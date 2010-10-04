@@ -199,13 +199,13 @@
 		
 		
 		<!-- Ajout d'un matériel -->
-		<span style="float:right; margin-right:20px"><a href='gestion_inventaire/form_materiels.php?height=600&width=640&id=-1' class='smoothbox' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>
+		<span style="float:right; margin-right:20px"><a href='gestion_inventaire/form_materiels.php?height=600&width=640&id=-1' rel='sexylightbox' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>
 		
 		
 		
-		<span id="modif_selection" style="display:none; float:right; margin-right:20px"><a href='gestion_inventaire/form_materiels.php?height=180&width=640&id=lot' class='smoothbox' title='modifier selection'> <img src='img/write.png'>Modifier la sélection</a> <span id="nb_selectionnes"></span> </span>
+		<span id="modif_selection" style="display:none; float:right; margin-right:20px"><a href='gestion_inventaire/form_materiels.php?height=180&width=640&id=lot' rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Modifier la sélection</a> <span id="nb_selectionnes"></span> </span>
 		<!--
-		<span id="rename_selection" style="float:right; margin-right:20px"><a href="gestion_inventaire/form_materiels.php?height=180&width=640&id=renamelot&liste='<script type='text/javascript'>	materiel_a_poster.value</script>'" class='smoothbox' title='modifier selection'> <img src='img/write.png'>Renommer la sélection</a></span>
+		<span id="rename_selection" style="float:right; margin-right:20px"><a href="gestion_inventaire/form_materiels.php?height=180&width=640&id=renamelot&liste='<script type='text/javascript'>	materiel_a_poster.value</script>'" rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Renommer la sélection</a></span>
 		-->
 		
 		
@@ -328,7 +328,12 @@
 				
 				echo "<tr id=tr_id$id class=$tr_class>";
 					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
+<<<<<<< .mine
+					/*	nom	*/	/*echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='sexylightbox' title='Nom du matériel : $nom'>$nom</a> </td>";*/
+					/*	nom	*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='sexylightbox' title='Nom du matériel : $nom'>$nom</a> </td>";
+=======
 					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='sexylightbox' title='Nom du matériel : $nom'>$nom</a> </td>";
+>>>>>>> .r5
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
 					/*	serial	*/	echo "<td class='td_serial'> $serial </td>";
@@ -509,7 +514,7 @@
 		for (var r = 1; r < table.rows.length; r++){
 			if ( document.getElementsByName("chk")[r-1].checked == true ) {
 				
-				var lg = "<a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=" + salleid + "' class='smoothbox' title='Membres de la salle " + salle_selected_text + "'>" + salle_selected_text + "</a>";
+				var lg = "<a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=" + salleid + "' rel='sexylightbox' title='Membres de la salle " + salle_selected_text + "'>" + salle_selected_text + "</a>";
 				// On change le texte de la salle par la nouvelle affectation
 				document.getElementById('mat_table').rows[r].cells[6].innerHTML = lg;
 			}
