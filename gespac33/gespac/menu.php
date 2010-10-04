@@ -1,3 +1,9 @@
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	});
+</script>
+
 <?PHP 
 
 /*
@@ -136,7 +142,7 @@ if ( $user_grade > 2 ) { // profs ou autres
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_donnees/dump_db_gespac.php');change_icon_onclick('donnees');">		Dump base GESPAC	</a></li>
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_donnees/dump_db_ocs.php');change_icon_onclick('donnees');">			Dump base OCS		</a></li>
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_donnees/voir_logs.php');change_icon_onclick('donnees');">				Voir les Logs		</a></li>
-					<li class='item'><a href='gestion_inventaire/form_import_csv.php?height=600&width=640' class='smoothbox' title='Import machines CSV'>	Importer CSV	</a></li>				
+					<li class='item'><a href='gestion_inventaire/form_import_csv.php?height=600&width=640' rel='sexylightbox' title='Import machines CSV'>	Importer CSV	</a></li>				
 				</ul>
 			</li>
 			
@@ -145,7 +151,7 @@ if ( $user_grade > 2 ) { // profs ou autres
 			<li class='dir'><a style='display:<?PHP echo $utilisateurs;?>' href="#" onclick="AffichePage('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');change_icon_onclick('utilisateurs');"><div id="utilisateurs" class="utilisateurs" title="gestion des utilisateurs"></div></a>
 				<ul>
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');change_icon_onclick('utilisateurs');">	Visualiser les utilisateurs		</a></li>
-					<li class='item'><a href='gestion_utilisateurs/form_comptes_iaca.php?height=200&width=640' class='smoothbox' title='Import des comptes IACA'>	Importer les comptes IACA	</a></li>
+					<li class='item'><a href='gestion_utilisateurs/form_comptes_iaca.php?height=200&width=640' rel='sexylightbox' title='Import des comptes IACA'>	Importer les comptes IACA	</a></li>
 				</ul>
 			</li>
 			
