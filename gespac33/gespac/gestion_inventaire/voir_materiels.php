@@ -88,9 +88,6 @@
 
 	window.addEvent('domready', function(){
 	
-	
-		//SexyLightbox = new SexyLightBox({color:'black', dir: 'sexyimages'});
-	
 		// fonction de filtrage
 		function filter (phrase) {
 			$("tableau").load("gestion_inventaire/voir_materiels_table.php?filter=" + phrase);
@@ -122,22 +119,22 @@
 		
 		$('filter_ecrans').addEvent('click', function(el)  {
 			$('filt').value = "ecran";
-			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=ecran");
+			filter ("ecran");
 		});
 		
 		$('filter_noecrans').addEvent('click', function(el)  {
 			$('filt').value = "/ecran";
-			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=/ecran");
+			filter ("/ecran");
 		});
 		
 		$('filter_ssnnc').addEvent('click', function(el)  {
 			$('filt').value = "nc:4";
-			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=nc:4");
+			filter ("nc:4");
 		});
 		
 		$('filter_ssnrand').addEvent('click', function(el)  {
 			$('filt').value = "rand:4";
-			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=rand:4");
+			filter ("rand:4");
 		});
 		
 	

@@ -328,19 +328,18 @@
 				
 				echo "<tr id=tr_id$id class=$tr_class>";
 					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-					/*	nom	*/	/*echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' class='smoothbox' title='Nom du matériel : $nom'>$nom</a> </td>";*/
-					/*	nom	*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='sexylightbox' title='Nom du matériel : $nom'>$nom</a> </td>";
+					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='sexylightbox' title='Nom du matériel : $nom'>$nom</a> </td>";
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
 					/*	serial	*/	echo "<td class='td_serial'> $serial </td>";
-					/*	etat	*/	echo "<td class='td_etat'> <a href='gestion_inventaire/voir_membres_etat.php?height=480&width=640&etat=$etat' class='smoothbox' title='Liste des materiels $etat'>$etat</a> </td>";
-					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' class='smoothbox' title='Liste de la famille $type'>$type</a></td>";
-					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' class='smoothbox' title='Liste de la sous famille $stype'>$stype</a></td>";
-					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' class='smoothbox' title='Liste de la marque $marque'>$marque</a></td>";
-					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' class='smoothbox' title='Liste du modèle $model'>$model</a></td>";
-					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' class='smoothbox' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
-					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' class='smoothbox' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
-					/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&id=$id&mat_ssn=$serial' class='smoothbox' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
+					/*	etat	*/	echo "<td class='td_etat'> <a href='gestion_inventaire/voir_membres_etat.php?height=480&width=640&etat=$etat' rel='sexylightbox' title='Liste des materiels $etat'>$etat</a> </td>";
+					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='sexylightbox' title='Liste de la famille $type'>$type</a></td>";
+					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' rel='sexylightbox' title='Liste de la sous famille $stype'>$stype</a></td>";
+					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='sexylightbox' title='Liste de la marque $marque'>$marque</a></td>";
+					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='sexylightbox' title='Liste du modèle $model'>$model</a></td>";
+					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='sexylightbox' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
+					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='sexylightbox' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
+					/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&id=$id&mat_ssn=$serial' rel='sexylightbox' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
 					/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel($id, '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 					
 				echo "</tr>";
