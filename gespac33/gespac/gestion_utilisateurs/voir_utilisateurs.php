@@ -14,6 +14,11 @@
 
 <h3>Visualisation des utilisateurs</h3>
 
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	});
+</script>
 
 <script type="text/javascript" src="server.php?client=all"></script>
 
@@ -116,7 +121,7 @@
 	
 <?PHP
 	// Ajout d'un utilisateur
-	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=280&width=640&id=-1' class='smoothbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=280&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 ?>
 
 	<center>
@@ -187,7 +192,7 @@
 					if ( $id == 1 ) {
 						$modif_user = "<td><img src='img/write.png' style=display:none></td>";
 					} else {
-						$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=270&width=640&id=$id' class='smoothbox' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
+						$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=270&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
 					}
 					
 					echo $modif_user;
@@ -206,7 +211,7 @@
 	
 <?PHP
 
-	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=280&width=640&id=-1' class='smoothbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=280&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 
 	// On se déconnecte de la db
 	$db_gespac->disconnect();
