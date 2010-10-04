@@ -38,6 +38,12 @@
 
 <h3>Visualisation des dossiers</h3>
 
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	});
+</script>
+
 <script type="text/javascript" src="server.php?client=all"></script>
 
 <!--	DIV target pour Ajax	-->
@@ -212,7 +218,7 @@
 					}
 					
 														
-					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dem_id' class='smoothbox' title='voir le dossier $dem_id'> <img src='img/loupe.gif'>$dem_id</a> </td>";					
+					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dem_id' rel='sexylightbox' title='voir le dossier $dem_id'> <img src='img/loupe.gif'>$dem_id</a> </td>";					
 					echo "<td> $dem_date </td>";
 					echo "<td bgcolor=$etat_couleur> $dem_etat </td>";
 					echo "<td> $dem_type </td>";

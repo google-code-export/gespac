@@ -18,6 +18,11 @@ session_start();
 
 <br>
 
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	});
+</script>
 
 <script type="text/javascript" src="server.php?client=all"></script>
 
@@ -188,7 +193,7 @@ session_start();
 					// On marque "EN COURS" lorsque le dossier n'est pas clos.
 					$interv_cloture = $interv_cloture == "" ? "EN COURS": $interv_cloture;
 											
-					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dossier' class='smoothbox' title='voir le dossier $dossier'> <img src='img/loupe.gif'>$dossier</a> </td>";
+					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dossier' rel='sexylightbox' title='voir le dossier $dossier'> <img src='img/loupe.gif'>$dossier</a> </td>";
 					echo "<td> $interv_id </td>";
 					echo "<td> $interv_date </td>";
 					echo "<td> $interv_cloture </td>";
