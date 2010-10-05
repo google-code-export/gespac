@@ -83,7 +83,14 @@ if ( $user_grade > 2 ) { // profs ou autres
 
 
 ?>
-	
+
+	<script type="text/javascript">
+		window.addEvent('domready', function(){
+			SexyLightbox = nothing;
+			SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+		});
+	</script>
+  
 	<script>
 		function change_icon_onclick (div) {
 			
