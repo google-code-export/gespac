@@ -13,161 +13,7 @@
 	include_once ('../../config/databases.php');
 ?>
 
-<script type="text/javascript">
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
-	});
-</script>
-
 <script type="text/javascript" src="server.php?client=all"></script>
-
-
-<script type="text/javascript">	
-
-	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
-
-			
-	// *********************************************************************************
-	//
-	//				Selection/déselection de toutes les rows
-	//
-	// *********************************************************************************	
-	
-	function checkall(_table) {
-		var table = document.getElementById(_table);	// le tableau du matériel
-		var checkall_box = document.getElementById('checkall');	// la checkbox "checkall"
-		
-		for ( var i = 1 ; i < table.rows.length ; i++ ) {
-
-			var lg = table.rows[i].id					// le tr_id (genre tr115)
-			
-			if (checkall_box.checked == true) {
-				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
-			} else {
-				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
-			}
-		}
-	}
-	
-	
-	// *********************************************************************************
-	//
-	//				Ajout des index pour postage sur clic de la checkbox
-	//
-	// *********************************************************************************	
-	 
-	function select_cette_ligne( tr_id, num_ligne, check ) {
-
-		var chaine_id = document.getElementById('materiel_a_poster').value;
-		var table_id = chaine_id.split(";");
-		
-		var nb_selectionnes = document.getElementById('nb_selectionnes');
-		
-		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
-		var li = document.getElementById(ligne);	
-		
-		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
-		
-			switch (check) {
-				case 1: // On force la selection si la ligne n'est pas déjà cochée
-					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
-						table_id.push(tr_id);
-						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
-					}
-				break;
-				
-				case 0: // On force la déselection
-					table_id.erase(tr_id);
-					nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-					// alternance des couleurs calculée avec la parité
-					if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-				break;
-				
-				
-				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
-					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
-						table_id.erase(tr_id);
-						
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-
-						// alternance des couleurs calculée avec la parité
-						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-					
-					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
-						table_id.push(tr_id);
-						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
-					}
-				break;			
-			}
-	
-			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
-			document.getElementById('materiel_a_poster').value = table_id.join(";");
-			
-
-			if ( $('materiel_a_poster').value != "" ) 
-				$('wakethem').style.display = "";
-			else 
-				$('wakethem').style.display = "none";
-		}
-	}
-
-		
-	
-	// *********************************************************************************
-	//
-	//			ferme la smoothbox et rafraichis la page
-	//
-	// *********************************************************************************	
-	
-	function refresh_quit () {
-		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("HTML_AJAX.replace('conteneur', 'modules/wol/voir_liste_wol.php');", 150000);
-		TB_remove();
-	}
-	
-	
-		
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-		}
-	}	
-		
-</script>
-
-
 
 
 <!--	DIV target pour Ajax	-->
@@ -287,3 +133,155 @@
 	// On se déconnecte de la db
 	$db_gespac->disconnect();
 ?>
+
+
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	});
+</script>
+
+<script type="text/javascript">	
+
+	// init de la couleur de fond
+	document.getElementById('conteneur').style.backgroundColor = "#fff";
+
+			
+	// *********************************************************************************
+	//
+	//				Selection/déselection de toutes les rows
+	//
+	// *********************************************************************************	
+	
+	function checkall(_table) {
+		var table = document.getElementById(_table);	// le tableau du matériel
+		var checkall_box = document.getElementById('checkall');	// la checkbox "checkall"
+		
+		for ( var i = 1 ; i < table.rows.length ; i++ ) {
+
+			var lg = table.rows[i].id					// le tr_id (genre tr115)
+			
+			if (checkall_box.checked == true) {
+				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
+				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
+			} else {
+				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
+				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
+			}
+		}
+	}
+	
+	
+	// *********************************************************************************
+	//
+	//				Ajout des index pour postage sur clic de la checkbox
+	//
+	// *********************************************************************************	
+	 
+	function select_cette_ligne( tr_id, num_ligne, check ) {
+
+		var chaine_id = document.getElementById('materiel_a_poster').value;
+		var table_id = chaine_id.split(";");
+		
+		var nb_selectionnes = document.getElementById('nb_selectionnes');
+		
+		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
+		var li = document.getElementById(ligne);	
+		
+		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
+		
+			switch (check) {
+				case 1: // On force la selection si la ligne n'est pas déjà cochée
+					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
+						table_id.push(tr_id);
+						li.className = "selected";
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+					}
+				break;
+				
+				case 0: // On force la déselection
+					table_id.erase(tr_id);
+					nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+					// alternance des couleurs calculée avec la parité
+					if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
+				break;
+				
+				
+				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
+					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
+						table_id.erase(tr_id);
+						
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+
+						// alternance des couleurs calculée avec la parité
+						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
+					
+					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
+						table_id.push(tr_id);
+						li.className = "selected";
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+					}
+				break;			
+			}
+	
+			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
+			document.getElementById('materiel_a_poster').value = table_id.join(";");
+			
+
+			if ( $('materiel_a_poster').value != "" ) 
+				$('wakethem').style.display = "";
+			else 
+				$('wakethem').style.display = "none";
+		}
+	}
+
+		
+	
+	// *********************************************************************************
+	//
+	//			ferme la smoothbox et rafraichis la page
+	//
+	// *********************************************************************************	
+	
+	function refresh_quit () {
+		// lance la fonction avec un délais de 1500ms
+		window.setTimeout("HTML_AJAX.replace('conteneur', 'modules/wol/voir_liste_wol.php');", 1500);
+		TB_remove();
+	}
+	
+	
+		
+	// *********************************************************************************
+	//
+	//				Fonction de filtrage des tables
+	//
+	// *********************************************************************************
+
+	function filter (phrase, _id){
+
+		var words = phrase.value.toLowerCase().split(" ");
+		var table = document.getElementById(_id);
+		var ele;
+		var elements_liste = "";
+				
+		for (var r = 1; r < table.rows.length; r++){
+			
+			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
+			var displayStyle = 'none';
+			
+			for (var i = 0; i < words.length; i++) {
+				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
+					displayStyle = '';
+				}	
+				else {	// on masque les rows qui ne correspondent pas
+					displayStyle = 'none';
+					break;
+				}
+			}
+			
+			// Affichage on / off en fonction de displayStyle
+			table.rows[r].style.display = displayStyle;	
+		}
+	}	
+		
+</script>

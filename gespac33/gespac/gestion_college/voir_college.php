@@ -1,9 +1,6 @@
-
-<script type="text/javascript" src="server.php?client=all"></script>
-		
 <script type="text/javascript">	
 	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
+	$('conteneur').style.backgroundColor = "#fff";
 </script>
 
 	
@@ -103,10 +100,8 @@ echo "<h3>Fiche d'informations du collège $clg_nom</h3><br>
 				
 			</table>
 		</center>";
+			
 		
-		
-		
-		
-echo "<br><center><a href='#&id=$clg_uai' onclick=\"HTML_AJAX.replace('conteneur', 'gestion_college/form_college.php?id=$clg_uai');\" ><img src='img/modif_college.png' title='Modifier les informations du collège'></a></center>";
+echo "<br><center><a href='#&id=$clg_uai' onclick=\"$('conteneur').load('gestion_college/form_college.php?id=$clg_uai');\" ><img src='img/modif_college.png' title='Modifier les informations du collège'></a></center>";
 
 ?>

@@ -1,9 +1,3 @@
-<script type="text/javascript">
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
-	});
-</script>
-
 <?PHP 
 
 /*
@@ -166,8 +160,7 @@ if ( $user_grade > 2 ) { // profs ou autres
 			<li class='dir'><a style='display:<?PHP echo $info;?>' href="#" onclick="AffichePage('conteneur', 'info.php');change_icon_onclick('info');"><div id="info" class="info" title="info"></div></a>
 				<ul>
 					<li class='item'><a style='display:<?PHP echo $stats;?>' href="#" onclick="AffichePage('conteneur', 'gestion_college/voir_college.php'); change_icon_onclick('info');">Fiche collège</a></li>
-					<li class='item'><a style='display:<?PHP echo $stats;?>' href="#" onclick="AffichePage('conteneur', 'modules/rss/rss.php'); change_icon_onclick('info');">Flux RSS</a></li>
-					
+					<li class='item'><a style='display:<?PHP echo $stats;?>' href="#" onclick="AffichePage('conteneur', 'modules/rss/rss.php'); change_icon_onclick('info');">Flux RSS</a></li>	
 					<li class='item'><a style='display:<?PHP echo $stats;?>' href="#" onclick="AffichePage('conteneur', 'modules/stats/graph.php');change_icon_onclick('info');">Stats camemberts</a></li>
 					<li class='item'><a style='display:<?PHP echo $stats;?>' href="#" onclick="AffichePage('conteneur', 'modules/stats/csschart.php');change_icon_onclick('info');">Stats bâtons</a></li>
 					<li class='item'><a style='display:<?PHP echo $stats;?>' href="#" onclick="AffichePage('conteneur', 'modules/stats/utilisation_parc.php');change_icon_onclick('info');">Stats utilisation du parc</a></li>	
@@ -176,3 +169,5 @@ if ( $user_grade > 2 ) { // profs ou autres
 
 		</ul>
 	</div>
+
+	

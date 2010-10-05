@@ -47,4 +47,41 @@
 	<script>
 		// Donne le focus au premier champ du formulaire
 		$('nom').focus();
+		
+		
+		// Validation du formulaire
+		function validation () {
+
+			var bt_submit = $("post_flux");
+			var rss_nom = $("nom").value;
+			var rss_url = $("url").value;
+
+			if (rss_nom == "" || rss_url == "") {
+				bt_submit.disabled = true;
+			} else {
+				bt_submit.disabled = false;
+			}
+		};
+		
+		// ferme la smoothbox et rafraichis la page
+		function refresh_quit () {
+			// lance la fonction avec un délais de 1500ms
+			window.setTimeout("$('conteneur').load('modules/rss/rss.php');", 1500);
+			//TB_remove();
+		};
+		
+		// On soumet le formulaire pour l'ajout d'un flux RSS
+		$('post_add_flux_rss').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+				method: this.method,
+				url: this.action,
+				onSuccess: function(responseText, responseXML) {
+					$('target').set('html', responseText);
+					window.setTimeout("$('conteneur').load('modules/rss/rss.php');", 1500);
+				}
+			}).send(this.toQueryString());
+		});	
+
+		
 	</script>

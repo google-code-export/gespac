@@ -2,6 +2,8 @@
 
 $action = $_GET['action'];
 
+
+
 	if ( $action == "add" ) {
 	
 		$nom = $_POST ['nom'];
@@ -44,14 +46,9 @@ $action = $_GET['action'];
 		fclose ($fp);
 	
 	}
-	
-	
-	
-	
-	
 ?>
 
-		<script>					
-			// on recharge la page de rss
-			//HTML_AJAX.replace('conteneur', 'modules/rss/rss.php');
-		</script>
+	<script>					
+		// on recharge la page de rss
+		//HTML_AJAX.replace('conteneur', 'modules/rss/rss.php');
+	</script>

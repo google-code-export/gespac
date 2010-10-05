@@ -14,11 +14,6 @@
 
 <h3>Visualisation des matériels disponibles au prêt</h3><br>
 
-<script type="text/javascript">
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
-	});
-</script>
 
 <script type="text/javascript" src="server.php?client=all"></script>
 
@@ -184,12 +179,16 @@
 ?>
 
 
-
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	});
+</script>
 
 <script type="text/javascript">	
 		
 	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
+	$('conteneur').style.backgroundColor = "#fff";
 	
 	
 	// *********************************************************************************

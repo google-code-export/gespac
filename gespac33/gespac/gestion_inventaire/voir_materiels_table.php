@@ -328,12 +328,7 @@
 				
 				echo "<tr id=tr_id$id class=$tr_class>";
 					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-<<<<<<< .mine
-					/*	nom	*/	/*echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='sexylightbox' title='Nom du matériel : $nom'>$nom</a> </td>";*/
-					/*	nom	*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='sexylightbox' title='Nom du matériel : $nom'>$nom</a> </td>";
-=======
 					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='sexylightbox' title='Nom du matériel : $nom'>$nom</a> </td>";
->>>>>>> .r5
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
 					/*	serial	*/	echo "<td class='td_serial'> $serial </td>";

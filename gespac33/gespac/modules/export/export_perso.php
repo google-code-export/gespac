@@ -3,6 +3,37 @@
 <!--  SERVEUR AJAX -->
 <script type="text/javascript" src="server.php?client=all"></script>
 
+
+<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="modules/export/post_export_perso.php" method="post" name="frmTest" id="frmTest">
+
+	<input type=checkbox class=chkbox id=mat_nom> Nom du Matériel <br>
+	<input type=checkbox class=chkbox id=mat_dsit> Num Inventaire <br>
+	<input type=checkbox class=chkbox id=mat_serial> Num Série <br>
+	<input type=checkbox class=chkbox id=mat_etat> Etat Matériel<br>
+	<input type=checkbox class=chkbox id=mat_origine> Origine Matériel <br>
+
+	<input type=checkbox class=chkbox id=salle_nom> Salle du Matériel <br>
+
+	<input type=checkbox class=chkbox id=marque_type> Type du Matériel <br>
+	<input type=checkbox class=chkbox id=marque_stype> Sous-type du Matériel <br>
+	<input type=checkbox class=chkbox id=marque_marque> Marque du Matériel <br>
+	<input type=checkbox class=chkbox id=marque_model> Modèle du Matériel <br>
+
+	<input type=checkbox class=chkbox id=user_nom> Prêté à <br>
+
+	<br>
+
+
+
+	<br><br>
+
+	<div id="log"></div>
+
+	<input type=hidden name=rqsql id=rqsql />
+	<input type=submit onclick="add_field()" value="GO">
+</form>
+
+
 <script>
 
 	function add_field () {
@@ -80,35 +111,4 @@
 
 	}
 	
-	
-
 </script>
-
-<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="modules/export/post_export_perso.php" method="post" name="frmTest" id="frmTest">
-
-	<input type=checkbox class=chkbox id=mat_nom> Nom du Matériel <br>
-	<input type=checkbox class=chkbox id=mat_dsit> Num Inventaire <br>
-	<input type=checkbox class=chkbox id=mat_serial> Num Série <br>
-	<input type=checkbox class=chkbox id=mat_etat> Etat Matériel<br>
-	<input type=checkbox class=chkbox id=mat_origine> Origine Matériel <br>
-
-	<input type=checkbox class=chkbox id=salle_nom> Salle du Matériel <br>
-
-	<input type=checkbox class=chkbox id=marque_type> Type du Matériel <br>
-	<input type=checkbox class=chkbox id=marque_stype> Sous-type du Matériel <br>
-	<input type=checkbox class=chkbox id=marque_marque> Marque du Matériel <br>
-	<input type=checkbox class=chkbox id=marque_model> Modèle du Matériel <br>
-
-	<input type=checkbox class=chkbox id=user_nom> Prêté à <br>
-
-	<br>
-
-
-
-	<br><br>
-
-	<div id="log"></div>
-
-	<input type=hidden name=rqsql id=rqsql />
-	<input type=submit onclick="add_field()" value="GO">
-</form>

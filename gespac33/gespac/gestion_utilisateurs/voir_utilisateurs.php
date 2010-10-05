@@ -14,90 +14,11 @@
 
 <h3>Visualisation des utilisateurs</h3>
 
-<script type="text/javascript">
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
-	});
-</script>
 
 <script type="text/javascript" src="server.php?client=all"></script>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
-
-
-
-<script type="text/javascript">	
-
-	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
-	
-	
-	// *********************************************************************************
-	//
-	//				Fonction de validation de la suppression d'un user
-	//
-	// *********************************************************************************
-	
-	function validation_suppr_user (id, nom, row, id_pret) {
-	
-		if ( id == 1 ) {
-			alert("IMPOSSIBLE de supprimer l'utilisateur ATI ! ");
-		} else {
-			
-			if ( id_pret == 0 ) {
-		
-				var valida = confirm('Voulez-vous vraiment supprimer l\'utilisateur "' + nom + '" ?');
-				// si la réponse est TRUE ==> on lance la page post_marques.php
-				if (valida) {
-							
-					/*	supprimer la ligne du tableau	*/
-					document.getElementById('user_table').deleteRow(row);
-					/*	poste la page en ajax	*/
-					HTML_AJAX.replace("target", "gestion_utilisateurs/post_utilisateurs.php?action=suppr&id=" + id);
-				}
-			} else {
-				alert('L\'utilisateur a une machine en prêt. Merci de la rendre avant suppression !');
-			}
-		}
-	}	
-
-	
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-		}
-	}	
-	
-</script>
 
 
 
@@ -215,6 +136,85 @@
 
 	// On se déconnecte de la db
 	$db_gespac->disconnect();
-
-
 ?>
+
+
+
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	});
+</script>
+
+<script type="text/javascript">	
+
+	// init de la couleur de fond
+	$('conteneur').style.backgroundColor = "#fff";
+	
+	
+	// *********************************************************************************
+	//
+	//				Fonction de validation de la suppression d'un user
+	//
+	// *********************************************************************************
+	
+	function validation_suppr_user (id, nom, row, id_pret) {
+	
+		if ( id == 1 ) {
+			alert("IMPOSSIBLE de supprimer l'utilisateur ATI ! ");
+		} else {
+			
+			if ( id_pret == 0 ) {
+		
+				var valida = confirm('Voulez-vous vraiment supprimer l\'utilisateur "' + nom + '" ?');
+				// si la réponse est TRUE ==> on lance la page post_marques.php
+				if (valida) {
+							
+					/*	supprimer la ligne du tableau	*/
+					document.getElementById('user_table').deleteRow(row);
+					/*	poste la page en ajax	*/
+					HTML_AJAX.replace("target", "gestion_utilisateurs/post_utilisateurs.php?action=suppr&id=" + id);
+				}
+			} else {
+				alert('L\'utilisateur a une machine en prêt. Merci de la rendre avant suppression !');
+			}
+		}
+	}	
+
+	
+	
+	// *********************************************************************************
+	//
+	//				Fonction de filtrage des tables
+	//
+	// *********************************************************************************
+
+	function filter (phrase, _id){
+
+		var words = phrase.value.toLowerCase().split(" ");
+		var table = document.getElementById(_id);
+		var ele;
+		var elements_liste = "";
+				
+		for (var r = 1; r < table.rows.length; r++){
+			
+			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
+			var displayStyle = 'none';
+			
+			for (var i = 0; i < words.length; i++) {
+				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
+					displayStyle = '';
+				}	
+				else {	// on masque les rows qui ne correspondent pas
+					displayStyle = 'none';
+					break;
+				}
+			}
+			
+			// Affichage on / off en fonction de displayStyle
+			table.rows[r].style.display = displayStyle;	
+		}
+	}	
+	
+</script>
+

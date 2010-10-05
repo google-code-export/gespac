@@ -25,12 +25,6 @@
 <h3>Visualisation des salles</h3>
 <br>
 
-<script type="text/javascript">
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
-	});
-</script>
-
 <script type="text/javascript" src="server.php?client=all"></script>
 
 <!--	DIV target pour Ajax	-->

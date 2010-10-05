@@ -1,5 +1,3 @@
-	
-	
 	<!-- 
 
 
@@ -112,9 +110,3 @@
 
 
 ?>
-
-	<script type="text/javascript">
-		window.addEvent('domready', function(){
-		  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
-		});
-	</script>

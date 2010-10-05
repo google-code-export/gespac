@@ -3,14 +3,14 @@
 
 <script type="text/javascript">	
 	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
+	$('conteneur').style.backgroundColor = "#fff";
 	
 	
 	// filtrer les stats
 	function filtrer_stat (pc, datedebut, datefin) {
-		var pc_value = document.getElementById('pc').value
-		var datedebut_value = document.getElementById('datedebut').value
-		var datefin_value = document.getElementById('datefin').value
+		var pc_value = $('pc').value
+		var datedebut_value = $('datedebut').value
+		var datefin_value = $('datefin').value
 		/*
 		(datedebut_value == '') ? ();
 		? ();
@@ -21,7 +21,7 @@
 		if (datefin_value == '')
 			datefin_value='2050-01-01';
 				
-		HTML_AJAX.replace("conteneur", "modules/stats/utilisation_parc.php?pc=" + pc_value + "&datefin=" + datefin_value + "&datedebut=" + datedebut_value);
+		$("conteneur").load("modules/stats/utilisation_parc.php?pc=" + pc_value + "&datefin=" + datefin_value + "&datedebut=" + datedebut_value);
 	}
 	
 	
