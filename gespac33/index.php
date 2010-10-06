@@ -14,12 +14,9 @@
 		<!--	JS	-->
 		<script type="text/javascript" src="./gespac/js/mootools-1.2.3-core-yc.js"></script>	
 		<script type="text/javascript" src="./gespac/js/mootools-1.2.3.1-more.js"></script>
-		<script type="text/javascript" src="./gespac/js/smoothbox.js"></script> 
-		<!--<script type="text/javascript" src="./gespac/js/dropdown.js"></script>		-->
-		<script type="text/javascript" src="./gespac/js/main.js"></script>	
+		<script type="text/javascript" src="./gespac/js/main.js"></script>
 		
 		<!--	CSS	-->
-		<link rel="stylesheet" href="./gespac/css/smoothbox.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="./gespac/css/style_ff.css" type="text/css" media="screen" />
 		
 		<!--Script de détection pour savoir si il y a un popup killer-->
@@ -128,7 +125,7 @@
 					<img src='./gespac/img/ocs.png' height=48><br>OCS </a></div>";
 			}
 
-			echo "<div id=portail-menu-item style='display : $display_icon;'><a href='./gespac/gestion_donnees/form_upload_restauration.php?height=200&width=640' class='smoothbox' title='Restauration des bases de données'>
+			echo "<div id=portail-menu-item style='display : $display_icon;'><a href='./gespac/gestion_donnees/form_upload_restauration.php?height=200&width=640' rel='sexylightbox' title='Restauration des bases de données'>
 				<img src='./gespac/img/database.png' height=48><br>RESTAURATION </a></div>";	
 			
 			echo "<div style='float:right;' id=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
