@@ -23,7 +23,7 @@
 		
 		// après suppression, le onchange ne marche plus !
 		
-		echo "<select id='select_flux' onchange=\"HTML_AJAX.replace('flux', 'modules/rss/rss_flux.php?page=' + this.value);  \">";
+		echo "<select id='select_flux' onchange=\"$('flux').load('modules/rss/rss_flux.php?page=' + this.value);  \">";
 		
 			while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 				

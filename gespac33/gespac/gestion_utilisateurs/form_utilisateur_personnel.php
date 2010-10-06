@@ -36,7 +36,7 @@
 	function refresh_quit () {
 
 		// lance la fonction avec un délais de 1000ms
-		//window.setTimeout("HTML_AJAX.replace('conteneur', 'accueil.php');", 1000);
+		//window.setTimeout("$('conteneur').load('accueil.php');", 1000);
 		TB_remove();
 	}
 	

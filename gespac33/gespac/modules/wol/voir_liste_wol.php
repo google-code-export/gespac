@@ -245,7 +245,7 @@
 	
 	function refresh_quit () {
 		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("HTML_AJAX.replace('conteneur', 'modules/wol/voir_liste_wol.php');", 1500);
+		window.setTimeout("$('conteneur').load('modules/wol/voir_liste_wol.php');", 1500);
 		TB_remove();
 	}
 	

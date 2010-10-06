@@ -118,7 +118,7 @@
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit () {
 		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_materiels.php');", 1500);
+		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1500);
 		TB_remove();
 	}
 	

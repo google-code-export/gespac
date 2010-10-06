@@ -54,8 +54,8 @@
 	<BODY>
 
 		<?PHP	// Includes
-			include_once ('config/databases.php');		// fichiers de configuration des bases de données
-			include_once ('fonctions.php');				// fichier contenant les fonctions utilisées dans le reste des scripts
+			include_once ('config/databases.php');	// fichiers de configuration des bases de données
+			include_once ('fonctions.php');			// fichier contenant les fonctions utilisées dans le reste des scripts
 			include_once ('config/pear.php');		// fichiers de configuration des lib PEAR (setinclude + packages)
 		?>
 

@@ -15,7 +15,7 @@
 <h3>Visualisation des utilisateurs</h3>
 
 
-<script type="text/javascript" src="server.php?client=all"></script>
+<!--<script type="text/javascript" src="server.php?client=all"></script>-->
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
@@ -173,7 +173,7 @@
 					/*	supprimer la ligne du tableau	*/
 					document.getElementById('user_table').deleteRow(row);
 					/*	poste la page en ajax	*/
-					HTML_AJAX.replace("target", "gestion_utilisateurs/post_utilisateurs.php?action=suppr&id=" + id);
+					$('target').load("gestion_utilisateurs/post_utilisateurs.php?action=suppr&id=" + id);
 				}
 			} else {
 				alert('L\'utilisateur a une machine en prêt. Merci de la rendre avant suppression !');

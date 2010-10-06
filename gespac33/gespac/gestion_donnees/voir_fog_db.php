@@ -21,7 +21,7 @@
 		
 		// si la réponse est TRUE ==> on lance la page import_ocs_db.php
 		if (valida) {
-			HTML_AJAX.replace('target', 'gestion_donnees/import_fog_db.php');
+			$('target').load('gestion_donnees/import_fog_db.php');
 		}
 	}
 

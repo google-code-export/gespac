@@ -162,7 +162,7 @@ $db_gespac->disconnect();
 			/*	supprimer la ligne du tableau	*/
 				document.getElementById('marque_table').deleteRow(row);
 			/*	poste la page en ajax	*/
-				HTML_AJAX.replace("target", "gestion_inventaire/post_marques.php?action=suppr&id=" + id);
+				$('target').load("gestion_inventaire/post_marques.php?action=suppr&id=" + id);
 			}
 		} else {
 			alert('IMPOSSIBLE de supprimer cette marque car des machines y sont associées !');

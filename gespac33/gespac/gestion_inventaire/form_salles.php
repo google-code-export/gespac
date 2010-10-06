@@ -35,7 +35,7 @@
 
 		// lance la fonction avec un délais de 1500ms
 		
-		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_salles.php?filter=" + filt + "');", 1500);
+		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php?filter=" + filt + "');", 1500);
 		TB_remove();
 	}
 		

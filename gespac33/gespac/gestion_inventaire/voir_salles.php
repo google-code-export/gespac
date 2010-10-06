@@ -47,9 +47,9 @@
 			// si la réponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
 				/*	poste la page en ajax	*/
-				HTML_AJAX.replace("target", "gestion_inventaire/post_salles.php?action=suppr&id=" + id);
+				$('target').load("gestion_inventaire/post_salles.php?action=suppr&id=" + id);
 				/*	on recharge la page au bout de 1000ms	*/
-				window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_salles.php');", 1000);
+				window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php');", 1000);
 			}
 		}
 	}

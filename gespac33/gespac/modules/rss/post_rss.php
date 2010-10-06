@@ -50,5 +50,5 @@ $action = $_GET['action'];
 
 	<script>					
 		// on recharge la page de rss
-		//HTML_AJAX.replace('conteneur', 'modules/rss/rss.php');
+		//$('conteneur').load('modules/rss/rss.php');
 	</script>

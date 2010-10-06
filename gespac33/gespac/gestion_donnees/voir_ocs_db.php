@@ -21,8 +21,8 @@
 		
 		// si la réponse est TRUE ==> on lance la page import_ocs_db.php
 		if (valida) {
-			//HTML_AJAX.replace('target', 'gestion_donnees/import_ocs_db.php');
-			HTML_AJAX.replace('conteneur', 'gestion_donnees/import_ocs_db.php');
+			//$('target').load('gestion_donnees/import_ocs_db.php');
+			$('conteneur').load('gestion_donnees/import_ocs_db.php');
 		}
 	}
 

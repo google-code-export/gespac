@@ -269,10 +269,10 @@
 		if (valida) {
 			
 				//	poste la page en ajax	
-				HTML_AJAX.replace("target", "gestion_prets/post_prets.php?action=preter&matid=" + matid + "&userid=" + userid);
+				$("target").load("gestion_prets/post_prets.php?action=preter&matid=" + matid + "&userid=" + userid);
 			
 				// recharge la page
-				HTML_AJAX.replace("conteneur", "gestion_prets/voir_prets.php");
+				$('conteneur').load("gestion_prets/voir_prets.php");
 			
 		}
 	}
@@ -296,10 +296,10 @@
 		if (valida) {
 					
 			//	poste la page en ajax
-			HTML_AJAX.replace("target", "gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
+			$("target").load("gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
 			
 			// recharge la page avec un délais de 1000ms
-			window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_prets/voir_prets.php');", 1000);
+			window.setTimeout("$('conteneur').load('gestion_prets/voir_prets.php');", 1000);
 		}
 	}
 	

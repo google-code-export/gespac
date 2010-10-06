@@ -36,8 +36,8 @@
 			AffichePage('conteneur', 'gestion_donnees/dump_logs.php');
 			
 			//	poste la page en ajax	
-			HTML_AJAX.replace("target", "gestion_donnees/post_logs.php");
-			window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_donnees/voir_logs.php');", 1000);
+			$("target").load("gestion_donnees/post_logs.php");
+			window.setTimeout("$('conteneur').load('gestion_donnees/voir_logs.php');", 1000);
 		}
 	}		
 	

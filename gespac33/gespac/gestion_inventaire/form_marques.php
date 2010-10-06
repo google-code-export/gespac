@@ -20,7 +20,7 @@
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit (filt) {
 		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1500);
+		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1500);
 		TB_remove();
 	}
 	
@@ -99,9 +99,9 @@
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 			//	poste la page en ajax
-			HTML_AJAX.replace("target", "gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
+			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
 			//	on recharge la page au bout de 1000ms
-			window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_marques.php');", 1000);
+			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
 			TB_remove();
 		}
 	}
@@ -148,9 +148,9 @@
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 			//	poste la page en ajax
-			HTML_AJAX.replace("target", "gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
+			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
 			//	on recharge la page au bout de 1000ms
-			window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_marques.php');", 1000);
+			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
 		}
 	}
 	
