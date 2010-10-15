@@ -38,7 +38,7 @@
 		$salle_id = $_GET['value'];
 
 		// requête qui va afficher dans le menu déroulant les pc de la salle $salle_id
-		$req_types_disponibles = $db_gespac->queryAll ( "SELECT mat_id, mat_nom FROM materiels WHERE salle_id = $salle_id" );
+		$req_types_disponibles = $db_gespac->queryAll ( "SELECT mat_id, mat_nom FROM materiels WHERE salle_id = $salle_id ORDER BY mat_nom" );
 
 		foreach ( $req_types_disponibles as $record) { 
 			
