@@ -216,7 +216,7 @@
 							<option selected>>>>Sélectionner une salle<<<</option>
 							<?PHP
 								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles" );
+								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles ORDER BY salle_nom" );
 								foreach ( $req_salles_disponibles as $record) { 
 								
 									$salle_nom 	= $record[0];
