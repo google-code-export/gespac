@@ -51,10 +51,11 @@
 		$user_nom = $liste_user [0][0];
 		
 		//On récupère le nom de matériel en fonction du mat_id
-		$liste_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id = $matid" );
+		$liste_materiel = $db_gespac->queryAll ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $matid" );
 		$mat_nom = $liste_materiel [0][0];
+		$mat_serial = $liste_materiel [0][1];
 		
-		$log_texte = "Le matériel $mat_nom a été prêté à $user_nom";
+		$log_texte = "Le matériel $mat_nom (Numéro de série : <b>$mat_serial</b>) a été prêté à $user_nom";
 		
 		// On insère une ligne dans les logs pour tracer tout ça
 		$req_log_preter_materiel = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Prêté', '$log_texte' );";
@@ -78,10 +79,11 @@
 		$user_nom = $liste_user [0][0];
 		
 		// On récupère le nom du matériel en fonction du mat_id
-		$liste_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id = $matid" );
+		$liste_materiel = $db_gespac->queryAll ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $matid" );
 		$mat_nom = $liste_materiel [0][0];
+		$mat_serial = $liste_materiel [0][1];
 		
-		$log_texte = "$user_nom a rendu le matériel $mat_nom";
+		$log_texte = "$user_nom a rendu le matériel $mat_nom (Numéro de série : <b>$mat_serial</b>)";
 		
 		// On insère une ligne dans les logs pour tracer tout ça
 		$req_log_rendu_materiel = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Rendu', '$log_texte' );";
@@ -97,5 +99,3 @@
 	}
 
 ?>
-
-
