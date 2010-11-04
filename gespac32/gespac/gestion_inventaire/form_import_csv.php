@@ -90,7 +90,7 @@
 		
 		// si la réponse est TRUE ==> on colle dans un input la valeur corr_id
 		if (valida) {
-			$('corr_id').value = corr_id;
+			$('marque_id').value = corr_id;
 			
 			$('choix_modele').style.display = 'none';
 			$('table_modele_selectionne').style.display = '';
@@ -111,7 +111,7 @@
 		$('choix_modele').style.display = '';
 		$('table_modele_selectionne').style.display = 'none';
 		
-		$('corr_id').value = "";
+		$('marque_id').value = "";
 		$('modele_selectionne').value = "";
 	}
 	
@@ -170,7 +170,7 @@
 		<table width=400 align=center cellpadding=10px>
 			<tr>
 				<td>Choisir un modèle :</td>
-				<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"> </td>
+				<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'marque_table_csv');" type="text"> </td>
 			</tr>
 		</table>
 	
@@ -178,30 +178,30 @@
 		
 		<?PHP
 		// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-		$liste_correspondances = $db_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
+		//$liste_correspondances = $db_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
+		$liste_marques = $db_gespac->queryAll ( "SELECT marque_id, marque_marque, marque_model, marque_type, marque_stype FROM marques ORDER BY marque_model" );
 		?>
-		
+		 	 	 	 	
 		<!-- s'affiche si il n'y a pas de résultat -->
 		<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez créer le modèle manuellement.</div>
 		
-		<table id="corr_table" class='tablehover'>
+		<table id="marque_table_csv" class='tablehover'>
 
 			<?PHP
-				foreach ( $liste_correspondances as $corr ) {
+				foreach ( $liste_marques as $marque ) {
 				
-					$corr_id 			= $corr[0];
-					$corr_marque_ocs 	= $corr[1];
-					$corr_type 			= $corr[2];
-					$corr_stype 		= $corr[3];
-					$corr_marque 		= $corr[4];
-					$corr_modele 		= $corr[5];
+					$marque_id 		= $marque[0];
+					$marque_marque 	= $marque[1];
+					$marque_model 	= $marque[2];
+					$marque_type 	= $marque[3];
+					$marque_stype 	= $marque[4];
 				
 					echo "<tr style='display:none' class='tr_filter'>";
-						echo "<td width=200>$corr_type</td>";
-						echo "<td width=200>$corr_stype</td>";
-						echo "<td width=200>$corr_marque</td>";
-						echo "<td width=200>$corr_modele</td>";
-						echo "<td><a href='#' onclick=\"validation_choisir_marque($corr_id, '$corr_marque $corr_modele');\"><img src='img/arrow-right.png' width=16 height=16 title='Choisir ce modèle'> </a></td>";
+						echo "<td width=200>$marque_type</td>";
+						echo "<td width=200>$marque_stype</td>";
+						echo "<td width=200>$marque_marque</td>";
+						echo "<td width=200>$marque_model</td>";
+						echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_model');\"><img src='img/arrow-right.png' width=16 height=16 title='Choisir ce modèle'> </a></td>";
 					echo "</tr>";
 				
 				}
@@ -214,7 +214,7 @@
 	<table width=400 align=center cellpadding=10px style='display:none' id="table_modele_selectionne">
 	 	<tr>
 			<td>Modèle sélectionné :</td>
-			<td><input type=hidden name=corr_id id=corr_id> <input type="text" id="modele_selectionne"> </td>
+			<td><input type=hidden name="marque_id" id="marque_id"> <input type="text" id="modele_selectionne"> </td>
 			<td><a href='#' onclick="choisir_modele();">changer</a></td>
 		</tr>
 	 </table>

@@ -20,14 +20,13 @@
 		
 	$dossier = '../dump/'; 		// dossier où sera déplacé le fichier
 	
-	$fichier = basename($_FILES['myfile']['name']);
+	$fichier 	= basename($_FILES['myfile']['name']);
 	$extensions = array('.txt', '.csv');
-	$extension = strrchr($_FILES['myfile']['name'], '.'); 
+	$extension 	= strrchr($_FILES['myfile']['name'], '.'); 
 	
-	$origine = $_POST ['origine'];
-	$etat = $_POST ['etat']; 
-	$corr_id = $_POST ['corr_id']; 
-	
+	$origine 	= $_POST ['origine'];
+	$etat 		= $_POST ['etat']; 
+	$marque_id 	= $_POST ['marque_id']; 
 	
 	//Si l'extension n'est pas dans le tableau
 	if ( !in_array($extension, $extensions) )
@@ -35,38 +34,6 @@
 
 	if (!isset($erreur)) {	//S'il n'y a pas d'erreur, on upload, on créé la marque ...
 	
-	
-		// Création de la marque ou affectation à la marque si elle existe
-		
-		// On récupère les champs dans la table des correspondances
-		$marque_dans_corr = $db_gespac->queryRow ("SELECT corr_type, corr_stype, corr_marque, corr_modele FROM correspondances WHERE corr_id=$corr_id;");
-		
-		$famille 	= $marque_dans_corr [0];
-		$sfamille 	= $marque_dans_corr [1];
-		$marque 	= $marque_dans_corr [2];
-		$modele 	= $marque_dans_corr [3];
-		
-		// On vérifie si le quadruplet existe dans la table des marques
-		$marque_id = $db_gespac->queryOne ("SELECT marque_id FROM marques WHERE marque_marque='$marque' AND marque_model='$modele' AND marque_type='$famille' AND marque_stype='$sfamille' ;");
-		
-		if ( $marque_id <> "" ) {
-			//echo "La marque existe, son id est $marque_id";
-		}
-		else {
-			//echo "La marque n'existe pas, on la créée : ";
-		
-			// Insertion d'une nouvelle marque avec les paramètres de la correspondance :
-			$req_add_marque = "INSERT INTO marques ( marque_type, marque_stype, marque_marque, marque_model) VALUES ( '$famille', '$sfamille', '$marque', '$modele' )";
-			$result = $db_gespac->exec ( $req_add_marque );
-			
-			// On log la requête SQL
-			fwrite($fp, date("Ymd His") . " " . $req_add_marque."\n");
-			
-			// On récupère le id de la marque nouvellement créée
-			$marque_id = $db_gespac->queryOne ("SELECT marque_id FROM marques WHERE marque_marque='$marque' AND marque_model='$modele' AND marque_type='$famille' AND marque_stype='$sfamille' ;");
-		}
-	
-
 		//On formate le nom du fichier ici...
 		$fichier = strtr($fichier, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 		$fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
@@ -91,12 +58,11 @@
 				$line[$row][2] = $data[2];			
 
 
-				$req_import_csv = "INSERT INTO materiels (mat_nom, mat_serial, mat_dsit, mat_etat, mat_origine, salle_id, user_id, marque_id, mat_suppr) VALUES ('" . $line[$row][0] . "', '" . $line[$row][1] ."', '" . $line[$row][2] . "', '$etat', '$origine', 1, 1, $marque_id, 0 );";
+				echo $req_import_csv = "INSERT INTO materiels (mat_nom, mat_serial, mat_dsit, mat_etat, mat_origine, salle_id, user_id, marque_id, mat_suppr) VALUES ('" . $line[$row][0] . "', '" . $line[$row][1] ."', '" . $line[$row][2] . "', '$etat', '$origine', 1, 1, $marque_id, 0 );";
 				$result = $db_gespac->exec ( $req_import_csv );
 				
 				// On log la requête SQL
 				fwrite($fp, date("Ymd His") . " " . $req_import_csv."\n");
-
 
 				$row++;
 			}
@@ -117,7 +83,7 @@
 			<?PHP
 		}
 		else	// En cas d'échec d'upload
-			echo 'Echec de l\'upload !';
+			echo 'Echec de l\'upload du fichier ' . $fichier;
 			  
 	} else	// En cas d'erreur dans l'extension
 		 echo $erreur;
