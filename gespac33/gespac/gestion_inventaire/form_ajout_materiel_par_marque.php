@@ -27,9 +27,9 @@
 	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
-		var bt_submit = document.getElementById("post_materiel");
-		var mat_nom = document.getElementById("nom").value;
-		var mat_serial = document.getElementById("serial").value;
+		var bt_submit 	= $("post_materiel");
+		var mat_nom 	= $("nom").value;
+		var mat_serial 	= $("serial").value;
 	
 		if (mat_nom == "" || mat_serial == "" ) {
 			bt_submit.disabled = true;
@@ -38,11 +38,10 @@
 		}
 	}
 	
-	// ferme la smoothbox et rafraichis la page
+	// Ferme la smoothbox et rafraichit la page
 	function refresh_quit (filt) {
 		// lance la fonction avec un délais de 1000ms
 		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1000);
-		TB_remove();
 	}
 	
 	
@@ -54,6 +53,31 @@
 		number = Math.floor(Math.random() * 100000);
 		$('serial').value =  "NC" + number;
 	}
+	
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML, filt) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					SexyLightbox.close();
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
 
 </script>
 
@@ -104,7 +128,7 @@
 		</script>
 		
 		
-		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=add_mat_marque" method="post" name="frmTest" id="frmTest">
+		<form action="gestion_inventaire/post_materiels.php?action=add_mat_marque" method="post" name="post_form" id="post_form">
 			<input type=hidden name=add_marque_materiel value=<?PHP echo $id; ?> >
 			<center>
 			<table width=500>

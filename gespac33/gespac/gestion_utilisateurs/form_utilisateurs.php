@@ -32,12 +32,11 @@
 		}
 	}
 	
-	// ferme la smoothbox et rafraichis la page
-	function refresh_quit () {
-		window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1000);
-		SexyLightbox.close();
-	};
-	
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
 	
 	window.addEvent('domready', function(){
 		
@@ -52,6 +51,7 @@
 					$('target').set('html', responseText);
 					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1500);
+					SexyLightbox.close();
 				}
 			
 			}).send(this.toQueryString());
@@ -157,7 +157,7 @@
 			</table>
 
 			<br>
-			<input id='post_user' type=submit value='Ajouter utilisateur' onClick="refresh_quit();" disabled>
+			<input id='post_user' type=submit value='Ajouter utilisateur' disabled>
 			</center>
 
 		</FORM>
@@ -274,7 +274,7 @@
 			</table>
 			
 			<br>
-			<input type=submit value='Modifier cet utilisateur' onClick="refresh_quit();">
+			<input type=submit value='Modifier cet utilisateur'>
 
 			</center>
 

@@ -21,14 +21,14 @@
 <script>
 
 	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
+	$('conteneur').style.backgroundColor = "#fff";
 
 	// Sur changement du type on affiche ou pas la salle et les pc
 	function change_type(type) {
 		
-		var tr_salle = document.getElementById("tr_salle");
-		var tr_pc = document.getElementById("tr_pc");
-		var tr_texte = document.getElementById("tr_texte");
+		var tr_salle = $("tr_salle");
+		var tr_pc 	 = $("tr_pc");
+		var tr_texte = $("tr_texte");
 		
 		// Si le type de demande est "installation" ou "reparation"
 		if ( type == "installation" || type == "reparation") {
@@ -52,8 +52,8 @@
 
 	// Sur changement de la salle on affiche le champ pc et on le remplit avec les pc de la salle <- [AMELIORATION] Ouh ! qu'il est laid ce code !
 	function change_salle(salle_id) {
-		var tr_pc = document.getElementById("tr_pc");
-		var pc_demande = document.getElementById("pc_demande");
+		var tr_pc 			= $("tr_pc");
+		var pc_demande 		= $("pc_demande");
 		tr_pc.style.display = "";
 		
 		pc_demande[0] = new Option(">>>Sélectionner un PC<<<","");
@@ -90,16 +90,9 @@
 	
 	// Sur changement du PC on affiche le champ texte 
 	function change_pc () {
-		var tr_texte = document.getElementById("tr_texte");
+		var tr_texte = $("tr_texte");
 		tr_texte.style.display = "";
 	}	
-	
-	// ferme la smoothbox et rafraichis la page
-	function refresh_quit () {
-		// lance la fonction avec un délais de 1000ms
-		window.setTimeout("$('conteneur').load('gestion_demandes/voir_demandes.php');", 1000);
-		TB_remove();
-	}
 	
 	// serveur AJAX mootools pour le chainage des combobox SALLE - PC
 	function chainage_salle_pc( select, id, div_id ) {
@@ -163,7 +156,7 @@
 	
 	// affiche / masque l'historique
 	function montre_masque_historique( ) {
-		var historique = document.getElementById("historique");
+		var historique = $("historique");
 		
 		if ( historique.style.display == "none" )
 			historique.style.display = "";
@@ -171,6 +164,31 @@
 			historique.style.display = "none";
 	}
 	
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('gestion_demandes/voir_demandes.php');", 1500);
+					SexyLightbox.close();
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
 </script>
 
 <style>
@@ -192,7 +210,7 @@
 		
 		?>
 
-		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_demandes/post_demandes.php?action=add" method="post" name="frmTest" id="frmTest">
+		<form action="gestion_demandes/post_demandes.php?action=add" method="post" name="post_form" id="post_form">
 
 			<center>
 			<table width=500>
@@ -255,7 +273,7 @@
 			
 			<br>
 			<br>
-				<input type=submit value='Envoyer la demande' onclick="refresh_quit();" >
+				<input type=submit value='Envoyer la demande' >
 
 			</center>
 
@@ -334,7 +352,7 @@
 
 	
 		<div id="reponse" style="display:<?PHP echo $montre_reponse; ?>">
-			<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_demandes/post_demandes.php?action=mod" method="post" name="frmTest" id="frmTest">
+			<form action="gestion_demandes/post_demandes.php?action=mod" method="post" name="post_form" id="post_form">
 				
 				<input type=hidden name="dossier" value= <?PHP echo $id;?> >
 				<input type=hidden name="salle" value= <?PHP echo $salle_id;?> >
@@ -369,7 +387,7 @@
 
 				</select>
 				
-				<input type=submit value=poster onclick="refresh_quit();">
+				<input type=submit value=poster >
 		
 			</form>
 		

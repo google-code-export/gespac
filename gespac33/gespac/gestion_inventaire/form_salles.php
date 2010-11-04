@@ -36,8 +36,32 @@
 		// lance la fonction avec un délais de 1500ms
 		
 		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php?filter=" + filt + "');", 1500);
-		TB_remove();
 	}
+	
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML, filt) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					SexyLightbox.close();
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
 		
 </script>
 
@@ -56,7 +80,7 @@
 			$('nom').focus();
 		</script>
 		
-		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_salles.php?action=add" method="post" name="frmTest" id="frmTest">
+		<form action="gestion_inventaire/post_salles.php?action=add" method="post" name="post_form" id="post_form">
 		
 			<center>
 			<table width=500>
@@ -138,7 +162,7 @@
 			$('nom').focus();
 		</script>
 
-		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_salles.php?action=mod" method="post" name="frmTest" id="frmTest">
+		<form action="gestion_inventaire/post_salles.php?action=mod" method="post" name="post_form" id="post_form">
 			
 			<input type=hidden name=salleid value=<?PHP echo $id;?> >
 			<center>
@@ -181,12 +205,7 @@
 
 		</FORM>
 				
-
-		<?PHP
-		
-		
-		
-		
+	<?PHP
 	}	
 ?>
 

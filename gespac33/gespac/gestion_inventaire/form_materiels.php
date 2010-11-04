@@ -201,12 +201,6 @@
 		}
 	}
 	
-	// ferme la smoothbox et rafraichis la page
-	function refresh_quit () {
-		// lance la fonction avec un délais de 1000ms
-		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1000);
-		TB_remove();
-	}
 
 	// serveur AJAX mootools pour le chainage des combobox type et sous type
 	// Beaucoup de redondances dans les paramètres. Je corrige ça un de ces jours
@@ -271,7 +265,35 @@
 		number = Math.floor(Math.random() * 100000);
 		$('serial').value =  "NC" + number;
 	}
+	
+	
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
 
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML, filt) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1500);
+					SexyLightbox.close();
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
+	
+	
 
 </script>
 
@@ -340,7 +362,7 @@
 			$('filt').focus();
 		</script>
 		
-		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=add" method="post" name="frmTest" id="frmTest">
+		<form action="gestion_inventaire/post_materiels.php?action=add" method="post" name="post_form" id="post_form">
 			
 				<!--
 
@@ -471,7 +493,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter un materiel' onclick="refresh_quit();" id="post_materiel" disabled>
+			<input type=submit value='Ajouter un materiel' id="post_materiel" disabled>
 
 			</center>
 
@@ -499,7 +521,7 @@
 			$('origine').focus();
 		</script>
 
-		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=modlot" method="post" name="frmTest" id="frmTest">
+		<form action="gestion_inventaire/post_materiels.php?action=modlot" method="post" name="post_form" id="post_form">
 			<center>
 			
 			<input type=hidden name=lot id=lot>
@@ -599,8 +621,8 @@
 			</table>
 
 			<br>
-			<input type=submit value='Modifier le lot' onclick="refresh_quit();" >
-			<input type=button value='sortir sans modifier' onclick="TB_remove();" >
+			<input type=submit value='Modifier le lot' >
+			<input type=button value='sortir sans modifier' onclick="SexyLightbox.close();" >
 
 			</center>
 
@@ -646,7 +668,7 @@
 			$('nom').focus();
 		</script>
 		
-		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=mod" method="post" name="frmTest" id="frmTest">
+		<form action="gestion_inventaire/post_materiels.php?action=mod" method="post" name="post_form" id="post_form">
 			<input type=hidden name=materiel_id value=<?PHP echo $id;?> >
 			
 				<!--
@@ -816,7 +838,7 @@
 			</table>
 
 			<br>
-			<input type=submit class="smoothbox" value='Modifier ce matériel' onClick="refresh_quit();"  >
+			<input type=submit class="smoothbox" value='Modifier ce matériel' >
 
 			</center>
 
