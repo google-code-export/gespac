@@ -91,7 +91,7 @@
 	
 					echo "<td> <input type=radio name=radio value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $user_id, this.parentNode.parentNode.rowIndex); bas_de_page(this.parentNode.parentNode.rowIndex);\"> </td>";
 					echo "<td> <a href='#basdepage' class='bdp' id='bdp$compteur' style='display:none;'><img src='./img/down.png' title='Aller en bas de page' align=left></a></td>";
-					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' class='smoothbox' title='Caractéristiques de $mat'>$mat</a> </td>";
+					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='sexylightbox' title='Caractéristiques de $mat'>$mat</a> </td>";
 					
 					//echo "<td> $serial </td>";
 					echo "<td> $inventaire </td>";
@@ -180,6 +180,11 @@
 
 
 
+<script type="text/javascript">
+	window.addEvent('domready', function(){
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	});
+</script>
 
 <script type="text/javascript">	
 		
