@@ -184,7 +184,7 @@
 <script type="text/javascript">	
 		
 	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
+	$('conteneur').style.backgroundColor = "#fff";
 	
 	
 	// *********************************************************************************
@@ -196,7 +196,7 @@
 	function filter (phrase, _id){
 
 		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
+		var table = $(_id);
 		var ele;
 		var elements_liste = "";
 			
@@ -229,20 +229,19 @@
 	// *********************************************************************************	
 	 
 	function select_cette_ligne( id, userid, row ) {
-		
 
-		document.getElementById('pret_a_poster').value = id;		
-		document.getElementById('row_table').value = row;	// row du tableau à modifier
-		document.getElementById('select_user').value = userid;	// userid du matos à modifier
+		$('pret_a_poster').value = id;		
+		$('row_table').value = row;	// row du tableau à modifier
+		$('select_user').value = userid;	// userid du matos à modifier
 		
 		if ( userid == 1 ) {	// On se base sur la valeur USER_ID de root
-			document.getElementById('rendre').style.visibility = "hidden";
-			document.getElementById('preter').style.visibility = "";
+			$('rendre').style.visibility = "hidden";
+			$('preter').style.visibility = "";
 			
 		} else {
 			
-			document.getElementById('rendre').style.visibility = "";
-			document.getElementById('preter').style.visibility = "hidden";
+			$('rendre').style.visibility = "";
+			$('preter').style.visibility = "hidden";
 		}			
 
 	}
@@ -257,11 +256,11 @@
 	 
 	function validation_preter_materiel( matid, userid, row ) {
 		
-		var mat_nom = document.getElementById('prets_table').rows[row].cells[8].innerHTML;
-		var mat_etat = document.getElementById('prets_table').rows[row].cells[6].innerHTML;
+		var mat_nom = $('prets_table').rows[row].cells[8].innerHTML;
+		var mat_etat = $('prets_table').rows[row].cells[6].innerHTML;
 		
-		var user_selected_id = document.getElementById('user_select').selectedIndex;
-		var user_selected_text = document.getElementById('user_select').options[user_selected_id].text;	
+		var user_selected_id = $('user_select').selectedIndex;
+		var user_selected_text = $('user_select').options[user_selected_id].text;	
 		
 		var valida = confirm('Voulez-vous vraiment prêter le matériel ' + mat_nom + ' qui est en état '+ mat_etat + ' à ' + user_selected_text + " ?");
 		
@@ -288,7 +287,7 @@
 	 
 	function validation_rendre_materiel( matid, userid, row ) {
 		
-		var mat_nom = document.getElementById('prets_table').rows[row].cells[8].innerHTML;
+		var mat_nom = $('prets_table').rows[row].cells[8].innerHTML;
 	
 		var valida = confirm('Voulez-vous vraiment rendre le matériel ' + mat_nom + " ?");
 		
