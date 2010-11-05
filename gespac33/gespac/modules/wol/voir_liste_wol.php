@@ -13,7 +13,33 @@
 	include_once ('../../config/databases.php');
 ?>
 
-<script type="text/javascript" src="server.php?client=all"></script>
+<script type="text/javascript">
+/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML, filt) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('modules/wol/voir_liste_wol.php');", 1500);
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
+	
+</script>
 
 
 <!--	DIV target pour Ajax	-->
@@ -35,7 +61,7 @@
 	
 	<center>
 	
-	<form name=elements_selectionnes id=elements_selectionnes  onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="modules/wol/post_wol.php" method="post">
+	<form name="post_form" id="post_form" action="modules/wol/post_wol.php" method="post">
 	
 		<!--------------------------------------------	LISTE DES ID A POSTER	------------------------------------------------>
 		<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
@@ -233,20 +259,6 @@
 			else 
 				$('wakethem').style.display = "none";
 		}
-	}
-
-		
-	
-	// *********************************************************************************
-	//
-	//			ferme la smoothbox et rafraichis la page
-	//
-	// *********************************************************************************	
-	
-	function refresh_quit () {
-		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("$('conteneur').load('modules/wol/voir_liste_wol.php');", 1500);
-		TB_remove();
 	}
 	
 	
