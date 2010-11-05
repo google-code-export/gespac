@@ -55,6 +55,7 @@
 	
 	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_mac FROM materiels, marques, salles WHERE (materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND mat_mac <> '' ) ORDER BY mat_nom" );
 ?>
+	<h3>Réveil des machines à distance</h3><br>
 	
 	<span id="nb_selectionnes">[0]</span> machines à réveiller.
 	
@@ -66,7 +67,7 @@
 		<!--------------------------------------------	LISTE DES ID A POSTER	------------------------------------------------>
 		<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
 
-		<input type=submit id="wakethem" value="Wake" onclick="refresh_quit ();" style="display:none">	
+		<input type=submit id="wakethem" value="Réveiller ces machines" style="display:none"><br>
 		
 	</form>
 	
