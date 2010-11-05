@@ -20,10 +20,10 @@
 	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
-		var bt_submit = document.getElementById("post_user");
-		var user_nom = document.getElementById("nom").value;
-		var user_login = document.getElementById("login").value;
-		var user_password = document.getElementById("password").value;
+		var bt_submit 	  = $("post_user");
+		var user_nom 	  = $("nom").value;
+		var user_login 	  = $("login").value;
+		var user_password = $("password").value;
 		
 		if (user_nom == "" || user_login == "" || user_password == "") {
 			bt_submit.disabled = true;
@@ -32,13 +32,32 @@
 		}
 	}
 	
-	// ferme la smoothbox et rafraichis la page
-	function refresh_quit () {
+	
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
 
-		// lance la fonction avec un délais de 1000ms
-		//window.setTimeout("$('conteneur').load('accueil.php');", 1000);
-		TB_remove();
-	}
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML, filt) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1500);
+					SexyLightbox.close();
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
 	
 </script>
 
@@ -83,7 +102,7 @@
 			$('nom').focus();
 		</script>
 		
-		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_utilisateurs/post_utilisateurs.php?action=mod" method="post" name="frmTest" id="frmTest">
+		<form action="gestion_utilisateurs/post_utilisateurs.php?action=mod" method="post" name="post_form" id="post_form">
 			<input type=hidden name=id value=<?PHP echo $user_id;?> >
 			<center>
 			<table width=500>
@@ -157,7 +176,7 @@
 			</table>
 			
 			<br>
-			<input type=submit value='Modifier cet utilisateur' onClick="refresh_quit();" >
+			<input type=submit value='Modifier cet utilisateur' >
 
 			</center>
 
