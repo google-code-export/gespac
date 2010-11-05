@@ -1,36 +1,66 @@
+<script type="text/javascript"> 
+
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('modules/export/post_export_perso.php');", 1500);
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
+
+
+</script>
+
 <?PHP header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères ?>
 
-<!--  SERVEUR AJAX -->
-<script type="text/javascript" src="server.php?client=all"></script>
+<div id="target"></div>
 
+<!--  SERVEUR AJAX 
+<script type="text/javascript" src="server.php?client=all"></script>-->
+<h3>Export personnalisé</h3><br>
 
-<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="modules/export/post_export_perso.php" method="post" name="frmTest" id="frmTest">
+<form action="modules/export/post_export_perso.php" method="post" name="post_form" id="post_form">
 
-	<input type=checkbox class=chkbox id=mat_nom> Nom du Matériel <br>
-	<input type=checkbox class=chkbox id=mat_dsit> Num Inventaire <br>
-	<input type=checkbox class=chkbox id=mat_serial> Num Série <br>
-	<input type=checkbox class=chkbox id=mat_etat> Etat Matériel<br>
-	<input type=checkbox class=chkbox id=mat_origine> Origine Matériel <br>
+	<input type=checkbox class=chkbox id=mat_nom> Nom du matériel <br>
+	<input type=checkbox class=chkbox id=mat_dsit> Numéro d'inventaire <br>
+	<input type=checkbox class=chkbox id=mat_serial> Numéro de série <br>
+	<input type=checkbox class=chkbox id=mat_etat> Etat du matériel<br>
+	<input type=checkbox class=chkbox id=mat_origine> Origine du matériel <br>
 
-	<input type=checkbox class=chkbox id=salle_nom> Salle du Matériel <br>
+	<input type=checkbox class=chkbox id=salle_nom> Salle du matériel <br>
 
-	<input type=checkbox class=chkbox id=marque_type> Type du Matériel <br>
-	<input type=checkbox class=chkbox id=marque_stype> Sous-type du Matériel <br>
-	<input type=checkbox class=chkbox id=marque_marque> Marque du Matériel <br>
-	<input type=checkbox class=chkbox id=marque_model> Modèle du Matériel <br>
+	<input type=checkbox class=chkbox id=marque_type> Type du matériel <br>
+	<input type=checkbox class=chkbox id=marque_stype> Sous-type du matériel <br>
+	<input type=checkbox class=chkbox id=marque_marque> Marque du matériel <br>
+	<input type=checkbox class=chkbox id=marque_model> Modèle du matériel <br>
 
 	<input type=checkbox class=chkbox id=user_nom> Prêté à <br>
 
 	<br>
-
-
 
 	<br><br>
 
 	<div id="log"></div>
 
 	<input type=hidden name=rqsql id=rqsql />
-	<input type=submit onclick="add_field()" value="GO">
+	<input type=submit onclick="add_field()" value="Lancer l'export personnalisé">
 </form>
 
 
@@ -110,5 +140,6 @@
 		else $('log').innerHTML = "Faudrait au moins cocher une case";
 
 	}
+	
 	
 </script>
