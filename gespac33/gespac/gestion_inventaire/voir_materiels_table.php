@@ -23,8 +23,35 @@
 			
 ?>
 
-<script type="text/javascript" src="server.php?client=all"></script>
+<!--<script type="text/javascript" src="server.php?client=all"></script>-->
+<script type="text/javascript">
+/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
 
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML, filt) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1500);
+					SexyLightbox.close();
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
+	
+</script>
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
@@ -165,7 +192,7 @@
 ?>
 	
 	
-	<form name=elements_selectionnes id=elements_selectionnes  onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=affect" method="post">
+	<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="post_form" >
 	
 		<!--------------------------------------------	LISTE DES ID A POSTER	------------------------------------------------>
 		<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
@@ -194,7 +221,7 @@
 			?>
 			
 		</select>
-		<input type=submit value="Affecter" onclick="refresh_quit ();">
+		<input type=submit value="Affecter" >
 		</span>
 		
 		
@@ -370,7 +397,7 @@
 <script type="text/javascript">	
 
 	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
+	$('conteneur').style.backgroundColor = "#fff";
 
 	
 	// *********************************************************************************
@@ -391,7 +418,7 @@
 				$('target').load("gestion_inventaire/post_materiels.php?action=suppr&id=" + id);
 				
 				/*	supprimer la ligne du tableau	*/
-				document.getElementById('mat_table').deleteRow(row);
+				$('mat_table').deleteRow(row);
 			}
 			
 		} else {
@@ -514,20 +541,6 @@
 				document.getElementById('mat_table').rows[r].cells[6].innerHTML = lg;
 			}
 		}
-	}
-	
-
-	
-	// *********************************************************************************
-	//
-	//			ferme la smoothbox et rafraichit la page
-	//
-	// *********************************************************************************	
-	
-	function refresh_quit () {
-		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1500);
-		TB_remove();
 	}
 	
 
