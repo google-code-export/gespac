@@ -65,15 +65,16 @@ foreach ($liste_export as $record) {
 
 	// cnx à la base de données OCS
 	$db_ocsweb 	= & MDB2::factory($dsn_ocsweb);
-	$liste_export_ocs = $db_ocsweb->queryALL ("select MAX(LASTCOME), FIDELITY from hardware, bios where bios.HARDWARE_ID=hardware.ID AND bios.SSN = '$serial'");
+	$liste_export_ocs = $db_ocsweb->queryALL ("select LASTCOME, FIDELITY from hardware, bios where bios.HARDWARE_ID=hardware.ID AND bios.SSN = '$serial'");
 	if (!$liste_export_ocs) {
 		$last='matériel non présent dans OCS'; $fidele='0';
 	}//du fait du MAX(LASTCOME) cette ligne ne marche pas...
 	else {
 		foreach ($liste_export_ocs as $record_ocs) {
-			$last = mb_strtoupper($record_ocs[0]);
-			$fidele = mb_strtoupper($record_ocs[1]);
+			$last = ($record_ocs[0]);
+			$fidele =($record_ocs[1]);
 		}
+		
 	}
 	$db_ocsweb->disconnect();
 
