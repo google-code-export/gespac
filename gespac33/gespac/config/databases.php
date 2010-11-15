@@ -4,7 +4,11 @@
 	
   $host = 'localhost';
   $user = 'root';
-  $pass = '';  
+  $pass = ''; 
 
+   //identification de base de données  
+  $gespac='gespac';
+  $ocsweb='ocsweb';
+  $fog='fog';
 
 ?>
