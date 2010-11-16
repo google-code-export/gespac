@@ -113,12 +113,21 @@
 				</tr>
 				
 				<tr>
-					<TD>Niveau</TD>
-					<TD><select name="niveau" size="1">
-							<option value=1>ATI</option>
-							<option value=2>TICE</option>
-							<option value=3>PROF</option>
-							<option value=9>Autre...</option>
+					<TD>Grade</TD>
+					<TD><select name="grade">
+						<?PHP
+							// Requete pour récupérer la liste des grades
+							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
+							
+							foreach ( $liste_grades as $record ) {
+							
+								$grade_id 	= $record[0];
+								$grade_nom 	= $record[1];
+							
+								echo "<option value=$grade_id>$grade_nom</option>";
+							}
+						?>	
+							
 						</select>
 					</TD>
 				</tr>
@@ -179,17 +188,19 @@
 		echo "<h2>formulaire de modification d'un utilisateur</h2><br>";
 		
 		// Requete pour récupérer les données des champs pour le user à modifier
-		$user_a_modifier = $db_gespac->queryAll ( "SELECT user_id, user_nom, user_logon, user_password, user_niveau, user_mail, user_skin, user_accueil FROM users WHERE user_id=$id" );		
+		$user_a_modifier = $db_gespac->queryAll ( "SELECT user_id, user_nom, user_logon, user_password, grade_id, user_mail, user_skin, user_accueil FROM users WHERE user_id=$id" );		
 		
 		// valeurs à affecter aux champs
 		$user_id 			= $user_a_modifier[0][0];
 		$user_nom	 		= $user_a_modifier[0][1];
 		$user_logon	 		= $user_a_modifier[0][2];
 		$user_password 		= $user_a_modifier[0][3];
-		$user_niveau	 	= $user_a_modifier[0][4];
+		$grade_id	 		= $user_a_modifier[0][4];
 		$user_mail 			= $user_a_modifier[0][5];
 		$user_skin 			= $user_a_modifier[0][6];
 		$user_accueil		= $user_a_modifier[0][7];
+		$grade_nom			= $user_a_modifier[0][8];
+
 	
 		
 		?>
@@ -224,13 +235,25 @@
 					<TD><input type=text name=mail value= "<?PHP echo $user_mail; ?>"	/></TD>
 				</tr>
 				
+				
 				<tr>
-					<TD>Niveau</TD>
-						<TD><select name="niveau" size="1">
-							<option <?PHP if ( $user_niveau == 1 ) echo "selected"; ?> value=1>ATI</option>
-							<option <?PHP if ( $user_niveau == 2 ) echo "selected"; ?> value=2>TICE</option>
-							<option <?PHP if ( $user_niveau == 3 ) echo "selected"; ?> value=3>Professeur</option>
-							<option <?PHP if ( $user_niveau == 9 ) echo "selected"; ?> value=9>Autre...</option>
+					<TD>Grade</TD>
+					<TD><select name="grade">
+						<?PHP
+							// Requete pour récupérer la liste des grades
+							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
+							
+							foreach ( $liste_grades as $record ) {
+							
+								$grade_id_lst 	= $record[0];
+								$grade_nom_lst 	= $record[1];
+						
+								$selected = $grade_id_lst == $grade_id ? "selected" : "";
+							
+								echo "<option value='$grade_id_lst' $selected>$grade_nom_lst</option>";
+							}
+						?>	
+							
 						</select>
 					</TD>
 				</tr>

@@ -31,7 +31,7 @@
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_utilisateurs = $db_gespac->queryAll ( "SELECT user_nom, user_logon, user_password, user_niveau, user_mail, user_id, user_skin FROM users ORDER BY user_nom" );
+	$liste_des_utilisateurs = $db_gespac->queryAll ( "SELECT user_nom, user_logon, user_password, grade_nom, user_mail, user_id, user_skin FROM users, grades WHERE users.grade_id=grades.grade_id ORDER BY user_nom" );
 
 ?>
 	
@@ -71,7 +71,7 @@
 					$nom 		= $record[0];
 					$logon 		= $record[1];
 					$password 	= $record[2];
-					$niveau		= $record[3];
+					$grade		= $record[3];
 					$mail 		= $record[4];
 					$id			= $record[5];
 					$skin		= $record[6];
@@ -87,26 +87,10 @@
 							$id_pret = 1;
 					}
 					
-					switch ($niveau) {
-						case 0 : $niveau = "ROOT";
-						break;
-					
-						case 1 : $niveau = "ATI";
-						break;
-						
-						case 2 : $niveau = "TICE";
-						break;
-						
-						case 3 : $niveau = "Professeur";
-						break;
-						
-						case 9 : $niveau = "Autre...";
-						break;
-					}
 					
 					echo "<td> $nom </td>";
 					echo "<td> $logon </td>";
-					echo "<td> $niveau </td>";
+					echo "<td> $grade </td>";
 					echo "<td> $mail </td>";
 					echo "<td> $skin </td>";
 					

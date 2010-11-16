@@ -73,13 +73,12 @@
 		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
 		$login 		= $_POST ['login'];
 		$password	= $_POST ['password'];
-		$niveau   	= $_POST ['niveau'];
+		$grade   	= $_POST ['grade'];
 		$mail  		= $_POST ['mail'];
 		$skin  		= $_POST ['skin'];
 		$page   	= $_POST ['page'];
 
-		// [BUG] pour le niveau : la valeur peut être null mais pas vide. On devrait pe mettre le niveau avec une valeur 0 pour non affecté par défaut
-		$req_modif_user = "UPDATE users SET user_nom='$nom', user_logon='$login', user_password='$password', user_niveau=$niveau, user_mail='$mail', user_skin='$skin', user_accueil='$page' WHERE user_id=$id";
+		$req_modif_user = "UPDATE users SET user_nom='$nom', user_logon='$login', user_password='$password', grade_id=$grade, user_mail='$mail', user_skin='$skin', user_accueil='$page' WHERE user_id=$id";
 		$result = $db_gespac->exec ( $req_modif_user );
 		
 		// On log la requête SQL
@@ -100,12 +99,12 @@
 		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
 		$login 		= $_POST ['login'];
 		$password	= $_POST ['password'];
-		$niveau   	= $_POST ['niveau'];
+		$grade   	= $_POST ['grade'];
 		$mail   	= $_POST ['mail'];
 		$skin   	= $_POST ['skin'];
 		$page   	= $_POST ['page'];
 		
-		$req_add_user = "INSERT INTO users ( user_nom, user_logon, user_password, user_niveau, user_mail, user_skin, user_accueil) VALUES ( '$nom', '$login', '$password', $niveau, '$mail', '$skin', '$page')";
+		$req_add_user = "INSERT INTO users ( user_nom, user_logon, user_password, grade_id, user_mail, user_skin, user_accueil) VALUES ( '$nom', '$login', '$password', $grade, '$mail', '$skin', '$page')";
 		$result = $db_gespac->exec ( $req_add_user );
 		
 		// On log la requête SQL
@@ -120,29 +119,6 @@
 		echo "<br><small>L'utilisateur <b>$nom</b> a bien été ajouté...</small>";
 	}
 
-	/********** AFFECTATION D'UN GRADE ***********/	
-	
-	//	PAS UTILISE POUR LE MOMENT
-	
-	
-	if ( $action == 'affect' ) {
-	/*
-		$mat_ids 	= $_POST['materiel_a_poster'];
-		$salle_id 	= $_POST['salle_select'];
-		
-		$mat_ids_array = explode (";", $mat_ids);
-		
-		$mat_ids_unique = array_unique ($mat_ids_array);
-		
-		foreach ($mat_ids_unique as $id) {
-			if ( $id <> "") {
-				$req_modif_apreter = "UPDATE materiels SET salle_id = $salle_id WHERE mat_id = $id";
-				$result = $db_gespac->exec ( $req_modif_apreter );
-			}
-		}
-
-	*/
-	}	
 	
 	// Je ferme le fichier  de log sql
 	fclose($fp);
