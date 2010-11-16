@@ -24,6 +24,7 @@
 ?>
 
 <!--<script type="text/javascript" src="server.php?client=all"></script>-->
+
 <script type="text/javascript">
 /******************************************
 	*
@@ -52,11 +53,10 @@
 	});
 	
 </script>
-<!--	DIV target pour Ajax	-->
+
+<!--	DIV target pour Ajax	
 <div id="target"></div>
-
-
-
+-->
 
 
 <?PHP
@@ -391,6 +391,25 @@
   <script type="text/javascript">
     window.addEvent('domready', function(){
       SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+	  
+	  		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML) {
+					$('target').set('html', responseText);
+					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1500);
+					SexyLightbox.close();
+				}
+			
+			}).send(this.toQueryString());
+		});	
+	  
+	  
     });
   </script>
 		

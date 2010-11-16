@@ -16,12 +16,12 @@
 
 ?>
 
-<!--	DIV target pour Ajax	-->
+<!--	DIV target pour Ajax	
 <div id="target"></div>
-
-<!--  SERVEUR AJAX -->
+-->
+<!--  SERVEUR AJAX 
 <script type="text/javascript" src="server.php?client=all"></script>
-
+-->
 
 <script type="text/javascript"> 
 	
@@ -275,22 +275,23 @@
 	
 	window.addEvent('domready', function(){
 		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+		$('post_form2').addEvent('submit', function(e) {	//	Pour poster un formulaire
 			new Event(e).stop();
 			new Request({
 
 				method: this.method,
 				url: this.action,
 
-				onSuccess: function(responseText, responseXML, filt) {
+				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					//$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste un champ trop grand on dépasse la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1500);
 					SexyLightbox.close();
 				}
 			
 			}).send(this.toQueryString());
-		});			
+		});	
+		
 	});
 	
 	
@@ -362,7 +363,7 @@
 			$('filt').focus();
 		</script>
 		
-		<form action="gestion_inventaire/post_materiels.php?action=add" method="post" name="post_form" id="post_form">
+		<form action="gestion_inventaire/post_materiels.php?action=add" method="post" name="post_form" id="post_form2">
 			
 				<!--
 
@@ -521,7 +522,7 @@
 			$('origine').focus();
 		</script>
 
-		<form action="gestion_inventaire/post_materiels.php?action=modlot" method="post" name="post_form" id="post_form">
+		<form action="gestion_inventaire/post_materiels.php?action=modlot" method="post" name="post_form" id="post_form2">
 			<center>
 			
 			<input type=hidden name=lot id=lot>
@@ -668,7 +669,7 @@
 			$('nom').focus();
 		</script>
 		
-		<form action="gestion_inventaire/post_materiels.php?action=mod" method="post" name="post_form" id="post_form">
+		<form action="gestion_inventaire/post_materiels.php?action=mod" method="post" name="post_form" id="post_form2">
 			<input type=hidden name=materiel_id value=<?PHP echo $id;?> >
 			
 				<!--
@@ -838,11 +839,12 @@
 			</table>
 
 			<br>
-			<input type=submit class="smoothbox" value='Modifier ce matériel' >
+			<input type=submit value='Modifier ce matériel' >
 
 			</center>
 
 		</FORM>
+
 		
 <?PHP
 	}	
