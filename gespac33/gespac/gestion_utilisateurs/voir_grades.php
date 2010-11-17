@@ -50,7 +50,6 @@
 	<table class="tablehover" id="grades_table" width=600>
 		<th>Niveau</th>
 		<th>Nom</th>
-		<th>Qt</th>
 		<th>Droits</th>
 		<th>&nbsp</th>
 		<th>&nbsp</th>
@@ -72,10 +71,10 @@
 					$grade_menu 	= $record[2];
 					$grade_niveau	= $record[3];
 					
+					$nb_users_du_grade = $db_gespac->queryOne ( "SELECT count(*) as compte FROM users WHERE grade_id=$grade_id" );
 					
 					echo "<td width=20> $grade_niveau </td>";
-					echo "<td> $grade_nom </td>";
-					echo "<td width=20> 0 </td>";
+					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='sexylightbox' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
 					echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
 					echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
