@@ -26,6 +26,13 @@ session_start();
 	$action 	= $_GET['action'];
 	$id 		= $_GET['id'];
 	
+	//Récupération du mail du compte ati (root)
+	$mail_root = $db_gespac->queryOne("SELECT user_mail FROM users WHERE user_id=1");
+	
+	// PARAMETRAGE DU SMTP 
+	ini_set('SMTP','smtp.intranet.cg13.oleane.fr'); //Mettre l'adresse SMTP dans le fichier de config
+	ini_set('sendmail_from', $mail_root);
+	
 	
 	
 	/*********************************************
@@ -47,7 +54,7 @@ session_start();
 		$inter		= $_POST ['inter'];
 		
 		
-		// on récupére le numéro d'id du user qui fait la demande
+		// on récupére le numéro d'id du user qui fait la clôture du dossier
 		$req_id_user = $db_gespac->queryRow ( "SELECT user_id, user_nom FROM users WHERE user_logon='$login'" );
 		$user_id 	=  $req_id_user[0];
 		$user_nom 	=  $req_id_user[1];
@@ -69,6 +76,87 @@ session_start();
 		$log_texte = "Modification de <b>$user_nom</b> sur le dossier <b>$dossier</b>. Le dossier est passé à l`état : <b>$etat</b> ";
 		$req_log_modif_dem = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Etat demande', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_modif_dem );
+		
+		
+		/*************************
+				MAILING
+		**************************/
+		
+		// on récupére le numéro d'id du user qui fait la demande. Attention on ne récupére les infos de mail que si le compte est actif.
+		$user_mail = $db_gespac->queryOne ( "SELECT user_mail FROM users WHERE user_logon='$login' AND user_mailing=1" );
+		
+		//Récupération des comptes qui ont le grade ATI
+		$req_comptes_ati = $db_gespac->queryAll("SELECT user_nom, user_mail FROM users WHERE grade_id=2 AND user_mailing=1");
+		
+		//On récupére les identifiants du demandeur en fonction du numéro de dossier
+		$id_demandeur = $db_gespac->queryOne("SELECT user_demandeur_id FROM demandes WHERE dem_id='$dossier'");
+		
+		//on récupère uniquement les comptes qui sont actifs ! Un mail est envoyé au demandeur pour l'avertir que son dossier a été clôturé
+		$req_mail_demandeur	= $db_gespac->queryRow("SELECT user_mail, user_nom FROM users WHERE user_id='$id_demandeur' AND user_mailing=1");
+		$mail_demandeur     = $req_mail_demandeur[0];
+		$nom_demandeur      = $req_mail_demandeur[1];
+		
+		// CORPS DU MAIL
+		$corps_mail = "L'intervention (n° : <b>$inter</b>) concernant le dossier n°<b>$dossier</b> a été clôturée le <b>$date_clot</b>. Vous pouvez le suivre en affichant la liste de vos dossiers par le lien suivant : http://localhost/developpement/gespac33/gespac/gestion_demandes/voir_interventions.php<br><br>";
+		$corps_mail .= "L'état du dossier est actuellement : <b>'$etat'<br><br></b>";
+		$corps_mail .= "Commentaire de l'utilisateur : <i>'$reponse'</i><br><br>";
+		$corps_mail .= "<i>Ce mail est envoyé automatiquement. Inutile d'y répondre, vous ne recevrez aucun mail en retour. Pour tout suivi du dossier, merci de vous connecter à <a href='http://gespac/gespac'>votre interface GESPAC.</a></i><br><br>";
+		$corps_mail .= "L'équipe GESPAC";
+		
+		$sujet_mail = '[GESPAC]Clôture du dossier n°'.$dossier.' par l\'utilisateur '.$user_nom;
+		
+		$message = '<html><head><title>'.$sujet_mail.'</title></head><body>'.$corps_mail.'</body></html>'; 
+		
+		//Boucle pour récupérer la liste des mails des ATIs
+		foreach ( $req_comptes_ati as $record ) {
+				
+			$mail_nom = $record[0];
+			$mail_ati = $record[1];
+				
+			if (empty($mail_ati)) { //le champ $mail_ati est vide
+				$liste_mail_ati .= ''; //on ne concatène rien dans la variable $liste_mail_ati
+			} else { // si ce champ n'est pas vide
+				$liste_mail_ati .= $mail_ati.','; //on colle à la variable la valeur de $mail_ati suivi d'une virgule et d'un espace
+			}
+		}
+		
+		// on concatène les mails des ati avec le mail du destinataire. L'envoi en Cc nous met une erreur.
+		$mail_destinataire = $liste_mail_ati.$mail_demandeur.','.$user_mail;
+		//on cherche si il y a une virgule après le séparateur ','. Si c'est le cas, on remplace cette virgule par une seule virgule.
+		$mail_destinataire = str_replace (",,", ",", $mail_destinataire);
+		
+		/******************************
+			Vérification des doublons
+		*******************************/
+		
+		// on transforme la chaine $mail_prof en un tableau
+		$verif_doublon_mail_destinataire = explode(',', $mail_destinataire); 
+		// Cette fonction va nous retourner un tableau complètement dédoublonné !! Magique !
+		$verif_doublon_mail_destinataire = array_unique($verif_doublon_mail_destinataire);
+		// On reconstruit notre string à partir du tableau dédoublonné
+		$mail_destinataire = implode(",", $verif_doublon_mail_destinataire);
+		
+		// Phase de test pour vérifier qu'on a bien toutes nos variables
+		echo 'Nom du demandeur sur ce dossier: <b>'.$nom_demandeur.'</b><br>';
+		echo 'Mail du demandeur sur ce dossier : <b>'.$mail_demandeur.'</b><br>';
+		echo 'Mail de l\'utilisateur <b>'.$user_nom.'</b> qui répond au dossier ($user_mail) : <b>'.$user_mail.'</b><br>';
+		echo 'LISTE MAIL DES ATIS : <b>'.$liste_mail_ati.'</b>';
+		
+		echo '<br><br>Dans ce cas, l\'utilisateur <b>'.$user_nom.'</b> doit recevoir en copie avec les autres comptes ATI qui ont pour mail <b>'.$liste_mail_ati.'</b> le mail destiné à l\'utilisateur <b>'.$nom_demandeur.'</b> qui a pour mail <b>'.$mail_demandeur.'</b>. Le mail est automatiquement envoyé avec le compte ati root qui a pour mail <b>'.$mail_root.'</b><br><br>';
+		
+		echo 'Mail destinataire : <b>'.$mail_destinataire.'</b>';
+		
+		$headers ='From: '.$mail_root."\n"; //c'est toujours le compte root qui envoie le mail
+		$headers .='Reply-To: '.$mail_root."\n"; 
+		$headers .='Content-Type: text/html; charset="iso-8859-1"'."\n"; 
+		$headers .='Content-Transfer-Encoding: 8bit'; 
+		
+		if(mail($mail_destinataire, $sujet_mail, $message, $headers)) { 
+			echo 'Le(s) mail(s) a (ont) bien été envoyé(s) !<br>'; 
+		} else { 
+			echo 'Le(s) mail(s) n\'a (ont) pas été envoyé(s) !<br>'; 
+		}
+		
 	}
 	
 	
