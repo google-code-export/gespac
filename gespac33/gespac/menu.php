@@ -85,8 +85,7 @@ if ( $user_grade > 2 ) { // profs ou autres
 ?>
 
 	<script type="text/javascript">
-		window.addEvent('domready', function(){
-			SexyLightbox = nothing;
+		window.addEvent('domready', function(){ 
 			SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
 		});
 	</script>
@@ -155,6 +154,7 @@ if ( $user_grade > 2 ) { // profs ou autres
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');change_icon_onclick('utilisateurs');">	Visualiser les utilisateurs		</a></li>
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_utilisateurs/voir_grades.php');change_icon_onclick('utilisateurs');">	Visualiser les grades		</a></li>
 					<li class='item'><a href='gestion_utilisateurs/form_comptes_iaca.php?height=200&width=640' rel='sexylightbox' title='Import des comptes IACA'>	Importer les comptes IACA	</a></li>
+					<li class='item'><a href='gestion_utilisateurs/form_utilisateur_personnel.php?height=300&width=640' rel='sexylightbox' title='Modifier mon compte'>	Modifier mon compte	</a></li>
 				</ul>
 			</li>
 			
