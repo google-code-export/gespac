@@ -113,6 +113,11 @@
 				</tr>
 				
 				<tr>
+					<TD>Mailing</TD> 
+					<TD><input type=checkbox name=mailing checked /></TD>
+				</tr>
+				
+				<tr>
 					<TD>Grade</TD>
 					<TD><select name="grade">
 						<?PHP
@@ -188,7 +193,7 @@
 		echo "<h2>formulaire de modification d'un utilisateur</h2><br>";
 		
 		// Requete pour récupérer les données des champs pour le user à modifier
-		$user_a_modifier = $db_gespac->queryAll ( "SELECT user_id, user_nom, user_logon, user_password, grade_id, user_mail, user_skin, user_accueil FROM users WHERE user_id=$id" );		
+		$user_a_modifier = $db_gespac->queryAll ( "SELECT user_id, user_nom, user_logon, user_password, users.grade_id, user_mail, user_skin, user_accueil, grade_nom, user_mailing FROM users, grades WHERE users.grade_id=grades.grade_id AND user_id=$id" );		
 		
 		// valeurs à affecter aux champs
 		$user_id 			= $user_a_modifier[0][0];
@@ -200,8 +205,9 @@
 		$user_skin 			= $user_a_modifier[0][6];
 		$user_accueil		= $user_a_modifier[0][7];
 		$grade_nom			= $user_a_modifier[0][8];
+		$user_mailing		= $user_a_modifier[0][9];
 
-	
+		$checked = $user_mailing == 1 ? "checked" : "";
 		
 		?>
 		
@@ -233,6 +239,11 @@
 				<tr>
 					<TD>Mail</TD> 
 					<TD><input type=text name=mail value= "<?PHP echo $user_mail; ?>"	/></TD>
+				</tr>
+				
+				<tr>
+					<TD>Mailing</TD> 
+					<TD><input type=checkbox name=mailing <?PHP echo $checked;?>	/></TD>
 				</tr>
 				
 				

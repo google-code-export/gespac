@@ -31,7 +31,7 @@
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_utilisateurs = $db_gespac->queryAll ( "SELECT user_nom, user_logon, user_password, grade_nom, user_mail, user_id, user_skin FROM users, grades WHERE users.grade_id=grades.grade_id ORDER BY user_nom" );
+	$liste_des_utilisateurs = $db_gespac->queryAll ( "SELECT user_nom, user_logon, user_password, grade_nom, user_mail, user_id, user_skin, user_mailing FROM users, grades WHERE users.grade_id=grades.grade_id ORDER BY user_nom" );
 
 ?>
 	
@@ -42,7 +42,7 @@
 	
 <?PHP
 	// Ajout d'un utilisateur
-	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=280&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 ?>
 
 	<center>
@@ -53,6 +53,7 @@
 		<th>Grade</th>
 		<th>Mail</th>
 		<th>Skin</th>
+		<th>Mailing</th>
 		<th>&nbsp</th>
 		<th>&nbsp</th>
 		
@@ -75,6 +76,9 @@
 					$mail 		= $record[4];
 					$id			= $record[5];
 					$skin		= $record[6];
+					$mailing	= $record[7];
+					
+					$mailing_chk = $mailing == 1 ? "checked.png" : "unchecked.png";
 					
 					
 					// test si la machine est prétée ou pas
@@ -93,11 +97,12 @@
 					echo "<td> $grade </td>";
 					echo "<td> $mail </td>";
 					echo "<td> $skin </td>";
+					echo "<td> <img src='img/$mailing_chk'> </td>";
 					
 					if ( $id == 1 ) {
 						$modif_user = "<td><img src='img/write.png' style=display:none></td>";
 					} else {
-						$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=270&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
+						$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
 					}
 					
 					echo $modif_user;
@@ -116,7 +121,7 @@
 	
 <?PHP
 
-	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=280&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 
 	// On se déconnecte de la db
 	$db_gespac->disconnect();

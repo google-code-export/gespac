@@ -77,8 +77,11 @@
 		$mail  		= $_POST ['mail'];
 		$skin  		= $_POST ['skin'];
 		$page   	= $_POST ['page'];
+		$mailing   	= $_POST ['mailing'];
+		
+		$mailing = $mailing == "on" ? 1 : 0 ;
 
-		$req_modif_user = "UPDATE users SET user_nom='$nom', user_logon='$login', user_password='$password', grade_id=$grade, user_mail='$mail', user_skin='$skin', user_accueil='$page' WHERE user_id=$id";
+		$req_modif_user = "UPDATE users SET user_nom='$nom', user_logon='$login', user_password='$password', grade_id=$grade, user_mail='$mail', user_skin='$skin', user_accueil='$page', user_mailing=$mailing WHERE user_id=$id";
 		$result = $db_gespac->exec ( $req_modif_user );
 		
 		// On log la requête SQL
@@ -103,8 +106,11 @@
 		$mail   	= $_POST ['mail'];
 		$skin   	= $_POST ['skin'];
 		$page   	= $_POST ['page'];
+		$mailing	= $_POST ['mailing'];
+
+		$mailing = $mailing == "on" ? 1 : 0 ;
 		
-		$req_add_user = "INSERT INTO users ( user_nom, user_logon, user_password, grade_id, user_mail, user_skin, user_accueil) VALUES ( '$nom', '$login', '$password', $grade, '$mail', '$skin', '$page')";
+		$req_add_user = "INSERT INTO users ( user_nom, user_logon, user_password, grade_id, user_mail, user_skin, user_accueil, user_mailing) VALUES ( '$nom', '$login', '$password', $grade, '$mail', '$skin', '$page', $mailing)";
 		$result = $db_gespac->exec ( $req_add_user );
 		
 		// On log la requête SQL
