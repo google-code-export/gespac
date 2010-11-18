@@ -178,10 +178,6 @@ session_start();
 		$user_nom 		=  $req_id_user[1];
 		$grade_id	 	=  $req_id_user[2];
 		
-		//On change le chemin du dossier dans le mail et on annonce qu'une intervention a été générée automatiquement
-		$chemin_visionnage_dossier	= 'voir_demandes.php';
-		$texte_visionnage_dossier	= '';
-		
 		if ( $type == "installation" || $type == "reparation" ) {	
 		
 			$salle 			= $_POST ['salle_demande'];
@@ -192,10 +188,6 @@ session_start();
 			
 			if ( $creat_inter == 'on') {
 				$etat = "intervention";
-				
-				//On change le chemin du dossier dans le mail et on annonce qu'une intervention a été générée automatiquement
-				$chemin_visionnage_dossier	= 'voir_interventions.php';
-				$texte_visionnage_dossier	= ' Une intervention a été générée en même temps que la création de ce dossier.';
 				
 			} else {
 				$etat = "attente";
@@ -213,9 +205,6 @@ session_start();
 				$req_create_inter = "INSERT INTO interventions ( dem_id, salle_id, mat_id, interv_text ) VALUES ( $dossier, $salle, $pc, '$texte' );";
 				$result = $db_gespac->exec ( $req_create_inter );
 				
-				//On change le chemin du dossier dans le mail et on annonce qu'une intervention a été générée automatiquement
-				$chemin_visionnage_dossier	= 'voir_interventions.php';
-				$texte_visionnage_dossier	= ' Une intervention a été générée en même temps que la création de ce dossier.';
 			}
 			
 
@@ -258,7 +247,7 @@ session_start();
 		
 		
 		// CORPS DU MAIL
-		$corps_mail = "Un nouveau dossier a été créé.$texte_visionnage_dossier Vous pouvez le suivre en affichant la liste de vos dossiers par le lien suivant : http://localhost/developpement/gespac33/gespac/gestion_demandes/$chemin_visionnage_dossier<br><br>";
+		$corps_mail = "Un nouveau dossier a été créé. Vous pouvez le suivre en affichant la liste de vos dossiers par le lien suivant : http://localhost/developpement/gespac33/gespac/gestion_demandes/voir_demandes.php<br><br>";
 		$corps_mail .= "L'état du dossier est actuellement : <b>'$etat'<br><br></b>";
 		$corps_mail .= "Commentaire de l'utilisateur : <i>'$reponse'</i><br><br>";
 		$corps_mail .= "<i>Ce mail est envoyé automatiquement. Inutile d'y répondre, vous ne recevrez aucun mail en retour. Pour tout suivi du dossier, merci de vous connecter à <a href='http://gespac/gespac'>votre interface GESPAC.</a></i><br><br>";
