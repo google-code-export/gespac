@@ -131,7 +131,6 @@ if ( $user_grade > 2 ) { // profs ou autres
 			<li class='dir'><a style='display:<?PHP echo $demandes;?>' href="#" onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');"><div id="demandes" class="demandes" title="demandes et interventions"></div></a>
 				<ul>
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');">		Voir les dossiers	</a></li>
-					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=-1');change_icon_onclick('demandes');">	ouvrir un dossier	</a></li>
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_demandes/voir_interventions.php');change_icon_onclick('demandes');">	Voir les interventions	</a></li>
 				</ul>
 			</li>
@@ -147,8 +146,10 @@ if ( $user_grade > 2 ) { // profs ou autres
 				</ul>
 			</li>
 			
-			<li><a style='display:<?PHP echo $prets;?>' href="#" onclick="AffichePage('conteneur', 'gestion_prets/voir_prets.php');change_icon_onclick('prets');"><div id="prets" class="prets" title="preter ou rendre un matériel"></div></a></li>
-			
+			<li class='dir'><a style='display:<?PHP echo $prets;?>' href="#" onclick="AffichePage('conteneur', 'gestion_prets/voir_prets.php');change_icon_onclick('prets');"><div id="prets" class="prets" title="preter ou rendre un matériel"></div></a></li>
+				<ul>
+					<li class='item'><a style='display:<?PHP echo $prets;?>' href="#" onclick="AffichePage('conteneur', 'gestion_prets/voir_prets.php');change_icon_onclick('prets');"><div id="prets" class="prets" title="preter ou rendre un matériel"></div></a></li>
+				</ul>
 			<li class='dir'><a style='display:<?PHP echo $utilisateurs;?>' href="#" onclick="AffichePage('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');change_icon_onclick('utilisateurs');"><div id="utilisateurs" class="utilisateurs" title="gestion des utilisateurs"></div></a>
 				<ul>
 					<li class='item'><a href="#" onclick="AffichePage('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');change_icon_onclick('utilisateurs');">	Visualiser les utilisateurs		</a></li>
