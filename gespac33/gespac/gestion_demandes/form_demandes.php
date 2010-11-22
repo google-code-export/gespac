@@ -174,10 +174,13 @@
 	function validation () {
 
 		var bt_submit  	= $("post_demandes");
-		var commentaire	= $("tr_texte");
+		var commentaire	= document.getElementById("tr_texte").value;
+		var type		= document.getElementById("type_demande").value;
+		var salle		= document.getElementById("tr_salle").value;
+		var pc			= document.getElementById("tr_pc").value;
 		
 	
-		if (commentaire == "") {
+		if (commentaire == "" || type == "" || salle == "" || pc == "") {
 			bt_submit.disabled = true;
 		} else {
 			bt_submit.disabled = false;
@@ -257,7 +260,7 @@
 
 				<tr id="tr_type">
 					<TD>Type :</TD>
-					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value);">
+					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value);" onkeyup="validation();">
 							<option selected value=""> >>> Type de Demande <<< </option>
 							<option value="installation">installation</option>
 							<option value="reparation">réparation</option>
@@ -270,11 +273,11 @@
 				
 				<tr id="tr_salle" style='display:none'>
 					<TD>Salle</TD>
-					<TD><select id="salle_demande" name="salle_demande" onChange="chainage_salle_pc(this, 'pc_demande', 'tr_pc');">
+					<TD><select id="salle_demande" name="salle_demande" onChange="chainage_salle_pc(this, 'pc_demande', 'tr_pc');" onkeyup="validation();">
 							<option selected>>>>Sélectionner une salle<<<</option>
 							<?PHP
-								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles ORDER BY salle_nom" );
+								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles' sauf les salles MATERIEL VOLE et D3E
+								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles WHERE NOT salle_id=2 AND NOT salle_id=21 ORDER BY salle_nom" );
 								foreach ( $req_salles_disponibles as $record) { 
 								
 									$salle_nom 	= $record[0];
@@ -290,7 +293,7 @@
 				
 				<tr id="tr_pc" style='display:none'>
 					<TD>PC</TD> 
-					<TD><select id="pc_demande" name="pc_demande" onChange="change_pc();chainage_pc_historique(this,'historique')"></select>
+					<TD><select id="pc_demande" name="pc_demande" onChange="change_pc();chainage_pc_historique(this,'historique')" onkeyup="validation();"></select>
 					</TD>
 				</tr>
 
@@ -400,7 +403,7 @@
 				
 				<textarea name="reponse" cols=65 rows=10 onkeyup="validation_reponse();" ></textarea>
 				<br>
-
+				
 				<label>Changer l'état : </label>
 				<select name="etat">
 					<option value=rectifier>	Rectifier le dossier	</option>
@@ -420,6 +423,8 @@
 							$inter_en_cours = $db_gespac->queryOne ( "SELECT interv_id FROM interventions WHERE dem_id=$id AND interv_cloture='' ;" );
 							if ( $inter_en_cours ) echo "<option value=clos>		Clore le dossier		</option>";
 						?>
+						
+						<option value=clos>	Clore le dossier		</option>
 						
 					<?PHP
 					}

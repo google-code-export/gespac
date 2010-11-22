@@ -52,6 +52,8 @@ session_start();
 		$mat_id 			= $_POST ['mat'];
 		$login				= $_SESSION['login'];
 		
+		//on récupére le type de la demande
+		$type_demande = $db_gespac->queryOne("SELECT dem_type FROM demandes WHERE dem_id=$dossier");
 		
 		// on récupére le numéro d'id et le nom du user qui fait la demande
 		$req_id_user = $db_gespac->queryRow ( "SELECT user_id, user_nom FROM users WHERE user_logon='$login'" );
@@ -71,6 +73,14 @@ session_start();
 		$req_log_modif_dem = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Etat demande', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_modif_dem );
 		
+		if ($type_demande == "installation" || $type_demande == "reparation") {
+			$salle_id = $_POST['salle'];
+			$mat_id = $_POST['mat'];
+		} else {
+			$salle_id = 0;
+			$mat_id = 0;
+		}
+		
 		// Si l'état est "intervention" on créé en même temps une inter dans la table des inter
 		if ( $etat == "intervention" ) {
 			$req_create_inter = "INSERT INTO interventions ( dem_id, salle_id, mat_id ) VALUES ( $dossier, $salle_id, $mat_id);";
@@ -82,7 +92,6 @@ session_start();
 			$req_create_inter = "INSERT INTO interventions ( dem_id, salle_id, mat_id ) VALUES ( $dossier, $salle_id, $mat_id);";
 			$result = $db_gespac->exec ( $req_create_inter );
 		}
-		
 
 		/*************************
 				MAILING
@@ -208,8 +217,10 @@ session_start();
 			}
 			
 
-		} else {	// si on a pas affaire à une installation ou une reparation, pas la peine de renseigner la salle et le pc
+		} else {	// si on a pas affaire à une installation ou une reparation, on donne un id de PC et de salle bidon (0) 
 			
+			$pc 			= 0;
+			$salle 			= 0;
 			$texte 			= addslashes(utf8_decode( $_POST ['texte_demande'] ));
 			$creat_inter	= $_POST ['creat_inter'];
 			
@@ -218,8 +229,18 @@ session_start();
 			if ( $creat_inter == 'on')	$etat = "intervention";
 			else $etat = "attente";
 			
-			$req_add_demande = "INSERT INTO demandes ( dem_text, dem_etat, user_demandeur_id, dem_type ) VALUES ( '$texte', '$etat', $user_id, '$type' )";
-			$result = $db_gespac->exec ( $req_add_demande );		
+			$req_add_demande = "INSERT INTO demandes ( dem_text, dem_etat, user_demandeur_id, salle_id, mat_id, dem_type ) VALUES ( '$texte', '$etat', $user_id, $salle, $pc, '$type' )";
+			$result = $db_gespac->exec ( $req_add_demande );
+			
+			// Si l'état est "intervention" on créé en même temps une inter dans la table des inter
+			if ( $creat_inter == 'on' ) {
+				// On récupère le demande_id le plus élevé : c'est très probablement le dernier créé donc le dossier en cours de création
+				$req_dossier_id = $db_gespac->queryAll ( "SELECT max(dem_id) FROM demandes" );
+				$dossier 	=  $req_dossier_id[0][0];
+			
+				$req_create_inter = "INSERT INTO interventions ( dem_id, salle_id, mat_id, interv_text ) VALUES ( $dossier, $salle, $pc, '$texte' );";
+				$result = $db_gespac->exec ( $req_create_inter );
+			}
 		}
 
 		echo "Votre demande a été prise en compte...";

@@ -31,9 +31,9 @@ session_start();
 
 		// cnx à la base de données GESPAC
 		$db_gespac 	= & MDB2::factory($dsn_gespac);
-
+		
 		// stockage des lignes retournées par sql dans un tableau nommé liste_des_demandes
-		$liste_des_interventions = $db_gespac->queryAll ( "SELECT interv_id, interv_date, interv_cloture, interv_text, interventions.dem_id, interventions.salle_id, salle_nom, interventions.mat_id, interventions.user_id, dem_text FROM interventions, salles, demandes WHERE interventions.salle_id=salles.salle_id AND demandes.dem_id=interventions.dem_id ORDER BY interv_date DESC" );
+		$liste_des_interventions = $db_gespac->queryAll ( "SELECT interv_id, interv_date, interv_cloture, interv_text, interventions.dem_id, interventions.salle_id, interventions.mat_id, interventions.user_id, dem_text FROM interventions, demandes WHERE demandes.dem_id=interventions.dem_id ORDER BY interv_date DESC" );
 		
 		// grade de l'utilisateur courant
 		$grade = $_SESSION['grade']; 
@@ -76,29 +76,38 @@ session_start();
 					$interv_cloture	= $record[2]; 
 					$interv_text	= $record[3]; 
 					$dossier		= $record[4]; 
-					$salle_id		= $record[5]; 
-					$salle_nom		= $record[6]; 
-					$mat_id			= $record[7]; 
-					$user_id		= $record[8];
-					$demande_txt	= $record[9];
+					$salle_id		= $record[5];
+					$mat_id			= $record[6]; 
+					$user_id		= $record[7];
+					$demande_txt	= $record[8];
 					
-					
-
-					// On récupère le nom du matériel
-					if ( $mat_id <> 0) {
-						$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
-						$mat_nom = $liste_nom_materiel[0][0];
+					// on récupère le nom de la salle
+					if ($salle_id <> 0) {
+						$salle_nom = $db_gespac->queryOne ("SELECT salle_nom FROM salles WHERE salle_id = $salle_id");
+					} else {
+						$salle_nom = "Pas de salle";
 					}
-					else {	$mat_nom = "TOUS";	}
 					
-					
-					if ( $grade > 1 )	// Si l'utilisateur n'est pas admin il ne peut pas modifier les inter
+					// on change la valeur de mat_nom en fonction de si il y a une salle ou pas
+					if ($salle_nom != "Pas de salle") {
+						// On récupère le nom du matériel
+						if ( $mat_id <> 0) {
+							$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
+							$mat_nom = $liste_nom_materiel[0][0];
+						} else {
+							$mat_nom = "TOUS";
+						}
+					} else {
+						$mat_nom = "Non  communiqué";
+					}
+						
+					if ( $grade > 1 ) {	// Si l'utilisateur n'est pas admin il ne peut pas modifier les inter
 						$hidemodif = "none";
-					else {
+					} else {
 						// Ne pas pouvoir modifier une inter close
 						$hidemodif = $interv_cloture == "" ? "": "none";
 					}
-						
+					
 					
 					
 					

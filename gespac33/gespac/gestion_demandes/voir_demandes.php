@@ -121,13 +121,45 @@
 					
 					
 					// On change la couleur quand le dossier est clos et on masque la case de modification
-					if ( $dem_etat == "clos" ) {
+					switch ($dem_etat) {
+						case "clos" : {
+							$etat_couleur = "#36F572";
+							$hidemodif = "none";
+							break;
+						}
+						
+						case "attente" : {
+							$etat_couleur = "#FFD700";
+							$hidemodif = "";
+							break;
+						}
+						
+						case "rectifier" : {
+							$etat_couleur = "#FFD700";
+							$hidemodif = "";
+							break;
+						}
+						
+						case "precisions" : {
+							$etat_couleur = "#FFD700";
+							$hidemodif = "";
+							break;
+						}
+						
+						case "intervention" : {
+							$etat_couleur = "#F57236";
+							$hidemodif = "";
+							break;
+						}
+					}
+					
+					/*if ( $dem_etat == "clos" ) {
 						$etat_couleur = "#F57236";
 						$hidemodif = "none";
 					} else {
 						$etat_couleur = "";
 						$hidemodif = "";
-					}
+					}*/
 					
 														
 					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dem_id' rel='sexylightbox' title='voir le dossier $dem_id'> <img src='img/loupe.gif'>$dem_id</a> </td>";					

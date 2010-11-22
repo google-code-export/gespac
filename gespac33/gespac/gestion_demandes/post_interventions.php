@@ -182,11 +182,13 @@ session_start();
 			$req_add_inter = "INSERT INTO interventions ( interv_text, interv_date, interv_type, salle_id, mat_id, dem_id, user_id ) VALUES ( '$texte', '$date_inter', '$type', $salle, $pc, 0, $user_id )";
 			$result = $db_gespac->exec ( $req_add_inter );
 
-		} else {	// si on a pas affaire à une installation ou une reparation, pas la peine de renseigner la salle et le pc
+		} else {	// si on a pas affaire à une installation ou une reparation, l'id de la salle et des pc est à 0 (id fictif)
 			
+			$pc 			= 0;
+			$salle 			= 0;
 			$texte 		= addslashes(utf8_decode( $_POST ['texte_intervention'] ));
 			
-			$req_add_inter = "INSERT INTO interventions ( interv_text, user_id, interv_type ) VALUES ( '$texte', $user_id, '$type' )";
+			$req_add_inter = "INSERT INTO interventions ( interv_text, user_id, interv_type, salle_id, mat_id ) VALUES ( '$texte', $user_id, '$type', $salle, $pc )";
 			$result = $db_gespac->exec ( $req_add_inter );		
 		}
 		
