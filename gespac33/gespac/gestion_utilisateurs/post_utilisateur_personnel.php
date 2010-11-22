@@ -16,7 +16,7 @@
 	$fp = fopen('../dump/log_sql.sql', 'a+');
 	
 	// adresse de connexion à la base de données	
-	$dsn_gespac	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';	
+	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::connect($dsn_gespac);

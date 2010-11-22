@@ -44,10 +44,10 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	********************************************/
 		// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
 			$link_bases = mysql_pconnect('localhost', 'root', $password_gespac);//connexion à la base de donnée
-			if(!mysql_select_db('ocsweb', $link_bases)) {}
+			if(!mysql_select_db($ocsweb, $link_bases)) {}
 			else {
 	// adresse de connexion à la base de données	
-	$dsn_ocs	= 'mysql://'. $user .':' . $pass . '@localhost/ocsweb';
+	$dsn_ocs	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
 	
 	// cnx à la base de données GESPAC
 	$db_ocs 	= & MDB2::factory($dsn_ocs);
@@ -73,7 +73,7 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	*
 	********************************************/
 	// adresse de connexion à la base de données	
-	$dsn_gespac	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
+	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -89,11 +89,11 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	*
 	********************************************/
 	//On vérifie l'existance de la base FOG même souci que OCS plantage de la page.
-	if(!mysql_select_db('fog', $link_bases)) {$message_fog ="Base FOG non présente";}
+	if(!mysql_select_db($fog, $link_bases)) {$message_fog ="Base FOG non présente";}
 	else {
 	
 	// adresse de connexion à la base de données
-	$dsn_fog	= 'mysql://'. $user .':' . $pass . '@localhost/fog';
+	$dsn_fog	= 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
 	
 	// cnx à la base de données FOG
 	$db_fog 	= & MDB2::factory($dsn_fog);

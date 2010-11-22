@@ -12,7 +12,7 @@
 
 
 	// adresse de connexion à la base de données
-	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
+	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
 	// cnx à la base de données OCS
 	$db_gespac 	= & MDB2::factory($dsn_gespac);

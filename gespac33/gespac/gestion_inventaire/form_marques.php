@@ -198,7 +198,7 @@
 	$id = $_GET['id'];
 	
 	// adresse de connexion à la base de données
-	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
+	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -217,7 +217,7 @@
 		echo "<h2>Formulaire de création d'une marque</h2><br>";
 		
 		// adresse de connexion à la base de données
-		$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
+		$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
 		// cnx à la base de données GESPAC
 		$db_gespac 	= & MDB2::factory($dsn_gespac);		
@@ -414,7 +414,7 @@
 		// Requete pour récupérer les données des champs pour la marque à modifier
 		
 		// adresse de connexion à la base de données
-		$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
+		$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
 		// cnx à la base de données GESPAC
 		$db_gespac 	= & MDB2::factory($dsn_gespac);

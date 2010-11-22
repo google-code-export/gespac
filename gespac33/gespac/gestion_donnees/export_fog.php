@@ -4,7 +4,7 @@ include_once ('../includes.php');	// fichier contenant les fonctions, la config 
 
 
 	// adresse de connexion à la base de données
-	$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/ocsweb';
+	$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
 
 	// cnx à la base de données OCS
 	$db_ocs 	= & MDB2::factory($dsn_ocs);

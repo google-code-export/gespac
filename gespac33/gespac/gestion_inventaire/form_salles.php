@@ -134,7 +134,7 @@
 		#***************************************************************************
 		
 		// adresse de connexion à la base de données
-		$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
+		$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
 		// options facultatives de cnx à la db
 		$options = array(

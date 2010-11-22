@@ -8,8 +8,8 @@ PAS D'iMPORT POUR LE MOMENT
 
 	
 	// adresse de connexion à la base de données
-	$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/ocsweb';
-	$dsn_gespac	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
+	$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
+	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
 	// cnx à la base de données OCS
 	$db_ocs 	= & MDB2::factory($dsn_ocs);

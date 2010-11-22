@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `correspondances` (
   UNIQUE KEY `corr_marque_ocs` (`corr_marque_ocs`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-INSERT INTO users VALUES('1', 'ati', 'ati', 'xxxxxx', '0', '', 'cg13', 'modules/stats/cssschart.php','','0');
+INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', '0', '', 'cg13', 'modules/stats/cssschart.php','','0');
 
 INSERT IGNORE INTO `etats` (`etat`) VALUES
 ('ATTENTE SAV'),

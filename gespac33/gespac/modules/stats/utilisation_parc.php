@@ -38,7 +38,7 @@
 	include_once ('../../config/databases.php');
 		
 	// adresse de connexion à la base de données
-	$dsn_fog 	= 'mysql://'. $user .':' . $pass . '@localhost/fog';
+	$dsn_fog     = 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
 
 	// cnx à la base de données FOG
 	$db_fog 	= & MDB2::factory($dsn_fog);
