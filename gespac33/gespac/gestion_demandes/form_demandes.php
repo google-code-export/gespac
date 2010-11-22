@@ -164,6 +164,46 @@
 			historique.style.display = "none";
 	}
 	
+	
+	// *********************************************************************************
+	//
+	// 		vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	//
+	// *********************************************************************************
+	
+	function validation () {
+
+		var bt_submit  	= $("post_demandes");
+		var commentaire	= $("tr_texte");
+		
+	
+		if (commentaire == "") {
+			bt_submit.disabled = true;
+		} else {
+			bt_submit.disabled = false;
+		}
+	}
+	
+	// *************************************************************************************************************
+	//
+	// 		vérouille l'accès au bouton submit si les conditions ne sont pas remplies pour la réponse à un dossier
+	//
+	// *************************************************************************************************************
+	
+	function validation_reponse () {
+
+		var bt_submit  	= $("post_reponse");
+		var commentaire	= $("reponse");
+		
+	
+		if (commentaire == "") {
+			bt_submit.disabled = true;
+		} else {
+			bt_submit.disabled = false;
+		}
+	}
+	
+	
 	/******************************************
 	*
 	*		AJAX
@@ -256,7 +296,7 @@
 
 				<TR id="tr_texte" style='display:none'>
 					<TD>Problème</TD>
-					<TD><textarea cols=45 rows=15 name="texte_demande" ></textarea></TD>
+					<TD><textarea cols=45 rows=15 name="texte_demande" onkeyup="validation();"></textarea></TD>
 				</TR>
 				
 			</table>
@@ -273,7 +313,7 @@
 			
 			<br>
 			<br>
-				<input type=submit value='Envoyer la demande' >
+				<input type=submit id=post_demandes value='Envoyer la demande' disabled>
 
 			</center>
 
@@ -358,7 +398,7 @@
 				<input type=hidden name="salle" value= <?PHP echo $salle_id;?> >
 				<input type=hidden name="mat" value= <?PHP echo $mat_id;?> >
 				
-				<textarea name="reponse" cols=65 rows=10 ></textarea>
+				<textarea name="reponse" cols=65 rows=10 onkeyup="validation_reponse();" ></textarea>
 				<br>
 
 				<label>Changer l'état : </label>
@@ -387,7 +427,7 @@
 
 				</select>
 				
-				<input type=submit value=poster >
+				<input type=submit id=post_reponse value=poster disabled >
 		
 			</form>
 		
