@@ -19,7 +19,8 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
 	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-	include ('../../include/config.php'); //on récupère les variables pour le test des bases OCS et FOG
+	include ('../../include/config.php'); 	//on récupère les variables pour le test des bases OCS et FOG
+	
 	// le ssn est le champ charnière pour récupérer les informations des différentes bases
 	$mat_ssn = $_GET ['mat_ssn'];
 	// le nom va servir pour la fiche fog ; en effet, la machine peut exister si elle n'a pas de numéro de série
@@ -31,9 +32,6 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	<!--	DIV target pour Ajax	-->
 	<div id="target"></div>
 
-	<!--  SERVEUR AJAX -->
-	<!--<script type="text/javascript" src="server.php?client=all"></script>-->
-	
 <?PHP
 
 
@@ -42,29 +40,30 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	*				BASE OCS
 	*
 	********************************************/
-		// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
-			$link_bases = mysql_pconnect('localhost', 'root', $password_gespac);//connexion à la base de donnée
-			if(!mysql_select_db($ocsweb, $link_bases)) {}
-			else {
-	// adresse de connexion à la base de données	
-	$dsn_ocs	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
 	
-	// cnx à la base de données GESPAC
-	$db_ocs 	= & MDB2::factory($dsn_ocs);
-	
-	// RQ POUR INFO OCS
-	$materiel_ocs    = $db_ocs->queryAll ( "SELECT NAME, USERDOMAIN, OSNAME, OSCOMMENTS, PROCESSORT, MEMORY, FIDELITY, USERID, SMANUFACTURER, SMODEL, SSN, networks.HARDWARE_ID, hardware.ID FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
-	$materiel_ocs_id = $materiel_ocs[0][12];
-	
-	if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
-		// RQ POUR INFO cartes rzo
-		$rq_cartes_reseaux = $db_ocs->queryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[0][11] );
-		// RQ POUR liste logiciels
-		$rq_liste_logiciels = $db_ocs->queryAll ( "SELECT softwares.Name FROM softwares , hardware WHERE softwares.hardware_id = " . $materiel_ocs[0][12] . " AND hardware.id = " . $materiel_ocs[0][12] . " AND NOT softwares.Name LIKE '% Windows XP %' ");
-	}
-	
-	// On se déconnecte de la db ocs
-	$db_ocs->disconnect();
+	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
+	$link_bases = mysql_pconnect('localhost', 'root', $password_gespac);//connexion à la base de donnée
+	if(!mysql_select_db($ocsweb, $link_bases)) { echo "BASE OCS introuvable";}
+	else {
+		// adresse de connexion à la base de données	
+		$dsn_ocs	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
+		
+		// cnx à la base de données GESPAC
+		$db_ocs 	= & MDB2::factory($dsn_ocs);
+		
+		// RQ POUR INFO OCS
+		$materiel_ocs    = $db_ocs->queryAll ( "SELECT NAME, USERDOMAIN, OSNAME, OSCOMMENTS, PROCESSORT, MEMORY, FIDELITY, USERID, SMANUFACTURER, SMODEL, SSN, networks.HARDWARE_ID, hardware.ID FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
+		$materiel_ocs_id = $materiel_ocs[0][12];
+		
+		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
+			// RQ POUR INFO cartes rzo
+			$rq_cartes_reseaux = $db_ocs->queryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[0][11] );
+			// RQ POUR liste logiciels
+			$rq_liste_logiciels = $db_ocs->queryAll ( "SELECT softwares.Name FROM softwares , hardware WHERE softwares.hardware_id = " . $materiel_ocs[0][12] . " AND hardware.id = " . $materiel_ocs[0][12] . " AND NOT softwares.Name LIKE '% Windows XP %' ");
+		}
+		
+		// On se déconnecte de la db ocs
+		$db_ocs->disconnect();
 	}
 	
 	/*******************************************
@@ -72,8 +71,9 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	*		BASE GESPAC
 	*
 	********************************************/
+	
 	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac     = 'mysql://'. $user . ':' . $pass . '@localhost/' . $database_gespac;
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -88,90 +88,91 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	*		BASE FOG
 	*
 	********************************************/
+	
 	//On vérifie l'existance de la base FOG même souci que OCS plantage de la page.
-	if(!mysql_select_db($fog, $link_bases)) {$message_fog ="Base FOG non présente";}
+	if(!mysql_select_db($fog, $link_bases)) {$message_fog = "Base FOG non présente";}
 	else {
 	
-	// adresse de connexion à la base de données
-	$dsn_fog	= 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
+		// adresse de connexion à la base de données
+		$dsn_fog	= 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
 	
-	// cnx à la base de données FOG
-	$db_fog 	= & MDB2::factory($dsn_fog);
+		// cnx à la base de données FOG
+		$db_fog 	= & MDB2::factory($dsn_fog);
 	
-	$rq_hotes_fog = $db_fog->queryAll ( "SELECT hostID FROM hosts, inventory WHERE hosts.hostID = inventory.iHostID AND inventory.iSysserial='$mat_ssn';" );
-	$host_id = $rq_hotes_fog[0][0];
+		$rq_hotes_fog = $db_fog->queryAll ( "SELECT hostID FROM hosts, inventory WHERE hosts.hostID = inventory.iHostID AND inventory.iSysserial='$mat_ssn';" );
+		$host_id = $rq_hotes_fog[0][0];
 	
-	$rq_nom_hotes_fog = $db_fog->queryAll ( "SELECT hostID FROM hosts WHERE hosts.hostName='$mat_nom';" );
-	$host_nom_id = $rq_nom_hotes_fog[0][0];
+		$rq_nom_hotes_fog = $db_fog->queryAll ( "SELECT hostID FROM hosts WHERE hosts.hostName='$mat_nom';" );
+		$host_nom_id = $rq_nom_hotes_fog[0][0];
+	
 
-	if ( $host_id ) { 
-		
-		$message_fog = "";
-		
-		$rq_image_associee = $db_fog->queryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $host_id");
-		$image_associee = $rq_image_associee[0][0];
-		
-		$rq_groupe_associe = $db_fog->queryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $host_id");
-		$groupe_associe = $rq_groupe_associe[0][0];
-		
-		$rq_liste_snapins = $db_fog->queryAll ( "SELECT sName FROM snapinAssoc, snapins WHERE sID=saSnapinID AND saHostID='$host_id';" );
-		
-		$image_fog  = (!empty($image_associee)) ? $image_associee : "Pas d'image associée";
-		$groupe_fog = (!empty($groupe_associe)) ? $groupe_associe : "Pas de groupe associé";
+		if ( $host_id ) { 
+			
+			$message_fog = "";
+			
+			$rq_image_associee = $db_fog->queryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $host_id");
+			$image_associee = $rq_image_associee[0][0];
+			
+			$rq_groupe_associe = $db_fog->queryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $host_id");
+			$groupe_associe = $rq_groupe_associe[0][0];
+			
+			$rq_liste_snapins = $db_fog->queryAll ( "SELECT sName FROM snapinAssoc, snapins WHERE sID=saSnapinID AND saHostID='$host_id';" );
+			
+			$image_fog  = (!empty($image_associee)) ? $image_associee : "Pas d'image associée";
+			$groupe_fog = (!empty($groupe_associe)) ? $groupe_associe : "Pas de groupe associé";
 
-	} else if ($host_nom_id) { // on vérifie en passant par le nom de la machine qu'il y ait au moins un résultat
-		
-		// on avertit qu'il peut y avoir des erreurs dans les informations
-		$message_fog = "Attention ! La recherche étant basée sur le nom, il peut y avoir des erreurs sur les données suivantes !";
-		
-		$rq_image_associee = $db_fog->queryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $host_nom_id");
-		$image_associee = $rq_image_associee[0][0];
-		
-		
-		$rq_groupe_associe = $db_fog->queryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $host_nom_id");
-		$groupe_associe = $rq_groupe_associe[0][0];
-		
-		
-		$rq_liste_snapins = $db_fog->queryAll ( "SELECT sName FROM snapinAssoc, snapins WHERE sID=saSnapinID AND saHostID='$host_nom_id';" );
-		
-		$image_fog  = (!empty($image_associee)) ? $image_associee : "Pas d'image associée";
-		$groupe_fog = (!empty($groupe_associe)) ? $groupe_associe : "Pas de groupe associé";
+		} else if ($host_nom_id) { // on vérifie en passant par le nom de la machine qu'il y ait au moins un résultat
+			
+			// on avertit qu'il peut y avoir des erreurs dans les informations
+			$message_fog = "Attention ! La recherche étant basée sur le nom, il peut y avoir des erreurs sur les données suivantes !";
+			
+			$rq_image_associee = $db_fog->queryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $host_nom_id");
+			$image_associee = $rq_image_associee[0][0];
+			
+			
+			$rq_groupe_associe = $db_fog->queryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $host_nom_id");
+			$groupe_associe = $rq_groupe_associe[0][0];
+			
+			
+			$rq_liste_snapins = $db_fog->queryAll ( "SELECT sName FROM snapinAssoc, snapins WHERE sID=saSnapinID AND saHostID='$host_nom_id';" );
+			
+			$image_fog  = (!empty($image_associee)) ? $image_associee : "Pas d'image associée";
+			$groupe_fog = (!empty($groupe_associe)) ? $groupe_associe : "Pas de groupe associé";
 
-
-	} else {
+		} else {
+			
+			$message_fog = "Ce matériel n'existe pas dans FOG.";
+			$image_associee  = "Pas d'image associée";
+			$groupe_associee = "Pas de groupe associé";
+		}
 		
-		$message_fog = "Ce matériel n'existe pas dans FOG.";
-		$image_associee  = "Pas d'image associée";
-		$groupe_associee = "Pas de groupe associé";
+		// On se déconnecte de la db fog
+		$db_fog->disconnect();
 	}
 	
-	// On se déconnecte de la db fog
-	$db_fog->disconnect();
-	}
 	
 	// OCS
 	if(!mysql_select_db('ocsweb', $link_bases)) {$message_ocs = "Base OCS non présente";}//Base OCS absente on affiche ce message dans la liste
-			else {
-	if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
-		$NAME 			= $materiel_ocs[0][0]; 
-		$USERDOMAIN 	= $materiel_ocs[0][1];  
-		$OSNAME 		= $materiel_ocs[0][2];  
-		$OSCOMMENTS 	= $materiel_ocs[0][3];
-		$PROCESSORT 	= $materiel_ocs[0][4]; 
-		$MEMORY 		= $materiel_ocs[0][5]; 
-		$FIDELITY 		= $materiel_ocs[0][6]; 
-		$USERID 		= $materiel_ocs[0][7];
-		$SMANUFACTURER 	= $materiel_ocs[0][8];
-		$SMODEL 		= $materiel_ocs[0][9];
-		$SSN 			= $materiel_ocs[0][10]; 
-		$HARDWARE_ID	= $materiel_ocs[0][11];
-	} else {
-		$message_ocs = "Ce matériel n'existe pas dans OCS.";//Base OCS existe mais materiel non
+	else {
+		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
+			$NAME 			= $materiel_ocs[0][0]; 
+			$USERDOMAIN 	= $materiel_ocs[0][1];  
+			$OSNAME 		= $materiel_ocs[0][2];  
+			$OSCOMMENTS 	= $materiel_ocs[0][3];
+			$PROCESSORT 	= $materiel_ocs[0][4]; 
+			$MEMORY 		= $materiel_ocs[0][5]; 
+			$FIDELITY 		= $materiel_ocs[0][6]; 
+			$USERID 		= $materiel_ocs[0][7];
+			$SMANUFACTURER 	= $materiel_ocs[0][8];
+			$SMODEL 		= $materiel_ocs[0][9];
+			$SSN 			= $materiel_ocs[0][10]; 
+			$HARDWARE_ID	= $materiel_ocs[0][11];
+		} else {
+			$message_ocs = "Ce matériel n'existe pas dans OCS.";//Base OCS existe mais materiel non
+		}
 	}
-	}
-	
-	
-	
+
+
 	// GESPAC
 	$mat_nom	= $materiel_gespac[0][0];
 	$dsit		= $materiel_gespac[0][1];
