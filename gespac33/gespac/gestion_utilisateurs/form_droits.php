@@ -88,7 +88,7 @@
 	
 		<center>
 		
-		<table width=500>
+		<table width=500 class="tablehover">
 			
 			<th>Item</th>
 			<th>Lecture</th>
