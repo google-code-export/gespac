@@ -174,10 +174,10 @@
 	function validation () {
 
 		var bt_submit  	= $("post_demandes");
-		var commentaire	= document.getElementById("tr_texte").value;
-		var type		= document.getElementById("type_demande").value;
-		var salle		= document.getElementById("tr_salle").value;
-		var pc			= document.getElementById("tr_pc").value;
+		var commentaire	= $("tr_texte");
+		var type		= $("type_demande");
+		var salle		= $("tr_salle");
+		var pc			= $("tr_pc");
 		
 	
 		if (commentaire == "" || type == "" || salle == "" || pc == "") {
@@ -260,7 +260,7 @@
 
 				<tr id="tr_type">
 					<TD>Type :</TD>
-					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value);" onkeyup="validation();">
+					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value);" onSelect="document.getElementbyId('salle_demande').value = ""; validation(); ">
 							<option selected value=""> >>> Type de Demande <<< </option>
 							<option value="installation">installation</option>
 							<option value="reparation">réparation</option>
@@ -273,11 +273,11 @@
 				
 				<tr id="tr_salle" style='display:none'>
 					<TD>Salle</TD>
-					<TD><select id="salle_demande" name="salle_demande" onChange="chainage_salle_pc(this, 'pc_demande', 'tr_pc');" onkeyup="validation();">
-							<option selected>>>>Sélectionner une salle<<<</option>
+					<TD><select id="salle_demande" name="salle_demande" onChange="chainage_salle_pc(this, 'pc_demande', 'tr_pc');" onSelect="document.getElementbyId('pc_demande').value = ""; validation();">
+							<option selected value="">>>>Sélectionner une salle<<<</option>
 							<?PHP
 								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles' sauf les salles MATERIEL VOLE et D3E
-								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles WHERE NOT salle_id=2 AND NOT salle_id=21 ORDER BY salle_nom" );
+								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles WHERE NOT salle_nom='PRETS' AND NOT salle_nom='MATERIEL VOLE'ORDER BY salle_nom" );
 								foreach ( $req_salles_disponibles as $record) { 
 								
 									$salle_nom 	= $record[0];
@@ -293,7 +293,7 @@
 				
 				<tr id="tr_pc" style='display:none'>
 					<TD>PC</TD> 
-					<TD><select id="pc_demande" name="pc_demande" onChange="change_pc();chainage_pc_historique(this,'historique')" onkeyup="validation();"></select>
+					<TD><select id="pc_demande" name="pc_demande" onChange="change_pc();chainage_pc_historique(this,'historique');" onSelect="document.getElementbyId('tr_texte').value = ""; validation();"></select>
 					</TD>
 				</tr>
 
@@ -417,14 +417,17 @@
 						<?PHP
 							// Ici il faut voir si le dossier est déjà en cours d'intervention
 							$inter_existe = $db_gespac->queryOne ( "SELECT interv_id FROM interventions WHERE dem_id=$id;" );
-							if ( !$inter_existe ) echo "<option value=intervention>	Créer l'intervention	</option>";
+							if ( !$inter_existe ) {
+								echo "<option value=intervention>	Créer l'intervention	</option>";
+								echo "<option value=clos>	Clore le dossier				</option>";
+							}
 							
+							/*
 							// Si le dossier est en cours d'intervention, on ne peut pas le fermer
 							$inter_en_cours = $db_gespac->queryOne ( "SELECT interv_id FROM interventions WHERE dem_id=$id AND interv_cloture='' ;" );
-							if ( $inter_en_cours ) echo "<option value=clos>		Clore le dossier		</option>";
+							if ( $inter_en_cours ) echo "<option value=clos>		Clore le dossier		</option>";*/
 						?>
-						
-						<option value=clos>	Clore le dossier		</option>
+
 						
 					<?PHP
 					}
@@ -449,7 +452,7 @@
 			<?PHP 
 				// historique des demandes
 				$historique_demandes = $db_gespac->queryAll ( "SELECT txt_date, txt_texte, user_nom, txt_etat FROM demandes_textes, users WHERE dem_id=$id AND users.user_id=demandes_textes.user_id ORDER BY txt_date DESC;" );
-			
+				
 				echo "<table style='border: 1px solid #ccc;width:700px;'>
 						<th>Date</th>
 						<th>Intervenant</th>

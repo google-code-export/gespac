@@ -152,14 +152,7 @@
 							break;
 						}
 					}
-					
-					/*if ( $dem_etat == "clos" ) {
-						$etat_couleur = "#F57236";
-						$hidemodif = "none";
-					} else {
-						$etat_couleur = "";
-						$hidemodif = "";
-					}*/
+				
 					
 														
 					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dem_id' rel='sexylightbox' title='voir le dossier $dem_id'> <img src='img/loupe.gif'>$dem_id</a> </td>";					

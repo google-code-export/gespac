@@ -20,7 +20,6 @@ session_start();
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
-	
 		
 	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
@@ -87,11 +86,12 @@ session_start();
 			$result = $db_gespac->exec ( $req_create_inter );
 		}
 		
-		// Si l'état est "clos" on ferme aussi l'inter
+		/*
+		// Si l'état est "clos" on ferme aussi l'intervention
 		if ( $etat == "clos" ) {
 			$req_create_inter = "INSERT INTO interventions ( dem_id, salle_id, mat_id ) VALUES ( $dossier, $salle_id, $mat_id);";
 			$result = $db_gespac->exec ( $req_create_inter );
-		}
+		}*/
 
 		/*************************
 				MAILING
@@ -150,16 +150,6 @@ session_start();
 		$verif_doublon_mail_destinataire = array_unique($verif_doublon_mail_destinataire);
 		// On reconstruit notre string à partir du tableau dédoublonné
 		$mail_destinataire = implode(",", $verif_doublon_mail_destinataire);
-		
-		// Phase de test pour vérifier qu'on a bien toutes nos variables
-		echo 'Nom du demandeur sur ce dossier: <b>'.$nom_demandeur.'</b><br>';
-		echo 'Mail du demandeur sur ce dossier : <b>'.$mail_demandeur.'</b><br>';
-		echo 'Mail de l\'utilisateur <b>'.$user_nom.'</b> qui répond au dossier ($user_mail) : <b>'.$user_mail.'</b><br>';
-		echo 'LISTE MAIL DES ATIS : <b>'.$liste_mail_ati.'</b>';
-		
-		echo '<br><br>Dans ce cas, l\'utilisateur <b>'.$user_nom.'</b> doit recevoir en copie avec les autres comptes ATI qui ont pour mail <b>'.$liste_mail_ati.'</b> le mail destiné à l\'utilisateur <b>'.$nom_demandeur.'</b> qui a pour mail <b>'.$mail_demandeur.'</b>. Le mail est automatiquement envoyé avec le compte ati root qui a pour mail <b>'.$mail_root.'</b><br><br>';
-		
-		echo 'Mail destinataire : <b>'.$mail_destinataire.'</b>';
 		
 		$headers ='From: '.$mail_root."\n"; //c'est toujours le compte root qui envoie le mail
 		$headers .='Reply-To: '.$mail_root."\n"; 
@@ -314,12 +304,7 @@ session_start();
 		// On reconstruit notre string à partir du tableau dédoublonné
 		$mail_destinataire = implode(", ", $verif_doublon_mail_destinataire);
 		
-		// Phase de test pour vérifier qu'on a bien toutes nos variables
-		echo 'Nom du créateur du dossier: <b>'.$user_nom.'</b><br>';
-		echo 'Mail du créateur du dossier : <b>'.$user_mail.'</b><br>';
-		echo 'LISTE MAIL DES ATIS : <b>'.$liste_mail_ati.'</b><br>';
 		
-		echo 'Mail destinataire : <b>'.$mail_destinataire.'</b>';
 		
 		$headers ='From: '.$mail_root."\n"; //c'est toujours le compte root qui envoie le mail
 		$headers .='Reply-To: '.$mail_root."\n"; 

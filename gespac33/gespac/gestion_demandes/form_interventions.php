@@ -298,7 +298,9 @@
 	
 		
 		
-		$req_info_demande = $db_gespac->queryAll ( "SELECT demandes.dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, demandes.mat_id, demandes.salle_id, salle_nom, user_nom, dem_type FROM demandes, salles, users, materiels, interventions WHERE salles.salle_id=demandes.salle_id AND demandes.user_demandeur_id=users.user_id AND interventions.dem_id = demandes.dem_id AND interv_id=$interv_id ORDER BY dem_date" );
+		//$req_info_demande = $db_gespac->queryAll ( "SELECT demandes.dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, demandes.mat_id, demandes.salle_id, salle_nom, user_nom, dem_type FROM demandes, salles, users, materiels, interventions WHERE salles.salle_id=demandes.salle_id AND demandes.user_demandeur_id=users.user_id AND interventions.dem_id = demandes.dem_id AND interv_id=$interv_id ORDER BY dem_date" );
+		$req_info_demande = $db_gespac->queryAll ( "SELECT demandes.dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, demandes.mat_id, demandes.salle_id, user_nom, dem_type FROM demandes, users, materiels, interventions WHERE demandes.user_demandeur_id=users.user_id AND interventions.dem_id = demandes.dem_id AND interv_id=$interv_id ORDER BY dem_date" );
+		
 		
 		$dem_id 				= $req_info_demande[0][0];
 		$dem_date 				= $req_info_demande[0][1];
@@ -308,20 +310,32 @@
 		$user_intervenant_id 	= $req_info_demande[0][5];
 		$mat_id 				= $req_info_demande[0][6];
 		$salle_id 				= $req_info_demande[0][7];
-		$salle_nom 				= $req_info_demande[0][8];
-		$user_demandeur_nom		= $req_info_demande[0][9];
-		$dem_type				= $req_info_demande[0][10];
+		$user_demandeur_nom		= $req_info_demande[0][8];
+		$dem_type				= $req_info_demande[0][9];
 
 		
 		echo "<h2>MODIFIER l'intervention du dossier <b>$dem_id</b> créé le : $dem_date </h2><br>";
 		
 		
-		// On récupère le nom du matériel
-		if ( $mat_id <> 0) {
-			$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
-			$mat_nom = $liste_nom_materiel[0][0];
-		}
-		else {	$mat_nom = "TOUS";	}
+		// on récupère le nom de la salle
+					if ($salle_id <> 0) {
+						$salle_nom = $db_gespac->queryOne ("SELECT salle_nom FROM salles WHERE salle_id = $salle_id");
+					} else {
+						$salle_nom = "Pas de salle";
+					}
+					
+					// on change la valeur de mat_nom en fonction de si il y a une salle ou pas
+					if ($salle_nom != "Pas de salle") {
+						// On récupère le nom du matériel
+						if ( $mat_id <> 0) {
+							$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
+							$mat_nom = $liste_nom_materiel[0][0];
+						} else {
+							$mat_nom = "TOUS";
+						}
+					} else {
+						$mat_nom = "Non  communiqué";
+					}
 		
 
 		echo "	<center>
@@ -402,7 +416,7 @@
 		
 			foreach ( $historique_demandes as $record ) {
 			
-				$txt_date 	= $record[0];
+				$txt_date 	= $record[0];				
 				$txt_texte 	= $record[1];
 				$user_nom 	= $record[2];
 				$txt_etat	= $record[3];

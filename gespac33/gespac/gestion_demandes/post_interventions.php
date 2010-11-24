@@ -49,6 +49,7 @@ session_start();
 		$reponse 	= addslashes(utf8_decode( $_POST ['reponse'] ));
 		$etat 		= "clos";
 		$dossier	= $_POST ['dossier'];
+		echo "Numéro de dossier : $dossier";
 		$login		= $_SESSION['login'];
 		$date_clot	= date( 'Y-m-d H:i:s', time() );
 		$inter		= $_POST ['inter'];
@@ -65,7 +66,7 @@ session_start();
 		$result = $db_gespac->exec ( $req_change_etat );
 		
 		// On ferme le dossier
-		$req_change_etat_demande = "UPDATE demandes SET dem_etat='clos' WHERE dem_id=$dossier";
+		$req_change_etat_demande = "UPDATE demandes SET dem_etat='$etat' WHERE dem_id=$dossier";
 		$result = $db_gespac->exec ( $req_change_etat_demande );
 		
 		// On met un dernier commentaire de cloture dans le dossier
@@ -136,6 +137,7 @@ session_start();
 		// On reconstruit notre string à partir du tableau dédoublonné
 		$mail_destinataire = implode(",", $verif_doublon_mail_destinataire);
 		
+		/*
 		// Phase de test pour vérifier qu'on a bien toutes nos variables
 		echo 'Nom du demandeur sur ce dossier: <b>'.$nom_demandeur.'</b><br>';
 		echo 'Mail du demandeur sur ce dossier : <b>'.$mail_demandeur.'</b><br>';
@@ -145,6 +147,8 @@ session_start();
 		echo '<br><br>Dans ce cas, l\'utilisateur <b>'.$user_nom.'</b> doit recevoir en copie avec les autres comptes ATI qui ont pour mail <b>'.$liste_mail_ati.'</b> le mail destiné à l\'utilisateur <b>'.$nom_demandeur.'</b> qui a pour mail <b>'.$mail_demandeur.'</b>. Le mail est automatiquement envoyé avec le compte ati root qui a pour mail <b>'.$mail_root.'</b><br><br>';
 		
 		echo 'Mail destinataire : <b>'.$mail_destinataire.'</b>';
+		
+		*/
 		
 		$headers ='From: '.$mail_root."\n"; //c'est toujours le compte root qui envoie le mail
 		$headers .='Reply-To: '.$mail_root."\n"; 
