@@ -114,7 +114,7 @@ session_start();
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$liste_des_salles = $db_gespac->queryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment FROM salles ORDER BY salle_nom" );
 
-	echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='sexylightbox' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
+	if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='sexylightbox' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
 ?>
 	
 	<center>
@@ -127,10 +127,7 @@ session_start();
 				
 		
 		<?PHP	
-			if ($E_chk) {
-			echo"<th>&nbsp</th>
-			<th>&nbsp</th>";
-			}
+			if ($E_chk) echo"<th>&nbsp</th>	<th>&nbsp</th>";
 
 			//$option_id = 0;
 			$compteur = 0;
@@ -190,7 +187,7 @@ session_start();
 	
 
 <?PHP
-	echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='sexylightbox' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
+if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='sexylightbox' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
 
 	// On se déconnecte de la db
 	$db_gespac->disconnect();
