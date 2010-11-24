@@ -1,7 +1,8 @@
 <?PHP
-
+session_start();
 
 	/*
+		PAGE 02-03
 	
 		Visualisation des salles
 		
@@ -17,7 +18,9 @@
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 		
-
+	$L_chk = preg_match ("#L-02-03#", $_SESSION['droits']);
+	$E_chk = preg_match ("#E-02-03#", $_SESSION['droits']);
+	
 ?>
 
 
@@ -121,12 +124,13 @@
 		<th>VLAN</th>
 		<th>Etage</th>
 		<th>Bâtiment</th>
-		<th>&nbsp</th>
-		<th>&nbsp</th>
-		
 				
 		
 		<?PHP	
+			if ($E_chk) {
+			echo"<th>&nbsp</th>
+			<th>&nbsp</th>";
+			}
 
 			//$option_id = 0;
 			$compteur = 0;
@@ -169,10 +173,10 @@
 						$display_mod = "";
 						$display_del = "";
 					}
-					
-					echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de la salle $nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
-					echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
-
+					if ( $E_chk ) {
+						echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de la salle $nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
+						echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
+					}
 				echo "</tr>";
 				
 				$compteur++;
