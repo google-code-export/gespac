@@ -11,7 +11,7 @@
 	
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 	
-	$E_chk = preg_match ("#E-06-01#", $_SESSION['droits']);		
+	$E_chk = preg_match ("#E-06-02#", $_SESSION['droits']);		
 
 ?>
 
@@ -78,9 +78,15 @@
 					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='sexylightbox' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
 					if ( $E_chk ) {
-						echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
-						echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' title='supprimer $grade_nom'>	</a> </td>";
+						if ( $grade_nom <> "root" ) {
+							echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
+							echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
+							echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' title='supprimer $grade_nom'>	</a> </td>";
+						} else {
+							echo"<td width=20>&nbsp</td>
+							<td width=20>&nbsp</td>
+							<td width=20>&nbsp</td>";
+						}
 					}
 					
 				echo "</tr>";
