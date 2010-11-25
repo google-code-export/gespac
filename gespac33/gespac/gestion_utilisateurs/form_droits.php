@@ -12,8 +12,9 @@
 
 ?>
 
-<!--  SERVEUR AJAX -->
+<!--  SERVEUR AJAX 
 <script type="text/javascript" src="server.php?client=all"></script>
+-->
 
 <script type="text/javascript"> 
 	
@@ -29,7 +30,29 @@
 		} else {
 			bt_submit.disabled = false;
 		}
+	};
+	
+	
+	// si on coche en écriture, la lecture s'active aussi
+	function cocher_lecture (item) {
+		
+		var item_E = $("E-" + item);
+		var item_L = $("L-" + item);
+		
+		if ( item_E.checked == true)
+			item_L.checked = true;	
 	}
+	
+	//si on décoche la lecture, c'est l'écriture qui se désactive
+	function decocher_ecriture (item) {
+		 
+		var item_E = $("E-" + item);
+		var item_L = $("L-" + item);
+		 
+		 if ( item_L.checked == false )
+			item_E.checked = false;
+	}
+	
 	
 	/******************************************
 	*
@@ -55,6 +78,7 @@
 			
 			}).send(this.toQueryString());
 		});			
+		
 	});
 	
 </script>
@@ -119,8 +143,8 @@
 					echo "
 						<tr>
 							<TD>$value</TD>
-							<TD><input type=checkbox name='L-$id' $L_check /></TD>
-							<TD><input type=checkbox name='E-$id' $E_check /></TD>
+							<TD><input type=checkbox id='L-$id' name='L-$id' $L_check onclick=\"decocher_ecriture('$id'); \"/></TD>
+							<TD><input type=checkbox id='E-$id' name='E-$id' $E_check onclick=\"cocher_lecture('$id'); \"/></TD>
 						</tr>";
 				}
 			?>
