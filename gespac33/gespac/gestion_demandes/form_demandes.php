@@ -9,9 +9,9 @@
 ?>
 
 
-<!--  SERVEUR AJAX -->
+<!--  SERVEUR AJAX 
 <script type="text/javascript" src="server.php?client=all"></script>
-
+-->
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
@@ -174,11 +174,10 @@
 	function validation () {
 
 		var bt_submit  	= $("post_demandes");
-		var commentaire	= $("tr_texte");
-		var type		= $("type_demande");
-		var salle		= $("tr_salle");
-		var pc			= $("tr_pc");
-		
+		var commentaire	= $("texte_demande").value;
+		var type		= $("type_demande").value;
+		var salle		= $("salle_demande").value;
+		var pc			= $("pc_demande").value;
 	
 		if (commentaire == "" || type == "" || salle == "" || pc == "") {
 			bt_submit.disabled = true;
@@ -260,7 +259,7 @@
 
 				<tr id="tr_type">
 					<TD>Type :</TD>
-					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value);" onSelect="document.getElementbyId('salle_demande').value = ""; validation(); ">
+					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value);$('salle_demande').value=''; $('pc_demande').value='';validation();">
 							<option selected value=""> >>> Type de Demande <<< </option>
 							<option value="installation">installation</option>
 							<option value="reparation">réparation</option>
@@ -273,8 +272,8 @@
 				
 				<tr id="tr_salle" style='display:none'>
 					<TD>Salle</TD>
-					<TD><select id="salle_demande" name="salle_demande" onChange="chainage_salle_pc(this, 'pc_demande', 'tr_pc');" onSelect="document.getElementbyId('pc_demande').value = ""; validation();">
-							<option selected value="">>>>Sélectionner une salle<<<</option>
+					<TD><select id="salle_demande" name="salle_demande" onChange="chainage_salle_pc(this, 'pc_demande', 'tr_pc') ; $('pc_demande').value = ''; validation();">
+							<option selected value=''> >>>Sélectionner une salle<<< </option>
 							<?PHP
 								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles' sauf les salles MATERIEL VOLE et D3E
 								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles WHERE NOT salle_nom='PRETS' AND NOT salle_nom='MATERIEL VOLE'ORDER BY salle_nom" );
@@ -293,13 +292,13 @@
 				
 				<tr id="tr_pc" style='display:none'>
 					<TD>PC</TD> 
-					<TD><select id="pc_demande" name="pc_demande" onChange="change_pc();chainage_pc_historique(this,'historique');" onSelect="document.getElementbyId('tr_texte').value = ""; validation();"></select>
+					<TD><select id="pc_demande" name="pc_demande" onChange="change_pc();chainage_pc_historique(this,'historique'); validation();"></select>
 					</TD>
 				</tr>
 
 				<TR id="tr_texte" style='display:none'>
 					<TD>Problème</TD>
-					<TD><textarea cols=45 rows=15 name="texte_demande" onkeyup="validation();"></textarea></TD>
+					<TD><textarea cols=45 rows=15 id="texte_demande" name="texte_demande" onkeyup="validation();"></textarea></TD>
 				</TR>
 				
 			</table>
