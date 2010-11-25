@@ -1,6 +1,10 @@
 <?PHP
 	
-	/* fichier de visualisation de l'inventaire :
+	/* 
+	 
+	 Page 02-01
+	  
+	 fichier de visualisation de l'inventaire :
 	
 		view de la db gespac avec tous le matos du parc
 
@@ -18,6 +22,8 @@
 	*/
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	
+	$E_chk = preg_match ("#E-02-01#", $_SESSION['droits']);
 	
 	if ( !isset($_SESSION['entetes']) ) $_SESSION['entetes'] = "0111001111";	// Cases à cocher par défaut
 			
@@ -54,9 +60,9 @@
 	
 </script>
 
-<!--	DIV target pour Ajax	
+<!--	DIV target pour Ajax	-->
 <div id="target"></div>
--->
+
 
 
 <?PHP
@@ -187,8 +193,6 @@
 		echo "<script>$('nb_filtre').innerHTML = ''</script>";
 	}
 	
-	
-
 ?>
 	
 	
@@ -199,10 +203,11 @@
 		
 		<span>
 		
-		<select name=salle_select id=salle_select>
+		<?PHP 
+			if ( $E_chk ) {	// test de droit en écriture sur l'affectation de matériel, l'ajout de matériel et la modification par lot
 		
-			<?PHP 
-			
+				echo "<select name=salle_select id=salle_select>";
+		
 				// Pour le remplissage de la combobox des salles pour l'affectation
 					
 				// stockage des lignes retournées par sql dans un tableau nommé combo_des_salles
@@ -218,21 +223,26 @@
 					
 					echo "<option value=$option_id $defaut> $option_salle </option>";
 				}
+			
+			echo "</select>";
+			echo "<input type=submit value='Affecter' >";
+				
+			}
 			?>
 			
-		</select>
-		<input type=submit value="Affecter" >
 		</span>
 		
 		
-		<!-- Ajout d'un matériel -->
-		<span style="float:right; margin-right:20px"><a href='gestion_inventaire/form_materiels.php?height=600&width=640&id=-1' rel='sexylightbox' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>
+		<!-- Ajout d'un matériel et Modification par lot-->
+		<?PHP
+			if ( $E_chk ) {
+				echo "<span style='float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=600&width=640&id=-1' rel='sexylightbox' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>";
+				echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&id=lot' rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Modifier la sélection</a> <span id='nb_selectionnes'></span> </span>";
+			}
+		?>
 		
-		
-		
-		<span id="modif_selection" style="display:none; float:right; margin-right:20px"><a href='gestion_inventaire/form_materiels.php?height=180&width=640&id=lot' rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Modifier la sélection</a> <span id="nb_selectionnes"></span> </span>
 		<!--
-		<span id="rename_selection" style="float:right; margin-right:20px"><a href="gestion_inventaire/form_materiels.php?height=180&width=640&id=renamelot&liste='<script type='text/javascript'>	materiel_a_poster.value</script>'" rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Renommer la sélection</a></span>
+		<span id='rename_selection' style='float:right; margin-right:20px'><a href=\"gestion_inventaire/form_materiels.php?height=180&width=640&id=renamelot&liste='<script type='text/javascript'>	materiel_a_poster.value</script>'\" rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Renommer la sélection</a></span>
 		-->
 		
 		
@@ -302,10 +312,15 @@
 		<th class='td_origine' title="11 : Propriétaire et année d'achat du matériel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_origine; ?>', $('filt').value);">
 			Origine<sup>11</sup> <?PHP echo $img_origine; ?></a></th>
-		<th>&nbsp</th>
-		<th>&nbsp</th>
+	
+	<?PHP 
+	
+	if ( $E_chk ) {
+		echo "<th>&nbsp</th>
+		<th>&nbsp</th>";
+	}
+	
 		
-		<?PHP	
 
 			$compteur = 0;
 			// On parcourt le tableau
@@ -366,8 +381,11 @@
 					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='sexylightbox' title='Liste du modèle $model'>$model</a></td>";
 					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='sexylightbox' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
 					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='sexylightbox' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
-					/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&id=$id&mat_ssn=$serial' rel='sexylightbox' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
-					/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel($id, '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
+					
+					if ( $E_chk ) {
+						/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&id=$id&mat_ssn=$serial' rel='sexylightbox' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
+						/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel($id, '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
+					}
 					
 				echo "</tr>";
 				

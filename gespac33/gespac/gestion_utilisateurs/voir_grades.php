@@ -1,21 +1,23 @@
 <?PHP
+	session_start();
 	
 	/* fichier de visualisation des grades :
 	
-		view de la db gespac avec tous les grades du parc
+		vue de la db gespac avec tous les grades du parc
 	*/
+	
+	
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 	
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
-
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 	
+	$E_chk = preg_match ("#E-06-01#", $_SESSION['droits']);		
+
 ?>
 
 
 <h3>Visualisation des grades</h3>
 
-
-<!--<script type="text/javascript" src="server.php?client=all"></script>-->
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
@@ -42,7 +44,8 @@
 	
 <?PHP
 	// Ajout d'un grade
-	echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='sexylightbox' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
+	if ( $E_chk )
+		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='sexylightbox' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
 ?>
 
 	<center>
@@ -50,12 +53,10 @@
 	<table class="tablehover" id="grades_table" width=600>
 		<th>Niveau</th>
 		<th>Nom</th>
-		<th>Droits</th>
-		<th>&nbsp</th>
-		<th>&nbsp</th>
-		
 		
 		<?PHP	
+		
+			if ( $E_chk ) echo "<th>&nbsp</th><th>&nbsp</th><th>&nbsp</th>";
 			
 			$compteur = 0;
 			// On parcourt le tableau
@@ -76,10 +77,11 @@
 					echo "<td width=20> $grade_niveau </td>";
 					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='sexylightbox' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
-					echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
-					echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
-					echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' title='supprimer $grade_nom'>	</a> </td>";
-				
+					if ( $E_chk ) {
+						echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
+						echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
+						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' title='supprimer $grade_nom'>	</a> </td>";
+					}
 					
 				echo "</tr>";
 				
@@ -95,7 +97,8 @@
 <?PHP
 
 	// Ajout d'un grade
-	echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='sexylightbox' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
+	if ( $E_chk )
+		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='sexylightbox' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
 	
 	// On se déconnecte de la db
 	$db_gespac->disconnect();

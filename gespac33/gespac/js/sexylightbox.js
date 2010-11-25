@@ -9,4 +9,743 @@
  * @example   http://www.coders.me/ejemplos/sexy-lightbox-2/
 */
 
-eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('s.3t({t:7(a){C 3.16(a)}});o 3u=p 3v({3w:[3x,3y],2z:{1k:\'28\',D:3z,q:\'2A\',1z:\'3A\',O:\'3B\',2B:\'1l\',n:\'2C.1A\',2D:\'2C.29\',1B:\'1B.1A\',R:0,1K:3C,1L:G.1C.2E,1M:3D,1N:G.1C.2E,2F:2G,2H:G.1C.2I.2a,2b:2G,2c:G.1C.2I.2a,1m:{2J:10,V:2d,A:G.1C.3E.2a,2K:2},17:{\'8\':3F,\'9\':3G},18:{\'3H\':{\'1n\':\'#1O\',\'1o\':\'#W\',\'n-q\':\'#W\',\'S\':0.6},\'2A\':{\'1n\':\'#W\',\'1o\':\'#1O\',\'n-q\':\'#W\',\'S\':0.6},\'3I\':{\'1n\':\'#1O\',\'1o\':\'#W\',\'n-q\':\'#W\',\'S\':0.6},\'3J\':{\'1n\':\'#W\',\'1o\':\'#1O\',\'n-q\':\'#W\',\'S\':0.6}}},19:{2L:7(a){3.4=a;3.w=p s(\'H\',{u:\'3K-\'+$3L(),v:$1P(3.4.1D,{\'1E\':\'2e\',\'1l\':0,\'I\':0,\'S\':0,\'z-1Q\':3.4.D}),3M:{1a:7(){5(3.4.2f){5(3.4.2g){3.4.2g()}P{3.1F()}}}.r(3)}});3.1G=1b;3.1R()},1R:7(){3.1S=1c.u(1c.2M);3.w.1R(3.1S,\'3N\');5((1d.1p.2N||(1d.1p.3O&&!1d.1p.3P&&1d.3Q.3R))){o a=3.w.2O(\'D\').1q();5(!a){a=1;o b=3.w.2O(\'1E\');5(b==\'3S\'||!b){3.w.1T(\'1E\',\'3T\')}3.w.1T(\'D\',a)}a=($3U(3.4.D)&&a>3.4.D)?3.4.D:a-1;5(a<0){a=1}3.J=p s(\'2P\',{u:"2Q"+p 2R().2S(),1r:\'\',3V:\'2T\',2U:0,v:{D:a,1E:\'2e\',1l:0,I:0,2h:\'X\',S:0}});3.J.1R(3.w,\'3W\')}},E:7(x,y){3.w.16({\'9\':0,\'8\':0});5(3.J)3.J.16({\'9\':0,\'8\':0});o a=1s.3X();o b=1d.1p.3Y?(a.x-25<1c.Y.2i?1c.Y.2i:a.x):a.x;3.w.16({8:$1U(x,b),9:$1U(y,a.y)});5(3.J){3.J.16({\'9\':0,\'8\':0});3.J.16({8:$1U(x,3Z.40(a.x,1c.Y.2i)),9:$1U(y,a.y)})}C 3},Z:7(){5(!3.1G)C 3;5(3.A)3.A.1H();3.1S.K(\'E\',3.E);3.E();5(3.J)3.J.1T(\'1e\',\'2V\');3.1G=Q;3.A=p G.2j(3.w,{2W:\'S\',V:3.4.1K,A:3.4.1L,2X:7(){3.w.1V(\'Z\')}.r(3)}).T(3.4.1D.S);C 3},1F:7(){5(3.1G)C 3;5(3.A)3.A.1H();3.1S.41(\'E\',3.E);5(3.J)3.J.1T(\'1e\',\'X\');3.1G=1b;3.A=p G.2j(3.w,{2W:\'S\',V:3.4.1M,A:3.4.1N,2X:7(){3.w.16({\'9\':0,\'8\':0});3.w.1V(\'1F\')}.r(3)}).T(0);C 3}},2Y:7(a){3.4.O=a.42||a.43||a.44||a.O;3.4.2Z=$30(3.4.18[3.4.q],3.4.2Z||{})},2k:7(a){L=p 1f();L.1r=a},45:7(b){3.46(3.2z,b);3.2Y(3.4);o c=3.4.O+\'/\'+3.4.q+\'/\'+((1d.1p.2N)?3.4.2D:3.4.n);o d=3.4.1k;3.2k(c);3.2k(3.4.O+\'/\'+3.4.q+\'/\'+3.4.1B);3.19.2L({1D:3.4.18[3.4.q],2f:1b,D:3.4.D-1,2g:3.1W.r(3),1K:3.4.1K,1L:3.4.1L,1M:3.4.1M,1N:3.4.1N});3.F={};3.M=p s(\'H\',{\'u\':d+\'-M\',\'v\':{\'z-1Q\':3.4.D,\'1e\':\'X\'}});3.1t=p s(\'H\',{\'u\':d+\'-1t\',\'v\':{\'z-1Q\':3.4.D+1}}).B(3.M);3.N=p s(\'H\',{\'u\':d+\'-N\',\'v\':{\'1E\':\'2e\',\'8\':3.4.17[\'8\'],\'z-1Q\':3.4.D+2}}).B(3.M);3.1X=p s(\'H\',{u:d+\'-1X\',v:{\'n-1g\':\'11(\'+c+\')\'}}).B(3.N);3.31=p s(\'a\',{1I:\'#\',Y:\'&32;\',v:{\'n-1g\':\'11(\'+3.4.O+\'/\'+3.4.q+\'/\'+3.4.1B+\')\'}}).B(3.1X);p s(\'H\',{\'u\':d+\'-47\',\'v\':{\'n-1g\':\'11(\'+c+\')\'}}).B(3.1X);3.12=p s(\'H\',{\'u\':d+\'-12\',\'v\':{\'9\':3.4.17[\'9\'],\'2h-I-q\':3.4.18[3.4.q].1n,\'2h-33-q\':3.4.18[3.4.q].1n}}).B(3.N);3.1Y=p s(\'H\',{\'u\':d+\'-49\',\'v\':{\'n-1g\':\'11(\'+c+\')\'}}).B(3.N);3.2l=p s(\'H\',{\'u\':d+\'-4a\',\'v\':{\'n-1g\':\'11(\'+c+\')\'}}).B(3.1Y);3.1u=p s(\'H\',{\'u\':d+\'-4b\',\'v\':{\'q\':3.4.18[3.4.q].1o}});3.2m=p s(\'4c\',{\'u\':d+\'-4d\',\'v\':{\'q\':3.4.18[3.4.q].1o}});3.M.B(1c.2M);3.31.K(\'1a\',7(){3.1W();C Q}.r(3));1c.K(\'4e\',7(a){5(3.4.R==1){5(a.2n==\'4f\'){3.1W()}5(a.2n==\'I\'){5(3.13){3.13.1V(\'1a\',a)}}5(a.2n==\'33\'){5(3.15){3.15.1V(\'1a\',a)}}}}.r(3));1s.4g({\'E\':7(){5(3.4.R==1){3.1v();3.19.E()}}.r(3),\'4h\':7(){5(3.4.R==1){3.1v()}}.r(3)});3.34();3.1Z=$U()},20:7(a){a.4i();3.Z((a.1w||a.1k||""),a.1I,(a.1h(\'1x\')||Q))},1W:7(){3.2o(0)},34:7(){3.2p=[];$$("a","4j").36(7(a){5(a.1h(\'1x\')&&a.1h(\'1x\').4k("^"+3.4.1z)){a.K(\'1a\',7(){3.20(a);C Q}.r(3));5(!(a.1h(\'u\')==3.4.1k+"-37"||a.1h(\'u\')==3.4.1k+"-38")){3.2p.4l(a)}}}.r(3))},2o:7(a){5(3.4.R==0&&a!=0||a==1){3.19.Z();3.4.R=1;3.M.t({\'1e\':\'2V\'})}P{3.M.t({\'1e\':\'X\',\'1l\':-(3.4.17[\'9\']+4m)});3.19.1F();3.19.w.K(\'1F\',7(){5(3.4.R){5(3.1f)3.1f.4n();3.4.R=0}}.r(3))}},1v:7(a){o b=1s.4o();o c=1s.4p();o d=3.4.17[\'8\'];o e=3.4.17[\'9\'];5(3.4.R==0){o x=0;o y=0;y=c.x+((b.x-d)/2);5(3.4.2B=="4q"){x=(c.y+b.y+22)}P{x=(c.y-e)-22}3.M.t({\'1e\':\'X\',\'1l\':x,\'I\':y});3.N.t({\'8\':d});3.12.t({\'9\':e-22})}a=$30({\'8\':3.F.8,\'9\':3.F.9,\'E\':0},a||{});5(3.1Z)3.1Z.1H();3.1Z=p G.2q(3.M,{V:3.4.2F,A:3.4.2H}).T({\'I\':(c.x+((b.x-a.8)/2)),\'1l\':(c.y+(b.y-(a.9+(3.1J?22:48)))/2)});5(a.E){5(3.2r)3.2r.1H();3.2r=p G.2q(3.12,{V:3.4.2b,A:3.4.2c}).T({\'9\':a.9});5(3.1i)3.1i.1H();3.1i=p G.2q(3.N,{V:3.4.2b,A:3.4.2c}).T({\'8\':a.8})}},2s:7(a,b){C p s(\'a\',{u:3.4.1k+\'-\'+b,1w:a.1w,1I:a.1I,1x:a.1h(\'1x\'),Y:"&32;",v:{\'n-1g\':\'11(\'+3.4.O+\'/\'+3.4.q+\'/\'+3.4.1B+\')\'}})},1e:7(a,b,c){C 3.Z(b,a,\'\',c)},Z:7(c,d,e,f){3.39();o g=d.2t(/(.+)?/)[1]||d;o h=/\\.(4r?g|1A|29|4s)/4t;o i=d.2t(/\\?(.+)/);5(i)i=i[1];o j=3.3a(i);j=$1P({\'8\':0,\'9\':0,\'23\':0,\'n\':\'\',\'1w\':c},j||{});j[\'8\']=j[\'8\'].1q();j[\'9\']=j[\'9\'].1q();j[\'23\']=j[\'23\'].1q();3.19.4.2f=!j[\'23\'];3.F=$1P(j,{\'8\':j[\'8\']+14});3.1J=3.F.1w?1b:Q;5(f==\'1g\'||g.2t(h)){3.L=p 1f();3.L.3b=7(){3.L.3b=7(){};5(!j[\'8\']){o a=3.3c(3.L.8,3.L.9);j[\'8\']=a.x;j[\'9\']=a.y;3.F.8=j[\'8\']+14}3.F.9=j[\'9\']-(3.1J?21:35);3.1v({\'E\':1});3.1i.K(\'24\',7(){3.3d(3.L.1r,j)}.r(3))}.r(3);3.L.4u=7(){3.Z(\'\',3.4.O+\'/\'+3.4.q+\'/3e.1A\',3.4.1z)}.r(3);3.L.1r=d}P{3.F.9=j[\'9\']+(1d.1p.4v?2:0);3.1v({\'E\':1});5(d.3f(\'4w\')!=-1){3.1i.K(\'24\',7(){3.2u($(j[\'4x\']).3g(\'Y\'),3.F)}.r(3))}P 5(d.3f(\'4y\')!=-1){o k=d.2v(\'4z\');3.1i.K(\'24\',7(){3.3h(k[0],3.F)}.r(3))}P{3.1i.K(\'24\',7(){o b=p 4A.4B({11:d,4C:\'3g\',4D:Q,4E:7(a){5(a.4F==3e){3.Z(\'\',3.4.O+\'/\'+3.4.q+\'/4G.1A\',3.4.1z)}}.r(3),4H:3.3i.r(3)}).4I()}.r(3))}}3.15=Q;3.13=Q;5(e.26>3.4.1z.26){3.1J=1b;o l=Q;o m=Q;3.2p.36(7(a,b){5(a.1h(\'1x\')==e&&!m){5(a.1I==d){l=1b}P{5(l){3.15=3.2s(a,"38");m=1b}P{3.13=3.2s(a,"37")}}}}.r(3))}3.3j();3.3k(c);3.2o(1)},3c:7(x,y){o a=1s.4J()-2d;o b=1s.4K()-2d;5(x>a){y=y*(a/x);x=a;5(y>b){x=x*(b/y);y=b}}P 5(y>b){x=x*(b/y);y=b;5(x>a){y=y*(a/x);x=a}}C{x:x.1q(),y:y.1q()}},3i:7(a,b,c,d){3.2u(c,3.F);$4L(d)},3j:7(){5(3.13)3.13.K(\'1a\',7(a){a.3l();3.20(3.13)}.r(3));5(3.15)3.15.K(\'1a\',7(a){a.3l();3.20(3.15)}.r(3))},3k:7(){5(3.1J){3.1Y.4M("28-3m");3.1u.U();3.1u.B(3.2l);3.2m.2w(\'Y\',3.F.1w);3.1u.3n(3.13);3.1u.3n(3.15);3.2m.B(3.1u)}P{3.1Y.4N("28-3m");3.2l.U()}},3d:7(a,b){3.1f=p s(\'L\',{\'1r\':a,\'v\':b}).B(3.1t.U().3o(\'1D\').t({8:\'1j\',9:\'1j\'}));3.N.t({\'n\':\'X\'});3.12.U().t({\'n-q\':\'3p\',\'2x\':\'2y\',\'8\':\'1j\'})},2u:7(a,b){3.1t.t({\'8\':b[\'8\']-14,\'9\':b[\'9\']+35,\'n-q\':b[\'n\']||\'#1y\'});3.1f=p s(\'H\',{\'v\':{\'8\':b[\'8\']-14,\'9\':b[\'9\'],\'4O\':\'1j\',\'n\':b[\'n\']||\'#1y\'}}).2w(\'Y\',a).B(3.12.U().t({\'8\':b[\'8\']-14,\'n-q\':b[\'n\']||\'#1y\'}));3.N.t({\'n\':\'X\'})},3h:7(a,b){3.1t.t({\'8\':b[\'8\']-14,\'9\':b[\'9\']+35,\'n-q\':b[\'n\']||\'#1y\'});3.1f=p s(\'2P\',{\'2U\':0,\'u\':"2Q"+p 2R().2S(),\'v\':{\'8\':b[\'8\']-14,\'9\':b[\'9\'],\'n\':b[\'n\']||\'#1y\'}}).2w(\'1r\',a).B(3.12.U().t({\'8\':b[\'8\']-14,\'n-q\':b[\'n\']||\'#1y\',\'2x\':\'2y\'}));3.N.t({\'n\':\'X\'})},39:7(){3.1t.U().3o(\'1D\').t({8:\'1j\',9:\'1j\'});3.12.U().t({\'n-q\':\'3p\',\'2x\':\'2y\',\'8\':\'1j\'});3.N.t({\'n\':\'11(\'+3.4.O+\'/\'+3.4.q+\'/4P.29) 2T-4Q 3q% 3q%\'});3.1v($1P(3.4.17,{\'E\':1}))},3a:7(a){5(!a)C{};o b={};o c=a.2v(/[;&]/);3r(o i=0;i<c.26;i++){o d=c[i].2v(\'=\');5(!d||d.26!=2)4R;b[3s(d[0])]=3s(d[1]).4S(/\\+/g,\' \')}C b},1m:7(){o d=3.4.1m.2J;o l=3.M.4T();l=l.I;5(!3.27){3.27=p G.2j(3.M,{4U:\'4V\',V:3.4.1m.V,A:3.4.1m.A})}3r(x=0;x<3.4.1m.2K;x++){3.27.T(\'I\',l+d).T(\'I\',l-d)}3.27.T(\'I\',l+d).T(\'I\',l)}});',62,306,'|||this|options|if||function|width|height||||||||||||||background|var|new|color|bind|Element|css|id|styles|element||||transition|injectInside|return|zIndex|resize|lightbox|Fx|div|left|shim|addEvent|img|Wrapper|Contenedor|dir|else|false|displayed|opacity|start|empty|duration|000000|none|html|show||url|Contenido|prev||next|setStyles|BoxStyles|Skin|overlay|click|true|document|Browser|display|Image|image|getProperty|ResizeBox|auto|name|top|shake|hexcolor|captionColor|Engine|toInt|src|window|Background|Nav|replaceBox|title|rel|ffffff|find|png|buttons|Transitions|style|position|hide|hidden|cancel|href|navigator|showDuration|showEffect|closeDuration|closeEffect|FFFFFF|merge|index|inject|target|setStyle|pick|fireEvent|close|Top|bb|MoveBox|hook||80|modal|complete||length|tween|SLB|gif|easeInOut|resizeDuration|resizeEffect|100|absolute|hideOnClick|callback|border|clientWidth|Tween|preloadimage|innerbb|Descripcion|key|animate|anchors|Morph|ResizeBox2|getInfo|match|showContent|split|set|padding|0px|getOptions|black|emergefrom|bgSexy|backgroundIE|linear|moveDuration|1000|moveEffect|Back|distance|loops|create|body|trident4|getStyle|iframe|IF_|Date|getTime|no|frameborder|block|property|onComplete|backwardcompatibility|OverlayStyles|extend|CloseButton|nbsp|right|refresh||each|Left|Right|showLoading|parseQuery|onload|calculate|showImage|404|indexOf|get|showIframe|handlerFunc|addButtons|showNavBar|stop|bbnav|adopt|erase|transparent|50|for|unescape|implement|SexyLightBox|Class|Implements|Options|Events|32000|sexylightbox|sexyimages|200|400|Sine|486|320|white|blanco|negro|mask|time|events|inside|gecko|gecko19|Platform|mac|static|relative|chk|scrolling|after|getScrollSize|webkit|Math|max|removeEvent|imagesdir|path|folder|initialize|setOptions|TopLeft||Bottom|BottomRight|Navegador|strong|Caption|keydown|esc|addEvents|scroll|blur|area|test|push|280|dispose|getSize|getScroll|bottom|jpe|bmp|gi|onerror|presto|TB_inline|inlineId|TB_iframe|TB_|Request|HTML|method|evalScripts|onFailure|status|404html|onSuccess|send|getWidth|getHeight|exec|addClass|removeClass|overflow|loading|repeat|continue|replace|getCoordinates|link|chain'.split('|'),0,{}))
+Element.implement({
+	css: function(params){ return this.setStyles(params);} // costumbre jQuery
+});
+
+var SexyLightBox = new Class(
+{
+  Implements: [Options, Events],
+	getOptions: {
+    name          : 'SLB',
+    zIndex        : 32000,
+    color         : 'black',
+    find          : 'sexylightbox',
+    dir           : 'sexyimages',
+    emergefrom    : 'bottom',
+    background    : 'bgSexy.png',
+    backgroundIE  : 'bgSexy.gif',
+    buttons       : 'buttons.png',
+    displayed     : 0,
+    showDuration  : 200,
+    showEffect    : Fx.Transitions.linear,
+    closeDuration : 400,
+    closeEffect   : Fx.Transitions.linear,
+    moveDuration  : 1000,
+    moveEffect    : Fx.Transitions.Back.easeInOut,
+    resizeDuration: 1000,
+    resizeEffect  : Fx.Transitions.Back.easeInOut,
+    shake         : {
+                      distance   : 10,
+                      duration   : 100,
+                      transition : Fx.Transitions.Sine.easeInOut,
+                      loops      : 2
+                    },
+    BoxStyles     : { 'width' : 486, 'height': 320 },
+    Skin          : {
+                      'white' : { 'hexcolor': '#FFFFFF', 'captionColor': '#000000', 'background-color': '#000000', 'opacity': 0.6 },
+                      'black' : { 'hexcolor': '#000000', 'captionColor': '#FFFFFF', 'background-color': '#000000', 'opacity': 0.6 },
+                      'blanco': { 'hexcolor': '#FFFFFF', 'captionColor': '#000000', 'background-color': '#000000', 'opacity': 0.6 },
+                      'negro' : { 'hexcolor': '#000000', 'captionColor': '#FFFFFF', 'background-color': '#000000', 'opacity': 0.6 }
+                    }
+	},
+  
+  overlay: {
+    create: function(options) {
+      this.options = options;
+      this.element = new Element('div', {
+        id      : 'mask-' + $time(),
+        styles  : $merge(this.options.style, {
+          'position'  : 'absolute',
+          'top'       : 0,
+          'left'      : 0,
+          'opacity'   : 0,
+          'z-index'   : this.options.zIndex
+        }),
+        events  : {
+            click: function() {
+              if (this.options.hideOnClick) {
+                  if (this.options.callback) {
+                    this.options.callback();
+                  } else {
+                    this.hide();
+                  }
+              }
+            }.bind(this)
+        } // events
+      });
+      
+      this.hidden = true;
+      this.inject();
+    },
+
+    inject: function() {
+      this.target = document.id(document.body);
+      this.element.inject(this.target, 'inside');
+
+      if((Browser.Engine.trident4 || (Browser.Engine.gecko && !Browser.Engine.gecko19 && Browser.Platform.mac)))
+      {
+        var zIndex = this.element.getStyle('zIndex').toInt();
+        if (!zIndex)
+        {
+          zIndex = 1;
+          var pos = this.element.getStyle('position');
+          if (pos == 'static' || !pos)
+          {
+            this.element.setStyle('position', 'relative');
+          }
+          this.element.setStyle('zIndex', zIndex);
+        }
+        zIndex = ($chk(this.options.zIndex) && zIndex > this.options.zIndex) ? this.options.zIndex : zIndex - 1;
+        if (zIndex < 0)
+        {
+          zIndex = 1;
+        }
+        this.shim = new Element('iframe', {
+          id          : "IF_"+new Date().getTime(),
+          src         : '',
+          scrolling   : 'no',
+          frameborder : 0,
+          styles      :
+          {
+            zIndex    : zIndex,
+            position  : 'absolute',
+            top       : 0,
+            left      : 0,
+            border    : 'none',
+            opacity   : 0
+          }
+        });
+        this.shim.inject(this.element, 'after');
+      }
+
+    },
+
+    resize: function(x, y) {
+      this.element.setStyles({ 'height': 0, 'width': 0 });
+      if (this.shim) this.shim.setStyles({ 'height': 0, 'width': 0 });
+
+      var win = window.getScrollSize();
+      var chromebugfix = Browser.Engine.webkit ? (win.x - 25 < document.html.clientWidth ? document.html.clientWidth : win.x) : win.x;
+
+      this.element.setStyles({
+        width  : $pick(x, chromebugfix), //* chrome fix
+        height : $pick(y, win.y)
+      });
+      
+      if (this.shim)
+      {
+        this.shim.setStyles({ 'height': 0, 'width': 0 });
+
+        this.shim.setStyles({
+          width  : $pick(x, Math.max(win.x, document.html.clientWidth)), //* chrome fix
+          height : $pick(y, win.y)
+        });
+      }
+      return this;
+    },
+
+    show: function() {
+      if (!this.hidden) return this;
+      if (this.transition) this.transition.cancel();
+      this.target.addEvent('resize', this.resize);
+      this.resize();
+      if (this.shim) this.shim.setStyle('display', 'block');
+      this.hidden = false;
+      
+      this.transition = new Fx.Tween(this.element, {
+        property   : 'opacity',
+        duration   : this.options.showDuration,
+        transition : this.options.showEffect,
+        onComplete : function () { this.element.fireEvent('show'); }.bind(this)
+      }).start(this.options.style.opacity);
+
+      return this;
+    },
+
+    hide: function() {
+      if (this.hidden) return this;
+      if (this.transition) this.transition.cancel();
+      this.target.removeEvent('resize', this.resize);
+      if (this.shim) this.shim.setStyle('display', 'none');
+      this.hidden = true;
+
+      this.transition = new Fx.Tween(this.element, {
+          property    : 'opacity',
+          duration    : this.options.closeDuration,
+          transition  : this.options.closeEffect,
+          onComplete  : function() { 
+            this.element.setStyles({ 'height': 0, 'width': 0 });
+            this.element.fireEvent('hide');
+          }.bind(this)
+      }).start(0);
+
+
+      return this;
+    }
+
+  },
+  
+  backwardcompatibility: function(option) {
+    this.options.dir =  option.imagesdir || option.path || option.folder || option.dir;
+    this.options.OverlayStyles = $extend(this.options.Skin[this.options.color], this.options.OverlayStyles || {});
+  },
+  
+  preloadimage: function(url) {
+    img     = new Image();
+    img.src = url;
+  },
+  
+	initialize: function(options) {
+    this.setOptions(this.getOptions, options);
+    this.backwardcompatibility(this.options);
+        
+    var strBG = this.options.dir+'/'+this.options.color+'/'+((Browser.Engine.trident4)?this.options.backgroundIE:this.options.background);
+    var name  = this.options.name;
+    
+    this.preloadimage(strBG);
+    this.preloadimage(this.options.dir+'/'+this.options.color+'/'+this.options.buttons);
+    
+    this.overlay.create({
+      style       : this.options.Skin[this.options.color],
+      hideOnClick : true,
+      zIndex      : this.options.zIndex-1,
+      callback    : this.close.bind(this),
+      showDuration  : this.options.showDuration,
+      showEffect    : this.options.showEffect,
+      closeDuration : this.options.closeDuration,
+      closeEffect   : this.options.closeEffect
+    });
+
+    this.lightbox = {};
+ 
+    this.Wrapper = new Element('div', { 
+      'id'      : name + '-Wrapper',
+      'styles'  : {
+        'z-index'   : this.options.zIndex,
+        'display'   : 'none'
+      }
+    });
+    
+    this.Background = new Element('div', {
+      'id'      : name + '-Background',
+      'styles': {
+        'z-index'   : this.options.zIndex + 1
+      }
+    }).injectInside(this.Wrapper);
+    
+    this.Contenedor = new Element('div', {
+      'id'      : name + '-Contenedor',
+      'styles'  : {
+        'position'  : 'absolute',
+        'width'     : this.options.BoxStyles['width'],
+        'z-index'   : this.options.zIndex + 2
+      }
+    }).injectInside(this.Wrapper);
+
+    
+    this.Top = new Element('div', {id: name+'-Top', styles:{'background-image':'url('+strBG+')'}}).injectInside(this.Contenedor);
+    
+    this.CloseButton = new Element('a', {href:'#', html:'&nbsp;', styles:{'background-image': 'url('+this.options.dir+'/'+this.options.color+'/'+this.options.buttons+')'}}).injectInside(this.Top);
+    new Element('div', {'id': name+'-TopLeft', 'styles': {'background-image':'url('+strBG+')'}}).injectInside(this.Top);
+    
+    this.Contenido = new Element('div', {
+      'id'      : name + '-Contenido',
+      'styles'  : {
+        'height'            : this.options.BoxStyles['height'],
+        'border-left-color' : this.options.Skin[this.options.color].hexcolor,
+        'border-right-color': this.options.Skin[this.options.color].hexcolor
+      }
+    }).injectInside(this.Contenedor);
+
+    this.bb          = new Element('div', {'id': name + '-Bottom'      , 'styles':{'background-image':'url('+strBG+')'}}).injectInside(this.Contenedor);
+    this.innerbb     = new Element('div', {'id': name + '-BottomRight' , 'styles':{'background-image':'url('+strBG+')'}}).injectInside(this.bb);
+    this.Nav         = new Element('div', {'id': name + '-Navegador'   , 'styles':{'color':this.options.Skin[this.options.color].captionColor}});
+    this.Descripcion = new Element('strong',{'id': name + '-Caption'   , 'styles':{'color':this.options.Skin[this.options.color].captionColor}});
+
+    this.Wrapper.injectInside(document.body);
+  
+    /**
+     * AGREGAMOS LOS EVENTOS
+     ************************/
+
+    this.CloseButton.addEvent('click', function() {
+      this.close();
+      return false;
+    }.bind(this));
+
+    document.addEvent('keydown', function(event) {
+      if (this.options.displayed == 1) {
+        if (event.key == 'esc'){
+          this.close();
+        }
+
+        if (event.key == 'left'){
+          if (this.prev) {
+            this.prev.fireEvent('click', event);
+          }
+        }
+
+        if (event.key == 'right'){
+          if (this.next) {
+            this.next.fireEvent('click', event);
+          }
+        }
+      }
+    }.bind(this));
+
+
+    window.addEvents({
+        'resize': function() {
+            if (this.options.displayed == 1)
+            {
+              this.replaceBox();
+              this.overlay.resize();
+            }
+        }.bind(this),
+        
+        'scroll': function() {
+            if (this.options.displayed == 1)
+            {
+              this.replaceBox();
+            }          
+        }.bind(this)
+    });
+    
+    this.refresh();
+
+    this.MoveBox = $empty();
+	
+  },
+
+  hook: function(enlace) {
+    enlace.blur();
+    this.show((enlace.title || enlace.name || ""), enlace.href, (enlace.getProperty('rel') || false));
+  },
+
+  close: function() {
+    this.animate(0);
+  },
+  
+  refresh: function() {
+    this.anchors = [];
+    $$("a", "area").each(function(el) {
+      if (el.getProperty('rel') && el.getProperty('rel').test("^"+this.options.find)) {
+        el.addEvent('click', function() {
+          this.hook(el);
+          return false;
+        }.bind(this));
+        if (!(el.getProperty('id')==this.options.name+"-Left" || el.getProperty('id')==this.options.name+"-Right")) {
+          this.anchors.push(el);
+        }
+      }
+    }.bind(this));
+  },
+
+  animate: function(option) {
+      // Mostrar el Lightbox
+      if(this.options.displayed == 0 && option != 0 || option == 1)
+      {
+        this.overlay.show();
+        this.options.displayed = 1;
+        this.Wrapper.css({'display': 'block'});
+      }
+      else // Cerrar el Lightbox
+      {
+        this.Wrapper.css({
+          'display' : 'none',
+          'top'     : -(this.options.BoxStyles['height']+280)
+        });
+        
+        this.overlay.hide();
+        this.overlay.element.addEvent('hide', function() {
+          if (this.options.displayed) {
+            if (this.Image) this.Image.dispose();
+            this.options.displayed = 0;
+          }
+        }.bind(this));
+      }
+  },
+  
+  
+	/*
+	Function: replaceBox
+  @description  Cambiar de tamaño y posicionar el lightbox en el centro de la pantalla
+	*/
+	replaceBox: function(data) {
+      var size   = window.getSize();
+      var scroll = window.getScroll();
+      var width  = this.options.BoxStyles['width'];
+      var height = this.options.BoxStyles['height'];
+
+      if (this.options.displayed == 0)
+      {
+        var x = 0;
+        var y = 0;
+        
+        // vertically center
+        y = scroll.x + ((size.x - width) / 2);
+
+        if (this.options.emergefrom == "bottom")
+        {
+          x = (scroll.y + size.y + 80);
+        }
+        else // top
+        {
+          x = (scroll.y - height) - 80;
+        }
+      
+        this.Wrapper.css({
+          'display' : 'none',
+          'top'     : x,
+          'left'    : y
+        });
+        this.Contenedor.css({
+          'width'   : width
+        });
+        this.Contenido.css({
+          'height'  : height - 80
+        });
+      }
+
+      data = $extend({
+        'width'  : this.lightbox.width,
+        'height' : this.lightbox.height,
+        'resize' : 0
+      }, data || {});
+
+      if (this.MoveBox) this.MoveBox.cancel();
+
+      this.MoveBox = new Fx.Morph(this.Wrapper, {
+        duration   : this.options.moveDuration,
+        transition : this.options.moveEffect
+      }).start({
+        'left': (scroll.x + ((size.x - data.width) / 2)),
+        'top' : (scroll.y + (size.y - (data.height + (this.navigator ? 80 : 48))) / 2)
+      });
+
+      if (data.resize)
+      {
+        if (this.ResizeBox2) this.ResizeBox2.cancel();
+        this.ResizeBox2 = new Fx.Morph(this.Contenido, {
+          duration   : this.options.resizeDuration,
+          transition : this.options.resizeEffect
+        }).start({ 'height': data.height });
+
+        if (this.ResizeBox) this.ResizeBox.cancel(); 
+        this.ResizeBox = new Fx.Morph(this.Contenedor, {
+          duration   : this.options.resizeDuration,
+          transition : this.options.resizeEffect
+        }).start({ 'width': data.width });
+      }
+      
+	},
+	
+  getInfo: function (image, id) {
+      return new Element('a', {
+        id    : this.options.name+'-'+id,
+        title : image.title,
+        href  : image.href,
+        rel   : image.getProperty('rel'),
+        html  : "&nbsp;",
+        styles: {
+          'background-image' : 'url('+this.options.dir+'/'+this.options.color+'/'+this.options.buttons+')'
+        }
+      });
+
+  },
+  
+	/*
+	Function: display
+	@description  Preparar y mostrar el lightbox.
+	*/
+  display: function(url, title, force) {
+    return this.show(title, url, '', force);
+  },
+
+  show: function(caption, url, rel, force) {
+      this.showLoading();
+      
+      var baseURL     = url.match(/(.+)?/)[1] || url;
+      var imageURL    = /\.(jpe?g|png|gif|bmp)/gi;
+      var queryString = url.match(/\?(.+)/);
+      if (queryString) queryString = queryString[1];
+      var params      = this.parseQuery( queryString );
+      
+      params = $merge({
+        'width'     : 0,
+        'height'    : 0,
+        'modal'     : 0,
+        'background': '',
+        'title'     : caption
+      }, params || {});
+
+      params['width']   = params['width'].toInt();
+      params['height']  = params['height'].toInt();
+      params['modal']   = params['modal'].toInt();
+
+      this.overlay.options.hideOnClick = !params['modal'];
+
+      this.lightbox  = $merge(params, { 'width' : params['width'] + 14 });
+      this.navigator = this.lightbox.title ? true : false;
+
+      if ( force=='image' || baseURL.match(imageURL) )
+      {
+          this.img = new Image();
+          this.img.onload = function() {
+              this.img.onload=function(){};
+              if (!params['width'])
+              {
+                var objsize = this.calculate(this.img.width, this.img.height);
+                params['width']   = objsize.x;
+                params['height']  = objsize.y;
+                this.lightbox.width = params['width'] + 14;
+              }
+              this.lightbox.height = params['height'] - (this.navigator ? 21 : 35);
+              
+              this.replaceBox({ 'resize' : 1 });
+              
+              // Mostrar la imagen, solo cuando la animacion de resizado se ha completado
+              this.ResizeBox.addEvent('complete', function() {
+                this.showImage(this.img.src, params);
+              }.bind(this));
+          }.bind(this);
+          
+          this.img.onerror = function() {
+            this.show('', this.options.dir+'/'+this.options.color+'/404.png', this.options.find);
+          }.bind(this);
+          
+          this.img.src = url;
+
+      } else { //code to show html pages
+
+        this.lightbox.height = params['height']+(Browser.Engine.presto?2:0);
+        this.replaceBox({'resize' : 1});
+
+        if (url.indexOf('TB_inline') != -1) //INLINE ID
+        {
+          this.ResizeBox.addEvent('complete', function() {
+            this.showContent($(params['inlineId']).get('html'), this.lightbox);
+          }.bind(this));
+        }
+        else if(url.indexOf('TB_iframe') != -1) //IFRAME
+        {
+          var urlNoQuery = url.split('TB_');
+          this.ResizeBox.addEvent('complete', function() {
+            this.showIframe(urlNoQuery[0], this.lightbox);
+          }.bind(this));
+        }
+        else //AJAX
+        {
+          this.ResizeBox.addEvent('complete', function() {
+            var myRequest = new Request.HTML({
+              url         : url,
+              method      : 'get',
+              evalScripts : false,
+              onFailure   : function (xhr) {if(xhr.status==404){this.show('', this.options.dir+'/'+this.options.color+'/404html.png', this.options.find)}}.bind(this),
+              onSuccess   : this.handlerFunc.bind(this)
+            }).send();
+          }.bind(this));
+        }
+      }
+      
+      this.next = false;
+      this.prev = false;
+      // Si la imagen pertenece a un grupo
+      if (rel.length > this.options.find.length)
+      {
+          this.navigator = true;
+          var foundSelf  = false;
+          var exit       = false;
+
+          this.anchors.each( function(image, index) {
+            if (image.getProperty('rel') == rel && !exit) {
+                if (image.href == url) {
+                    foundSelf = true;
+                } else {
+                    if (foundSelf) {
+                        this.next = this.getInfo(image, "Right");
+                        // stop searching
+                        exit = true;
+                    } else {
+                        this.prev = this.getInfo(image, "Left");
+                    }
+                }
+            }
+          }.bind(this));
+      }
+
+      this.addButtons();
+      this.showNavBar(caption);
+      this.animate(1);
+  },
+  
+  calculate: function(x, y) {
+    // Resizing large images
+    var maxx = window.getWidth() - 100;
+    var maxy = window.getHeight() - 100;
+
+    if (x > maxx)
+    {
+      y = y * (maxx / x);
+      x = maxx;
+      if (y > maxy)
+      {
+        x = x * (maxy / y);
+        y = maxy;
+      }
+    }
+    else if (y > maxy)
+    {
+      x = x * (maxy / y);
+      y = maxy;
+      if (x > maxx)
+      {
+        y = y * (maxx / x);
+        x = maxx;
+      }
+    }
+    // End Resizing
+    return {x: x.toInt(), y: y.toInt()};
+  },
+  
+  handlerFunc: function(tree, elements, html, script) {
+    this.showContent(html, this.lightbox);
+    $exec(script);
+  },
+
+  addButtons: function(){
+      if(this.prev) this.prev.addEvent('click', function(event) {event.stop();this.hook(this.prev);}.bind(this));
+      if(this.next) this.next.addEvent('click', function(event) {event.stop();this.hook(this.next);}.bind(this));
+  },
+  
+  showNavBar: function() {
+      if (this.navigator)
+      {
+        this.bb.addClass("SLB-bbnav");
+        this.Nav.empty();
+        this.Nav.injectInside(this.innerbb);
+        this.Descripcion.set('html', this.lightbox.title);
+        this.Nav.adopt(this.prev);
+        this.Nav.adopt(this.next);
+        this.Descripcion.injectInside(this.Nav);
+      }
+      else
+      {
+        this.bb.removeClass("SLB-bbnav");
+        this.innerbb.empty();
+      }
+  },
+  
+  showImage: function(image, size) {
+    this.Image = new Element('img', { 'src' : image, 'styles': size}).injectInside(
+      this.Background.empty().erase('style').css({width:'auto', height:'auto'})
+    );
+
+    this.Contenedor.css({
+      'background' : 'none'
+    });
+
+    this.Contenido.empty().css({
+        'background-color': 'transparent',
+        'padding'         : '0px',
+        'width'           : 'auto'
+    });
+  },
+
+  showContent: function(html, size) {
+    this.Background.css({
+      'width'            : size['width']-14,
+      'height'           : size['height']+35,
+      'background-color' : size['background'] || '#ffffff'
+    });
+    this.Image = new Element('div', { 'styles': {
+      'width'       : size['width']-14,
+      'height'      : size['height'],
+      'overflow'    : 'auto',
+      'background'  : size['background'] || '#ffffff'
+    }}).set('html', html).injectInside(this.Contenido.empty().css({
+      'width'             : size['width']-14,
+      'background-color'  : size['background'] || '#ffffff'
+    }));
+    this.Contenedor.css({
+      'background': 'none'
+    });
+  },
+
+  showIframe: function(src, size) {
+    this.Background.css({
+      'width'           : size['width']-14,
+      'height'          : size['height']+35,
+      'background-color': size['background'] || '#ffffff'
+    });
+  
+    this.Image = new Element('iframe', {
+      'frameborder' : 0,
+      'id'          : "IF_"+new Date().getTime(),
+      'styles'      : {
+        'width'       : size['width']-14,
+        'height'      : size['height'],
+        'background'  : size['background'] || '#ffffff'
+      }
+    }).set('src',src).injectInside(this.Contenido.empty().css({
+      'width'             : size['width']-14,
+      'background-color'  : size['background'] || '#ffffff',
+      'padding'           : '0px'
+    }));
+    this.Contenedor.css({
+      'background' : 'none'
+    });
+  },
+
+  showLoading: function() {
+    this.Background.empty().erase('style').css({width:'auto', height:'auto'});
+
+    this.Contenido.empty().css({
+      'background-color'  : 'transparent',
+      'padding'           : '0px',
+      'width'             : 'auto'
+    });
+
+    this.Contenedor.css({
+      'background' : 'url('+this.options.dir+'/'+this.options.color+'/loading.gif) no-repeat 50% 50%'
+    });
+
+    this.replaceBox($merge(this.options.BoxStyles, {'resize' : 1}));
+  },
+
+  parseQuery: function (query) {
+    if( !query )
+      return {};
+    var params = {};
+
+    var pairs = query.split(/[;&]/);
+    for ( var i = 0; i < pairs.length; i++ ) {
+      var pair = pairs[i].split('=');
+      if ( !pair || pair.length != 2 )
+        continue;
+      params[unescape(pair[0])] = unescape(pair[1]).replace(/\+/g, ' ');
+     }
+     return params;
+  },
+  
+  shake: function() {
+		var d = this.options.shake.distance;
+		var l = this.Wrapper.getCoordinates();
+		l = l.left;
+		if (!this.tween)
+		{
+      this.tween = new Fx.Tween(this.Wrapper, { 
+        link       : 'chain', 
+        duration   : this.options.shake.duration,
+        transition : this.options.shake.transition
+      });
+		}
+		for(x=0;x<this.options.shake.loops;x++)
+		{
+      this.tween.start('left',l+d).start('left',l-d);
+		}
+		this.tween.start('left',l+d).start('left',l);
+  }
+  
+});

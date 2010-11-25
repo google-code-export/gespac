@@ -1,4 +1,5 @@
 <?PHP
+	session_start();
 	
 	/* fichier de visualisation des utilisateurs :
 	
@@ -8,6 +9,7 @@
 	
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
 
+	$E_chk = preg_match ("#E-06-01#", $_SESSION['droits']);	
 	
 ?>
 
@@ -42,7 +44,8 @@
 	
 <?PHP
 	// Ajout d'un utilisateur
-	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+	if ( $E_chk )  
+		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 ?>
 
 	<center>
@@ -54,11 +57,9 @@
 		<th>Mail</th>
 		<th>Skin</th>
 		<th>Mailing</th>
-		<th>&nbsp</th>
-		<th>&nbsp</th>
-		
 		
 		<?PHP	
+		if ( $E_chk ) echo "<th>&nbsp</th><th>&nbsp</th>";
 			
 			$compteur = 0;
 			// On parcourt le tableau
@@ -99,15 +100,17 @@
 					echo "<td> $skin </td>";
 					echo "<td> <img src='img/$mailing_chk'> </td>";
 					
-					if ( $id == 1 ) {
-						$modif_user = "<td><img src='img/write.png' style=display:none></td>";
-					} else {
-						$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
+					if ( $E_chk ) {
+						if ( $logon == "ati" ) {
+							$modif_user = "<td><img src='img/write.png' style=display:none></td>";
+						} else {
+							$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
+						}
+						
+						echo $modif_user;
+						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user($id, '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";				
 					}
 					
-					echo $modif_user;
-					echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user($id, '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
-				
 				echo "</tr>";
 				
 				$compteur++;
@@ -120,8 +123,8 @@
 	
 	
 <?PHP
-
-	echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+	if ( $E_chk )
+		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 
 	// On se déconnecte de la db
 	$db_gespac->disconnect();

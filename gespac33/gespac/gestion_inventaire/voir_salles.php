@@ -18,7 +18,6 @@ session_start();
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 		
-	$L_chk = preg_match ("#L-02-03#", $_SESSION['droits']);
 	$E_chk = preg_match ("#E-02-03#", $_SESSION['droits']);
 	
 ?>

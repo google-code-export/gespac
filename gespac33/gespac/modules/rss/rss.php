@@ -1,3 +1,8 @@
+<?PHP
+	session_start();
+?>
+
+
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
@@ -11,6 +16,9 @@
 	require_once ('../../fonctions.php');
 	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	
+	$E_chk = preg_match ("#E-08-02#", $_SESSION['droits']);
+	
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 	
@@ -49,13 +57,13 @@
 	<?PHP
 		}
 		
-		
-		echo "<a href='modules/rss/form_rss.php?height=190&width=640&action=ajout' rel='sexylightbox' title='Ajouter un flux'> &nbsp <img src='img/add.png'>Ajouter un flux </a>";
+		if ( $E_chk ) {
+			echo "<a href='modules/rss/form_rss.php?height=190&width=640&action=ajout' rel='sexylightbox' title='Ajouter un flux'> &nbsp <img src='img/add.png'>Ajouter un flux </a>";
 
-		// si le fichier flux n'existe pas, on ne permet pas la suppression (et la suppression de quoi d'abord ?)
-		if ( $row > 0 )
-			echo "<a href='#' onclick='supprimer_flux( $(\"select_flux\").value);'> &nbsp <img src='img/delete.png'>Supprimer ce flux </a>";
-		
+			// si le fichier flux n'existe pas, on ne permet pas la suppression (et la suppression de quoi d'abord ?)
+			if ( $row > 0 )
+				echo "<a href='#' onclick='supprimer_flux( $(\"select_flux\").value);'> &nbsp <img src='img/delete.png'>Supprimer ce flux </a>";
+		}
 	?>	
 
 <br><br>

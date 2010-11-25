@@ -1,3 +1,14 @@
+<?PHP
+session_start();
+
+	/* 
+		fichier de creation / modif / du college
+
+	*/
+
+
+?>
+
 <script type="text/javascript">	
 	// init de la couleur de fond
 	$('conteneur').style.backgroundColor = "#fff";
@@ -7,14 +18,10 @@
 <?PHP
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	/* 
-		fichier de creation / modif / du college
-
-	*/
-	
 	
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+
+	$E_chk = preg_match ("#E-08-01#", $_SESSION['droits']);
 
 	
 	// adresse de connexion à la base de données	
@@ -101,7 +108,7 @@ echo "<h3>Fiche d'informations du collège $clg_nom</h3><br>
 			</table>
 		</center>";
 			
-		
-echo "<br><center><a href='#&id=$clg_uai' onclick=\"$('conteneur').load('gestion_college/form_college.php?id=$clg_uai');\" ><img src='img/modif_college.png' title='Modifier les informations du collège'></a></center>";
+if ($E_chk)	
+	echo "<br><center><a href='#&id=$clg_uai' onclick=\"$('conteneur').load('gestion_college/form_college.php?id=$clg_uai');\" ><img src='img/modif_college.png' title='Modifier les informations du collège'></a></center>";
 
 ?>

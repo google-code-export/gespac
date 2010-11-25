@@ -34,7 +34,6 @@
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 	
-	$L_chk = preg_match ("#L-03-01#", $_SESSION['droits']);
 	$E_chk = preg_match ("#E-03-01#", $_SESSION['droits']);
 
 ?>
@@ -83,7 +82,7 @@
 		
 		<?PHP	
 			
-			if ($E_chk) echo"<th>&nbsp</th>";
+			if ($E_chk) echo "<th>&nbsp</th>";
 			
 			$compteur = 0;
 			// On parcourt le tableau
@@ -182,8 +181,8 @@
 	
 	
 <?PHP
-
-	echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=-1');\"> <img src='img/add.png'>Ouvrir un dossier </a>";
+	if ( $E_chk )
+		echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=-1');\"> <img src='img/add.png'>Ouvrir un dossier </a>";
 
 	// On se déconnecte de la db
 	$db_gespac->disconnect();

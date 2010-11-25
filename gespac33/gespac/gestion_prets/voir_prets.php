@@ -1,4 +1,5 @@
 <?PHP
+	session_start();
 	
 	/* fichier de visualisation des prets :
 	
@@ -6,6 +7,9 @@
 	*/
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
+	
+	$E_chk = preg_match ("#E-05-01#", $_SESSION['droits']);
+	
 	
 ?>
 
@@ -45,8 +49,10 @@
 	<center>
 	
 	<table class="tablehover" id="prets_table" width=800>
-		<th> &nbsp </th>
-		<th> &nbsp </th>
+	
+	<?PHP
+		if ($E_chk) echo "<th> &nbsp </th><th> &nbsp </th>";
+	?>
 		<th>Nom</th>
 		<th>DSIT</th>
 		<th>Type</th>
@@ -88,9 +94,11 @@
 						$user = "DISPONIBLE";
 					} else { $apreter_color = "#F57236"; }
 					
-	
-					echo "<td> <input type=radio name=radio value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $user_id, this.parentNode.parentNode.rowIndex); bas_de_page(this.parentNode.parentNode.rowIndex);\"> </td>";
-					echo "<td> <a href='#basdepage' class='bdp' id='bdp$compteur' style='display:none;'><img src='./img/down.png' title='Aller en bas de page' align=left></a></td>";
+					if ( $E_chk ) {
+						echo "<td> <input type=radio name=radio value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $user_id, this.parentNode.parentNode.rowIndex); bas_de_page(this.parentNode.parentNode.rowIndex);\"> </td>";
+						echo "<td> <a href='#basdepage' class='bdp' id='bdp$compteur' style='display:none;'><img src='./img/down.png' title='Aller en bas de page' align=left></a></td>";
+					}
+					
 					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='sexylightbox' title='Caractéristiques de $mat'>$mat</a> </td>";
 					
 					//echo "<td> $serial </td>";
@@ -120,6 +128,10 @@
 	<!--	FORMULAIRE DE PRET AUX USERS 	-->
 	
 	<form id=elements_selectionnes method="post">
+		
+		<?PHP
+		if ( $E_chk ) {
+		?>
 		
 		<input type=hidden name=pret_a_poster id=pret_a_poster value=''>	<!--	ID du pret à poster	-->
 		<input type=hidden name=row_table id=row_table value=''>			<!--	ROW du pret à poster	-->
@@ -169,6 +181,8 @@
 			<?PHP echo "<input type=button value='RENDRE LE MATERIEL' onclick=\"javascript:validation_rendre_materiel(pret_a_poster.value, select_user.value, row_table.value);\"> "; ?>
 		</div>
 		<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
+		
+		<?PHP } // fin test de droit sur le prêt ?>
 		
 	</form>
 
