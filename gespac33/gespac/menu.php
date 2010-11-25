@@ -1,5 +1,6 @@
 <?PHP 
 
+
 /*
 
 	menu en haut de l'écran
@@ -74,8 +75,8 @@ include_once ('fonctions.php');
 			if ( checkalldroits("L-03-01,L-03-02") ) {
 				echo "<li class='dir'>"; if (checkdroit("L-03-01") ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='demandes et interventions'></div></a>"; else echo "<div id='demandes' class='demandes' title='demandes et interventions'></div>";
 					echo "<ul>";
-						if (checkdroit("L-02-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');\">		Voir les dossiers	</a></li>";
-						if (checkdroit("L-02-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_interventions.php');change_icon_onclick('demandes');\">	Voir les interventions	</a></li>";
+						if (checkdroit("L-03-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');\">		Voir les dossiers	</a></li>";
+						if (checkdroit("L-03-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_interventions.php');change_icon_onclick('demandes');\">	Voir les interventions	</a></li>";
 					echo "</ul>
 				</li>";
 			}
