@@ -33,6 +33,9 @@
 */
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	
+	$L_chk = preg_match ("#L-03-01#", $_SESSION['droits']);
+	$E_chk = preg_match ("#E-03-01#", $_SESSION['droits']);
 
 ?>
 
@@ -63,7 +66,7 @@
 	
 	<center><small><a href='#' id="masque_montre" onclick="montre_masque_dossiers_clotures();" title="masque">masquer/montrer les dossiers clos</a></small></center>
 	
-	<?PHP echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=-1');\"> <img src='img/add.png'>Ouvrir un dossier </a>"; ?>
+	<?PHP if ( $E_chk ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=-1');\"> <img src='img/add.png'>Ouvrir un dossier </a>"; ?>
 
 	<center>
 	
@@ -77,9 +80,11 @@
 		<th>salle</th>
 		<th>mat</th>		
 		<th>texte</th>
-		<th>&nbsp</th>
 		
 		<?PHP	
+			
+			if ($E_chk) echo"<th>&nbsp</th>";
+			
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ( $liste_des_demandes as $record ) {
@@ -152,7 +157,7 @@
 							break;
 						}
 					}
-				
+					
 					
 														
 					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dem_id' rel='sexylightbox' title='voir le dossier $dem_id'> <img src='img/loupe.gif'>$dem_id</a> </td>";					
@@ -163,7 +168,7 @@
 					echo "<td> $salle_nom  </td>";
 					echo "<td> $mat_nom </td>";
 					echo "<td> $dem_text </td>";
-					echo "<td width=20 align=center> <a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=$dem_id');\" style='display:$hidemodif;'>	<img src='img/write.png' title='gérer la demande $dem_id'>	</a> </td>";
+					if ($E_chk) echo "<td width=20 align=center> <a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=$dem_id');\" style='display:$hidemodif;'>	<img src='img/write.png' title='gérer la demande $dem_id'>	</a> </td>";
 				
 				echo "</tr>";
 				

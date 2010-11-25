@@ -12,6 +12,9 @@ session_start();
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 	
+	$L_chk = preg_match ("#L-03-02#", $_SESSION['droits']);
+	$E_chk = preg_match ("#E-03-02#", $_SESSION['droits']);
+	
 ?>
 
 <h3>Visualisation des interventions</h3>
@@ -58,10 +61,12 @@ session_start();
 		<th>Salle</th>
 		<th>Matériel</th>
 		<th>texte</th>
-		<th>&nbsp</th>
 
 		
-		<?PHP	
+		<?PHP
+			
+			if ($E_chk) echo"<th>&nbsp</th>";
+			
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ( $liste_des_interventions as $record ) {
@@ -122,7 +127,7 @@ session_start();
 					echo "<td> $mat_nom </td>";
 					echo "<td> $demande_txt  </td>";
 
-					echo "<td width=20 align=center> <a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_interventions.php?id=$interv_id');\" style='display:$hidemodif;'>	<img src='img/write.png' title='gérer l`intervention'>	</a> </td>";
+					if ($E_chk) echo "<td width=20 align=center> <a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_interventions.php?id=$interv_id');\" style='display:$hidemodif;'>	<img src='img/write.png' title='gérer l`intervention'>	</a> </td>";
 				
 				echo "</tr>";
 				
