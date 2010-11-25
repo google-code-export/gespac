@@ -14,6 +14,7 @@
 06-01;"Visualiser les utilisateurs"
 06-02;"Visualiser les grades"
 06-03;"Importer les comptes IACA"
+06-04;"Modifier mon compte"
 07-01;"Récapitulatif FOG"
 07-02;"Wake On Lan"
 07-03;"Export Perso"
