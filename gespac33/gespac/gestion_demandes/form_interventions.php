@@ -162,6 +162,24 @@
 			historique.style.display = "none";
 	}
 	
+	// *************************************************************************************************************
+	//
+	// 		vérouille l'accès au bouton submit si les conditions ne sont pas remplies pour la réponse à un dossier
+	//
+	// *************************************************************************************************************
+	
+	function validation_reponse () {
+
+		var bt_submit  	= $("post_reponse");
+		var commentaire	= $("reponse_texte").value;
+
+		if (commentaire == "") {
+			bt_submit.disabled = true;
+		} else {
+			bt_submit.disabled = false;
+		}
+	}
+	
 	
 	/******************************************
 	*
@@ -378,7 +396,7 @@
 			<input type=hidden name="salle" value= <?PHP echo $salle_id;?> >
 			<input type=hidden name="mat" value= <?PHP echo $mat_id;?> >
 			
-			<textarea name="reponse" cols=65 rows=10 ></textarea>
+			<textarea name="reponse" id="reponse_texte" cols=65 rows=10  onkeyup="validation_reponse();" ></textarea>
 			<br>
 			<!--
 			<label>Changer l'état : </label>
@@ -388,7 +406,7 @@
 			</select>
 			-->
 			<br>
-			<input type=submit value="Clore l'intervention">
+			<input type=submit value="Clore l'intervention" id="post_reponse" disabled>
 	
 		</form>
 	
