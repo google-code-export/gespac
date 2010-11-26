@@ -5,16 +5,13 @@
 
 
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	header("Content-Type:text/html; charset=iso-8859-1"); 	// règle le problème d'encodage des caractères
 
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
 	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
 
 ?>
 
-<!--  SERVEUR AJAX 
-<script type="text/javascript" src="server.php?client=all"></script>
--->
 
 <script type="text/javascript"> 
 	
@@ -120,6 +117,9 @@
 
 			<?PHP
 				$lines = file('../menu.txt');
+				$menu_precedent = "00"; // J'initialise le menu pour la gestion des groupes d'items
+				$tr_class = "tr1";
+
 
 				foreach ($lines as $line) {
 				
@@ -127,6 +127,16 @@
 					$explode_line = explode (";", $line);
 					$id = $explode_line[0];
 					$value = $explode_line[1];
+					
+					$explode_id = explode ("-", $id);
+					$menu = $explode_id[0];	// Le menu courant
+
+					// Si jamais on change de bloc d'items
+					if ( $menu <> $menu_precedent ) {
+						$tr_class = $tr_class == "tr1" ? "tr2" : "tr1" ;					
+						$menu_precedent = $menu;	
+					}
+					
 					
 					// J'initialise, on sait jamais
 					$L_value = "";
@@ -141,7 +151,7 @@
 					
 					
 					echo "
-						<tr>
+						<tr class='$tr_class'>
 							<TD>$value</TD>
 							<TD><input type=checkbox id='L-$id' name='L-$id' $L_check onclick=\"decocher_ecriture('$id'); \"/></TD>
 							<TD><input type=checkbox id='E-$id' name='E-$id' $E_check onclick=\"cocher_lecture('$id'); \"/></TD>
@@ -152,9 +162,8 @@
 		</table>
 		
 		<br>
-		<input type=submit value='Modifier les droits'>
+		<input type=submit value='Modifier les droits' />
 
 		</center>
 
 	</FORM>
-
