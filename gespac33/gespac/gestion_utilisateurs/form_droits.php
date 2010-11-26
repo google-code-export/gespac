@@ -51,14 +51,11 @@
 	}
 	
 	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
+
 	
 	window.addEvent('domready', function(){
 		
+		// MOTEUR AJAX
 		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
 			new Event(e).stop();
 			new Request({
@@ -68,13 +65,38 @@
 
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (pour les url trop longues)
 					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_grades.php');", 1500);
 					SexyLightbox.close();
 				}
 			
 			}).send(this.toQueryString());
-		});			
+		});		
+		
+		
+		// Pour checker toutes les cases en lecture
+		$('L_CheckAll').addEvent ('click', function(e) {
+			
+			if ( $('L_CheckAll').checked == true ) {			
+				$$('.Lchk').each(function (item) {	item.checked = true; }) // on coche tout
+			} else {
+				$$('.Lchk').each(function (item) {	item.checked = false; }) // on decoche toutes les lectures
+				$$('.Echk').each(function (item) {	item.checked = false; }) // on decoche toutes les écritures (parce que si on a pas la lecture, ey, ça sert à rien de pouvoir écrire)
+				$('E_CheckAll').checked = false;
+			}	
+		});
+		
+		// Pour checker toutes les cases en écriture
+		$('E_CheckAll').addEvent ('click', function(e) {
+			
+			if ( $('E_CheckAll').checked == true ) {			
+				$$('.Echk').each(function (item) {	item.checked = true; }) // on coche toutes les écritures
+				$$('.Lchk').each(function (item) {	item.checked = true; }) // on coche toutes les lectures parce que si on peut écrire, on doit pouvoir lire aussi
+				$('L_CheckAll').checked = true;
+			} else {
+				$$('.Echk').each(function (item) {	item.checked = false; }) // on decoche toutes les écritures
+			}	
+		});
 		
 	});
 	
@@ -112,8 +134,8 @@
 		<table width=500 class="tablehover">
 			
 			<th>Item</th>
-			<th>Lecture</th>
-			<th>Ecriture</th>
+			<th>Lecture <input type=checkbox id=L_CheckAll> </th>
+			<th>Ecriture <input type=checkbox id=E_CheckAll> </th>
 
 			<?PHP
 				$lines = file('../menu.txt');
@@ -153,8 +175,8 @@
 					echo "
 						<tr class='$tr_class'>
 							<TD>$value</TD>
-							<TD><input type=checkbox id='L-$id' name='L-$id' $L_check onclick=\"decocher_ecriture('$id'); \"/></TD>
-							<TD><input type=checkbox id='E-$id' name='E-$id' $E_check onclick=\"cocher_lecture('$id'); \"/></TD>
+							<TD><input type=checkbox id='L-$id' class='Lchk' name='L-$id' $L_check onclick=\"decocher_ecriture('$id'); \"/></TD>
+							<TD><input type=checkbox id='E-$id' class='Echk' name='E-$id' $E_check onclick=\"cocher_lecture('$id'); \"/></TD>
 						</tr>";
 				}
 			?>
