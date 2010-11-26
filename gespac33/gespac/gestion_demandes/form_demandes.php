@@ -195,9 +195,8 @@
 	function validation_reponse () {
 
 		var bt_submit  	= $("post_reponse");
-		var commentaire	= $("reponse");
-		
-	
+		var commentaire	= $("reponse_texte").value;
+
 		if (commentaire == "") {
 			bt_submit.disabled = true;
 		} else {
@@ -246,7 +245,15 @@
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 
 	
-	if ( $id == -1 ) {	// Création d'une demande
+	if ( $id == -1 ) {	
+		
+		
+		/*********************************************
+		 * 
+		 * 				CREATION
+		 * 
+		 ***********************************************/
+			
 	
 		echo "<h2>Créer le dossier</h2><br>";
 		
@@ -259,7 +266,7 @@
 
 				<tr id="tr_type">
 					<TD>Type :</TD>
-					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value);$('salle_demande').value=''; $('pc_demande').value='';validation();">
+					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value); $('salle_demande').value=''; $('pc_demande').value='';validation();">
 							<option selected value=""> >>> Type de Demande <<< </option>
 							<option value="installation">installation</option>
 							<option value="reparation">réparation</option>
@@ -324,6 +331,12 @@
 		<div id=historique></div>
 	<?PHP	
 	} else {
+		
+		/*********************************************
+		 * 
+		 * 				MODIFICATION
+		 * 
+		 ***********************************************/
 			
 		$req_info_demande = $db_gespac->queryAll ( "SELECT dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, user_nom, dem_type FROM demandes, users WHERE demandes.user_demandeur_id=users.user_id AND dem_id=$id ORDER BY dem_date" );
 		
@@ -400,7 +413,7 @@
 				<input type=hidden name="salle" value= <?PHP echo $salle_id;?> >
 				<input type=hidden name="mat" value= <?PHP echo $mat_id;?> >
 				
-				<textarea name="reponse" cols=65 rows=10 onkeyup="validation_reponse();" ></textarea>
+				<textarea name="reponse" id='reponse_texte' cols=65 rows=10 onkeyup="validation_reponse();" ></textarea>
 				<br>
 				
 				<label>Changer l'état : </label>
@@ -434,7 +447,7 @@
 
 				</select>
 				
-				<input type=submit id=post_reponse value=poster disabled >
+				<input type=submit id='post_reponse' value=poster disabled >
 		
 			</form>
 		
