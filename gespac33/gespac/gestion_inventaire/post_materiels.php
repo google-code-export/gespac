@@ -173,6 +173,43 @@ session_start();
 
 	}
 	
+	
+	/**************** RENOMMAGE D'UN LOT ********************/
+		
+	if ( $action == 'renomlot' ) {
+		
+		$lot		= addslashes(utf8_decode(urldecode($_POST ['lot'])));
+		$prefixe   	= addslashes(utf8_decode(urldecode($_POST ['prefixe'])));
+		$suffixe   	= $_POST ['suffixe'];
+		
+
+		$lot_array = explode(";", $lot);
+		
+		$sequence = $suffixe == "on" ? 1 : "" ;
+		
+		foreach ($lot_array as $item) {
+			
+			if ($item <> "") {
+				$req_renomme_materiel = "UPDATE materiels SET mat_nom='" . $prefixe ."". $sequence . "' WHERE mat_id=$item ;";
+				$result = $db_gespac->exec ( $req_renomme_materiel );
+				
+				if ( $suffixe == 'on' ) $sequence++;	//Pour faire un suffixe séquentiel
+			}
+			
+			// On log la requête SQL
+			fwrite($fp, date("Ymd His") . " " . $req_renomme_materiel."\n");
+		
+		}
+	
+		//Insertion d'un log
+		$lot_w_space = str_replace (";", " ", $lot);
+		$log_texte = "Les materiels <b>$lot_w_space</b> ont été renommés";
+
+		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
+		$result = $db_gespac->exec ( $req_log_modif_mat );
+
+	}
+	
 	/**************** MODIFICATION ********************/
 		
 	if ( $action == 'mod' ) {

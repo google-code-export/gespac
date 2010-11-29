@@ -29,17 +29,15 @@
 			
 ?>
 
-<!--<script type="text/javascript" src="server.php?client=all"></script>-->
 
 <script type="text/javascript">
-/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
+
+
 	
 	window.addEvent('domready', function(){
 		
+		
+		// AJAX		
 		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
 			new Event(e).stop();
 			new Request({
@@ -199,7 +197,7 @@
 	<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="post_form" >
 	
 		<!--------------------------------------------	LISTE DES ID A POSTER	------------------------------------------------>
-		<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
+		<input type=hidden name='materiel_a_poster' id='materiel_a_poster' value=''>	
 		
 		<span>
 		
@@ -236,14 +234,11 @@
 		<!-- Ajout d'un matériel et Modification par lot-->
 		<?PHP
 			if ( $E_chk ) {
-				echo "<span style='float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=600&width=640&id=-1' rel='sexylightbox' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>";
-				echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&id=lot' rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Modifier la sélection</a> <span id='nb_selectionnes'></span> </span>";
+				echo "<span style='float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='sexylightbox' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>";
+				echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Modifier lot</a> <span id='nb_selectionnes'></span> </span>";
+				echo "<span id='rename_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='sexylightbox' title='renommer selection'> <img src='img/write.png'>Renommer lot</a> </span>";
 			}
 		?>
-		
-		<!--
-		<span id='rename_selection' style='float:right; margin-right:20px'><a href=\"gestion_inventaire/form_materiels.php?height=180&width=640&id=renamelot&liste='<script type='text/javascript'>	materiel_a_poster.value</script>'\" rel='sexylightbox' title='modifier selection'> <img src='img/write.png'>Renommer la sélection</a></span>
-		-->
 		
 		
 		<!-- Gestion de l'affichage des colonnes ici. -->	
@@ -383,7 +378,7 @@
 					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='sexylightbox' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
 					
 					if ( $E_chk ) {
-						/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&id=$id&mat_ssn=$serial' rel='sexylightbox' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
+						/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&action=mod&id=$id&mat_ssn=$serial' rel='sexylightbox' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
 						/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel($id, '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 					}
 					
@@ -549,10 +544,13 @@
 			document.getElementById('materiel_a_poster').value = table_id.join(";");
 			
 
-			if ( $('materiel_a_poster').value != "" ) 
+			if ( $('materiel_a_poster').value != "" ) {
 				$('modif_selection').style.display = "";
-			else 
+				$('rename_selection').style.display = "";
+			} else { 
 				$('modif_selection').style.display = "none";
+				$('rename_selection').style.display = "none";
+			}
 		}
 	}
 

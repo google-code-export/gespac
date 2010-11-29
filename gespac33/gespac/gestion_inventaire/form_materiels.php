@@ -16,12 +16,6 @@
 
 ?>
 
-<!--	DIV target pour Ajax	
-<div id="target"></div>
--->
-<!--  SERVEUR AJAX 
-<script type="text/javascript" src="server.php?client=all"></script>
--->
 
 <script type="text/javascript"> 
 	
@@ -300,9 +294,10 @@
 
 <?PHP
 	
-	$id 	 = $_GET['id'];
-	//le SSN va nous servir pour récupérer les adresses MAC d'OCS
-	$mat_ssn = $_GET['mat_ssn'];
+	// action à executer
+	$action	 = $_GET['action'];
+	$mat_ssn = $_GET['mat_ssn'];		//le SSN va nous servir pour récupérer les adresses MAC d'OCS
+	
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
 	$link_bases = mysql_pconnect('localhost', $user, $pass);//connexion à la base de donnée
@@ -341,8 +336,6 @@
 	// Requête qui va récupérer les états des matériels ...
 	$liste_etats = $db_gespac->queryAll ( "SELECT etat FROM etats ORDER BY etat" );
 	
-	$id 	 = $_GET['id'];
-	$mat_ssn = $_GET['mat_ssn']; //va nous servir pour récupérer les adresses MAC d'OCS
 
 	
 	// *********************************************************************************
@@ -352,7 +345,7 @@
 	// *********************************************************************************	
 	
 
-	if ( $id == '-1' ) {
+	if ( $action == 'add' ) {
 	
 		echo "<h2>formulaire de création d'un nouveau matériel</h2><br>";
 		
@@ -502,17 +495,22 @@
 				
 
 		<?PHP
+		
+	} 
 	
 	
+
+
 	// *********************************************************************************
 	//
 	//			Formulaire modification par lot non prérempli
 	//
 	// *********************************************************************************		
 		
+	
+	if ($action == 'modlot') {
 		
-	} else if ($id == 'lot') {
-
+		
 		echo "<h2>formulaire de modification d'un lot</h2><br>";
 			
 		?>
@@ -527,7 +525,7 @@
 			
 			<input type=hidden name=lot id=lot>
 			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
-			<script>document.getElementById("lot").value = document.elements_selectionnes.materiel_a_poster.value;	</script>
+			<script>$("lot").value = $('materiel_a_poster').value;</script>
 
 			<table width=500>
 				
@@ -631,14 +629,24 @@
 				
 
 		<?PHP
+
+		
+	} 
 	
+		
+		
+		
+		
 	// *********************************************************************************
 	//
 	//			Formulaire modification unique prérempli
 	//
 	// *********************************************************************************	
-		
-	} else {
+	
+	
+	if ($action == 'mod') {
+	
+		$id = $_GET['id'];	// Id du matériel à modifier
 	
 		echo "<h2>formulaire de modification d'un matériel</h2><br>";
 		
@@ -848,4 +856,55 @@
 		
 <?PHP
 	}	
+	
+	
+	// *********************************************************************************
+	//
+	//			Formulaire de renommage par lot de la selection
+	//
+	// *********************************************************************************	
+	
+	
+	if ($action == 'renomlot') {
+		
+			echo "<h2>formulaire pour renommer un lot</h2><br>";
+?>
+
+		<form action="gestion_inventaire/post_materiels.php?action=renomlot" method="post" name="post_form" id="post_form2">
+			<center>
+			
+			<input type=hidden name=lot id=lot>
+			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
+			<script>$("lot").value = $('materiel_a_poster').value;</script>
+
+			<table width=500>
+				
+				<tr>
+					<TD>Préfixe du lot</TD> 
+					<TD>
+						<input type=text name=prefixe id=prefixe />
+					</TD>
+				</tr>
+				
+				<tr>
+					<TD>Suffixe séquentiel</TD> 
+					<TD>
+						<input type=checkbox name=suffixe id=suffixe checked />
+					</TD>
+				</tr>
+				
+				
+			</table>
+
+			<br>
+			<input type=submit value='Renommer le lot' >
+			<input type=button value='sortir sans renommer' onclick="SexyLightbox.close();" >
+
+			</center>
+
+		</FORM>
+
+
+<?PHP	
+	}
 ?>
