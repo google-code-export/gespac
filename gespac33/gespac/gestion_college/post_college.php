@@ -47,12 +47,12 @@
 		
 		//la fonction addslashes() va permettre de rajouter un slash avant une apostrophe dans un string. Pas besoin d'utiliser cette fonction pour les champs uniquement numériques comme le téléphone, fax...
 		$clg_uai 		= $_POST['clg_uai'];
-		$clg_nom 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_nom']))));
-		$clg_ati 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ati']))));
+		$clg_nom 		= stripslashes(strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_nom'])))));
+		$clg_ati 		= stripslashes(strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ati'])))));
 		$clg_ati_mail 	= addslashes(utf8_decode(urldecode($_POST['clg_ati_mail'])));
-		$clg_adresse 	= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_adresse']))));
+		$clg_adresse 	= stripslashes(strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_adresse'])))));
 		$clg_cp 		= $_POST['clg_cp'];
-		$clg_ville 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ville']))));
+		$clg_ville 		= stripslashes(strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ville'])))));
 		$clg_tel 		= $_POST['clg_tel'];
 		$clg_fax 		= $_POST['clg_fax'];
 		$clg_web 		= addslashes(utf8_decode(urldecode($_POST['clg_web'])));
@@ -61,8 +61,6 @@
 	
 		$req_add_college = "INSERT INTO college VALUES ( '$clg_uai', '$clg_nom', '$clg_ati', '$clg_ati_mail', '$clg_adresse', '$clg_cp', '$clg_ville', '$clg_tel', '$clg_fax', '$clg_web', '$clg_grr')";
 		$result = $db_gespac->exec ( $req_add_college );
-		
-		$clg_nom = stripslashes($clg_nom);
 		
 		echo "<br><small>Création du collège <b>$clg_nom</b> !</small><br>";
 		
