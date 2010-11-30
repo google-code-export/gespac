@@ -29,6 +29,7 @@
 		
 	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
+	
 
 	
 	
@@ -47,12 +48,12 @@
 		
 		//la fonction addslashes() va permettre de rajouter un slash avant une apostrophe dans un string. Pas besoin d'utiliser cette fonction pour les champs uniquement numériques comme le téléphone, fax...
 		$clg_uai 		= $_POST['clg_uai'];
-		$clg_nom 		= stripslashes(strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_nom'])))));
-		$clg_ati 		= stripslashes(strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ati'])))));
+		$clg_nom 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_nom']))));
+		$clg_ati 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ati']))));
 		$clg_ati_mail 	= addslashes(utf8_decode(urldecode($_POST['clg_ati_mail'])));
-		$clg_adresse 	= stripslashes(strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_adresse'])))));
+		$clg_adresse 	= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_adresse']))));
 		$clg_cp 		= $_POST['clg_cp'];
-		$clg_ville 		= stripslashes(strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ville'])))));
+		$clg_ville 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ville']))));
 		$clg_tel 		= $_POST['clg_tel'];
 		$clg_fax 		= $_POST['clg_fax'];
 		$clg_web 		= addslashes(utf8_decode(urldecode($_POST['clg_web'])));
