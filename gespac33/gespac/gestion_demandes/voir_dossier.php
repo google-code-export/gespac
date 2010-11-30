@@ -41,11 +41,11 @@
 		
 		$dem_id 				= $req_info_demande[0][0];
 		$dem_date 				= $req_info_demande[0][1];
-		$dem_text 				= $req_info_demande[0][2];
+		$dem_text 				= stripslashes($req_info_demande[0][2]);
 		$dem_etat 				= $req_info_demande[0][3];
 		$user_demandeur_id 		= $req_info_demande[0][4];
 		$user_intervenant_id 	= $req_info_demande[0][5];
-		$user_demandeur_nom		= $req_info_demande[0][6];
+		$user_demandeur_nom		= stripslashes($req_info_demande[0][6]);
 		$dem_type				= $req_info_demande[0][7];
 
 		
@@ -58,20 +58,48 @@
 
 			$mat_id 	= $rq_extraction_salle_mat [0][0];
 			$salle_id 	= $rq_extraction_salle_mat [0][1];
-			$salle_nom 	= $rq_extraction_salle_mat [0][2];
+			$salle_nom 	= stripslashes($rq_extraction_salle_mat [0][2]);
 			
 			// On récupère le nom du matériel
 			if ( $mat_id <> 0) {
 				$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
-				$mat_nom = $liste_nom_materiel[0][0];
+				$mat_nom = stripslashes($liste_nom_materiel[0][0]);
 			}
 			else {	$mat_nom = "TOUS";	}
 			
-		} else {
+		} else { //ce n'est ni une installation ni une réparation
 			$mat_nom 	= "NA";
 			$salle_nom 	= "NA";
 		}
 					
+		
+		// On change la couleur quand le dossier est clos et on masque la case de modification
+		switch ($dem_etat) {
+			case "clos" : {
+				$etat_couleur = "#36F572";
+				break;
+			}
+						
+			case "attente" : {
+				$etat_couleur = "#FFD700";
+				break;
+			}
+						
+			case "rectifier" : {
+				$etat_couleur = "#FFD700";
+				break;
+			}
+						
+			case "precisions" : {
+				$etat_couleur = "#FFD700";
+				break;
+			}
+						
+			case "intervention" : {
+				$etat_couleur = "#F57236";
+				break;
+			}
+		}
 		
 
 		echo "	<center>
@@ -83,7 +111,7 @@
 					<th>Matériel</th>
 					
 					<tr>
-						<td>$dem_etat</td>
+						<td bgcolor=$etat_couleur>$dem_etat</td>
 						<td>$dem_type</td>
 						<td>$user_demandeur_nom</td>
 						<td>$salle_nom</td>
@@ -121,16 +149,44 @@
 			foreach ( $historique_demandes as $record ) {
 			
 				$txt_date 	= $record[0];
-				$txt_texte 	= $record[1];
-				$user_nom 	= $record[2];
-				$txt_etat	= $record[3];
+				$txt_texte 	= stripslashes($record[1]);
+				$user_nom 	= stripslashes($record[2]);
+				$txt_etat	= stripslashes($record[3]);
+				
+				// On change la couleur quand le dossier est clos et on masque la case de modification
+					switch ($txt_etat) {
+						case "clos" : {
+							$etat_couleur = "#36F572";
+							break;
+						}
+						
+						case "attente" : {
+							$etat_couleur = "#FFD700";
+							break;
+						}
+						
+						case "rectifier" : {
+							$etat_couleur = "#FFD700";
+							break;
+						}
+						
+						case "precisions" : {
+							$etat_couleur = "#FFD700";
+							break;
+						}
+						
+						case "intervention" : {
+							$etat_couleur = "#F57236";
+							break;
+						}
+					}
 				
 
 				echo "
 					<tr>
 						<td>$txt_date</td>
 						<td>$user_nom</td>
-						<td>$txt_etat</td>
+						<td bgcolor=$etat_couleur>$txt_etat</td>
 						<td>$txt_texte</td>
 				";
 						

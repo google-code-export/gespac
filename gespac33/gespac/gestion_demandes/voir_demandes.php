@@ -71,14 +71,14 @@
 	
 	<table class="tablehover" id="demandes_table" width=800>
 	
-		<th>num</th>
-		<th>date</th>
-		<th>état</th>
-		<th>type</th>
-		<th>demandeur</th>
-		<th>salle</th>
-		<th>mat</th>		
-		<th>texte</th>
+		<th>N°</th>
+		<th>Date</th>
+		<th>Etat</th>
+		<th>Type</th>
+		<th>Demandeur</th>
+		<th>Salle</th>
+		<th>Matériel</th>		
+		<th>Commentaire</th>
 		
 		<?PHP	
 			
@@ -95,12 +95,12 @@
 				
 					$dem_id 				= $record[0];
 					$dem_date 				= $record[1];
-					$dem_text 				= $record[2];
+					$dem_text 				= stripslashes($record[2]);
 					$dem_etat 				= $record[3];
 					$dem_type 				= $record[4];
 					$user_demandeur_id 		= $record[5];
 					$user_intervenant_id 	= $record[6];
-					$user_demandeur_nom		= $record[7];
+					$user_demandeur_nom		= stripslashes($record[7]);
 					
 					
 					// On récupère la salle et le materiel si c'est une installation ou une reparation
@@ -109,12 +109,12 @@
 
 						$mat_id 	= $rq_extraction_salle_mat [0][0];
 						$salle_id 	= $rq_extraction_salle_mat [0][1];
-						$salle_nom 	= $rq_extraction_salle_mat [0][2];
+						$salle_nom 	= stripslashes($rq_extraction_salle_mat [0][2]);
 						
 						// On récupère le nom du matériel
 						if ( $mat_id <> 0) {
 							$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
-							$mat_nom = $liste_nom_materiel[0][0];
+							$mat_nom = stripslashes($liste_nom_materiel[0][0]);
 						}
 						else {	$mat_nom = "TOUS";	}
 						

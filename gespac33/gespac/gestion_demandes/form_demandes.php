@@ -265,13 +265,13 @@
 			<table width=500>
 
 				<tr id="tr_type">
-					<TD>Type :</TD>
+					<TD>Type</TD>
 					<TD><select id="type_demande" name="type_demande" onChange="change_type(type_demande.value); $('salle_demande').value=''; $('pc_demande').value='';validation();">
-							<option selected value=""> >>> Type de Demande <<< </option>
-							<option value="installation">installation</option>
-							<option value="reparation">réparation</option>
-							<option value="usages">usages</option>
-							<option value="formation">formation</option>
+							<option selected value=""> >>> Type de demande <<< </option>
+							<option value="installation">Installation</option>
+							<option value="reparation">Réparation</option>
+							<option value="usages">Usages</option>
+							<option value="formation">Formation</option>
 							<option value="autre">Autre...</option>
 						</select>
 					</TD>
@@ -342,11 +342,11 @@
 		
 		$dem_id 				= $req_info_demande[0][0];
 		$dem_date 				= $req_info_demande[0][1];
-		$dem_text 				= $req_info_demande[0][2];
+		$dem_text 				= stripslashes($req_info_demande[0][2]);
 		$dem_etat 				= $req_info_demande[0][3];
 		$user_demandeur_id 		= $req_info_demande[0][4];
 		$user_intervenant_id 	= $req_info_demande[0][5];
-		$user_demandeur_nom		= $req_info_demande[0][6];
+		$user_demandeur_nom		= stripslashes($req_info_demande[0][6]);
 		$dem_type				= $req_info_demande[0][7];
 
 		
@@ -356,12 +356,12 @@
 
 			$mat_id 	= $rq_extraction_salle_mat [0][0];
 			$salle_id 	= $rq_extraction_salle_mat [0][1];
-			$salle_nom 	= $rq_extraction_salle_mat [0][2];
+			$salle_nom 	= stripslashes($rq_extraction_salle_mat [0][2]);
 			
 			// On récupère le nom du matériel
 			if ( $mat_id <> 0) {
 				$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
-				$mat_nom = $liste_nom_materiel[0][0];
+				$mat_nom = stripslashes($liste_nom_materiel[0][0]);
 			}
 			else {	$mat_nom = "TOUS";	}
 			
@@ -475,8 +475,8 @@
 				foreach ( $historique_demandes as $record ) {
 				
 					$txt_date 	= $record[0];
-					$txt_texte 	= $record[1];
-					$user_nom 	= $record[2];
+					$txt_texte 	= stripslashes($record[1]);
+					$user_nom 	= stripslashes($record[2]);
 					$txt_etat	= $record[3];
 					
 					echo "

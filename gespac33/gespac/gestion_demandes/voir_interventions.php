@@ -56,10 +56,10 @@ session_start();
 		<th>Dossier</th>
 		<th>Inter</th>
 		<th>Ouverture</th>
-		<th>Cloture</th>
+		<th>Clôture</th>
 		<th>Salle</th>
 		<th>Matériel</th>
-		<th>texte</th>
+		<th>Commentaire</th>
 
 		
 		<?PHP
@@ -78,16 +78,17 @@ session_start();
 					$interv_id		= $record[0]; 
 					$interv_date	= $record[1]; 
 					$interv_cloture	= $record[2]; 
-					$interv_text	= $record[3]; 
+					$interv_text	= stripslashes($record[3]); 
 					$dossier		= $record[4]; 
 					$salle_id		= $record[5];
 					$mat_id			= $record[6]; 
 					$user_id		= $record[7];
-					$demande_txt	= $record[8];
+					$demande_txt	= stripslashes($record[8]);
 					
 					// on récupère le nom de la salle
 					if ($salle_id <> 0) {
 						$salle_nom = $db_gespac->queryOne ("SELECT salle_nom FROM salles WHERE salle_id = $salle_id");
+						$salle_nom = stripslashes($salle_nom);
 					} else {
 						$salle_nom = "Pas de salle";
 					}
@@ -97,7 +98,7 @@ session_start();
 						// On récupère le nom du matériel
 						if ( $mat_id <> 0) {
 							$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
-							$mat_nom = $liste_nom_materiel[0][0];
+							$mat_nom = stripslashes($liste_nom_materiel[0][0]);
 						} else {
 							$mat_nom = "TOUS";
 						}
@@ -116,12 +117,19 @@ session_start();
 					
 					
 					// On marque "EN COURS" lorsque le dossier n'est pas clos.
-					$interv_cloture = $interv_cloture == "" ? "EN COURS": $interv_cloture;
+					if ($interv_cloture == "") {
+						$interv_cloture = "EN COURS";
+						$etat_couleur = "#F57236";
+					} else {
+						$interv_cloture = $interv_cloture;
+						$etat_couleur = "#36F572";
+					}
+					//$interv_cloture = $interv_cloture == "" ? "EN COURS": $interv_cloture;
 											
 					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dossier' rel='sexylightbox' title='voir le dossier $dossier'> <img src='img/loupe.gif'>$dossier</a> </td>";
 					echo "<td> $interv_id </td>";
 					echo "<td> $interv_date </td>";
-					echo "<td> $interv_cloture </td>";
+					echo "<td bgcolor=$etat_couleur> $interv_cloture </td>";
 					echo "<td> $salle_nom </td>";
 					echo "<td> $mat_nom </td>";
 					echo "<td> $demande_txt  </td>";

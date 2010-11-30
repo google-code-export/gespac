@@ -234,13 +234,13 @@
 		
 		$dem_id 				= $req_info_demande[0][0];
 		$dem_date 				= $req_info_demande[0][1];
-		$dem_text 				= $req_info_demande[0][2];
+		$dem_text 				= stripslashes($req_info_demande[0][2]);
 		$dem_etat 				= $req_info_demande[0][3];
 		$user_demandeur_id 		= $req_info_demande[0][4];
 		$user_intervenant_id 	= $req_info_demande[0][5];
 		$mat_id 				= $req_info_demande[0][6];
 		$salle_id 				= $req_info_demande[0][7];
-		$user_demandeur_nom		= $req_info_demande[0][8];
+		$user_demandeur_nom		= stripslashes($req_info_demande[0][8]);
 		$dem_type				= $req_info_demande[0][9];
 
 		
@@ -248,17 +248,19 @@
 		
 		
 		// on récupère le nom de la salle
-					if ($salle_id <> 0)
+					if ($salle_id <> 0) {
 						$salle_nom = $db_gespac->queryOne ("SELECT salle_nom FROM salles WHERE salle_id = $salle_id");
-					else
+						$salle_nom = stripslashes($salle_nom);
+					} else {
 						$salle_nom = "Pas de salle";
+					}
 					
 					// on change la valeur de mat_nom en fonction de si il y a une salle ou pas
 					if ($salle_nom != "Pas de salle") {
 						// On récupère le nom du matériel
 						if ( $mat_id <> 0) {
 							$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
-							$mat_nom = $liste_nom_materiel[0][0];
+							$mat_nom = stripslashes($liste_nom_materiel[0][0]);
 						} else {
 							$mat_nom = "TOUS";
 						}
@@ -346,8 +348,8 @@
 			foreach ( $historique_demandes as $record ) {
 			
 				$txt_date 	= $record[0];				
-				$txt_texte 	= $record[1];
-				$user_nom 	= $record[2];
+				$txt_texte 	= stripslashes($record[1]);
+				$user_nom 	= stripslashes($record[2]);
 				$txt_etat	= $record[3];
 				
 				echo "
