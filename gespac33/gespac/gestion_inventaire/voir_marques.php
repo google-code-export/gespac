@@ -25,8 +25,6 @@
 <h3>Visualisation des marques et modèles</h3>
 <br>
 
-<script type="text/javascript" src="server.php?client=all" ></script>
-
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
