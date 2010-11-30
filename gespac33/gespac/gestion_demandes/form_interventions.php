@@ -162,12 +162,10 @@
 			historique.style.display = "none";
 	}
 	
-	// *************************************************************************************************************
-	//
-	// 		vérouille l'accès au bouton submit si les conditions ne sont pas remplies pour la réponse à un dossier
-	//
-	// *************************************************************************************************************
 	
+	
+	
+	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies pour la réponse à un dossier
 	function validation_reponse () {
 
 		var bt_submit  	= $("post_reponse");
@@ -226,95 +224,9 @@
 	
 	/*******************************************************************
 	*
-	*				CREER INTERVENTION
+	*				MODIFICATION INTERVENTION
 	*
 	*******************************************************************/
-	
-	
-	
-	
-	if ( $interv_id == -1 ) {	// Création d'une demande
-	
-		echo "<h2>CREER une intervention</h2><br>";
-		
-		?>
-
-		<form action="gestion_demandes/post_interventions.php?action=add" method="post" name="post_form" id="post_form">
-
-			<center>
-			<table width=500>
-
-				<tr id="tr_type">
-					<TD>Type :</TD>
-					<TD><select id="type_intervention" name="type_intervention" onChange="change_type(type_intervention.value);">
-							<option selected value=""> >>> Type d'intervention <<< </option>
-							<option value="installation">installation</option>
-							<option value="reparation">réparation</option>
-							<option value="usages">usages</option>
-							<option value="formation">formation</option>
-							<option value="autre">Autre...</option>
-						</select>
-					</TD>
-				</tr>
-				
-				<tr id="tr_salle" style='display:none'>
-					<TD>Salle</TD>
-					<TD><select id="salle_intervention" name="salle_intervention" onChange="chainage_salle_pc(this, 'pc_intervention', 'tr_pc');">
-							<option selected>>>>Sélectionner une salle<<<</option>
-							<?PHP
-								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles" );
-								foreach ( $req_salles_disponibles as $record) { 
-								
-									$salle_nom 	= $record[0];
-									$salle_id 	= $record[1];
-								?>
-									<option value="<?PHP echo $salle_id ?>"><?PHP echo $salle_nom ?></option>
-							<?PHP
-								}
-							?>
-						</select>
-					</TD>
-				</tr>
-				
-				<tr id="tr_pc" style='display:none'>
-					<TD>PC</TD> 
-					<TD><select id="pc_intervention" name="pc_intervention" onChange="change_pc();chainage_pc_historique(this,'historique')"></select>
-					</TD>
-				</tr>
-
-				<TR id="tr_texte" style='display:none'>
-					<TD>soucy</TD>
-					<TD><textarea cols=45 rows=15 name="texte_intervention" ></textarea></TD>
-				</TR>
-				
-			</table>
-
-			<br>
-				<input type=submit value='Créer l`intervention' >
-
-			</center>
-
-		</FORM>
-		
-		<div id=historique></div>
-	<?PHP	
-	
-	
-	
-	
-	/*******************************************************************
-	*
-	*			MODIFICATION INTERVENTION
-	*
-	*******************************************************************/
-	
-	
-	
-	
-	} else {
-	
-		
 		
 		//$req_info_demande = $db_gespac->queryAll ( "SELECT demandes.dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, demandes.mat_id, demandes.salle_id, salle_nom, user_nom, dem_type FROM demandes, salles, users, materiels, interventions WHERE salles.salle_id=demandes.salle_id AND demandes.user_demandeur_id=users.user_id AND interventions.dem_id = demandes.dem_id AND interv_id=$interv_id ORDER BY dem_date" );
 		$req_info_demande = $db_gespac->queryAll ( "SELECT demandes.dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, demandes.mat_id, demandes.salle_id, user_nom, dem_type FROM demandes, users, materiels, interventions WHERE demandes.user_demandeur_id=users.user_id AND interventions.dem_id = demandes.dem_id AND interv_id=$interv_id ORDER BY dem_date" );
@@ -336,11 +248,10 @@
 		
 		
 		// on récupère le nom de la salle
-					if ($salle_id <> 0) {
+					if ($salle_id <> 0)
 						$salle_nom = $db_gespac->queryOne ("SELECT salle_nom FROM salles WHERE salle_id = $salle_id");
-					} else {
+					else
 						$salle_nom = "Pas de salle";
-					}
 					
 					// on change la valeur de mat_nom en fonction de si il y a une salle ou pas
 					if ($salle_nom != "Pas de salle") {
@@ -454,7 +365,3 @@
 	
 			
 	</div>
-
-	<?PHP
-	}
-	?>
