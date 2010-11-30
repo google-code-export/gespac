@@ -33,17 +33,17 @@ session_start();
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$college_info = $db_gespac->queryAll ( "SELECT clg_uai, clg_nom, clg_ati, clg_ati_mail, clg_adresse, clg_cp, clg_ville, clg_tel, clg_fax, clg_site_web, clg_site_grr FROM college;" );
 
-	$clg_uai 		= $college_info [0][0];
-	$clg_nom 		= $college_info [0][1];
-	$clg_ati 		= $college_info [0][2];
-	$clg_ati_mail 	= $college_info [0][3];
-	$clg_adresse 	= $college_info [0][4];
+	$clg_uai 		= stripslashes($college_info [0][0]);
+	$clg_nom 		= stripslashes($college_info [0][1]);
+	$clg_ati 		= stripslashes($college_info [0][2]);
+	$clg_ati_mail 	= stripslashes($college_info [0][3]);
+	$clg_adresse 	= stripslashes($college_info [0][4]);
 	$clg_cp 		= $college_info [0][5];
-	$clg_ville 		= $college_info [0][6];
+	$clg_ville 		= stripslashes($college_info [0][6]);
 	$clg_tel 		= $college_info [0][7];
 	$clg_fax 		= $college_info [0][8];
-	$clg_site_web 	= $college_info [0][9];
-	$clg_site_grr 	= $college_info [0][10];
+	$clg_site_web 	= stripslashes($college_info [0][9]);
+	$clg_site_grr 	= stripslashes($college_info [0][10]);
 	
 	
 echo "<h3>Fiche d'informations du collège $clg_nom</h3><br>
@@ -71,7 +71,7 @@ echo "<h3>Fiche d'informations du collège $clg_nom</h3><br>
 				</tr>
 			
 				<tr class='tr1'>
-					<TD><B>Adresse du bollège</B></TD>
+					<TD><B>Adresse du collège</B></TD>
 					<TD>$clg_adresse</TD>
 				</tr>
 			
