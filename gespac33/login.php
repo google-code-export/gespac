@@ -31,7 +31,6 @@
 									  `user_nom` varchar(255) DEFAULT NULL,
 									  `user_logon` varchar(20) NOT NULL,
 									  `user_password` varchar(15) DEFAULT NULL,
-									  `user_niveau` int(11) DEFAULT '3',
 									  `user_mail` varchar(100) NOT NULL,
 									  `user_skin` varchar(150) NOT NULL DEFAULT 'cg13',
 									  `user_accueil` varchar(255) NOT NULL,
@@ -112,10 +111,9 @@
 					
 				// extraction de données pour les mettre en variables de sessions
 				$user = $_SESSION ['login'];
-				$rq_session_user = $db_gespac->queryAll ( "SELECT user_niveau, user_skin, grade_menu FROM users, grades WHERE users.grade_id=grades.grade_id AND user_logon='$user' " );
-				$_SESSION ['grade'] = $rq_session_user[0][0];             
-				$_SESSION ['skin'] = $rq_session_user[0][1];             
-				$_SESSION ['droits'] = $rq_session_user[0][2];             
+				$rq_session_user = $db_gespac->queryAll ( "SELECT user_skin, grade_menu FROM users, grades WHERE users.grade_id=grades.grade_id AND user_logon='$user' " );
+				$_SESSION ['skin'] = $rq_session_user[0][0];             
+				$_SESSION ['droits'] = $rq_session_user[0][1];             
 				
 				header ("Location: ./index.php");
 				break;

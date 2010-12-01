@@ -12,9 +12,9 @@
 	// on vérifie si l'utilisateur est identifié
 	if (!isset( $_SESSION['login'])) {
 
-		// la variable de session n’existe pas, donc l'utilisateur n'est pas authentifié
-		// On redirige sur la page permettant de s’authentifier
-		header("Location: ../index.php"); //[AMELIORATION]
+		// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié
+		// On redirige sur la page permettant de s'authentifier
+		header("Location: ../index.php");
 			
 		// on arrête l'exécution
 		exit();
@@ -43,9 +43,7 @@
 		<script type="text/javascript" src="js/sexylightbox.js"></script> 
 		<script type="text/javascript" src="js/main.js"></script>
 
-		<!-- 	AJAX	-->
-		<!--<script type="text/javascript" src="server.php?client=all"></script>-->
-	
+
 		<title>GESPAC -> GEStion du PArc des Collèges</title>
 	
 	</head>
