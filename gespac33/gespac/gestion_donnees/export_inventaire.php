@@ -56,8 +56,30 @@ foreach ($liste_export as $record) {
 	$web 		= mb_strtoupper($record[17]);
 	$grr 		= mb_strtoupper($record[18]);
 
+	
+	//Partie fidelité OCS :-(
+
+	// adresse de connexion à la base de données
+	$dsn_ocsweb 	= 'mysql://'. $user .':' . $pass . '@localhost/'.$ocsweb;
+
+	// cnx à la base de données OCS
+	$db_ocsweb 	= & MDB2::factory($dsn_ocsweb);
+	$liste_export_ocs = $db_ocsweb->queryALL ("select LASTCOME, FIDELITY from hardware, bios where bios.HARDWARE_ID=hardware.ID AND bios.SSN = '$serial'");
+	if (!$liste_export_ocs) {
+		$last='matériel non présent dans OCS'; $fidele='0';
+	}//du fait du MAX(LASTCOME) cette ligne ne marche pas...
+	else {
+		foreach ($liste_export_ocs as $record_ocs) {
+			$last = ($record_ocs[0]);
+			$fidele =($record_ocs[1]);
+		}
+		
+	}
+	$db_ocsweb->disconnect();
+
+
     
-	fputcsv($fp, array($clg_uai, $clg_nom, $clg_cp, $clg_ville, $salle_nom, $mat_nom, $etat, $origine, $type, $stype, $marque, $modele, $dsit, $serial, $vlan, $etage, $batiment, $web, $grr), ',');
+	fputcsv($fp, array($clg_uai, $clg_nom, $clg_cp, $clg_ville, $salle_nom, $mat_nom, $etat, $origine, $type, $stype, $marque, $modele, $dsit, $last, $fidele, $serial, $vlan, $etage, $batiment, $web, $grr), ',');
 	//fputcsv( $out, array("" . $mac . "", '"' . $name . '"'), ',');
 }
 
