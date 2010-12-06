@@ -26,9 +26,6 @@
 <!--	Ancre haut de page	-->
 <a name="hautdepage"></a>
 
-<!--	Script serveur Ajax	-->
-<script type="text/javascript" src="server.php?client=all"></script>
-
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
@@ -70,7 +67,7 @@
 
 	<br>
 
-	<div id='tableau'></div>
+	<div id='tableau'>Chargement des données ...</div>
 	<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
 	
 <?PHP
@@ -91,8 +88,9 @@
 		// fonction de filtrage
 		function filter (phrase) {
 			$("tableau").load("gestion_inventaire/voir_materiels_table.php?filter=" + phrase);
-		}
+		};
 			
+
 		// Tamporisation du filtre + envoi
 		$('filt').addEvent('keyup', function(el)  {
 			 el.stop();
@@ -100,6 +98,7 @@
 				 $clear(this.timer);
 			 this.timer = (function() { filter($('filt').value); }).delay(1000);
 		});
+		
 			
 		// Menu des filtres préprogrammés
 		$('liste_filtres').addEvent('mouseenter', function(el)  {
