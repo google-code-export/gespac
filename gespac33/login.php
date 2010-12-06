@@ -40,7 +40,7 @@
 									  UNIQUE KEY `user_logon` (`user_logon`)
 									) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
 									
-			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', '0', '', 'cg13', 'modules/stats/csschart.php','','0');";
+			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
 			
 			//on exécute les requêtes ci-dessus
 			$result_creation_table = $db_gespac->exec($req_creation_table_users);
