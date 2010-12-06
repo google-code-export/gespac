@@ -52,7 +52,7 @@
 		<center>
 		<div id="ligne-filtre">
 			<small>Filtrer <a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:1 / ecran:1` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI.');">[?]</a>:</small> 
-			<input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text">
+			<input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
 			<span id="nb_filtre"></span>
 			
 			<span id="liste_filtres" style=''><small>filtres perso</small>
@@ -139,8 +139,8 @@
 		
 	
 		// oncharge par défaut TOUS les enregistrements
-		filter('');
-
+		filter("<?PHP echo $_GET['filter'];?>");
+		
 	});
 	
 
