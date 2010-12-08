@@ -51,6 +51,9 @@ session_start();
 		$mat_id 			= $_POST ['mat'];
 		$login				= $_SESSION['login'];
 		
+		
+		
+		
 		//on récupére le type de la demande
 		$type_demande = $db_gespac->queryOne("SELECT dem_type FROM demandes WHERE dem_id=$dossier");
 		
@@ -58,6 +61,13 @@ session_start();
 		$req_id_user = $db_gespac->queryRow ( "SELECT user_id, user_nom FROM users WHERE user_logon='$login'" );
 		$user_id 	=  $req_id_user[0];
 		$user_nom 	=  $req_id_user[1];
+		
+		
+		//Insertion d'un log
+		$log_texte = "Modification de <b>$user_nom</b> sur le dossier <b>$dossier</b>. Le dossier est passé à l`état : <b>$etat</b> ";
+		$req_log_modif_dem = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Etat demande', '$log_texte');";
+		$result = $db_gespac->exec ( $req_log_modif_dem );
+		
 		
 		// insert d'un texte associé à la demande
 		$req_insert_txt = "INSERT INTO demandes_textes ( txt_texte, dem_id, user_id, txt_etat ) VALUES ( '$reponse', $dossier, $user_id, '$etat');";
@@ -67,17 +77,13 @@ session_start();
 		$req_change_etat = "UPDATE demandes SET dem_etat='$etat' WHERE dem_id=$dossier";
 		$result = $db_gespac->exec ( $req_change_etat );
 		
-		//Insertion d'un log
-		$log_texte = "Modification de <b>$user_nom</b> sur le dossier <b>$dossier</b>. Le dossier est passé à l'état : <b>$etat</b> ";
-		$req_log_modif_dem = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Etat demande', '$log_texte');";
-		$result = $db_gespac->exec ( $req_log_modif_dem );
-		
 		if ($type_demande == "installation" || $type_demande == "reparation") {
 			$salle_id = $_POST['salle'];
 			$mat_id = $_POST['mat'];
-		} else {
+		} else { 
+			//dans le cas d'une formation, d'un usage ou autre, on affecte une valeur 0 aux mat_id et salle_id afin de pouvoir remplir la requête avec une valeur
 			$salle_id = 0;
-			$mat_id = 0;
+			$mat_id   = 0;
 		}
 		
 		// Si l'état est "intervention" on créé en même temps une inter dans la table des inter
@@ -86,12 +92,6 @@ session_start();
 			$result = $db_gespac->exec ( $req_create_inter );
 		}
 		
-		/*
-		// Si l'état est "clos" on ferme aussi l'intervention
-		if ( $etat == "clos" ) {
-			$req_create_inter = "INSERT INTO interventions ( dem_id, salle_id, mat_id ) VALUES ( $dossier, $salle_id, $mat_id);";
-			$result = $db_gespac->exec ( $req_create_inter );
-		}*/
 
 		/*************************
 				MAILING
