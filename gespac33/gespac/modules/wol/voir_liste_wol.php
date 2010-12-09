@@ -133,15 +133,15 @@
 				
 				echo "<tr id=tr_id$id class=$tr_class>";
 					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' rel='sexylightbox' title='Caractéristiques de $nom'>$nom</a> </td>";
+					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' rel='slb_wol' title='Caractéristiques de $nom'>$nom</a> </td>";
 					/*	dsit			echo "<td> $dsit </td>";*/
 					/*	serial	*/		echo "<td> $serial </td>";
 					/*	etat	*/		echo "<td> $etat </td>";
-					/*	type			echo "<td> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='sexylightbox' title='membres du type de marque $type'>$type</a></td>";*/
-					/*	stype			echo "<td> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' rel='sexylightbox' title='membres de sous type $stype'>$stype</a></td>";*/
-					/*	marque		echo "<td> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='sexylightbox' title='membres de marque $marque'>$marque</a></td>";*/
-					/*	modele		echo "<td> <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='sexylightbox' title='membres de modèle $model'>$model</a></td>";*/
-					/*	salle	*/		echo "<td> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='sexylightbox' title='Membres de la salle $salle'>$salle</a> </td>";
+					/*	type			echo "<td> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_wol' title='membres du type de marque $type'>$type</a></td>";*/
+					/*	stype			echo "<td> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' rel='slb_wol' title='membres de sous type $stype'>$stype</a></td>";*/
+					/*	marque		echo "<td> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_wol' title='membres de marque $marque'>$marque</a></td>";*/
+					/*	modele		echo "<td> <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_wol' title='membres de modèle $model'>$model</a></td>";*/
+					/*	salle	*/		echo "<td> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_wol' title='Membres de la salle $salle'>$salle</a> </td>";
 					/*	macaddr	*/	echo "<td> $mac </td>";
 
 				echo "</tr>";
@@ -163,12 +163,10 @@
 
 
 <script type="text/javascript">
+	
 	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_wol'});
 	});
-</script>
-
-<script type="text/javascript">	
 
 	// init de la couleur de fond
 	document.getElementById('conteneur').style.backgroundColor = "#fff";

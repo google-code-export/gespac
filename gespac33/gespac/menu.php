@@ -21,7 +21,7 @@ include_once ('fonctions.php');
 	<script type="text/javascript">
 		
 		window.addEvent('domready', function(){ 
-			SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+			SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'sexylightbox_menu'});
 		});
 		
 		
@@ -91,7 +91,7 @@ include_once ('fonctions.php');
 						if (checkdroit("L-04-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_donnees/dump_db_gespac.php');change_icon_onclick('donnees');\">	Dump base GESPAC	</a></li>";
 						if (checkdroit("L-04-04") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_donnees/dump_db_ocs.php');change_icon_onclick('donnees');\">		Dump base OCS		</a></li>";
 						if (checkdroit("L-04-05") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_donnees/voir_logs.php');change_icon_onclick('donnees');\">		Voir les Logs		</a></li>";
-						if (checkdroit("L-04-06") ) echo "<li class='item'><a href='gestion_inventaire/form_import_csv.php?height=600&width=640' rel='sexylightbox' title='Import machines CSV'>	Importer CSV	</a></li>";				
+						if (checkdroit("L-04-06") ) echo "<li class='item'><a href='gestion_inventaire/form_import_csv.php?height=600&width=640' rel='sexylightbox_menu' title='Import machines CSV'>	Importer CSV	</a></li>";				
 					echo "</ul>
 				</li>";
 			}
@@ -111,8 +111,8 @@ include_once ('fonctions.php');
 				echo "<ul>";
 					if (checkdroit("L-06-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');change_icon_onclick('utilisateurs');\">	Visualiser les utilisateurs		</a></li>";
 					if (checkdroit("L-06-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_utilisateurs/voir_grades.php');change_icon_onclick('utilisateurs');\">	Visualiser les grades		</a></li>";
-					if (checkdroit("L-06-03") ) echo "<li class='item'><a href='gestion_utilisateurs/form_comptes_iaca.php?height=200&width=640' rel='sexylightbox' title='Import des comptes IACA'>	Importer les comptes IACA	</a></li>";
-					if (checkdroit("L-06-04") ) echo "<li class='item'><a href='gestion_utilisateurs/form_utilisateur_personnel.php?height=300&width=640' rel='sexylightbox' title='Modifier mon compte'>	Modifier mon compte	</a></li>";
+					if (checkdroit("L-06-03") ) echo "<li class='item'><a href='gestion_utilisateurs/form_comptes_iaca.php?height=200&width=640' rel='sexylightbox_menu' title='Import des comptes IACA'>	Importer les comptes IACA	</a></li>";
+					if (checkdroit("L-06-04") ) echo "<li class='item'><a href='gestion_utilisateurs/form_utilisateur_personnel.php?height=300&width=640' rel='sexylightbox_menu' title='Modifier mon compte'>	Modifier mon compte	</a></li>";
 					echo "</ul>
 				</li>";
 			}

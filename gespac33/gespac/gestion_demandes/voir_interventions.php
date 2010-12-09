@@ -126,7 +126,7 @@ session_start();
 					}
 					//$interv_cloture = $interv_cloture == "" ? "EN COURS": $interv_cloture;
 											
-					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dossier' rel='sexylightbox' title='voir le dossier $dossier'> <img src='img/loupe.gif'>$dossier</a> </td>";
+					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dossier' rel='slb_inter' title='voir le dossier $dossier'> <img src='img/loupe.gif'>$dossier</a> </td>";
 					echo "<td> $interv_id </td>";
 					echo "<td> $interv_date </td>";
 					echo "<td bgcolor=$etat_couleur> $interv_cloture </td>";
@@ -156,13 +156,12 @@ session_start();
 
 
 <script type="text/javascript">
+
 	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_inter'});
 	});
-</script>
 
 
-<script type="text/javascript">	
 	
 	// init de la couleur de fond
 	document.getElementById('conteneur').style.backgroundColor = "#fff";

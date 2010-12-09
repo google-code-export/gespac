@@ -45,7 +45,7 @@
 <?PHP
 	// Ajout d'un grade
 	if ( $E_chk )
-		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='sexylightbox' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
+		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='slb_grades' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
 ?>
 
 	<center>
@@ -75,12 +75,12 @@
 					$nb_users_du_grade = $db_gespac->queryOne ( "SELECT count(*) as compte FROM users WHERE grade_id=$grade_id" );
 					
 					echo "<td width=20> $grade_niveau </td>";
-					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='sexylightbox' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
+					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='slb_grades' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
 					if ( $E_chk ) {
 						if ( $grade_nom <> "root" ) {
-							echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
-							echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='sexylightbox' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
+							echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
+							echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
 							echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' title='supprimer $grade_nom'>	</a> </td>";
 						} else {
 							echo"<td width=20>&nbsp</td>
@@ -104,7 +104,7 @@
 
 	// Ajout d'un grade
 	if ( $E_chk )
-		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='sexylightbox' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
+		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='slb_grades' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
 	
 	// On se déconnecte de la db
 	$db_gespac->disconnect();
@@ -113,12 +113,10 @@
 
 
 <script type="text/javascript">
+	
 	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_grades'});
 	});
-</script>
-
-<script type="text/javascript">	
 
 	// init de la couleur de fond
 	$('conteneur').style.backgroundColor = "#fff";

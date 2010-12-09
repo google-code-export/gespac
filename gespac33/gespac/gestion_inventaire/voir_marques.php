@@ -45,7 +45,7 @@
 	$liste_des_marques = $db_gespac->queryAll ( "SELECT marque_id, marque_type, marque_stype, marque_model, marque_marque FROM marques WHERE marque_suppr = 0 ORDER BY marque_type, marque_stype, marque_marque, marque_model" );
 
 	
-	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='sexylightbox' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
+	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
 ?>
 	<!-- Gestion de l'affichage des modèles vides ici	
 		<span style="float:right;"><input type="checkbox" id="case_cochee" onclick="cacher_modele(); alterner_couleurs ();" checked> Cacher les modèles vides </span>
@@ -101,14 +101,14 @@
 					$afficher_modifier = $quadruplet <> "" ? "none" : "" ;
 									
 					
-					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='sexylightbox' title='Liste des matériels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$soustype' rel='sexylightbox' title='Liste des matériels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='sexylightbox' title='Liste des matériels de marque $marque'>" . $marque . "</a> [" . $nb_matos_de_cette_marque . "] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='sexylightbox' title='Liste des matériels de modèle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
+					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_marques' title='Liste des matériels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$soustype' rel='slb_marques' title='Liste des matériels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_marques' title='Liste des matériels de marque $marque'>" . $marque . "</a> [" . $nb_matos_de_cette_marque . "] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_marques' title='Liste des matériels de modèle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
 					
 					if ($E_chk) {
-						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=280&width=640&id=$id' rel='sexylightbox' title='Formulaire d`ajout d`un materiel'><img src='img/add.png'> </a></td>";
-						echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de la marque $nom'><img src='img/write.png' style='display:$afficher_modifier'> </a></td>";
+						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=280&width=640&id=$id' rel='slb_marques' title='Formulaire d`ajout d`un materiel'><img src='img/add.png'> </a></td>";
+						echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' rel='slb_marques' title='Formulaire de modification de la marque $nom'><img src='img/write.png' style='display:$afficher_modifier'> </a></td>";
 						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_marque($id, '$model', '$marque', this.parentNode.parentNode.rowIndex, '" . $nb_matos_de_ce_modele ."');\">	<img src='img/delete.png'>	</a> </td>";
 					}
 					
@@ -126,7 +126,7 @@
 	
 
 <?PHP
-	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='sexylightbox' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
+	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
 
 // On se déconnecte de la db
 $db_gespac->disconnect();
@@ -136,12 +136,11 @@ $db_gespac->disconnect();
 
 
 <script type="text/javascript">
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
-	});
-</script>
 
-<script type="text/javascript">	
+	window.addEvent('domready', function(){
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_marques'});
+	});
+
 
 	// init de la couleur de fond
 	$('conteneur').style.backgroundColor = "#fff";

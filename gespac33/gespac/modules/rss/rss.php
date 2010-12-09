@@ -58,7 +58,7 @@
 		}
 		
 		if ( $E_chk ) {
-			echo "<a href='modules/rss/form_rss.php?height=190&width=640&action=ajout' rel='sexylightbox' title='Ajouter un flux'> &nbsp <img src='img/add.png'>Ajouter un flux </a>";
+			echo "<a href='modules/rss/form_rss.php?height=190&width=640&action=ajout' rel='slb_rss' title='Ajouter un flux'> &nbsp <img src='img/add.png'>Ajouter un flux </a>";
 
 			// si le fichier flux n'existe pas, on ne permet pas la suppression (et la suppression de quoi d'abord ?)
 			if ( $row > 0 )
@@ -71,9 +71,12 @@
 <div id='flux'></div>
 
 
-<script type="text/javascript"> window.addEvent('domready', function(){SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});}); </script>
+<script type="text/javascript"> 
 
-<script>
+	window.addEvent('domready', function(){
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_rss'});
+	}); 
+
 
 	// Permet de supprimer un flux
 	function supprimer_flux (ligne) {

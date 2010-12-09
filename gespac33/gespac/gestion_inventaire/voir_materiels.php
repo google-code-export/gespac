@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <?PHP
 	
 	/* fichier de visualisation de l'inventaire :
@@ -65,9 +66,8 @@
 		</center>
 	</form>
 
-	<br>
-
 	<div id='tableau'>Chargement des données ...</div>
+
 	<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
 	
 <?PHP

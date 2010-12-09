@@ -45,7 +45,7 @@
 <?PHP
 	// Ajout d'un utilisateur
 	if ( $E_chk )  
-		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='slb_users' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 ?>
 
 	<center>
@@ -104,7 +104,7 @@
 						if ( $logon == "ati" ) {
 							$modif_user = "<td><img src='img/write.png' style=display:none></td>";
 						} else {
-							$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id' rel='sexylightbox' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
+							$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id' rel='slb_users' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
 						}
 						
 						echo $modif_user;
@@ -124,7 +124,7 @@
 	
 <?PHP
 	if ( $E_chk )
-		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='sexylightbox' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='slb_users' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 
 	// On se déconnecte de la db
 	$db_gespac->disconnect();
@@ -133,12 +133,10 @@
 
 
 <script type="text/javascript">
+	
 	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_users'});
 	});
-</script>
-
-<script type="text/javascript">	
 
 	// init de la couleur de fond
 	$('conteneur').style.backgroundColor = "#fff";

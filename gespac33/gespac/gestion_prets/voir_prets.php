@@ -99,7 +99,7 @@
 						echo "<td> <a href='#basdepage' class='bdp' id='bdp$compteur' style='display:none;'><img src='./img/down.png' title='Aller en bas de page' align=left></a></td>";
 					}
 					
-					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='sexylightbox' title='Caractéristiques de $mat'>$mat</a> </td>";
+					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='slb_prets title='Caractéristiques de $mat'>$mat</a> </td>";
 					
 					//echo "<td> $serial </td>";
 					echo "<td> $inventaire </td>";
@@ -195,12 +195,11 @@
 
 
 <script type="text/javascript">
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages'});
-	});
-</script>
 
-<script type="text/javascript">	
+	window.addEvent('domready', function(){
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_prets'});
+	});
+
 		
 	// init de la couleur de fond
 	$('conteneur').style.backgroundColor = "#fff";

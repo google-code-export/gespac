@@ -78,7 +78,6 @@
 					$id 		= $record[6];
 					$salle 		= $record[7];
 					
-					//echo "<td> <a href='gestion_inventaire/voir_materiel_ocs.php?height=480&width=640&mat_nom=$nom' rel='sexylightbox' title='caractéristiques de $nom'>$nom</a> </td>";
 					echo "<td> $nom </td>";
 					echo "<td> $dsit </td>";
 					echo "<td> $serial </td>";

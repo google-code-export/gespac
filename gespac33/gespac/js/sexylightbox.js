@@ -21,7 +21,7 @@ var SexyLightBox = new Class(
     zIndex        : 32000,
     color         : 'black',
     find          : 'sexylightbox',
-    dir           : 'sexyimages',
+    dir           : 'img/sexyimages',
     emergefrom    : 'bottom',
     background    : 'bgSexy.png',
     backgroundIE  : 'bgSexy.gif',
