@@ -146,12 +146,12 @@
 			<table width=500>
 			
 				<tr>
-					<TD>Nom</TD>
+					<TD>Nom *</TD>
 					<TD><input type=text name=nom id=nom value= "<?PHP echo $grade_nom; ?>" 	/></TD>
 				</tr>
 				
 				<tr>
-					<TD>log In</TD>
+					<TD>Niveau *</TD>
 					<TD><input type=text name=niveau value= "<?PHP echo $grade_niveau; ?>"	/></TD>
 				</tr>
 				
