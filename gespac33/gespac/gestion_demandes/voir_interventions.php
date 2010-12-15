@@ -34,11 +34,12 @@ session_start();
 		// cnx à la base de données GESPAC
 		$db_gespac 	= & MDB2::factory($dsn_gespac);
 		
+		$login = $_SESSION['login'];
+		
 		// stockage des lignes retournées par sql dans un tableau nommé liste_des_demandes
 		$liste_des_interventions = $db_gespac->queryAll ( "SELECT interv_id, interv_date, interv_cloture, interv_text, interventions.dem_id, interventions.salle_id, interventions.mat_id, interventions.user_id, dem_text FROM interventions, demandes WHERE demandes.dem_id=interventions.dem_id ORDER BY interv_date DESC" );
+		$liste_des_interventions_user = $db_gespac->queryAll ( "SELECT interv_id, interv_date, interv_cloture, interv_text, interventions.dem_id, interventions.salle_id, interventions.mat_id, interventions.user_id, dem_text FROM interventions, demandes, users WHERE demandes.dem_id=interventions.dem_id AND demandes.user_demandeur_id=users.user_id AND user_logon='$login' ORDER BY interv_date DESC" );
 		
-		// grade de l'utilisateur courant
-		$grade = $_SESSION['grade']; 
 		
 	?>
 	
@@ -47,8 +48,9 @@ session_start();
 		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'interventions_table', '1')" type="text"></center>
 	</form>
 	
-	<center><small><a href='#' id="masque_montre" onclick="montre_masque_dossiers_clos();" title="masque">masquer/montrer les interventions closes</a></small></center>
-	
+	<center><small><a href='#' id="masque_montre" onclick="montre_masque_dossiers_clos();" title="masque">masquer/montrer les interventions closes</a></small> | 
+	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_interventions.php?selection=0');" id="label_inter"  title="Mes interventions">Afficher uniquement mes interventions</a></small> | 
+	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_interventions.php?selection=1');" id="label_inter"  title="Toutes les interventions">Lister toutes les interventions</a></small></center><br>
 	<center>
 	
 	<table class="tablehover" id="interventions_table" width=800>
@@ -63,12 +65,13 @@ session_start();
 
 		
 		<?PHP
-			
+		if ($_GET['selection'] == 0) {
+		
 			if ($E_chk) echo"<th>&nbsp</th>";
 			
 			$compteur = 0;
 			// On parcourt le tableau
-			foreach ( $liste_des_interventions as $record ) {
+			foreach ( $liste_des_interventions_user as $record ) {
 				
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
@@ -106,15 +109,6 @@ session_start();
 						$mat_nom = "Non  communiqué";
 					}
 						
-					if ( $grade > 1 ) {	// Si l'utilisateur n'est pas admin il ne peut pas modifier les inter
-						$hidemodif = "none";
-					} else {
-						// Ne pas pouvoir modifier une inter close
-						$hidemodif = $interv_cloture == "" ? "": "none";
-					}
-					
-					
-					
 					
 					// On marque "EN COURS" lorsque le dossier n'est pas clos.
 					if ($interv_cloture == "") {
@@ -139,7 +133,77 @@ session_start();
 				echo "</tr>";
 				
 				$compteur++;
+			}	
+		} else {
+			
+			if ($E_chk) echo"<th>&nbsp</th>";
+			
+			$compteur = 0;
+			// On parcourt le tableau
+			foreach ( $liste_des_interventions as $record ) {
+					
+				// alternance des couleurs
+				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
+							
+				echo "<tr class=$tr_class>";
+
+					$interv_id		= $record[0]; 
+					$interv_date	= $record[1]; 
+					$interv_cloture	= $record[2]; 
+					$interv_text	= stripslashes($record[3]); 
+					$dossier		= $record[4]; 
+					$salle_id		= $record[5];
+					$mat_id			= $record[6]; 
+					$user_id		= $record[7];
+					$demande_txt	= stripslashes($record[8]);
+						
+					// on récupère le nom de la salle
+					if ($salle_id <> 0) {
+						$salle_nom = $db_gespac->queryOne ("SELECT salle_nom FROM salles WHERE salle_id = $salle_id");
+						$salle_nom = stripslashes($salle_nom);
+					} else {
+						$salle_nom = "Pas de salle";
+					}
+						
+					// on change la valeur de mat_nom en fonction de si il y a une salle ou pas
+					if ($salle_nom != "Pas de salle") {
+						// On récupère le nom du matériel
+						if ( $mat_id <> 0) {
+							$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
+							$mat_nom = stripslashes($liste_nom_materiel[0][0]);
+						} else {
+							$mat_nom = "TOUS";
+						}
+					} else {
+						$mat_nom = "Non  communiqué";
+					}
+							
+							
+					// On marque "EN COURS" lorsque le dossier n'est pas clos.
+					if ($interv_cloture == "") {
+						$interv_cloture = "EN COURS";
+						$etat_couleur = "#F57236";
+					} else {
+						$interv_cloture = $interv_cloture;
+						$etat_couleur = "#36F572";
+					}
+					//$interv_cloture = $interv_cloture == "" ? "EN COURS": $interv_cloture;
+												
+					echo "<td> <a href='gestion_demandes/voir_dossier.php?height=480&width=640&id=$dossier' rel='slb_inter' title='voir le dossier $dossier'> <img src='img/loupe.gif'>$dossier</a> </td>";
+					echo "<td> $interv_id </td>";
+					echo "<td> $interv_date </td>";
+					echo "<td bgcolor=$etat_couleur> $interv_cloture </td>";
+					echo "<td> $salle_nom </td>";
+					echo "<td> $mat_nom </td>";
+					echo "<td> $demande_txt  </td>";
+
+					if ($E_chk) echo "<td width=20 align=center> <a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_interventions.php?id=$interv_id');\" style='display:$hidemodif;'>	<img src='img/write.png' title='gérer l`intervention'>	</a> </td>";
+					
+				echo "</tr>";
+					
+				$compteur++;
 			}
+		}
 		?>		
 
 	</table>

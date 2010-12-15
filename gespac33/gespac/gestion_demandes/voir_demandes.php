@@ -54,15 +54,13 @@
 
 		$login = $_SESSION['login'];
 		
-		
 		$liste_des_demandes = $db_gespac->queryAll ( "SELECT dem_id, dem_date, dem_text, dem_etat, dem_type, user_demandeur_id, user_intervenant_id, user_nom FROM demandes, users WHERE demandes.user_demandeur_id=users.user_id ORDER BY dem_date DESC" );
 		$liste_des_demandes_user = $db_gespac->queryAll ( "SELECT dem_id, dem_date, dem_text, dem_etat, dem_type, user_demandeur_id, user_intervenant_id, user_nom FROM demandes, users WHERE demandes.user_demandeur_id=users.user_id AND user_logon='$login' ORDER BY dem_date DESC" );
 		
-		//on récupére le grade_id de l'utilisateur connecté
+		//on récupére le grade_nom de l'utilisateur connecté
+		$grade_nom = $db_gespac->queryOne ("SELECT grade_nom FROM users, grades WHERE grades.grade_id = users.grade_id AND user_logon='$login'");
 		
-		$grade_id = $db_gespac->queryOne ("SELECT grade_id FROM users WHERE user_logon='$login'");
-		
-		if ($grade_id <= 2) {
+		if ($grade_nom == 'ati' | $grade_nom == 'root') {
 			// si le grade est celui d'un ati ou du root on met la valeur de la session à 1
 			$_SESSION['entete_demandeur'] = 1;
 		} else {
@@ -100,7 +98,8 @@
 		<th>Matériel</th>		
 		<th>Commentaire</th>
 		
-		<?PHP	
+		<?PHP
+		
 		if ($_GET['selection'] == 0) { 
 		
 			if ($E_chk) echo "<th>&nbsp</th>";

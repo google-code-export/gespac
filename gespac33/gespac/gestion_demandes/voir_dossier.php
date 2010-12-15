@@ -48,6 +48,17 @@
 		$user_demandeur_nom		= stripslashes($req_info_demande[0][6]);
 		$dem_type				= $req_info_demande[0][7];
 
+		//on récupére le grade_id de l'utilisateur connecté
+		$login = $_SESSION['login'];
+		//on récupére le grade_nom de l'utilisateur connecté
+		$grade_nom = $db_gespac->queryOne ("SELECT grade_nom FROM users, grades WHERE grades.grade_id = users.grade_id AND user_logon='$login'");
+		
+		if ($grade_nom == 'ati' | $grade_nom == 'root') {
+			// si le grade est celui d'un ati ou du root on met la valeur de la session à 1
+			$_SESSION['entete_demandeur'] = 1;
+		} else {
+			$_SESSION['entete_demandeur'] = 0;
+		}
 		
 		echo "<h2>Dossier <b>$id</b> créé le : $dem_date</h2><br>";
 		
@@ -106,14 +117,14 @@
 				<table width=600px>
 					<th>Etat Actuel</th>
 					<th>Type</th>
-					<th>Demandeur</th>
+					<th class='td_demandeur'>Demandeur</th>
 					<th>Salle</th>
 					<th>Matériel</th>
 					
 					<tr>
 						<td bgcolor=$etat_couleur>$dem_etat</td>
 						<td>$dem_type</td>
-						<td>$user_demandeur_nom</td>
+						<td class='td_demandeur'>$user_demandeur_nom</td>
 						<td>$salle_nom</td>
 						<td>$mat_nom</td>
 					</tr>
@@ -197,3 +208,27 @@
 	
 			
 	</div>
+	
+	<script type="text/javascript">
+	
+	function hidethem (col_name, show) { 
+	
+		if ( show == true)
+			var state = "";
+		else var state = "none";
+	
+		$$(col_name).each(function(item) {
+			item.style.display = state;
+		})
+	}
+	
+	
+	function init_entetes (value) {
+		
+		if (value.substr(0, 1) == "1") { hidethem('.td_demandeur', true);} 
+		else {hidethem('.td_demandeur', false);}
+	}
+	
+	init_entetes ('<?PHP echo $_SESSION['entete_demandeur'];?>');
+	
+	</script>
