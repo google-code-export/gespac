@@ -5,7 +5,8 @@
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 
 	$id = $_GET['id'];
-
+	
+	$E_chk = preg_match ("#E-03-02#", $_SESSION['droits']);
 ?>
 
 
@@ -311,10 +312,11 @@
 			</table>
 	
 			<?PHP 
-				$grade_user = $_SESSION ['grade'];
+				
+				
 				
 				// L'utilisateur ATI peut créer directement l'intervention
-				if ( $grade_user <=2 ) { ?>
+				if ( $E_chk ) { ?>
 					<br>
 					<br>
 				 Créer directement l'intervention <input type=checkbox name=creat_inter id=creat_inter>
