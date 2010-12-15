@@ -54,6 +54,7 @@
 
 		$login = $_SESSION['login'];
 		
+		
 		$liste_des_demandes = $db_gespac->queryAll ( "SELECT dem_id, dem_date, dem_text, dem_etat, dem_type, user_demandeur_id, user_intervenant_id, user_nom FROM demandes, users WHERE demandes.user_demandeur_id=users.user_id ORDER BY dem_date DESC" );
 		$liste_des_demandes_user = $db_gespac->queryAll ( "SELECT dem_id, dem_date, dem_text, dem_etat, dem_type, user_demandeur_id, user_intervenant_id, user_nom FROM demandes, users WHERE demandes.user_demandeur_id=users.user_id AND user_logon='$login' ORDER BY dem_date DESC" );
 		
@@ -64,30 +65,21 @@
 		if ($grade_id <= 2) {
 			// si le grade est celui d'un ati ou du root on met la valeur de la session à 1
 			$_SESSION['entete_demandeur'] = 1;
-			$afficher_mes_dossiers = "none";
-			$separateur = "";
-			
-			
 		} else {
 			$_SESSION['entete_demandeur'] = 0;
-			//on affiche un lien pour montrer uniquement les dossiers du prof
-			$afficher_mes_dossiers = "";
-			$separateur = " | ";
 		}
 		
 		
 	?>
-	
-	<input type="hidden" id="selection" value="">
 	
 	<!-- 	bouton pour le filtrage du tableau	-->
 	<form>
 		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'demandes_table', '1')" type="text"></center>
 	</form>
 	
-	<center><small><a href='#' id="masque_montre" onclick="montre_masque_dossiers_clotures();" title="masque">masquer/montrer les dossiers clos</a></small><?PHP echo $separateur;?>
-	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php?selection=1');" id="label_dossiers" style='display:<?PHP echo $afficher_mes_dossiers;?>' value="" title="Mes dossiers">Afficher uniquement mes dossiers</a></small><?PHP echo $separateur;?>
-	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php?selection=0');" id="label_dossiers" style='display:<?PHP echo $afficher_mes_dossiers;?>' value="" title="Tous les dossiers">Lister tous les dossiers</a></small></center><br>
+	<center><small><a href='#' id="masque_montre" onclick="montre_masque_dossiers_clotures();" title="masque">masquer/montrer les dossiers clos</a></small> | 
+	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php?selection=0');" id="label_dossiers"  title="Mes dossiers">Afficher uniquement mes dossiers</a></small> | 
+	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php?selection=1');" id="label_dossiers"  title="Tous les dossiers">Lister tous les dossiers</a></small></center><br>
 	
 	<?PHP 
 		if ( $E_chk ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=-1');\"> <img src='img/add.png'>Ouvrir un dossier </a>"; 
@@ -116,7 +108,7 @@
 			$compteur = 0;
 			
 			// On parcourt le tableau
-			foreach ( $liste_des_demandes as $record ) {
+			foreach ( $liste_des_demandes_user as $record ) {
 				
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
@@ -203,6 +195,7 @@
 				
 				$compteur++;
 			}
+			
 		} else {
 			
 			if ($E_chk) echo "<th>&nbsp</th>";
@@ -210,7 +203,7 @@
 			$compteur = 0;
 			
 			// On parcourt le tableau
-			foreach ( $liste_des_demandes_user as $record ) {
+			foreach ( $liste_des_demandes as $record ) {
 				
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
