@@ -60,7 +60,7 @@
 		// On log la requête SQL
 		fwrite($fp, date("Ymd His") . " " . $req_suppr_grade."\n");
 		
-		echo "<br><small>L'utilisateur <b>$grade_nom</b> a été supprimé !</small>";
+		echo "<br><small>Le grade <b>$grade_nom</b> a été supprimé !</small>";
 	}
 
 	/**************** MODIFICATION ********************/	
