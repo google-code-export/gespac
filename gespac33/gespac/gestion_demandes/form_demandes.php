@@ -179,11 +179,19 @@
 		var type		= $("type_demande").value;
 		var salle		= $("salle_demande").value;
 		var pc			= $("pc_demande").value;
-	
-		if (commentaire == "" || type == "" || salle == "" || pc == "") {
-			bt_submit.disabled = true;
+		
+		if ( type == "installation" || type == "reparation") {
+			if (commentaire == "" || type == "" || salle == "" || pc == "") {
+				bt_submit.disabled = true;
+			} else {
+				bt_submit.disabled = false;
+			}
 		} else {
-			bt_submit.disabled = false;
+			if (commentaire == "" || type == "" ) {
+				bt_submit.disabled = true;
+			} else {
+				bt_submit.disabled = false;
+			}
 		}
 	}
 	
