@@ -137,6 +137,7 @@
 			$('grades_table').deleteRow(row);
 			/*	poste la page en ajax	*/
 			$('target').load("gestion_utilisateurs/post_grades.php?action=suppr&id=" + id);
+			window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_grades.php');", 1500);
 		}
 	}	
 

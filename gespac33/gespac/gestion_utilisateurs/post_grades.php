@@ -48,19 +48,29 @@
 		//On récupère le nom du grade en fonction de son id
 	    $grade_nom = $db_gespac->queryOne ( "SELECT grade_nom FROM grades WHERE grade_id=$id" );
 
-	    $log_texte = "Le grade $grade_nom a été supprimé";
+	    $log_texte = "Le grade $grade_nom a été supprimé et les utilisateurs affectés sont désormais du grade \"invité\"";
 
 	    $req_log_suppr_grade = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression grade', '$log_texte');";
 	    $result = $db_gespac->exec ( $req_log_suppr_grade );
 	
-		// Suppression de l'utilisateur de la base
+		// On récupère le grade_id du grade "invité"
+		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom='invité'" );
+		
+		// On colle tous les utilisateurs du grade dans le grade générique "invité"
+		$req_maj_users = "UPDATE users SET grade_id=$grade_id_invite WHERE grade_id=$id;";
+		$result = $db_gespac->exec ( $req_maj_users );
+		
+		// On log la requête SQL
+		fwrite($fp, date("Ymd His") . " " . $req_maj_users."\n");
+		
+		// Suppression du grade de la base
 		$req_suppr_grade = "DELETE FROM grades WHERE grade_id=$id;";
 		$result = $db_gespac->exec ( $req_suppr_grade );
 		
 		// On log la requête SQL
 		fwrite($fp, date("Ymd His") . " " . $req_suppr_grade."\n");
 		
-		echo "<br><small>Le grade <b>$grade_nom</b> a été supprimé !</small>";
+		echo "<br><small>Le grade <b>$grade_nom</b> a été supprimé et les utilisateurs affectés sont désormais du grade \"invité\"</small>";
 	}
 
 	/**************** MODIFICATION ********************/	
