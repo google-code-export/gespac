@@ -34,7 +34,9 @@
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 	
-	$E_chk = preg_match ("#E-03-01#", $_SESSION['droits']);
+	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
+	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-01#", $_SESSION['droits']);
+	
 	
 ?>
 
@@ -67,7 +69,7 @@
 			$_SESSION['entete_demandeur'] = 0;
 		}
 		
-		
+
 	?>
 	
 	<!-- 	bouton pour le filtrage du tableau	-->
@@ -76,8 +78,8 @@
 	</form>
 	
 	<center><small><a href='#' id="masque_montre" onclick="montre_masque_dossiers_clotures();" title="masque">masquer/montrer les dossiers clos</a></small> | 
-	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php?selection=0');" id="label_dossiers"  title="Mes dossiers">Afficher uniquement mes dossiers</a></small> | 
-	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php?selection=1');" id="label_dossiers"  title="Tous les dossiers">Lister tous les dossiers</a></small></center><br>
+	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php?selection=0');" id="label_dossiers" title="Mes dossiers">Afficher uniquement mes dossiers</a></small> | 
+	<small><a href='#' onclick="AffichePage('conteneur', 'gestion_demandes/voir_demandes.php?selection=1');" id="label_dossiers" title="Tous les dossiers">Lister tous les dossiers</a></small></center><br>
 	
 	<?PHP 
 		if ( $E_chk ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/form_demandes.php?id=-1');\"> <img src='img/add.png'>Ouvrir un dossier </a>"; 
@@ -101,7 +103,8 @@
 		<?PHP
 		
 		if ($_GET['selection'] == 0) { 
-		
+			
+			
 			if ($E_chk) echo "<th>&nbsp</th>";
 			
 			$compteur = 0;
@@ -392,7 +395,7 @@
 	
 	// *********************************************************************************
 	//
-	//			Montre ou masque les options d'affichage de la page
+	//			Change le label pour afficher mes dossiers ou tous les dossiers
 	//
 	// *********************************************************************************	
 	

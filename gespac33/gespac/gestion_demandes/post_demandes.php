@@ -112,7 +112,7 @@ session_start();
 		$nom_demandeur      = $req_mail_demandeur[1];
 		
 		// CORPS DU MAIL
-		$corps_mail = "Le dossier <b>$dossier</b> a changé d'état. Vous pouvez le suivre en affichant la liste de vos dossiers par le lien suivant : http://localhost/developpement/gespac33/gespac/gestion_demandes/voir_demandes.php<br><br>";
+		$corps_mail = "Le dossier <b>$dossier</b> a changé d'état. Vous pouvez le suivre en affichant la liste de vos dossiers par le lien suivant : http://gespac/gespac/gestion_demandes/voir_dossier.php?height=480&width=640&id=$dossier<br><br>";
 		$corps_mail .= "L'état du dossier est actuellement : <b>'$etat'<br><br></b>";
 		$corps_mail .= "Commentaire de l'utilisateur : <i>'$reponse'</i><br><br>";
 		$corps_mail .= "<i>Ce mail est envoyé automatiquement. Inutile d'y répondre, vous ne recevrez aucun mail en retour. Pour tout suivi du dossier, merci de vous connecter à <a href='http://gespac/gespac'>votre interface GESPAC.</a></i><br><br>";
