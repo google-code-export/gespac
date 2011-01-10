@@ -68,12 +68,21 @@
 					$accueil 	= $record[4];
 					$mailing 	= $record[5];
 					
+					
+					if ($mailing == 1) {
+						$mailing_nom   = "Activé";
+						$mailing_color = "#00DE00";
+					} else {
+						$mailing_nom   = "Désactivé";
+						$mailing_color = "#EE0000";
+					}
+					
 					echo "<td> $nom </td>";
 					echo "<td> $login </td>";
 					echo "<td> $mail </td>";
 					echo "<td> $skin </td>";
 					echo "<td> $accueil </td>";
-					echo "<td> $mailing </td>";
+					echo "<td><font color=$mailing_color><b> $mailing_nom </b></font></td>";
 				echo "</tr>";
 				
 				// On constitue le fichier CSV de l'extraction
