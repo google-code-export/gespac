@@ -6,7 +6,9 @@
 
 	$id = $_GET['id'];
 	
-	$E_chk = preg_match ("#E-03-02#", $_SESSION['droits']);
+	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
+	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-02#", $_SESSION['droits']);
+	
 ?>
 
 

@@ -5,7 +5,7 @@
 
 // Permet de tester un droit du grade actuellement chargé en session	
 function checkdroit ($item){
-	if ( preg_match ("#$item#", $_SESSION ['droits']) )
+	if ( preg_match ("#$item#", $_SESSION ['droits']) || $_SESSION ['grade'] == 'root')
 		return true;
 	else return false;
 };
@@ -20,13 +20,18 @@ function checkalldroits ($listeitems) {
 	// on éclate la chaine séparée par des "," et on colle tout dans un tableau
 	$arr_items = explode (",", $listeitems);
 	
-	// On teste chaque valeur
-	foreach ($arr_items as $item) {	
-		if ( preg_match ("#$item#", $_SESSION ['droits']) )
-			return true;
+	if (  $_SESSION ['grade'] == 'root' ) {
+		return true;
+	} else {
+		// On teste chaque valeur
+		foreach ($arr_items as $item) {	
+			if ( preg_match ("#$item#", $_SESSION ['droits']) )
+				return true;
+		}
+		
+		return false;
 	}
 	
-	return false;
 };
 
 
