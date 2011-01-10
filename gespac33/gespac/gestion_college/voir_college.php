@@ -21,7 +21,9 @@ session_start();
 	
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 
-	$E_chk = preg_match ("#E-08-01#", $_SESSION['droits']);
+	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
+	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-08-01#", $_SESSION['droits']);
+	
 
 	
 	// adresse de connexion à la base de données	
