@@ -51,7 +51,7 @@
 	    $liste_noms = $db_gespac->queryAll ( "SELECT user_nom FROM users WHERE user_id=$id" );
 	    $user_nom = $liste_noms [0][0];
 
-	    $log_texte = "Le compte $user_nom a été supprimé";
+	    $log_texte = "Le compte <b>$user_nom</b> a été supprimé.";
 
 	    $req_log_suppr_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression compte', '$log_texte');";
 	    $result = $db_gespac->exec ( $req_log_suppr_user );
@@ -81,14 +81,19 @@
 		
 		$mailing = $mailing == "on" ? 1 : 0 ;
 
+		// on récupére les anciennes valeurs du compte pour les logs
+		$req_infos_compte_old = $db_gespac->queryRow("SELECT user_nom FROM users WHERE user_id=$id");
+		$nom_old = $req_infos_compte_old[0];
+		
+		
 		$req_modif_user = "UPDATE users SET user_nom='$nom', user_logon='$login', user_password='$password', grade_id=$grade, user_mail='$mail', user_skin='$skin', user_accueil='$page', user_mailing=$mailing WHERE user_id=$id";
 		$result = $db_gespac->exec ( $req_modif_user );
 		
 		// On log la requête SQL
 		fwrite($fp, date("Ymd His") . " " . $req_modif_user."\n");
 		
-		// [BUG=>la requête est nok] Insertion d'un log
-		$log_texte = "Le compte $nom a été modifié";
+		//Insertion d'un log
+		$log_texte = "Le compte (anciennement <b>$nom_old</b>) a été modifié en <b>$nom</b>.";
 		
 	    $req_log_modif_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification compte', '$log_texte' );";
 	    $result = $db_gespac->exec ( $req_log_modif_user );
@@ -116,8 +121,8 @@
 		// On log la requête SQL
 		fwrite($fp, date("Ymd His") . " " . $req_add_user."\n");
 		
-		// [BUG=>la requête est nok] Insertion d'un log
-		$log_texte = "Le compte $nom a été créé";
+		//Insertion d'un log
+		$log_texte = "Le compte <b>$nom</b> a été créé.";
 
 	    $req_log_creation_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création compte', '$log_texte' );";
 	    $result = $db_gespac->exec ( $req_log_creation_user );
