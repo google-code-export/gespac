@@ -88,7 +88,7 @@
 		
 		//Insertion d'un log
 		
-		$log_texte = "Le collège $clg_nom a été créé";
+		$log_texte = "La fiche informative a été créée. Nom actuel : <b>$clg_nom</b>";
 		
 		$req_log_creer_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création collège', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_creer_college );
@@ -129,14 +129,14 @@
 		
 		//Insertion d'un log
 		
-		$log_texte = "Le collège $clg_nom a été modifié";
+		$log_texte = "La fiche informative a été modifiée. Nom actuel : <b>$clg_nom</b>";
 		
 		$req_log_modif_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification collège', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_modif_college );
 		
 		$clg_nom = stripslashes($clg_nom);
 		
-		echo "<small>Modification du collège <b>$clg_nom</b> !</small>";
+		echo "<small>Modification du collège <b>$clg_nom</b>.</small>";
 	
 	}	
 	
