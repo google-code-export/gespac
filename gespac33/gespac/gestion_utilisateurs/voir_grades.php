@@ -80,7 +80,7 @@
 					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='slb_grades' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
 					if ( $E_chk ) {
-						if ( $grade_nom <> "root" ) {
+						if ( $grade_nom <> "root" && $grade_nom <> "invité" ) {
 							echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
 							echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
 							echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' title='supprimer $grade_nom'>	</a> </td>";
