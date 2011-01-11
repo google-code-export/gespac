@@ -52,7 +52,17 @@
 
 	    $req_log_suppr_grade = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression grade', '$log_texte');";
 	    $result = $db_gespac->exec ( $req_log_suppr_grade );
-	
+		
+		// On test si le grade invité existe
+		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom='invit'" );
+		
+		// Si il n'existe pas, on le créé
+		if ( $grade_id_invite == "" ) {
+			$req_insert_grade_invite = "INSERT INTO grades ( grade_nom, grade_menu, grade_niveau ) VALUES ( 'invité', '', 100);";
+			$result = $db_gespac->exec ( $req_insert_grade_invite );
+			fwrite($fp, date("Ymd His") . " " . $req_insert_grade_invite."\n");
+		}
+			
 		// On récupère le grade_id du grade "invité"
 		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom='invité'" );
 		
