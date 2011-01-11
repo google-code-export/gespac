@@ -116,9 +116,8 @@ session_start();
 		$modele 	= addslashes(utf8_decode(urldecode($_POST ['modele'])));
 		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
 		
-		$liste_noms   = "";
-		$liste_serial = "";
-		//var_dump($_POST).'<br>';
+		//$liste_noms   = "";
+		//$liste_serial = "";
 		
 		$lot_array = explode(";", $lot);
 		
@@ -217,7 +216,6 @@ session_start();
 		}
 	
 		//Insertion d'un log
-		$lot_w_space = str_replace (";", " ", $lot);
 		$log_texte = $liste_nom_materiels;
 
 		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
@@ -261,7 +259,7 @@ session_start();
 	
 		//Insertion d'un log
 
-		$log_texte = "Le materiel $nom a été modifié";
+		$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été modifié";
 
 		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
 		$result = $db_gespac->exec ( $req_log_modif_mat );
@@ -300,7 +298,7 @@ session_start();
 		
 		//Insertion d'un log
 
-		$log_texte = "Le materiel $nom a été créé";
+		$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été créé.";
 		
 		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création matériel', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_modif_mat );
@@ -334,7 +332,7 @@ session_start();
 		
 		//Insertion d'un log
 
-		$log_texte = "Le materiel $nom a été créé";
+		$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été créé.";
 		
 		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création matériel', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_modif_mat );
@@ -350,6 +348,8 @@ session_start();
 		
 		$mat_ids_array = explode (";", $mat_ids);
 		$mat_ids_unique = array_unique ($mat_ids_array);
+		
+		
 		
 		foreach ($mat_ids_unique as $id) {
 			
@@ -378,10 +378,9 @@ session_start();
 					$liste_salle = $db_gespac->queryAll ( "SELECT salle_nom FROM salles WHERE salle_id = $salle_id" );
 					$salle_nom = $liste_salle [0][0];
 
-					$log_texte = "Réaffectation de <i>$nom_materiel</i> dans la salle <i>$salle_nom</i>";
+					$log_texte .= "Réaffectation de <b>$nom_materiel</b> dans la salle <b>$salle_nom</b><br> ";
 					
-					$req_log_affect_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Affectation salle', '$log_texte' );";
-					$result = $db_gespac->exec ( $req_log_affect_salle );
+					
 					
 					
 				} else {	// la machine est prêtée ($mat_id existe)
@@ -391,6 +390,9 @@ session_start();
 				}
 			}
 		}
+		
+		$req_log_affect_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Affectation salle', '$log_texte' );";
+		$result = $db_gespac->exec ( $req_log_affect_salle );
 	}
 	
 // Je ferme le fichier  de log sql
