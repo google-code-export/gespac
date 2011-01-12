@@ -143,8 +143,6 @@
 		
 		$lot_array = explode(";", $lot);
 		
-		var_dump($_POST);
-		
 		foreach ($lot_array as $item) {
 			if ( $item <> "" ) {	// permet de virer les éléments vides
 				
