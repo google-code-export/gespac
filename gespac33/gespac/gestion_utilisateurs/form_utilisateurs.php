@@ -9,11 +9,13 @@
 
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
 	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-
+	
+	
 ?>
 
 <!--  SERVEUR AJAX -->
 <script type="text/javascript" src="server.php?client=all"></script>
+
 
 <script type="text/javascript"> 
 	
@@ -68,8 +70,8 @@
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 	
-	$id = $_GET['id'];
-
+	$id 	= $_GET['id'];
+	$action = $_GET['action'];
 
 	
 	#***************************************************************************
@@ -79,7 +81,7 @@
 	
 	if ( $id == '-1' ) {	// Formulaire vierge de création
 	
-		echo "<h2>formulaire de création d'un nouvel utilisateur</h2><br>";
+		echo "<h2>Formulaire de création d'un nouvel utilisateur</h2><br>";
 		
 		?>
 		
@@ -179,16 +181,17 @@
 
 		<?PHP
 		
+	} 
+	
+	if ($action == 'mod') {
+	
+	#***************************************************************************
+	# 				MODIFICATION de l'utilisateur
+	#***************************************************************************
 		
 		
 		
-		#***************************************************************************
-		# 				MODIFICATION de l'utilisateur
-		#***************************************************************************
-		
-		
-		
-	} else {	// formulaire de modification prérempli
+		// formulaire de modification prérempli
 	
 		echo "<h2>formulaire de modification d'un utilisateur</h2><br>";
 		
@@ -316,7 +319,122 @@
 		
 		<?PHP
 	}	
-?>
+
+	
+	// *********************************************************************************
+	//
+	//			Formulaire modification par lot non prérempli
+	//
+	// *********************************************************************************		
+		
+	
+	if ($action == 'modlot') {
+		
+		echo "<h2>Formulaire de modification d'un lot</h2><br>";
+			
+		?>
+		
+		<script>
+			// Donne le focus au premier champ du formulaire
+			$('mailing').focus();
+		</script>
+
+		<form action="gestion_utilisateurs/post_utilisateurs.php?action=modlot" method="post" name="post_form" id="post_form">
+			<center>
+			
+			<input type=hidden name=lot_users id=lot_users>
+			<!-- Ici on récupère la valeur du champ utilisateur_a_poster de la page voir_utilisateurs.php -->
+			<script>$("lot_users").value = $('utilisateur_a_poster').value;</script>
+			
+
+			<table width=500>
+				<a href='#' onclick="alert($('utilisateur_a_poster').value);">ID utilisateurs sélectionnés</a>
+				<tr>
+					<TD> Activer le mailing</TD> 
+						<TD><select name="mailing">
+							<option value=2>Ne pas modifier</option>
+							<option value=1>Activer</option>
+							<option value=0>Désactiver</option>
+							</select>
+						</TD>
+				</tr>
+				
+				
+				<tr>
+					<TD>Grade</TD>
+					<TD><select name="grade">
+						<option value="">Ne pas modifier</option>
+						<?PHP
+							// Requete pour récupérer la liste des grades
+							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
+							
+							foreach ( $liste_grades as $record ) {
+							
+								$grade_id_lst 	= $record[0];
+								$grade_nom_lst 	= $record[1];
+						
+								$selected = $grade_id_lst == $grade_id ? "selected" : "";
+							
+								echo "<option value='$grade_id_lst' $selected>$grade_nom_lst</option>";
+							}
+						?>	
+							
+						</select>
+					</TD>
+				</tr>
+				
+				<tr>
+					<td>Skin</td>
+					<td><select name="skin">
+						<option value="">Ne pas modifier</option>
+						<?PHP
+							$dossier = opendir("../skins");
+							while ( $skin = readdir($dossier) ) {
+								if ( $skin != "." && $skin != ".." && $skin != ".svn") {
+									$selected = $skin == $user_skin ? "selected" : "" ;
+									echo "<option $selected value=$skin>$skin</option>";
+								}
+							}
+							closedir($dossier);
+						?>
+						</select>
+					</td>
+				</tr>
+				
+				<tr>
+					<?PHP 
+						$selected = $accueil == $user_accueil ? "selected" : "" ;
+					?>
+				
+					<TD>Page de Démarrage</TD>
+					<TD><select name="page" size="1">
+							<option value="">Ne pas modifier</option>
+							<option value="gestion_inventaire/voir_materiels.php">matériels</option>
+							<option value="modules/stats/csschart.php">stats</option>
+							<option value="modules/rss/rss.php">rss</option>
+							<option value="gestion_demandes/voir_demandes.php">demandes</option>
+							<option value="gestion_demandes/voir_interventions.php">interventions</option>
+							<option value="modules/stats/utilisation_parc.php">utilisation parc</option>
+							<option value="modules/wol/voir_liste_wol.php">WOL</option>
+						</select>
+					</TD>
+				</tr>
+			</table>
+
+			<br>
+			<input type=submit value='Modifier le lot' >
+			<input type=button value='Sortir sans modifier' onclick="SexyLightbox.close();" >
+
+			</center>
+		
+		</FORM>
+				
+
+		<?PHP	
+	}
+		
+		
+?>		
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>

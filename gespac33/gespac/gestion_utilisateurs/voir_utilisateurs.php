@@ -45,15 +45,20 @@
 		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'user_table', '1')" type="text"></center>
 	</form>
 	
+	<input type=hidden name='utilisateur_a_poster' id='utilisateur_a_poster' value=''>
+	
 <?PHP
 	// Ajout d'un utilisateur
-	if ( $E_chk )  
+	if ( $E_chk )  {
 		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='slb_users' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
+		echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_utilisateurs/form_utilisateurs.php?height=200&width=640&action=modlot' rel='slb_users' title='modifier selection'> <img src='img/write.png'>Modifier le lot</a> <span id='nb_selectionnes'></span> </span>";
+	}
 ?>
 
 	<center>
 	<br>
 	<table class="tablehover" id="user_table" width=800>
+		<th> <input type=checkbox id=checkall onclick="checkall('user_table');" > </th>
 		<th>Nom</th>
 		<th>Logon</th>
 		<th>Grade</th>
@@ -96,6 +101,18 @@
 					}
 					
 					
+					echo "<tr id=tr_id$id class=$tr_class>"; //utilisé par la fonction select_cette_ligne !
+					
+					// on affiche pas la checkbox pour le compte ati (pas modifiable)
+					if ( $E_chk ) {
+						if ( $logon == "ati" ) {
+							$chk_box = "<td>&nbsp</td>";
+						} else {
+							$chk_box = "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur); \"> </td>";	
+						}
+					}
+					
+					echo $chk_box;
 					echo "<td> $nom </td>";
 					echo "<td> $logon </td>";
 					echo "<td> $grade </td>";
@@ -106,12 +123,14 @@
 					if ( $E_chk ) {
 						if ( $logon == "ati" ) {
 							$modif_user = "<td><img src='img/write.png' style=display:none></td>";
+							$suppr_user = "<td><img src='img/delete.png' style=display:none></td>";
 						} else {
-							$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id' rel='slb_users' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
+							$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id&action=mod' rel='slb_users' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
+							$suppr_user = "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user($id, '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 						}
 						
 						echo $modif_user;
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user($id, '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";				
+						echo $suppr_user; 				
 					}
 					
 				echo "</tr>";
@@ -152,26 +171,21 @@
 	// *********************************************************************************
 	
 	function validation_suppr_user (id, nom, row, id_pret) {
-	
-		if ( id == 1 ) {
-			alert("IMPOSSIBLE de supprimer l'utilisateur ATI ! ");
-		} else {
-			
-			if ( id_pret == 0 ) {
 		
-				var valida = confirm('Voulez-vous vraiment supprimer l\'utilisateur "' + nom + '" ?');
-				// si la réponse est TRUE ==> on lance la page post_marques.php
-				if (valida) {
+		if ( id_pret == 0 ) {
+		
+			var valida = confirm('Voulez-vous vraiment supprimer l\'utilisateur "' + nom + '" ?');
+			// si la réponse est TRUE ==> on lance la page post_marques.php
+			if (valida) {
 							
-					/*	supprimer la ligne du tableau	*/
-					document.getElementById('user_table').deleteRow(row);
-					/*	poste la page en ajax	*/
-					$('target').load("gestion_utilisateurs/post_utilisateurs.php?action=suppr&id=" + id);
-				}
-			} else {
-				alert('L\'utilisateur a une machine en prêt. Merci de la rendre avant suppression !');
+				/*	supprimer la ligne du tableau	*/
+				document.getElementById('user_table').deleteRow(row);
+				/*	poste la page en ajax	*/
+				$('target').load("gestion_utilisateurs/post_utilisateurs.php?action=suppr&id=" + id);
 			}
-		}
+		} else {
+			alert('L\'utilisateur a une machine en prêt. Merci de la rendre avant suppression !');
+		}	
 	}	
 
 	
@@ -208,6 +222,100 @@
 			table.rows[r].style.display = displayStyle;	
 		}
 	}	
+	
+	
+	// *********************************************************************************
+	//
+	//				Selection/déselection de toutes les rows
+	//
+	// *********************************************************************************	
+	
+	function checkall(_table) {
+		var table = document.getElementById(_table);	// le tableau du matériel
+		var checkall_box = document.getElementById('checkall');	// la checkbox "checkall"
+		
+		for ( var i = 1 ; i < table.rows.length ; i++ ) {
+
+			var lg = table.rows[i].id;	// le tr_id (genre tr115)
+			
+			if (checkall_box.checked == true) {
+				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
+				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
+			} else {
+				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
+				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
+			}
+		}
+	}
+	
+	
+	// *********************************************************************************
+	//
+	//				Ajout des index pour postage sur clic de la checkbox
+	//
+	// *********************************************************************************	
+	 
+	function select_cette_ligne( tr_id, num_ligne, check ) {
+
+		var chaine_id = $('utilisateur_a_poster').value;
+		var table_id = chaine_id.split(";");
+		
+		var nb_selectionnes = $('nb_selectionnes');
+		
+		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
+		var li = document.getElementById(ligne);
+		
+		
+		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
+		
+			switch (check) {
+				case 1: // On force la selection si la ligne n'est pas déjà cochée
+					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
+						table_id.push(tr_id);
+						li.className = "selected";
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+					}
+				break;
+				
+				case 0: // On force la déselection
+					table_id.erase(tr_id);
+					nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+					// alternance des couleurs calculée avec la parité
+					if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
+				break;
+				
+				
+				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
+					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
+						table_id.erase(tr_id);
+						
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+
+						// alternance des couleurs calculée avec la parité
+						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
+					
+					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
+						table_id.push(tr_id);
+						li.className = "selected";
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+					}
+				break;			
+			}
+	
+			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
+			$('utilisateur_a_poster').value = table_id.join(";");
+
+			if ( $('utilisateur_a_poster').value != "" ) {
+				$('modif_selection').style.display = "";
+
+			} else { 
+				$('modif_selection').style.display = "none";
+			}
+		}
+	}
+	
+	
+	
 	
 </script>
 

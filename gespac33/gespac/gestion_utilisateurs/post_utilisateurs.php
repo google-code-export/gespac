@@ -129,6 +129,79 @@
 		
 		echo "<br><small>L'utilisateur <b>$nom</b> a bien été ajouté...</small>";
 	}
+	
+	
+	/**************** MODIFICATION D'UN LOT ********************/
+		
+	if ( $action == 'modlot' ) {
+		
+		$lot		= addslashes(utf8_decode(urldecode($_POST ['lot_users'])));
+		$mailing	= $_POST ['mailing'];
+		$grade		= addslashes(utf8_decode(urldecode($_POST ['grade'])));
+		$skin		= addslashes(utf8_decode(urldecode($_POST ['skin'])));
+		$page		= addslashes(utf8_decode(urldecode($_POST ['page'])));
+		
+		$lot_array = explode(";", $lot);
+		
+		var_dump($_POST);
+		
+		foreach ($lot_array as $item) {
+			if ( $item <> "" ) {	// permet de virer les éléments vides
+				
+				// Si l'état est modifié on fait un update sur ce champ
+				$sql_mailing = $mailing == "" ? "" : " mat_etat='$etat' ";
+				
+				if ( $origine <> "" ) {
+					// met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)
+					$sql_origine = $sql_etat == "" ? " mat_origine='$origine' " : ", mat_origine='$origine' " ;
+					
+				} else { $sql_origine = ""; }
+				
+				
+				if ( $salle <> "" ) {
+					// on récupére le numéro d'id de salle que l'on veut modifier dans la table materiels avec comme clause WHERE le nom de salle posté
+					$req_id_salle_par_nom = $db_gespac->queryAll ( "SELECT salle_id FROM salles WHERE salle_nom='$salle'" );
+					$salle_id =  $req_id_salle_par_nom[0][0];
+
+					// dans la rq sql, met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)
+					
+					if ( $sql_origine == "" && $sql_etat == "" ) $sql_salle = " salle_id=$salle_id ";
+					else $sql_salle = ", salle_id=$salle_id " ;
+
+				} else { $sql_salle = ""; }
+				
+				if ( $type <> "" ) {
+					// on récupére le numéro d'id de marque que l'on veut modifier dans la table materiels avec comme clause WHERE le type, le sous type, la marque et le modele de marque
+					$req_id_marque_par_type = $db_gespac->queryAll ( "SELECT marque_id FROM marques WHERE marque_type='$type' AND marque_stype='$stype' AND marque_marque='$marque' AND marque_model='$modele'" );
+					$marque_id =  $req_id_marque_par_type[0][0];
+					
+					if ( $sql_origine == "" && $sql_etat == "" && $sql_salle == "" ) $sql_marque = " mat_salle=$marque_id";
+					else $sql_marque = " , marque_id=$marque_id" ;
+					
+				} else { $sql_marque = ""; }
+				
+				$req_modif_materiel = "UPDATE materiels SET " . $sql_etat . $sql_origine . $sql_salle . $sql_marque . " WHERE mat_id=$item ;";
+				//$result = $db_gespac->exec ( $req_modif_materiel );
+				
+				//on récupérer le nom et le serial de chaque item
+				$req_nom_serial_materiel = $db_gespac->queryRow ("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
+				$liste_noms_serial   .=  '<b>'.$req_nom_serial_materiel[0].' (</b>serial : <b>'.$req_nom_serial_materiel[1].')</b>, ';
+				
+				// On log la requête SQL
+				fwrite($fp, date("Ymd His") . " " . $req_modif_materiel."\n");
+			}
+
+		}
+	
+		//Insertion d'un log
+		//on supprime les caractères en fin de chaine
+		$liste_noms_serial = trim ($liste_noms_serial, ", ");
+		$log_texte = "Les materiels $liste_noms_serial ont été modifiés.";
+
+		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
+		$result = $db_gespac->exec ( $req_log_modif_mat );
+
+	}
 
 	
 	// Je ferme le fichier  de log sql
