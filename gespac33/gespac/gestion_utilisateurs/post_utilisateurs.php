@@ -148,58 +148,58 @@
 		foreach ($lot_array as $item) {
 			if ( $item <> "" ) {	// permet de virer les éléments vides
 				
-				// Si l'état est modifié on fait un update sur ce champ
-				$sql_mailing = $mailing == "" ? "" : " mat_etat='$etat' ";
 				
-				if ( $origine <> "" ) {
-					// met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)
-					$sql_origine = $sql_etat == "" ? " mat_origine='$origine' " : ", mat_origine='$origine' " ;
+				//$skin est le 1er champ à UPDATER (ou pas)
+				$sql_skin = $skin == "" ? "" : " user_skin='$skin' ";
+				
+				
+				//$grade est le 2eme champ à UPDATER (ou pas)
+				if ( $grade <> "" ) {
 					
-				} else { $sql_origine = ""; }
+					// met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...). Si $sql_skin est vide, ça signifie qu'on ne modifie pas cette valeur donc pas de virgule avant $sql_grade
+					$sql_grade = $sql_skin == "" ? " grade_id=$grade " : ", grade_id=$grade " ;
+					
+				} else { $sql_grade = ""; }
 				
 				
-				if ( $salle <> "" ) {
-					// on récupére le numéro d'id de salle que l'on veut modifier dans la table materiels avec comme clause WHERE le nom de salle posté
-					$req_id_salle_par_nom = $db_gespac->queryAll ( "SELECT salle_id FROM salles WHERE salle_nom='$salle'" );
-					$salle_id =  $req_id_salle_par_nom[0][0];
+				//$page est le 3eme champ à UPDATER (ou pas)
+				if ( $page <> "" ) {
 
-					// dans la rq sql, met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)
-					
-					if ( $sql_origine == "" && $sql_etat == "" ) $sql_salle = " salle_id=$salle_id ";
-					else $sql_salle = ", salle_id=$salle_id " ;
+					// dans la rq sql, met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)					
+					if ( $sql_skin == "" && $sql_grade == "" ) $sql_page = " user_accueil='$page' ";
+					else $sql_page = ", user_accueil='$page' " ;
 
-				} else { $sql_salle = ""; }
+				} else { $sql_page = ""; }
 				
-				if ( $type <> "" ) {
-					// on récupére le numéro d'id de marque que l'on veut modifier dans la table materiels avec comme clause WHERE le type, le sous type, la marque et le modele de marque
-					$req_id_marque_par_type = $db_gespac->queryAll ( "SELECT marque_id FROM marques WHERE marque_type='$type' AND marque_stype='$stype' AND marque_marque='$marque' AND marque_model='$modele'" );
-					$marque_id =  $req_id_marque_par_type[0][0];
+				
+				//$mailing est le dernier champ à UPDATER (ou pas)
+				if ( $mailing <> 2 ) {
 					
-					if ( $sql_origine == "" && $sql_etat == "" && $sql_salle == "" ) $sql_marque = " mat_salle=$marque_id";
-					else $sql_marque = " , marque_id=$marque_id" ;
+					if ( $sql_skin == "" && $sql_grade == "" && $sql_page == "" ) $sql_mailing = " user_mailing=$mailing";
+					else $sql_mailing = " , user_mailing=$mailing" ;
 					
-				} else { $sql_marque = ""; }
+				} else { $sql_mailing = ""; }
 				
-				$req_modif_materiel = "UPDATE materiels SET " . $sql_etat . $sql_origine . $sql_salle . $sql_marque . " WHERE mat_id=$item ;";
-				//$result = $db_gespac->exec ( $req_modif_materiel );
+				$req_modif_user = "UPDATE users SET " . $sql_skin . $sql_grade . $sql_page . $sql_mailing . " WHERE user_id=$item ;";
+				$result = $db_gespac->exec ( $req_modif_user );
 				
-				//on récupérer le nom et le serial de chaque item
-				$req_nom_serial_materiel = $db_gespac->queryRow ("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
-				$liste_noms_serial   .=  '<b>'.$req_nom_serial_materiel[0].' (</b>serial : <b>'.$req_nom_serial_materiel[1].')</b>, ';
+				//on récupérer le nom et l'id du user de chaque item pour les logs
+				$req_nom_id_user = $db_gespac->queryRow ("SELECT user_nom, user_id FROM users WHERE user_id=$item");
+				$liste_noms_id   .=  '<b>'.$req_nom_id_user[0].' (</b>serial : <b>'.$req_nom_id_user[1].')</b>, ';
 				
 				// On log la requête SQL
-				fwrite($fp, date("Ymd His") . " " . $req_modif_materiel."\n");
+				fwrite($fp, date("Ymd His") . " " . $req_modif_user."\n");
 			}
 
 		}
 	
 		//Insertion d'un log
 		//on supprime les caractères en fin de chaine
-		$liste_noms_serial = trim ($liste_noms_serial, ", ");
-		$log_texte = "Les materiels $liste_noms_serial ont été modifiés.";
+		$liste_noms_id = trim ($liste_noms_id, ", ");
+		$log_texte = "Les utilisateurs $liste_noms_id ont été modifiés.";
 
-		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
-		$result = $db_gespac->exec ( $req_log_modif_mat );
+		$req_log_modif_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification compte', '$log_texte' );";
+		$result = $db_gespac->exec ( $req_log_modif_user );
 
 	}
 

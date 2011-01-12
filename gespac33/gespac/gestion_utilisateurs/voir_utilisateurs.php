@@ -51,7 +51,7 @@
 	// Ajout d'un utilisateur
 	if ( $E_chk )  {
 		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='slb_users' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
-		echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_utilisateurs/form_utilisateurs.php?height=200&width=640&action=modlot' rel='slb_users' title='modifier selection'> <img src='img/write.png'>Modifier le lot</a> <span id='nb_selectionnes'></span> </span>";
+		echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_utilisateurs/form_utilisateurs.php?height=200&width=640&action=modlot' rel='slb_users' title='modifier selection'> <img src='img/write.png'>Modifier le lot</a> <span id='nb_selectionnes'></span></span>";
 	}
 ?>
 

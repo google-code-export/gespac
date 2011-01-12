@@ -348,10 +348,9 @@
 			
 
 			<table width=500>
-				<a href='#' onclick="alert($('utilisateur_a_poster').value);">ID utilisateurs sélectionnés</a>
 				<tr>
 					<TD> Activer le mailing</TD> 
-						<TD><select name="mailing">
+						<TD><select name="mailing" id="mailing">
 							<option value=2>Ne pas modifier</option>
 							<option value=1>Activer</option>
 							<option value=0>Désactiver</option>
