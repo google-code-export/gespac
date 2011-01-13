@@ -29,7 +29,7 @@ session_start();
 	$mail_root = $db_gespac->queryOne("SELECT user_mail FROM users WHERE user_id=1");
 	
 	// PARAMETRAGE DU SMTP 
-	ini_set('SMTP','smtp.intranet.cg13.oleane.fr'); //Mettre l'adresse SMTP dans le fichier de config
+	//ini_set('SMTP','smtp.intranet.cg13.oleane.fr'); //Mettre l'adresse SMTP dans le fichier de config
 	ini_set('sendmail_from', $mail_root);
 	
 	
