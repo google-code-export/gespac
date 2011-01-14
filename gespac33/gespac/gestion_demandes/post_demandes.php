@@ -26,7 +26,7 @@ session_start();
 	$id 		= $_GET['id'];
 	
 	//Récupération du mail du compte ati (root)
-	$mail_root = $db_gespac->queryOne("SELECT user_mail FROM users WHERE user_id=1");
+	$mail_root = $db_gespac->queryOne("SELECT clg_ati_mail FROM college");
 	
 	// PARAMETRAGE DU SMTP 
 	//ini_set('SMTP','smtp.intranet.cg13.oleane.fr'); //Mettre l'adresse SMTP dans le fichier de config
@@ -98,23 +98,24 @@ session_start();
 		**************************/
 		
 		// on récupére le numéro d'id du user qui fait la demande. Attention on ne récupére les infos de mail que si le compte est actif.
-		$user_mail = $db_gespac->queryOne ( "SELECT user_mail FROM users WHERE user_logon='$login' AND user_mailing=1" );
+		$user_mail = $db_gespac->queryOne ( "SELECT user_mail FROM users WHERE user_logon='$login'  AND user_mailing=1" );
 		
 		//Récupération des comptes qui ont le grade ATI
-		$req_comptes_ati = $db_gespac->queryAll("SELECT user_nom, user_mail FROM users WHERE grade_id=2 AND user_mailing=1");
+		$req_comptes_ati = $db_gespac->queryAll("SELECT user_nom, user_mail FROM users, grades WHERE grade_nom='ati' AND users.grade_id = grades.grade_id AND user_mailing=1");
 		
 		//On récupére les identifiants de l'intervenant et du demandeur en fonction du numéro de dossier
-		$id_demandeur = $db_gespac->queryOne("SELECT user_demandeur_id FROM demandes WHERE dem_id='$dossier'");
+		$id_demandeur = $db_gespac->queryOne("SELECT user_demandeur_id FROM demandes WHERE dem_id=$dossier");
 		
 		//on récupère uniquement les comptes qui sont actifs !
-		$req_mail_demandeur	= $db_gespac->queryRow("SELECT user_mail, user_nom FROM users WHERE user_id='$id_demandeur' AND user_mailing=1");
+		$req_mail_demandeur	= $db_gespac->queryRow("SELECT user_mail, user_nom FROM users WHERE user_id=$id_demandeur AND user_mailing=1");
 		$mail_demandeur     = $req_mail_demandeur[0];
 		$nom_demandeur      = $req_mail_demandeur[1];
 		
 		// CORPS DU MAIL
-		$corps_mail = "Le dossier <b>$dossier</b> a changé d'état. Vous pouvez le suivre en affichant la liste de vos dossiers par le lien suivant : http://gespac/gespac/gestion_demandes/voir_dossier.php?height=480&width=640&id=$dossier<br><br>";
+		$corps_mail = "Le dossier <b>$dossier</b> a changé d'état. Vous pouvez le suivre en consultant la liste de vos dossiers sur votre interface GESPAC.<br><br>";
 		$corps_mail .= "L'état du dossier est actuellement : <b>'$etat'<br><br></b>";
-		$corps_mail .= "Commentaire de l'utilisateur : <i>'$reponse'</i><br><br>";
+		$commentaire = ($reponse == '') ? "Pas de commentaire." : $commentaire = $reponse;
+		$corps_mail .= "Commentaire de l'utilisateur : <i>'$commentaire'</i><br><br>";
 		$corps_mail .= "<i>Ce mail est envoyé automatiquement. Inutile d'y répondre, vous ne recevrez aucun mail en retour. Pour tout suivi du dossier, merci de vous connecter à <a href='http://gespac/gespac'>votre interface GESPAC.</a></i><br><br>";
 		$corps_mail .= "L'équipe GESPAC";
 		
@@ -131,7 +132,7 @@ session_start();
 			if (empty($mail_ati)) { //le champ $mail_ati est vide
 				$liste_mail_ati .= ''; //on ne concatène rien dans la variable $liste_mail_ati
 			} else { // si ce champ n'est pas vide
-				$liste_mail_ati .= $mail_ati.','; //on colle à la variable la valeur de $mail_ati suivi d'une virgule et d'un espace
+				$liste_mail_ati .= $mail_ati.','; //on colle à la variable la valeur de $mail_ati suivi d'une virgule
 			}
 		}
 		
@@ -150,6 +151,7 @@ session_start();
 		$verif_doublon_mail_destinataire = array_unique($verif_doublon_mail_destinataire);
 		// On reconstruit notre string à partir du tableau dédoublonné
 		$mail_destinataire = implode(",", $verif_doublon_mail_destinataire);
+		
 		
 		$headers ='From: '.$mail_root."\n"; //c'est toujours le compte root qui envoie le mail
 		$headers .='Reply-To: '.$mail_root."\n"; 
@@ -172,10 +174,10 @@ session_start();
 		$login		= $_SESSION['login'];
 			
 		// on récupére le numéro d'id du user qui fait la demande ainsique son nom et son grade
-		$req_id_user 	= $db_gespac->queryRow ( "SELECT user_id, user_nom, grade_id FROM users WHERE user_logon='$login'" );
+		$req_id_user 	= $db_gespac->queryRow ( "SELECT user_id, user_nom, grade_nom FROM users, grades WHERE user_logon='$login' AND users.grade_id = grades.grade_id" );
 		$user_id 		=  $req_id_user[0];
 		$user_nom 		=  $req_id_user[1];
-		$grade_id	 	=  $req_id_user[2];
+		$grade_nom	 	=  $req_id_user[2];
 		
 		if ( $type == "installation" || $type == "reparation" ) {	
 		
@@ -250,17 +252,25 @@ session_start();
 			Fait uniquement pour les grades prof et ATI
 		**************************************************/
 		
-		// on récupére le mail du user qui fait la demande. Attention on ne récupére ces infos que si le compte est actif.
+		// on récupére le mail du user qui fait la demande. Attention on ne récupére ces infos que si le mailing est actif.
 		$user_mail = $db_gespac->queryOne ( "SELECT user_mail FROM users WHERE user_logon='$login' AND user_mailing=1" );
 		
+		
 		//on récupére les noms et mails de ces comptes avec le grade ATI
-		$req_comptes_ati = $db_gespac->queryAll("SELECT user_logon, user_mail FROM users WHERE grade_id=2 AND user_mailing=1"); 
+		$req_comptes_ati = $db_gespac->queryAll("SELECT user_logon, user_mail FROM users, grades WHERE grade_nom='ati' AND users.grade_id = grades.grade_id AND user_mailing=1"); 
 		
 		
 		// CORPS DU MAIL
-		$corps_mail = "Un nouveau dossier a été créé. Vous pouvez le suivre en affichant la liste de vos dossiers par le lien suivant : http://localhost/developpement/gespac33/gespac/gestion_demandes/voir_demandes.php<br><br>";
+		if ( $creat_inter == 'on') {
+			$corps_mail = "Un nouveau dossier a été créé. Vous pouvez le suivre en consultant la liste de vos dossiers sur votre interface GESPAC.<br>
+			<font color='red'><b>Une intervention a été générée lors de la création de ce dossier.</b></font><br><br>";
+		} else {
+			$corps_mail = "Un nouveau dossier a été créé. Vous pouvez le suivre en consultant la liste de vos dossiers sur votre interface GESPAC.<br><br>";
+		}
+		
+		$commentaire = ($reponse == '') ? "Pas de commentaire." : $commentaire = $reponse;
 		$corps_mail .= "L'état du dossier est actuellement : <b>'$etat'<br><br></b>";
-		$corps_mail .= "Commentaire de l'utilisateur : <i>'$reponse'</i><br><br>";
+		$corps_mail .= "Commentaire de l'utilisateur : <i>'$commentaire'</i><br><br>";
 		$corps_mail .= "<i>Ce mail est envoyé automatiquement. Inutile d'y répondre, vous ne recevrez aucun mail en retour. Pour tout suivi du dossier, merci de vous connecter à <a href='http://gespac/gespac'>votre interface GESPAC.</a></i><br><br>";
 		$corps_mail .= "L'équipe GESPAC";
 		
@@ -283,14 +293,17 @@ session_start();
 		
 		
 		//ON TESTE SI LE GRADE DU CREATEUR DU DOSSIER EST CELUI D'UN PROF (OU PAS)
-		if ($grade_id == 4) { //le grade_id correspond à celui d'un professeur
+		/*
+		if ($grade_nom == 'professeur') { //le grade_id correspond à celui d'un professeur
 			//Il faut donc envoyer un mail au professeur ainsiqu'à tous les ATI dont le compte est actif
 			$mail_destinataire = $liste_mail_ati.$user_mail;
 		
 		} else {
 			//le grade n'est pas celui d'un professeur. On considère pour l'instant que c'est un ATI qui a créé le dossier.
-			$mail_destinataire = $liste_mail_ati;
-		}
+			$mail_destinataire = $liste_mail_ati.$user_mail;
+		}*/
+		
+		$mail_destinataire = $liste_mail_ati.$user_mail;
 		
 		
 		/******************************
@@ -318,7 +331,4 @@ session_start();
 		}
 	}
 	
-	
 ?>
-
-
