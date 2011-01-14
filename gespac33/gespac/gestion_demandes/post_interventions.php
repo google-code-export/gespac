@@ -27,10 +27,10 @@ session_start();
 	$id 		= $_GET['id'];
 	
 	//Récupération du mail du compte ati (root)
-	$mail_root = $db_gespac->queryOne("SELECT user_mail FROM users WHERE user_id=1");
+	$mail_root = $db_gespac->queryOne("SELECT clg_ati_mail FROM college");
 	
 	// PARAMETRAGE DU SMTP 
-	ini_set('SMTP','smtp.intranet.cg13.oleane.fr'); //Mettre l'adresse SMTP dans le fichier de config
+	//ini_set('SMTP','smtp.intranet.cg13.oleane.fr'); //Mettre l'adresse SMTP dans le fichier de config
 	ini_set('sendmail_from', $mail_root);
 	
 	
@@ -86,7 +86,7 @@ session_start();
 		$user_mail = $db_gespac->queryOne ( "SELECT user_mail FROM users WHERE user_logon='$login' AND user_mailing=1" );
 		
 		//Récupération des comptes qui ont le grade ATI
-		$req_comptes_ati = $db_gespac->queryAll("SELECT user_nom, user_mail FROM users WHERE grade_id=2 AND user_mailing=1");
+		$req_comptes_ati = $db_gespac->queryAll("SELECT user_nom, user_mail FROM users, grades WHERE grade_nom='ati' AND users.grade_id = grades.grade_id AND user_mailing=1");
 		
 		//On récupére les identifiants du demandeur en fonction du numéro de dossier
 		$id_demandeur = $db_gespac->queryOne("SELECT user_demandeur_id FROM demandes WHERE dem_id='$dossier'");
@@ -97,9 +97,10 @@ session_start();
 		$nom_demandeur      = $req_mail_demandeur[1];
 		
 		// CORPS DU MAIL
-		$corps_mail = "L'intervention (n° : <b>$inter</b>) concernant le dossier n°<b>$dossier</b> a été clôturée le <b>$date_clot</b>. Vous pouvez le suivre en affichant la liste de vos dossiers par le lien suivant : http://localhost/developpement/gespac33/gespac/gestion_demandes/voir_interventions.php<br><br>";
+		$corps_mail = "L'intervention (n° : <b>$inter</b>) concernant le dossier n°<b>$dossier</b> a été clôturée le <b>$date_clot</b>. Vous pouvez le suivre en consultant la liste de vos interventions sur votre interface GESPAC.<br><br>";
 		$corps_mail .= "L'état du dossier est actuellement : <b>'$etat'<br><br></b>";
-		$corps_mail .= "Commentaire de l'utilisateur : <i>'$reponse'</i><br><br>";
+		$commentaire = ($reponse == '') ? "Pas de commentaire." : $commentaire = $reponse;
+		$corps_mail .= "Commentaire de l'utilisateur : <i>'$commentaire'</i><br><br>";
 		$corps_mail .= "<i>Ce mail est envoyé automatiquement. Inutile d'y répondre, vous ne recevrez aucun mail en retour. Pour tout suivi du dossier, merci de vous connecter à <a href='http://gespac/gespac'>votre interface GESPAC.</a></i><br><br>";
 		$corps_mail .= "L'équipe GESPAC";
 		
@@ -195,5 +196,3 @@ session_start();
 	
 
 ?>
-
-
