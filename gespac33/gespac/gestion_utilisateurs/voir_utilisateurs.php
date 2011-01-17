@@ -45,7 +45,7 @@
 		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'user_table', '1')" type="text"></center>
 	</form>
 	
-	<input type=hidden name='utilisateur_a_poster' id='utilisateur_a_poster' value=''>
+	<input type=hidden name='users_a_poster' id='users_a_poster' value=''>
 	
 <?PHP
 	// Ajout d'un utilisateur
@@ -76,8 +76,6 @@
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 						
-				echo "<tr class=$tr_class>";
-						
 					$nom 		= $record[0];
 					$logon 		= $record[1];
 					$password 	= $record[2];
@@ -101,7 +99,7 @@
 					}
 					
 					
-					echo "<tr id=tr_id$id class=$tr_class>"; //utilisé par la fonction select_cette_ligne !
+					echo "<tr id=tr_id$id class=$tr_class>";
 					
 					// on affiche pas la checkbox pour le compte ati (pas modifiable)
 					if ( $E_chk ) {
@@ -230,13 +228,14 @@
 	//
 	// *********************************************************************************	
 	
+	
 	function checkall(_table) {
-		var table = document.getElementById(_table);	// le tableau du matériel
-		var checkall_box = document.getElementById('checkall');	// la checkbox "checkall"
+		var table = $(_table);	// le tableau du matériel
+		var checkall_box = $('checkall');	// la checkbox "checkall"
 		
 		for ( var i = 1 ; i < table.rows.length ; i++ ) {
 
-			var lg = table.rows[i].id;	// le tr_id (genre tr115)
+			var lg = table.rows[i].id					// le tr_id (genre tr115)
 			
 			if (checkall_box.checked == true) {
 				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
@@ -245,6 +244,7 @@
 				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
 				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
 			}
+			
 		}
 	}
 	
@@ -257,14 +257,13 @@
 	 
 	function select_cette_ligne( tr_id, num_ligne, check ) {
 
-		var chaine_id = $('utilisateur_a_poster').value;
+		var chaine_id = $('users_a_poster').value;
 		var table_id = chaine_id.split(";");
-		
+
 		var nb_selectionnes = $('nb_selectionnes');
 		
 		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
 		var li = document.getElementById(ligne);
-		
 		
 		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
 		
@@ -303,9 +302,9 @@
 			}
 	
 			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
-			$('utilisateur_a_poster').value = table_id.join(";");
+			$('users_a_poster').value = table_id.join(";");
 
-			if ( $('utilisateur_a_poster').value != "" ) {
+			if ( $('users_a_poster').value != "" ) {
 				$('modif_selection').style.display = "";
 
 			} else { 
@@ -313,7 +312,6 @@
 			}
 		}
 	}
-	
 	
 	
 	
