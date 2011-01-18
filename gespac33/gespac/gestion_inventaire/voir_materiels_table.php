@@ -239,7 +239,8 @@
 	
 	<table class="tablehover" id="mat_table" width=870>
 		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
-		<th> <input type=checkbox id=checkall onclick="checkall('mat_table');" > </th>
+		<?PHP if ( $E_chk ) echo "<th> <input type=checkbox id=checkall onclick=\"checkall('mat_table');\" > </th>"; ?>
+		
 		<th title="1 : le nom de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_nom; ?>', $('filt').value);">
 			Nom<sup>1</sup> <?PHP echo $img_nom; ?></a></th>
@@ -338,7 +339,8 @@
 				}
 				
 				echo "<tr id=tr_id$id class=$tr_class>";
-					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
+				
+					/*	chckbox	*/	if ( $E_chk ) echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
 					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='slb_mat' title='Nom du matériel : $nom'>$nom</a> </td>";
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
