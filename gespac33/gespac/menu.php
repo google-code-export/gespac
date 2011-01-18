@@ -119,13 +119,14 @@ include_once ('fonctions.php');
 		
 			
 			
-			if ( checkalldroits("L-07-01,L-07-02,L-07-03") ) {	
+			if ( checkalldroits("L-07-01,L-07-02,L-07-03,L-07-04,L-07-05") ) {	
 			echo "<li class='dir'> <a href='#'><div id='plugins' class='plugins' title='modules et extensions'></div></a>";
 				echo "<ul>";
 					if (checkdroit("L-07-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/fog/recap_fog.php');change_icon_onclick('plugins');\">Récapitulatif FOG</a></li>";
 					if (checkdroit("L-07-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/wol/voir_liste_wol.php');change_icon_onclick('plugins');\">Wake On Lan</a></li>";
-					if (checkdroit("L-07-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/export/export_perso.php');change_icon_onclick('info');\">Export Perso</a></li>";
+					if (checkdroit("L-07-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/export/export_perso.php');change_icon_onclick('plugins');\">Export Perso</a></li>";
 					if (checkdroit("L-07-04") ) echo "<li class='item'><a href='modules/ssn_dsit/form_import_csv.php?height=250&width=640' rel='sexylightbox_menu' title='MAJ tags DSIT'>	MAJ tags DSIT	</a></li>";				
+					if (checkdroit("L-07-05") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/image_fog/voir_liste.php');change_icon_onclick('plugins');\">Image FOG</a></li>";
 					echo "</ul>
 				</li>";
 			}
