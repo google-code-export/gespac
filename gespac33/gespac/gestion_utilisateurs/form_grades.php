@@ -22,9 +22,8 @@
 
 		var bt_submit = $("post_user");
 		var grade_nom = $("nom").value;
-		var grade_niveau = $("niveau").value;
 		
-		if (grade_nom == "" || grade_niveau == "") {
+		if (grade_nom == "") {
 			bt_submit.disabled = true;
 		} else {
 			bt_submit.disabled = false;
@@ -95,11 +94,6 @@
 					<TD>Nom*</TD>
 					<TD><input type=text name=nom id=nom onkeyup="validation();"/></TD>
 				</tr>
-				
-				<tr>
-					<TD>Niveau *</TD>
-					<TD><input type=text name=niveau id=niveau onkeyup="validation();" /></TD>
-				</tr>
 
 			</table>
 
@@ -126,12 +120,11 @@
 		echo "<h2>formulaire de modification d'un grade</h2><br>";
 		
 		// Requete pour récupérer les données des champs pour le user à modifier
-		$grade_a_modifier = $db_gespac->queryRow ( "SELECT grade_id, grade_nom, grade_niveau FROM grades WHERE grade_id=$id" );		
+		$grade_a_modifier = $db_gespac->queryRow ( "SELECT grade_id, grade_nom FROM grades WHERE grade_id=$id" );		
 		
 		// valeurs à affecter aux champs
 		$grade_id 			= $grade_a_modifier[0];
 		$grade_nom	 		= $grade_a_modifier[1];
-		$grade_niveau	 	= $grade_a_modifier[2];
 
 		?>
 		
@@ -148,11 +141,6 @@
 				<tr>
 					<TD>Nom *</TD>
 					<TD><input type=text name=nom id=nom value= "<?PHP echo $grade_nom; ?>" 	/></TD>
-				</tr>
-				
-				<tr>
-					<TD>Niveau *</TD>
-					<TD><input type=text name=niveau value= "<?PHP echo $grade_niveau; ?>"	/></TD>
 				</tr>
 				
 			</table>

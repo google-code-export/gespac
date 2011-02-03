@@ -88,9 +88,8 @@
 	
 		$id     	= $_POST ['id'];
 		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
-		$niveau   	= $_POST ['niveau'];
 
-		$req_modif_grade = "UPDATE grades SET grade_nom='$nom', grade_niveau=$niveau WHERE grade_id=$id";
+		$req_modif_grade = "UPDATE grades SET grade_nom='$nom' WHERE grade_id=$id";
 		$result = $db_gespac->exec ( $req_modif_grade );
 		
 		// On log la requête SQL
@@ -109,9 +108,8 @@
 	if ( $action == 'add' ) {
 	
 		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
-		$niveau   	= $_POST ['niveau'];
 		
-		$req_add_grade = "INSERT INTO grades ( grade_nom, grade_niveau, grade_menu) VALUES ( '$nom', $niveau, '' )";
+		$req_add_grade = "INSERT INTO grades ( grade_nom, grade_menu) VALUES ( '$nom', '' )";
 		$result = $db_gespac->exec ( $req_add_grade );
 		
 		// On log la requête SQL

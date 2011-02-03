@@ -35,7 +35,7 @@
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom, grade_menu, grade_niveau FROM grades ORDER BY grade_nom" );
+	$liste_des_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom, grade_menu FROM grades ORDER BY grade_nom" );
 
 ?>
 	
@@ -52,8 +52,7 @@
 
 	<center>
 	<br>
-	<table class="tablehover" id="grades_table" width=600>
-		<th>Niveau</th>
+	<table class="tablehover" id="grades_table" width=450>
 		<th>Nom</th>
 		
 		<?PHP	
@@ -72,11 +71,9 @@
 					$grade_id 		= $record[0];
 					$grade_nom 		= $record[1];
 					$grade_menu 	= $record[2];
-					$grade_niveau	= $record[3];
 					
 					$nb_users_du_grade = $db_gespac->queryOne ( "SELECT count(*) as compte FROM users WHERE grade_id=$grade_id" );
 					
-					echo "<td width=20> $grade_niveau </td>";
 					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='slb_grades' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
 					if ( $E_chk ) {
