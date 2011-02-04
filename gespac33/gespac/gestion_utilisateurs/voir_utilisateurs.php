@@ -85,7 +85,7 @@
 					$skin		= $record[6];
 					$mailing	= $record[7];
 					
-					$mailing_chk = $mailing == 1 ? "checked.png" : "unchecked.png";
+					$mailing_chk = $mailing == 1 ? "<img src='img/ok.png' height=16px width=16px>" : "";
 					
 					
 					// test si la machine est prétée ou pas
@@ -116,7 +116,7 @@
 					echo "<td> $grade </td>";
 					echo "<td> $mail </td>";
 					echo "<td> $skin </td>";
-					echo "<td> <img src='img/$mailing_chk'> </td>";
+					echo "<td> $mailing_chk </td>";
 					
 					if ( $E_chk ) {
 						if ( $logon == "ati" ) {
