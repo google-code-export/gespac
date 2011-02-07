@@ -110,7 +110,7 @@
 		$grade   	= $_POST ['grade'];
 		$mail   	= $_POST ['mail'];
 		$skin   	= $_POST ['skin'];
-		$page   	= $_POST ['page'];
+		$page   	= "bienvenue.php";
 		$mailing	= $_POST ['mailing'];
 
 		$mailing = $mailing == "on" ? 1 : 0 ;

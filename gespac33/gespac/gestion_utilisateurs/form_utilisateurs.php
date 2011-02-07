@@ -1,5 +1,4 @@
 <?PHP
-
 	#formulaire d'ajout et de modification
 	#des users !
 
@@ -36,7 +35,7 @@
 	
 	/******************************************
 	*
-	*		AJAX
+	*				AJAX
 	*
 	*******************************************/
 	
@@ -157,18 +156,38 @@
 				</tr>
 				
 				<tr>
-					<TD>Page de Démarrage</TD>
-					<TD><select name="page" size="1">
-							<option value="gestion_inventaire/voir_materiels.php">matériels</option>
-							<option value="modules/stats/csschart.php">stats</option>
-							<option value="modules/rss/rss.php">rss</option>
-							<option value="gestion_demandes/voir_demandes.php">demandes</option>
-							<option value="gestion_demandes/voir_interventions.php">interventions</option>
-							<option value="modules/stats/utilisation_parc.php">utilisation parc</option>
-							<option value="modules/wol/voir_liste_wol.php">WOL</option>
+						<?PHP 
+							$selected = $accueil == $user_accueil ? "selected" : "" ;
+						?>
+					
+						<TD>Page de Démarrage</TD>
+						<TD><select name="page" size="1">
+					
+					<?PHP
+						$lines = file('../menu.txt');
+
+						echo "<option value='bienvenue.php'>Bienvenue</option>";	// Page par défaut
+
+						foreach ($lines as $line) {
+
+							$line = str_replace('"','',$line);
+							$explode_line = explode (";", $line);
+							$id = $explode_line[0];
+							$value = $explode_line[1];
+							$path_page = $explode_line[2];	
+												
+							$selected = $path_page == $user_accueil ? "selected" : "" ; //pour une raison étrange, ça ne marche pas ...
+							
+							$L_chk = preg_match ("#$id#", $droits) ;
+	
+							if ($L_chk && $value <> "Retour au portail")	// Oui parce que si on met en page de démarrage la page de retour au menu, ça sert à rien !
+								echo "<option $selected value='$path_page'>$value</option>";
+						}
+					?>
+					
 						</select>
-					</TD>
-				</tr>
+						</TD>
+					</tr>
 				
 			</table>
 
@@ -288,24 +307,6 @@
 						?>
 						</select>
 					</td>
-				</tr>
-				
-				<tr>
-					<?PHP 
-						$selected = $accueil == $user_accueil ? "selected" : "" ;
-					?>
-				
-					<TD>Page de Démarrage</TD>
-					<TD><select name="page" size="1">
-							<option value="gestion_inventaire/voir_materiels.php">matériels</option>
-							<option value="modules/stats/csschart.php">stats</option>
-							<option value="modules/rss/rss.php">rss</option>
-							<option value="gestion_demandes/voir_demandes.php">demandes</option>
-							<option value="gestion_demandes/voir_interventions.php">interventions</option>
-							<option value="modules/stats/utilisation_parc.php">utilisation parc</option>
-							<option value="modules/wol/voir_liste_wol.php">WOL</option>
-						</select>
-					</TD>
 				</tr>
 				
 			</table>
