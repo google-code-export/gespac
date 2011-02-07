@@ -50,7 +50,7 @@ include_once ('fonctions.php');
 		<ul id="nav" class="dropdown dropdown-horizontal">
 			
 
-			<li class='dir'><a href='#' onclick=\"AffichePage('conteneur', 'accueil.php');change_icon_onclick('accueil');\"><div id='accueil' class='accueil' title='accueil'></div></a>
+			<li class='dir'><a href='#' onclick="AffichePage('conteneur', './accueil.php');change_icon_onclick('accueil');"><div id='accueil' class='accueil' title='accueil'></div></a>
 				<ul>
 					<li class='item'><a href='../index.php'>	Retour au portail	</a></li>
 				</ul>
