@@ -287,6 +287,17 @@
 			}).send(this.toQueryString());
 		});	
 		
+		
+		
+		// Fait apparaitre le numéro GIGN dans le cas d'un ETAT particulier
+		$('CB_etat').addEvent('change', function(e) {
+			new Event(e).stop();
+			
+			if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} ) {	$('tr_gign').style.display = ""; }
+			else { $('tr_gign').style.display = "none";	}
+		});
+
+	
 	});
 	
 	
@@ -817,11 +828,16 @@
 				<tr>
 					<TD>Etat du matériel</TD> 
 					<TD>
-						<select name="etat">
+						<select name="etat" id="CB_etat">
 							<option selected><?PHP echo $materiel_etat; ?></option>
 							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
 						</select>
 					</TD>
+				</tr>
+				
+				<tr id="tr_gign" style="display:none;">
+					<td>Dossier GIGN</td>
+					<td><input type="text" name="num_gign">
 				</tr>
 				
 			
