@@ -1,0 +1,86 @@
+
+
+/* this is the main UL element*/
+.dropdown{
+	margin:0;
+	padding:0;
+	list-style:none;
+	border-bottom:1px solid #444;
+}
+
+/* these are the inner menus	*/
+.dropdown ul{
+	margin:0;
+	padding:0;
+	border-top:1px solid #444;
+	list-style:none;	
+	width:auto;
+	min-width:80px;
+}
+
+.dropdown .sousmenu {
+	margin-top:48px;
+}
+
+/* tous les items du menu */
+.dropdown li{
+	margin:0;
+	padding:0;
+	width:auto;
+	min-width:100px;
+	/*background-color: orange;*/
+	cursor:pointer;
+}
+
+.dropdown li:hover{
+	/*border-right:1px solid #444;
+	border-left:1px solid #444;*/
+	/*background-color: #4FC9C5;*/
+}
+
+/*
+.dropdown li:hover{
+	background-color:#00254b;
+	color:white;
+}
+*/
+
+/* surlignage d'un lien dans le menu */
+.dropdown a:hover{
+	color:white;
+}
+
+/* lien dans le menu */
+.dropdown a{
+	text-decoration:none;
+	color:#000000;
+}
+
+/* items qui appartiennent à un sous menu mais qui n'en possèdent pas*/
+.dropdown ul li{
+	border:1px solid #444;
+	border-top:0;
+	margin-left:-1px;
+	width:180px;
+	background-color: #4FC9C5;
+	margin-top:0px;
+}
+
+/* items qui possedent un sous menu*/
+.dropdown li.submenu{
+	/*background-image:url('../img/expand_down.gif');*/
+	background-position:center left;
+	background-repeat:no-repeat;
+	padding-left:0px;
+	width:auto;
+	min-width:100px;
+}
+
+/* items qui sont dans un sous menu et qui possedent un sous menu*/
+.dropdown ul li.submenu{
+	background-image:url('../img/expand_right.gif');
+	background-position:center right;
+	padding:5px;
+	width:180px;
+	background-color: #4FC9C5;
+}
