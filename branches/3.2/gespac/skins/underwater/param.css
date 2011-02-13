@@ -1,0 +1,400 @@
+body {
+	background-position : left top;
+	background-image	: url('fond.jpg');
+	background-color	: #336967;
+	background-repeat	: no-repeat;
+	font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+h3 {
+	margin : 0px;
+}
+
+input, textarea, select {
+	border: 1px solid #6E6F6A;
+}
+
+#portail-menu {
+	background		: orange; 
+	border			: solid 1px black; 
+	width			: 94%;
+	padding			: 5px 10px 5px 10px; 
+	margin-left		: auto; 
+	margin-right	: auto;
+	position		: absolute;
+	-moz-border-radius		: 10px;
+	-webkit-border-radius 	: 10px;
+	-khtml-border-radius 	: 10px;
+	-opera-border-radius	: 10px;
+}
+
+#portail-menu-item {
+	text-align		: center;
+	vertical-align	: middle;
+	width 			: auto;
+	float 			: left;
+	position		: relative;
+	margin-right	: 20px;
+}
+
+#portail-conteneur {
+	background		: orange; 
+	border			: solid 1px black; 
+	padding			: 5px 10px; 
+	width			: 94%;
+	margin-left		: auto; 
+	margin-right	: auto;
+	position		: absolute;
+	top 			: 120px;
+	-moz-border-radius		: 10px;
+	-webkit-border-radius 	: 10px;
+	-khtml-border-radius 	: 10px;
+	-opera-border-radius	: 10px;
+}
+
+#principal {
+	background-color 	: #1E3F3E;
+	width 				: 950px;
+	height 				: 820px;
+	left 				: 20px;
+	margin-left 		: auto;
+	margin-right 		: auto;
+	text-align			: left; 
+	padding 			: 10px;
+	float				: top;
+	-moz-border-radius		: 10px;
+	-webkit-border-radius 	: 10px;
+	-khtml-border-radius 	: 10px;
+	-opera-border-radius	: 10px;
+}
+
+#main_menu {
+	width 			: 96%;
+	margin			: auto;
+	text-align		: center; 
+	vertical-align	: middle;
+	padding			: 0px 10px 0px 10px;
+	background-color: #158A86;
+	-moz-border-radius-topleft	: 10px;
+	-moz-border-radius-topright	: 10px;
+	-webkit-border-top-left-radius : 10px;
+	-webkit-border-top-right-radius : 10px;
+}
+
+#bandeau {
+	width 	: 98%;
+	height 	: 100px;
+	margin 	: auto;
+	padding : 10px;
+	overflow: hidden;
+}
+
+#bandeau-logo {
+	float	: left;
+	width	: 650px;
+	height : 100px;
+	background-image:url('bandeau.png');
+	background-repeat:no-repeat; 
+	-moz-border-radius-bottomleft	: 10px;
+	-moz-border-radius-topleft		: 10px;
+	-webkit-border-bottom-left-radius : 10px;
+	-webkit-border-top-left-radius : 10px;
+}
+
+#bandeau-identity {
+	float			: left;
+	background-color: #158A86;
+	width			: 30%;
+	height			: 100%;
+	text-align		: center;
+	color			: #D7D7D7;
+	-moz-border-radius-topright		: 10px;
+	-moz-border-radius-bottomright	: 10px;
+	-webkit-border-top-right-radius : 10px;
+	-webkit-border-bottom-right-radius : 10px;
+}
+
+#bandeau-identity a{
+	color			: white;
+	text-decoration	: underline;
+	font-size		: 12px;
+}
+
+
+#conteneur {
+	background-color 	: #FFFFFF;
+	width 				: 96%;
+	height 				: 620px;
+	text-align			: left; 
+	margin				: auto;
+	padding 			: 10px;
+	overflow			: auto;
+	z-index				: 1;
+	-moz-border-radius-bottomleft	: 10px;
+	-moz-border-radius-bottomright	: 10px;
+	-webkit-border-bottom-left-radius : 10px;
+	-webkit-border-bottom-right-radius : 10px;
+}
+
+#options_colonnes {
+	display : none;
+	font-size : small;
+	border : 1px grey solid;
+	padding : 5px;
+	margin-top : 5px;
+}
+
+a {
+	text-decoration : none;
+}
+
+
+table {
+	border		: 1px solid #ccc;
+	padding		: 4px;
+	text-align	: center; 
+	font-size	: small;	
+	border-collapse:collapse;
+	-moz-border-radius		: 5px;
+	-webkit-border-radius 	: 5px;
+	-khtml-border-radius 	: 5px;
+	-opera-border-radius	: 5px;
+	font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+th {
+	background-color 	: orange;
+	background-image	: url('entetes.png');
+	background-repeat	: repeat-x;
+	font-size		 	: 16px;
+	padding			 	: 5px 0px;
+}
+
+img { 
+	border:0px;
+	vertical-align:middle;
+}
+
+.tablehover tr:hover {
+	background-color : #FFD769;
+	padding : 2px 0px;
+}
+
+.tablehover td {
+	padding: 2px 4px;
+	font-size: 11px;
+}
+
+/*	Pour les lignes selectionnées	*/
+.selected {
+	background-color : #7EEF9F;}
+/*	Pour les lignes paires	*/
+.tr1 {
+	background-color : #D9DBDC;}
+/*	Pour les lignes impaires	*/
+.tr2 {
+	background-color : #fff;}
+/*	Pour les lignes paires surlignées	*/
+.tr1:hover {
+	background-color : #FFD769;}
+/*	Pour les lignes impaires surlignées */
+.tr2:hover {
+	background-color : #FFD769;}
+
+/*	Pour les lignes paires sans rollover	*/
+.tr3 {
+	background-color : #D9DBDC;}
+/*	Pour les lignes impaires sans rollover	*/
+.tr4 {
+	background-color : #fff;}
+/*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
+.tr_doublon {
+	background-color : #29C920;}
+/*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
+.tr_doublon_ocs {
+	background-color : yellow;}
+
+	
+	
+/*************************************** 	ICONES MENU  *******************************************/
+
+.accueil {	background-image:url('accueil-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.accueil-clicked {	background-image:url('accueil-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#accueil:hover {	background-image:url('accueil-01.png');}
+
+.inventaire {	background-image:url('inventaire-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.inventaire-clicked {	background-image:url('inventaire-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#inventaire:hover {	background-image:url('inventaire-01.png');}
+
+.demandes {	background-image:url('demandes-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.demandes-clicked {	background-image:url('demandes-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#demandes:hover {	background-image:url('demandes-01.png');}
+
+.donnees {	background-image:url('donnees-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.donnees-clicked {	background-image:url('donnees-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#donnees:hover {	background-image:url('donnees-01.png');}
+
+.prets {	background-image:url('prets-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.prets-clicked {	background-image:url('prets-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#prets:hover {	background-image:url('prets-01.png');}
+
+.utilisateurs {	background-image:url('utilisateurs-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.utilisateurs-clicked {	background-image:url('utilisateurs-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#utilisateurs:hover {	background-image:url('utilisateurs-01.png');}
+
+.plugins {	background-image:url('plugins-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.plugins-clicked {	background-image:url('plugins-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#plugins:hover {	background-image:url('plugins-01.png');}
+
+.college {	background-image:url('college-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.college-clicked {	background-image:url('college-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#college:hover {	background-image:url('college-01.png');}
+
+.info {	background-image:url('info-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.info-clicked {	background-image:url('info-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#info:hover {	background-image:url('info-01.png');}
+
+
+
+/*************************************** 	COMBOBOX  *******************************************/
+
+#combobox {
+	width		: auto;
+	text-align	: center;
+	position	: absolute;
+}
+
+#textbox {
+	display:inline;
+	z-index:1;
+	top:0px;
+	position:absolute;
+	width:30px;
+	left:0px;
+
+}
+
+#listbox {
+	display:inline;
+	z-index:0;
+	top:0px;
+	position:absolute;
+	width:30px;
+	left:90px;
+}
+
+
+/*************************************** 	MENU  *******************************************/
+
+
+/* this is the main UL element*/
+.dropdown{
+	margin:0;
+	padding:0;
+	list-style:none;
+	border-bottom:1px solid #444;
+}
+
+/* these are the inner menus	*/
+.dropdown ul{
+	margin:0;
+	padding:0;
+	border-top:1px solid #444;
+	list-style:none;	
+	width:auto;
+	min-width:80px;
+}
+
+.dropdown .sousmenu {
+	margin-top:48px;
+}
+
+/* tous les items du menu */
+.dropdown li{
+	margin:0;
+	padding:0;
+	width:auto;
+	min-width:100px;
+	/*background-color: orange;*/
+	cursor:pointer;
+}
+
+.dropdown li:hover{
+	/*border-right:1px solid #444;
+	border-left:1px solid #444;*/
+	/*background-color: #4FC9C5;*/
+}
+
+/*
+.dropdown li:hover{
+	background-color:#00254b;
+	color:white;
+}
+*/
+
+/* surlignage d'un lien dans le menu */
+.dropdown a:hover{
+	color:white;
+}
+
+/* lien dans le menu */
+.dropdown a{
+	text-decoration:none;
+	color:#000000;
+}
+
+/* items qui appartiennent à un sous menu mais qui n'en possèdent pas*/
+.dropdown ul li{
+	border:1px solid #444;
+	border-top:0;
+	margin-left:-1px;
+	width:180px;
+	background-color: #4FC9C5;
+	margin-top:0px;
+}
+
+/* items qui possedent un sous menu*/
+.dropdown li.submenu{
+	/*background-image:url('../img/expand_down.gif');*/
+	background-position:center left;
+	background-repeat:no-repeat;
+	padding-left:0px;
+	width:auto;
+	min-width:100px;
+}
+
+/* items qui sont dans un sous menu et qui possedent un sous menu*/
+.dropdown ul li.submenu{
+	background-image:url('../img/expand_right.gif');
+	background-position:center right;
+	padding:5px;
+	width:180px;
+	background-color: #4FC9C5;
+}
+
+
+/*************************************** 	RSS / ATOM  *******************************************/
+
+#rss_title {
+	font: 14px Arial, Helvetica, sans-serif;
+}
+
+
+#rss_title a{
+	font: 14px Arial, Helvetica, sans-serif;
+}
+
+#rss_content {
+	font: 12px Arial, Helvetica, sans-serif;
+}
+
+#rss_news {
+	border : 1px solid black;
+	padding : 10px;
+	margin : 10px;
+	background-color : #C0FF96;
+	-moz-border-radius		: 5px;
+	-webkit-border-radius 	: 5px;
+	-khtml-border-radius 	: 5px;
+	-opera-border-radius	: 5px;
+}

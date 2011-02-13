@@ -1,0 +1,4 @@
+"gespac updates";"http://code.google.com/feeds/p/gespac/updates/basic"
+"issues updates";"http://code.google.com/feeds/p/gespac/issueupdates/basic"
+"raoulpower";"http://raoulpower.free.fr/rss/index.php?dossier=img/divers/"
+"le monde";"http://www.lemonde.fr/rss/en_continu.xml"
