@@ -1,4 +1,5 @@
 <?PHP
+
 	#formulaire d'ajout et de modification
 	#des users !
 
@@ -8,23 +9,21 @@
 
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
 	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-	
-	
+
 ?>
 
 <!--  SERVEUR AJAX -->
 <script type="text/javascript" src="server.php?client=all"></script>
-
 
 <script type="text/javascript"> 
 	
 	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
-		var bt_submit = $("post_user");
-		var user_nom = $("nom").value;
-		var user_login = $("login").value;
-		var user_password = $("password").value;
+		var bt_submit = document.getElementById("post_user");
+		var user_nom = document.getElementById("nom").value;
+		var user_login = document.getElementById("login").value;
+		var user_password = document.getElementById("password").value;
 		
 		if (user_nom == "" || user_login == "" || user_password == "") {
 			bt_submit.disabled = true;
@@ -33,44 +32,25 @@
 		}
 	}
 	
-	/******************************************
-	*
-	*				AJAX
-	*
-	*******************************************/
-	
-	window.addEvent('domready', function(){
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1500);
-					SexyLightbox.close();
-				}
-			
-			}).send(this.toQueryString());
-		});			
-	});
+	// ferme la smoothbox et rafraichis la page
+	function refresh_quit () {
+		// lance la fonction avec un délais de 1000ms
+		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');", 1000);
+		TB_remove();
+	}
 	
 </script>
 
 <?PHP
 
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 	
-	$id 	= $_GET['id'];
-	$action = $_GET['action'];
+	$id = $_GET['id'];
+
 
 	
 	#***************************************************************************
@@ -80,7 +60,7 @@
 	
 	if ( $id == '-1' ) {	// Formulaire vierge de création
 	
-		echo "<h2>Formulaire de création d'un nouvel utilisateur</h2><br>";
+		echo "<h2>formulaire de création d'un nouvel utilisateur</h2><br>";
 		
 		?>
 		
@@ -89,7 +69,8 @@
 			$('nom').focus();
 		</script>
 
-		<form action="gestion_utilisateurs/post_utilisateurs.php?action=add" method="post" name="post_form" id="post_form">
+		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_utilisateurs/post_utilisateurs.php?action=add" method="post" name="frmTest" id="frmTest">
+
 			<center>
 			<table width=500>
 			
@@ -114,26 +95,12 @@
 				</tr>
 				
 				<tr>
-					<TD>Mailing</TD> 
-					<TD><input type=checkbox name=mailing checked /></TD>
-				</tr>
-				
-				<tr>
-					<TD>Grade</TD>
-					<TD><select name="grade">
-						<?PHP
-							// Requete pour récupérer la liste des grades
-							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
-							
-							foreach ( $liste_grades as $record ) {
-							
-								$grade_id 	= $record[0];
-								$grade_nom 	= $record[1];
-							
-								echo "<option value=$grade_id>$grade_nom</option>";
-							}
-						?>	
-							
+					<TD>Niveau</TD>
+					<TD><select name="niveau" size="1">
+							<option value=1>ATI</option>
+							<option value=2>TICE</option>
+							<option value=3>PROF</option>
+							<option value=9>Autre...</option>
 						</select>
 					</TD>
 				</tr>
@@ -156,43 +123,24 @@
 				</tr>
 				
 				<tr>
-						<?PHP 
-							$selected = $accueil == $user_accueil ? "selected" : "" ;
-						?>
-					
-						<TD>Page de Démarrage</TD>
-						<TD><select name="page" size="1">
-					
-					<?PHP
-						$lines = file('../menu.txt');
-
-						echo "<option value='bienvenue.php'>Bienvenue</option>";	// Page par défaut
-
-						foreach ($lines as $line) {
-
-							$line = str_replace('"','',$line);
-							$explode_line = explode (";", $line);
-							$id = $explode_line[0];
-							$value = $explode_line[1];
-							$path_page = $explode_line[2];	
-												
-							$selected = $path_page == $user_accueil ? "selected" : "" ; //pour une raison étrange, ça ne marche pas ...
-							
-							$L_chk = preg_match ("#$id#", $droits) ;
-	
-							if ($L_chk && $value <> "Retour au portail")	// Oui parce que si on met en page de démarrage la page de retour au menu, ça sert à rien !
-								echo "<option $selected value='$path_page'>$value</option>";
-						}
-					?>
-					
+					<TD>Page de Démarrage</TD>
+					<TD><select name="page" size="1">
+							<option value="gestion_inventaire/voir_materiels.php">matériels</option>
+							<option value="modules/stats/csschart.php">stats</option>
+							<option value="modules/rss/rss.php">rss</option>
+							<option value="gestion_demandes/voir_demandes.php">demandes</option>
+							<option value="gestion_demandes/voir_interventions.php">interventions</option>
+							<option value="modules/stats/utilisation_parc.php">utilisation parc</option>
+							<option value="modules/wol/voir_liste_wol.php">WOL</option>
 						</select>
-						</TD>
-					</tr>
+					</TD>
+				</tr>
 				
 			</table>
 
 			<br>
-			<input id='post_user' type=submit value='Ajouter utilisateur' disabled>
+			<input type=submit value='Ajouter utilisateur' onClick="refresh_quit();" id="post_user" disabled>
+			
 			</center>
 
 		</FORM>
@@ -200,36 +148,32 @@
 
 		<?PHP
 		
-	} 
-	
-	if ($action == 'mod') {
-	
-	#***************************************************************************
-	# 				MODIFICATION de l'utilisateur
-	#***************************************************************************
 		
 		
 		
-		// formulaire de modification prérempli
+		#***************************************************************************
+		# 				MODIFICATION de l'utilisateur
+		#***************************************************************************
+		
+		
+		
+	} else {	// formulaire de modification prérempli
 	
 		echo "<h2>formulaire de modification d'un utilisateur</h2><br>";
 		
 		// Requete pour récupérer les données des champs pour le user à modifier
-		$user_a_modifier = $db_gespac->queryAll ( "SELECT user_id, user_nom, user_logon, user_password, users.grade_id, user_mail, user_skin, user_accueil, grade_nom, user_mailing FROM users, grades WHERE users.grade_id=grades.grade_id AND user_id=$id" );		
+		$user_a_modifier = $db_gespac->queryAll ( "SELECT user_id, user_nom, user_logon, user_password, user_niveau, user_mail, user_skin, user_accueil FROM users WHERE user_id=$id" );		
 		
 		// valeurs à affecter aux champs
 		$user_id 			= $user_a_modifier[0][0];
 		$user_nom	 		= $user_a_modifier[0][1];
 		$user_logon	 		= $user_a_modifier[0][2];
 		$user_password 		= $user_a_modifier[0][3];
-		$grade_id	 		= $user_a_modifier[0][4];
+		$user_niveau	 	= $user_a_modifier[0][4];
 		$user_mail 			= $user_a_modifier[0][5];
 		$user_skin 			= $user_a_modifier[0][6];
 		$user_accueil		= $user_a_modifier[0][7];
-		$grade_nom			= $user_a_modifier[0][8];
-		$user_mailing		= $user_a_modifier[0][9];
-
-		$checked = $user_mailing == 1 ? "checked" : "";
+	
 		
 		?>
 		
@@ -238,7 +182,7 @@
 			$('nom').focus();
 		</script>
 		
-		<form action="gestion_utilisateurs/post_utilisateurs.php?action=mod" method="post" name="post_form" id="post_form">
+		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_utilisateurs/post_utilisateurs.php?action=mod" method="post" name="frmTest" id="frmTest">
 			<input type=hidden name=id value=<?PHP echo $user_id;?> >
 			<center>
 			<table width=500>
@@ -264,29 +208,12 @@
 				</tr>
 				
 				<tr>
-					<TD>Mailing</TD> 
-					<TD><input type=checkbox name=mailing <?PHP echo $checked;?>	/></TD>
-				</tr>
-				
-				
-				<tr>
-					<TD>Grade</TD>
-					<TD><select name="grade">
-						<?PHP
-							// Requete pour récupérer la liste des grades
-							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
-							
-							foreach ( $liste_grades as $record ) {
-							
-								$grade_id_lst 	= $record[0];
-								$grade_nom_lst 	= $record[1];
-						
-								$selected = $grade_id_lst == $grade_id ? "selected" : "";
-							
-								echo "<option value='$grade_id_lst' $selected>$grade_nom_lst</option>";
-							}
-						?>	
-							
+					<TD>Niveau</TD>
+						<TD><select name="niveau" size="1">
+							<option <?PHP if ( $user_niveau == 1 ) echo "selected"; ?> value=1>ATI</option>
+							<option <?PHP if ( $user_niveau == 2 ) echo "selected"; ?> value=2>TICE</option>
+							<option <?PHP if ( $user_niveau == 3 ) echo "selected"; ?> value=3>Professeur</option>
+							<option <?PHP if ( $user_niveau == 9 ) echo "selected"; ?> value=9>Autre...</option>
 						</select>
 					</TD>
 				</tr>
@@ -309,98 +236,6 @@
 					</td>
 				</tr>
 				
-			</table>
-			
-			<br>
-			<input type=submit value='Modifier cet utilisateur'>
-
-			</center>
-
-		</FORM>
-		
-		<?PHP
-	}	
-
-	
-	// *********************************************************************************
-	//
-	//			Formulaire modification par lot non prérempli
-	//
-	// *********************************************************************************		
-		
-	
-	if ($action == 'modlot') {
-		
-		echo "<h2>Formulaire de modification d'un lot</h2><br>";
-			
-		?>
-		
-		<script>
-			// Donne le focus au premier champ du formulaire
-			$('mailing').focus();
-		</script>
-
-		<form action="gestion_utilisateurs/post_utilisateurs.php?action=modlot" method="post" name="post_form" id="post_form">
-			<center>
-			
-			<input type=hidden name=lot_users id=lot_users>
-			<!-- Ici on récupère la valeur du champ utilisateur_a_poster de la page voir_utilisateurs.php -->
-			<script>$("lot_users").value = $('utilisateur_a_poster').value;</script>
-			
-
-			<table width=500>
-				<tr>
-					<TD> Activer le mailing</TD> 
-						<TD><select name="mailing" id="mailing">
-							<option value=2>Ne pas modifier</option>
-							<option value=1>Activer</option>
-							<option value=0>Désactiver</option>
-							</select>
-						</TD>
-				</tr>
-				
-				
-				<tr>
-					<TD>Grade</TD>
-					<TD><select name="grade">
-						<option value="">Ne pas modifier</option>
-						<?PHP
-							// Requete pour récupérer la liste des grades
-							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
-							
-							foreach ( $liste_grades as $record ) {
-							
-								$grade_id_lst 	= $record[0];
-								$grade_nom_lst 	= $record[1];
-						
-								$selected = $grade_id_lst == $grade_id ? "selected" : "";
-							
-								echo "<option value='$grade_id_lst' $selected>$grade_nom_lst</option>";
-							}
-						?>	
-							
-						</select>
-					</TD>
-				</tr>
-				
-				<tr>
-					<td>Skin</td>
-					<td><select name="skin">
-						<option value="">Ne pas modifier</option>
-						<?PHP
-							$dossier = opendir("../skins");
-							while ( $skin = readdir($dossier) ) {
-								if ( $skin != "." && $skin != ".." && $skin != ".svn") {
-									$selected = $skin == $user_skin ? "selected" : "" ;
-									echo "<option $selected value=$skin>$skin</option>";
-								}
-							}
-							closedir($dossier);
-						?>
-						</select>
-					</td>
-				</tr>
-				
 				<tr>
 					<?PHP 
 						$selected = $accueil == $user_accueil ? "selected" : "" ;
@@ -408,7 +243,6 @@
 				
 					<TD>Page de Démarrage</TD>
 					<TD><select name="page" size="1">
-							<option value="">Ne pas modifier</option>
 							<option value="gestion_inventaire/voir_materiels.php">matériels</option>
 							<option value="modules/stats/csschart.php">stats</option>
 							<option value="modules/rss/rss.php">rss</option>
@@ -419,22 +253,19 @@
 						</select>
 					</TD>
 				</tr>
+				
 			</table>
-
+			
 			<br>
-			<input type=submit value='Modifier le lot' >
-			<input type=button value='Sortir sans modifier' onclick="SexyLightbox.close();" >
+			<input type=submit value='Modifier cet utilisateur' onClick="refresh_quit();" >
 
 			</center>
-		
-		</FORM>
-				
 
-		<?PHP	
-	}
+		</FORM>
 		
-		
-?>		
+		<?PHP
+	}	
+?>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>

@@ -1,8 +1,7 @@
 <?PHP
-session_start();
+
 
 	/*
-		PAGE 02-03
 	
 		Visualisation des salles
 		
@@ -17,11 +16,8 @@ session_start();
 
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-	
-	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
-	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-02-03#", $_SESSION['droits']);
+		
 
-	
 ?>
 
 
@@ -51,9 +47,9 @@ session_start();
 			// si la réponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
 				/*	poste la page en ajax	*/
-				$('target').load("gestion_inventaire/post_salles.php?action=suppr&id=" + id);
+				HTML_AJAX.replace("target", "gestion_inventaire/post_salles.php?action=suppr&id=" + id);
 				/*	on recharge la page au bout de 1000ms	*/
-				window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php');", 1000);
+				window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_salles.php');", 1000);
 			}
 		}
 	}
@@ -107,7 +103,7 @@ session_start();
 <?PHP 
 
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données OCS
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -115,7 +111,7 @@ session_start();
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$liste_des_salles = $db_gespac->queryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment FROM salles ORDER BY salle_nom" );
 
-	if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
+	echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' class='smoothbox' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
 ?>
 	
 	<center>
@@ -125,10 +121,12 @@ session_start();
 		<th>VLAN</th>
 		<th>Etage</th>
 		<th>Bâtiment</th>
+		<th>&nbsp</th>
+		<th>&nbsp</th>
+		
 				
 		
 		<?PHP	
-			if ($E_chk) echo"<th>&nbsp</th>	<th>&nbsp</th>";
 
 			//$option_id = 0;
 			$compteur = 0;
@@ -158,7 +156,7 @@ session_start();
 					//$nb_matos_de_ce_type 		= $db_gespac->queryAll ( "SELECT COUNT DISTINCT, marque_type, marque_model, marque_apreter FROM marques" );
 					$nb_matos_dans_cette_salle 	= $db_gespac->queryAll ( "SELECT COUNT(*) FROM materiels WHERE salle_id=$id" );
 
-					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$id' rel='slb_salles' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle[0][0] ."] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$id' class='smoothbox' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle[0][0] ."] </td>";
 					echo "<td>" . $vlan . "</td>";
 					echo "<td>" . $etage . "</td>";
 					echo "<td>" . $batiment . "</td>";
@@ -171,10 +169,10 @@ session_start();
 						$display_mod = "";
 						$display_del = "";
 					}
-					if ( $E_chk ) {
-						echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
-						echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
-					}
+					
+					echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' class='smoothbox' title='Formulaire de modification de la salle $nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
+					echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
+
 				echo "</tr>";
 				
 				$compteur++;
@@ -188,20 +186,13 @@ session_start();
 	
 
 <?PHP
-if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
+	echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' class='smoothbox' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
 
 	// On se déconnecte de la db
 	$db_gespac->disconnect();
 ?>
 
-<script type="text/javascript">
-	
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
-	});
-
-
+<script>	
 	// Filtre rémanent
 	filter ( $('filt'), 'salle_table' );	
-
 </script>

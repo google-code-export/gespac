@@ -33,11 +33,11 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_logs.php
 		if (valida) {
-			AffichePage('conteneur', 'gestion_donnees/dump_logs.php');
+			OuvrirPage('gestion_donnees/dump_logs.php');
 			
 			//	poste la page en ajax	
-			$("target").load("gestion_donnees/post_logs.php");
-			window.setTimeout("$('conteneur').load('gestion_donnees/voir_logs.php');", 1000);
+			HTML_AJAX.replace("target", "gestion_donnees/post_logs.php");
+			window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_donnees/voir_logs.php');", 1000);
 		}
 	}		
 	
@@ -82,7 +82,7 @@
 <?PHP
 	
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);

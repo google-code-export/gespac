@@ -68,9 +68,8 @@ input, textarea, select {
 	-opera-border-radius	: 10px;
 }
 
-#main_menu{
+#main_menu {
 	width 			: 96%;
-	height			: 48px;
 	margin			: auto;
 	text-align		: center; 
 	vertical-align	: middle;

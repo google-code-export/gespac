@@ -1,5 +1,4 @@
 <?PHP
-	session_start();
 	
 	/* fichier de visualisation des prets :
 	
@@ -7,10 +6,6 @@
 	*/
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
-	
-	
-	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
-	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-05-01#", $_SESSION['droits']);
 	
 ?>
 
@@ -29,7 +24,7 @@
 <?PHP
 	
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -50,10 +45,8 @@
 	<center>
 	
 	<table class="tablehover" id="prets_table" width=800>
-	
-	<?PHP
-		if ($E_chk) echo "<th> &nbsp </th><th> &nbsp </th>";
-	?>
+		<th> &nbsp </th>
+		<th> &nbsp </th>
 		<th>Nom</th>
 		<th>DSIT</th>
 		<th>Type</th>
@@ -95,12 +88,10 @@
 						$user = "DISPONIBLE";
 					} else { $apreter_color = "#F57236"; }
 					
-					if ( $E_chk ) {
-						echo "<td> <input type=radio name=radio value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $user_id, this.parentNode.parentNode.rowIndex); bas_de_page(this.parentNode.parentNode.rowIndex);\"> </td>";
-						echo "<td> <a href='#basdepage' class='bdp' id='bdp$compteur' style='display:none;'><img src='./img/down.png' title='Aller en bas de page' align=left></a></td>";
-					}
-					
-					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='slb_prets title='Caractéristiques de $mat'>$mat</a> </td>";
+	
+					echo "<td> <input type=radio name=radio value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $user_id, this.parentNode.parentNode.rowIndex); bas_de_page(this.parentNode.parentNode.rowIndex);\"> </td>";
+					echo "<td> <a href='#basdepage' class='bdp' id='bdp$compteur' style='display:none;'><img src='./img/down.png' title='Aller en bas de page' align=left></a></td>";
+					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' class='smoothbox' title='Caractéristiques de $mat'>$mat</a> </td>";
 					
 					//echo "<td> $serial </td>";
 					echo "<td> $inventaire </td>";
@@ -129,10 +120,6 @@
 	<!--	FORMULAIRE DE PRET AUX USERS 	-->
 	
 	<form id=elements_selectionnes method="post">
-		
-		<?PHP
-		if ( $E_chk ) {
-		?>
 		
 		<input type=hidden name=pret_a_poster id=pret_a_poster value=''>	<!--	ID du pret à poster	-->
 		<input type=hidden name=row_table id=row_table value=''>			<!--	ROW du pret à poster	-->
@@ -183,8 +170,6 @@
 		</div>
 		<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
 		
-		<?PHP } // fin test de droit sur le prêt ?>
-		
 	</form>
 
 	
@@ -195,15 +180,11 @@
 
 
 
-<script type="text/javascript">
 
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_prets'});
-	});
-
+<script type="text/javascript">	
 		
 	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
+	document.getElementById('conteneur').style.backgroundColor = "#fff";
 	
 	
 	// *********************************************************************************
@@ -215,7 +196,7 @@
 	function filter (phrase, _id){
 
 		var words = phrase.value.toLowerCase().split(" ");
-		var table = $(_id);
+		var table = document.getElementById(_id);
 		var ele;
 		var elements_liste = "";
 			
@@ -248,19 +229,20 @@
 	// *********************************************************************************	
 	 
 	function select_cette_ligne( id, userid, row ) {
+		
 
-		$('pret_a_poster').value = id;		
-		$('row_table').value = row;	// row du tableau à modifier
-		$('select_user').value = userid;	// userid du matos à modifier
+		document.getElementById('pret_a_poster').value = id;		
+		document.getElementById('row_table').value = row;	// row du tableau à modifier
+		document.getElementById('select_user').value = userid;	// userid du matos à modifier
 		
 		if ( userid == 1 ) {	// On se base sur la valeur USER_ID de root
-			$('rendre').style.visibility = "hidden";
-			$('preter').style.visibility = "";
+			document.getElementById('rendre').style.visibility = "hidden";
+			document.getElementById('preter').style.visibility = "";
 			
 		} else {
 			
-			$('rendre').style.visibility = "";
-			$('preter').style.visibility = "hidden";
+			document.getElementById('rendre').style.visibility = "";
+			document.getElementById('preter').style.visibility = "hidden";
 		}			
 
 	}
@@ -275,11 +257,11 @@
 	 
 	function validation_preter_materiel( matid, userid, row ) {
 		
-		var mat_nom = $('prets_table').rows[row].cells[8].innerHTML;
-		var mat_etat = $('prets_table').rows[row].cells[6].innerHTML;
+		var mat_nom = document.getElementById('prets_table').rows[row].cells[8].innerHTML;
+		var mat_etat = document.getElementById('prets_table').rows[row].cells[6].innerHTML;
 		
-		var user_selected_id = $('user_select').selectedIndex;
-		var user_selected_text = $('user_select').options[user_selected_id].text;	
+		var user_selected_id = document.getElementById('user_select').selectedIndex;
+		var user_selected_text = document.getElementById('user_select').options[user_selected_id].text;	
 		
 		var valida = confirm('Voulez-vous vraiment prêter le matériel ' + mat_nom + ' qui est en état '+ mat_etat + ' à ' + user_selected_text + " ?");
 		
@@ -287,10 +269,10 @@
 		if (valida) {
 			
 				//	poste la page en ajax	
-				$("target").load("gestion_prets/post_prets.php?action=preter&matid=" + matid + "&userid=" + userid);
+				HTML_AJAX.replace("target", "gestion_prets/post_prets.php?action=preter&matid=" + matid + "&userid=" + userid);
 			
 				// recharge la page
-				$('conteneur').load("gestion_prets/voir_prets.php");
+				HTML_AJAX.replace("conteneur", "gestion_prets/voir_prets.php");
 			
 		}
 	}
@@ -306,7 +288,7 @@
 	 
 	function validation_rendre_materiel( matid, userid, row ) {
 		
-		var mat_nom = $('prets_table').rows[row].cells[8].innerHTML;
+		var mat_nom = document.getElementById('prets_table').rows[row].cells[8].innerHTML;
 	
 		var valida = confirm('Voulez-vous vraiment rendre le matériel ' + mat_nom + " ?");
 		
@@ -314,10 +296,10 @@
 		if (valida) {
 					
 			//	poste la page en ajax
-			$("target").load("gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
+			HTML_AJAX.replace("target", "gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
 			
 			// recharge la page avec un délais de 1000ms
-			window.setTimeout("$('conteneur').load('gestion_prets/voir_prets.php');", 1000);
+			window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_prets/voir_prets.php');", 1000);
 		}
 	}
 	

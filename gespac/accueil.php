@@ -9,7 +9,7 @@
 	session_start();
 	
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac      = & MDB2::factory($dsn_gespac);
@@ -26,7 +26,7 @@
 	// init de la couleur de fond
 	document.getElementById('conteneur').style.backgroundColor = "#fff";
 	
-	AffichePage('conteneur', '<?PHP echo $page_accueil;?>');
+	OuvrirPage ('<?PHP echo $page_accueil;?>');
 </script>
 	
 <a href="../index.php">Retour au portail</a>

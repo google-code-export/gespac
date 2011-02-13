@@ -1,33 +1,27 @@
-<?PHP
-session_start();
 
-	/* 
-		fichier de creation / modif / du college
-
-	*/
-
-
-?>
-
+<script type="text/javascript" src="server.php?client=all"></script>
+		
 <script type="text/javascript">	
 	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
+	document.getElementById('conteneur').style.backgroundColor = "#fff";
 </script>
 
 	
 <?PHP
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+
+	/* 
+		fichier de creation / modif / du college
+
+	*/
+	
 	
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 
-	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
-	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-08-01#", $_SESSION['droits']);
-	
-
 	
 	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
+	$dsn_gespac	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';	
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -35,17 +29,17 @@ session_start();
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$college_info = $db_gespac->queryAll ( "SELECT clg_uai, clg_nom, clg_ati, clg_ati_mail, clg_adresse, clg_cp, clg_ville, clg_tel, clg_fax, clg_site_web, clg_site_grr FROM college;" );
 
-	$clg_uai 		= stripslashes($college_info [0][0]);
-	$clg_nom 		= stripslashes($college_info [0][1]);
-	$clg_ati 		= stripslashes($college_info [0][2]);
-	$clg_ati_mail 	= stripslashes($college_info [0][3]);
-	$clg_adresse 	= stripslashes($college_info [0][4]);
+	$clg_uai 		= $college_info [0][0];
+	$clg_nom 		= $college_info [0][1];
+	$clg_ati 		= $college_info [0][2];
+	$clg_ati_mail 	= $college_info [0][3];
+	$clg_adresse 	= $college_info [0][4];
 	$clg_cp 		= $college_info [0][5];
-	$clg_ville 		= stripslashes($college_info [0][6]);
+	$clg_ville 		= $college_info [0][6];
 	$clg_tel 		= $college_info [0][7];
 	$clg_fax 		= $college_info [0][8];
-	$clg_site_web 	= stripslashes($college_info [0][9]);
-	$clg_site_grr 	= stripslashes($college_info [0][10]);
+	$clg_site_web 	= $college_info [0][9];
+	$clg_site_grr 	= $college_info [0][10];
 	
 	
 echo "<h3>Fiche d'informations du collège $clg_nom</h3><br>
@@ -73,7 +67,7 @@ echo "<h3>Fiche d'informations du collège $clg_nom</h3><br>
 				</tr>
 			
 				<tr class='tr1'>
-					<TD><B>Adresse du collège</B></TD>
+					<TD><B>Adresse du bollège</B></TD>
 					<TD>$clg_adresse</TD>
 				</tr>
 			
@@ -109,8 +103,10 @@ echo "<h3>Fiche d'informations du collège $clg_nom</h3><br>
 				
 			</table>
 		</center>";
-			
-if ($E_chk)	
-	echo "<br><center><a href='#&id=$clg_uai' onclick=\"$('conteneur').load('gestion_college/form_college.php?id=$clg_uai');\" ><img src='img/modif_college.png' title='Modifier les informations du collège'></a></center>";
+		
+		
+		
+		
+echo "<br><center><a href='#&id=$clg_uai' onclick=\"HTML_AJAX.replace('conteneur', 'gestion_college/form_college.php?id=$clg_uai');\" ><img src='img/modif_college.png' title='Modifier les informations du collège'></a></center>";
 
 ?>

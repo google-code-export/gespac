@@ -1,3 +1,6 @@
+
+
+
 <?PHP
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
@@ -11,7 +14,7 @@
 		echo "<h2>Ajouter un flux RSS ou ATOM</h2><br>";
 ?>	
 	
-		<form action="modules/rss/post_rss.php?action=add" method="post" name="post_add_flux_rss" id="post_add_flux_rss">
+		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="modules/rss/post_rss.php?action=add" method="post" name="frmTest" id="frmTest">
 		
 			<center>
 			<table width=500 class="form_table">
@@ -42,46 +45,38 @@
 ?>
 
 
-	<script type="text/javascript" src="../../js/main.js"></script>
+	<!--  SERVEUR AJAX -->
+	<script type="text/javascript" src="server.php?client=all"></script>
+
 
 	<script>
 		// Donne le focus au premier champ du formulaire
 		$('nom').focus();
+	</script>
+
+
+	<script type="text/javascript"> 
 		
-		
-		// Validation du formulaire
+		// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 		function validation () {
 
 			var bt_submit = $("post_flux");
-			var rss_nom = $("nom").value;
-			var rss_url = $("url").value;
-
-			if (rss_nom == "" || rss_url == "") {
+			var nom = $("nom").value;
+			var url = $("url").value;
+			
+			if (nom == "" || url == "") {
 				bt_submit.disabled = true;
 			} else {
 				bt_submit.disabled = false;
 			}
-		};
+		}
 		
 		// ferme la smoothbox et rafraichis la page
 		function refresh_quit () {
-			// lance la fonction avec un délais de 1500ms
-			window.setTimeout("$('conteneur').load('modules/rss/rss.php');", 1500);
-			//TB_remove();
-		};
-		
-		// On soumet le formulaire pour l'ajout d'un flux RSS
-		$('post_add_flux_rss').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-				method: this.method,
-				url: this.action,
-				onSuccess: function(responseText, responseXML) {
-					$('target').set('html', responseText);
-					window.setTimeout("$('conteneur').load('modules/rss/rss.php');", 1500);
-				}
-			}).send(this.toQueryString());
-		});	
 
-		
+			// lance la fonction avec un délais de 1500ms
+			window.setTimeout("HTML_AJAX.replace('conteneur', 'modules/rss/rss.php');", 1500);
+			TB_remove();
+		}
+			
 	</script>

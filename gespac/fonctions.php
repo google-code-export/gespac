@@ -1,39 +1,5 @@
 <?PHP
 
-/*************************************************************************/
-
-
-// Permet de tester un droit du grade actuellement chargé en session	
-function checkdroit ($item){
-	if ( preg_match ("#$item#", $_SESSION ['droits']) || $_SESSION ['grade'] == 'root')
-		return true;
-	else return false;
-};
-
-
-/*************************************************************************/
-
-
-// Permet de checker une liste de code pages pour voir si elles font partie de la liste des droits
-// C'est une généralisation de checkdroit() qui devient peut être inutile.
-function checkalldroits ($listeitems) {
-	// on éclate la chaine séparée par des "," et on colle tout dans un tableau
-	$arr_items = explode (",", $listeitems);
-	
-	if (  $_SESSION ['grade'] == 'root' ) {
-		return true;
-	} else {
-		// On teste chaque valeur
-		foreach ($arr_items as $item) {	
-			if ( preg_match ("#$item#", $_SESSION ['droits']) )
-				return true;
-		}
-		
-		return false;
-	}
-	
-};
-
 
 	
 /*************************************************************************/

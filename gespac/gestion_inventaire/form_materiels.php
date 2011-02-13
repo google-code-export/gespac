@@ -16,6 +16,12 @@
 
 ?>
 
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
+<!--  SERVEUR AJAX -->
+<script type="text/javascript" src="server.php?client=all"></script>
+
 
 <script type="text/javascript"> 
 	
@@ -195,6 +201,12 @@
 		}
 	}
 	
+	// ferme la smoothbox et rafraichis la page
+	function refresh_quit () {
+		// lance la fonction avec un délais de 1000ms
+		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_materiels.php');", 1000);
+		TB_remove();
+	}
 
 	// serveur AJAX mootools pour le chainage des combobox type et sous type
 	// Beaucoup de redondances dans les paramètres. Je corrige ça un de ces jours
@@ -259,57 +271,15 @@
 		number = Math.floor(Math.random() * 100000);
 		$('serial').value =  "NC" + number;
 	}
-	
-	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
-	
-	window.addEvent('domready', function(){
-		
-		$('post_form2').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
 
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('target').set('html', responseText);
-					//$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste un champ trop grand on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php?filter=" + $('filt').value + "');", 1500);
-					SexyLightbox.close();
-				}
-			
-			}).send(this.toQueryString());
-		});	
-		
-		
-		
-		// Fait apparaitre le numéro GIGN dans le cas d'un ETAT particulier
-		$('CB_etat').addEvent('change', function(e) {
-			new Event(e).stop();
-			
-			if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} ) {	$('tr_gign').style.display = ""; }
-			else { $('tr_gign').style.display = "none";	}
-		});
-
-	
-	});
-	
-	
 
 </script>
 
 <?PHP
 	
-	// action à executer
-	$action	 = $_GET['action'];
-	$mat_ssn = $_GET['mat_ssn'];		//le SSN va nous servir pour récupérer les adresses MAC d'OCS
-	
+	$id 	 = $_GET['id'];
+	//le SSN va nous servir pour récupérer les adresses MAC d'OCS
+	$mat_ssn = $_GET['mat_ssn'];
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
 	$link_bases = mysql_pconnect('localhost', $user, $pass);//connexion à la base de donnée
@@ -317,7 +287,7 @@
 	else {
 	
 		// adresse de connexion à la base de données
-		$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
+		$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/ocsweb';
 
 		// cnx à la base de données OCS
 		$db_ocs 	= & MDB2::factory($dsn_ocs);
@@ -337,7 +307,7 @@
 	}
 	
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -348,6 +318,8 @@
 	// Requête qui va récupérer les états des matériels ...
 	$liste_etats = $db_gespac->queryAll ( "SELECT etat FROM etats ORDER BY etat" );
 	
+	$id 	 = $_GET['id'];
+	$mat_ssn = $_GET['mat_ssn']; //va nous servir pour récupérer les adresses MAC d'OCS
 
 	
 	// *********************************************************************************
@@ -357,7 +329,7 @@
 	// *********************************************************************************	
 	
 
-	if ( $action == 'add' ) {
+	if ( $id == '-1' ) {
 	
 		echo "<h2>formulaire de création d'un nouveau matériel</h2><br>";
 		
@@ -368,7 +340,7 @@
 			$('filt').focus();
 		</script>
 		
-		<form action="gestion_inventaire/post_materiels.php?action=add" method="post" name="post_form" id="post_form2">
+		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=add" method="post" name="frmTest" id="frmTest">
 			
 				<!--
 
@@ -499,7 +471,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter un materiel' id="post_materiel" disabled>
+			<input type=submit value='Ajouter un materiel' onclick="refresh_quit();" id="post_materiel" disabled>
 
 			</center>
 
@@ -507,22 +479,17 @@
 				
 
 		<?PHP
-		
-	} 
 	
 	
-
-
 	// *********************************************************************************
 	//
 	//			Formulaire modification par lot non prérempli
 	//
 	// *********************************************************************************		
 		
-	
-	if ($action == 'modlot') {
 		
-		
+	} else if ($id == 'lot') {
+
 		echo "<h2>formulaire de modification d'un lot</h2><br>";
 			
 		?>
@@ -532,12 +499,12 @@
 			$('origine').focus();
 		</script>
 
-		<form action="gestion_inventaire/post_materiels.php?action=modlot" method="post" name="post_form" id="post_form2">
+		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=modlot" method="post" name="frmTest" id="frmTest">
 			<center>
 			
 			<input type=hidden name=lot id=lot>
 			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
-			<script>$("lot").value = $('materiel_a_poster').value;</script>
+			<script>document.getElementById("lot").value = document.elements_selectionnes.materiel_a_poster.value;	</script>
 
 			<table width=500>
 				
@@ -632,8 +599,8 @@
 			</table>
 
 			<br>
-			<input type=submit value='Modifier le lot' >
-			<input type=button value='sortir sans modifier' onclick="SexyLightbox.close();" >
+			<input type=submit value='Modifier le lot' onclick="refresh_quit();" >
+			<input type=button value='sortir sans modifier' onclick="TB_remove();" >
 
 			</center>
 
@@ -641,24 +608,14 @@
 				
 
 		<?PHP
-
-		
-	} 
 	
-		
-		
-		
-		
 	// *********************************************************************************
 	//
 	//			Formulaire modification unique prérempli
 	//
 	// *********************************************************************************	
-	
-	
-	if ($action == 'mod') {
-	
-		$id = $_GET['id'];	// Id du matériel à modifier
+		
+	} else {
 	
 		echo "<h2>formulaire de modification d'un matériel</h2><br>";
 		
@@ -689,7 +646,7 @@
 			$('nom').focus();
 		</script>
 		
-		<form action="gestion_inventaire/post_materiels.php?action=mod" method="post" name="post_form" id="post_form2">
+		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=mod" method="post" name="frmTest" id="frmTest">
 			<input type=hidden name=materiel_id value=<?PHP echo $id;?> >
 			
 				<!--
@@ -828,16 +785,11 @@
 				<tr>
 					<TD>Etat du matériel</TD> 
 					<TD>
-						<select name="etat" id="CB_etat">
+						<select name="etat">
 							<option selected><?PHP echo $materiel_etat; ?></option>
 							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
 						</select>
 					</TD>
-				</tr>
-				
-				<tr id="tr_gign" style="display:none;">
-					<td>Dossier GIGN</td>
-					<td><input type="text" name="num_gign">
 				</tr>
 				
 			
@@ -864,64 +816,12 @@
 			</table>
 
 			<br>
-			<input type=submit value='Modifier ce matériel' >
+			<input type=submit class="smoothbox" value='Modifier ce matériel' onClick="refresh_quit();"  >
 
 			</center>
 
 		</FORM>
-
 		
 <?PHP
 	}	
-	
-	
-	// *********************************************************************************
-	//
-	//			Formulaire de renommage par lot de la selection
-	//
-	// *********************************************************************************	
-	
-	
-	if ($action == 'renomlot') {
-		
-			echo "<h2>formulaire pour renommer un lot</h2><br>";
-?>
-
-		<form action="gestion_inventaire/post_materiels.php?action=renomlot" method="post" name="post_form" id="post_form2">
-			<center>
-			
-			<input type=hidden name=lot id=lot>
-			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
-			<script>$("lot").value = $('materiel_a_poster').value;</script>
-
-			<table width=500>
-				
-				<tr>
-					<TD>Préfixe du lot</TD> 
-					<TD>
-						<input type=text name=prefixe id=prefixe />
-					</TD>
-				</tr>
-				
-				<tr>
-					<TD>Suffixe séquentiel</TD> 
-					<TD>
-						<input type=checkbox name=suffixe id=suffixe checked />
-					</TD>
-				</tr>
-				
-				
-			</table>
-
-			<br>
-			<input type=submit value='Renommer le lot' >
-			<input type=button value='sortir sans renommer' onclick="SexyLightbox.close();" >
-
-			</center>
-
-		</FORM>
-
-
-<?PHP	
-	}
 ?>

@@ -21,7 +21,7 @@
 	$fp = fopen('../dump/log_sql.sql', 'a+');
 	
 	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
+	$dsn_gespac	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';	
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::connect($dsn_gespac);
@@ -29,7 +29,6 @@
 		
 	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
-	
 
 	
 	
@@ -63,6 +62,8 @@
 		$req_add_college = "INSERT INTO college VALUES ( '$clg_uai', '$clg_nom', '$clg_ati', '$clg_ati_mail', '$clg_adresse', '$clg_cp', '$clg_ville', '$clg_tel', '$clg_fax', '$clg_web', '$clg_grr')";
 		$result = $db_gespac->exec ( $req_add_college );
 		
+		$clg_nom = stripslashes($clg_nom);
+		
 		echo "<br><small>Création du collège <b>$clg_nom</b> !</small><br>";
 		
 		$req_add_salle_stock = "INSERT INTO salles (salle_id, salle_nom, clg_uai) VALUES (1, 'STOCK', '$clg_uai' )";
@@ -88,7 +89,7 @@
 		
 		//Insertion d'un log
 		
-		$log_texte = "La fiche informative a été créée. Nom actuel : <b>$clg_nom</b>";
+		$log_texte = "Le collège $clg_nom a été créé";
 		
 		$req_log_creer_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création collège', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_creer_college );
@@ -129,14 +130,14 @@
 		
 		//Insertion d'un log
 		
-		$log_texte = "La fiche informative a été modifiée. Nom actuel : <b>$clg_nom</b>";
+		$log_texte = "Le collège $clg_nom a été modifié";
 		
 		$req_log_modif_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification collège', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_modif_college );
 		
 		$clg_nom = stripslashes($clg_nom);
 		
-		echo "<small>Modification du collège <b>$clg_nom</b>.</small>";
+		echo "<small>Modification du collège <b>$clg_nom</b> !</small>";
 	
 	}	
 	

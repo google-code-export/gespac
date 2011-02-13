@@ -23,9 +23,9 @@
 	// Sur changement du type on affiche ou pas la salle et les pc
 	function change_type(type) {
 		
-		var tr_salle = $("tr_salle");
-		var tr_pc 	 = $("tr_pc");
-		var tr_texte = $("tr_texte");
+		var tr_salle = document.getElementById("tr_salle");
+		var tr_pc = document.getElementById("tr_pc");
+		var tr_texte = document.getElementById("tr_texte");
 		
 		// Si le type de demande est "installation" ou "reparation"
 		if ( type == "installation" || type == "reparation") {
@@ -49,8 +49,8 @@
 
 	// Sur changement de la salle on affiche le champ pc et on le remplit avec les pc de la salle <- [AMELIORATION] Ouh ! qu'il est laid ce code !
 	function change_salle(salle_id) {
-		var tr_pc = $("tr_pc");
-		var pc_intervention = $("pc_intervention");
+		var tr_pc = document.getElementById("tr_pc");
+		var pc_intervention = document.getElementById("pc_intervention");
 		tr_pc.style.display = "";
 		
 		pc_demande[0] = new Option(">>>Sélectionner un PC<<<","");
@@ -58,7 +58,7 @@
 		<?PHP
 		
 			// adresse de connexion à la base de données
-			$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+			$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 			// cnx à la base de données GESPAC
 			$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -87,10 +87,16 @@
 	
 	// Sur changement du PC on affiche le champ texte 
 	function change_pc () {
-		var tr_texte = $("tr_texte");
+		var tr_texte = document.getElementById("tr_texte");
 		tr_texte.style.display = "";
 	}	
 	
+	// ferme la smoothbox et rafraichis la page
+	function refresh_quit () {
+		// lance la fonction avec un délais de 1000ms
+		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_demandes/voir_interventions.php');", 1000);
+		TB_remove();
+	}
 	
 	// serveur AJAX mootools pour le chainage des combobox SALLE - PC
 	function chainage_salle_pc( select, id, div_id ) {
@@ -126,7 +132,7 @@
 	// serveur AJAX mootools pour le chainage PC - historique des demandes
 	function chainage_pc_historique( pc_id, div_id ) {
 	
-		var salle_id = $("salle_intervention").value;
+		var salle_id = document.getElementById("salle_intervention").value;
 	
 		var myRequest = new Request(
 		{
@@ -154,7 +160,7 @@
 	
 	// affiche / masque l'historique
 	function montre_masque_historique( ) {
-		var historique = $("historique");
+		var historique = document.getElementById("historique");
 		
 		if ( historique.style.display == "none" )
 			historique.style.display = "";
@@ -162,48 +168,6 @@
 			historique.style.display = "none";
 	}
 	
-	
-	
-	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies pour la réponse à un dossier
-	function validation_reponse () {
-
-		var bt_submit  	= $("post_reponse");
-		var commentaire	= $("reponse_texte").value;
-
-		if (commentaire == "") {
-			bt_submit.disabled = true;
-		} else {
-			bt_submit.disabled = false;
-		}
-	}
-	
-	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
-	
-	window.addEvent('domready', function(){
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_demandes/voir_interventions.php');", 1500);
-					SexyLightbox.close();
-				}
-			
-			}).send(this.toQueryString());
-		});			
-	});
 </script>
 
 <style>
@@ -214,7 +178,7 @@
 <?PHP
 
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -224,49 +188,120 @@
 	
 	/*******************************************************************
 	*
-	*				MODIFICATION INTERVENTION
+	*				CREER INTERVENTION
 	*
 	*******************************************************************/
+	
+	
+	
+	
+	if ( $interv_id == -1 ) {	// Création d'une demande
+	
+		echo "<h2>CREER une intervention</h2><br>";
 		
-		//$req_info_demande = $db_gespac->queryAll ( "SELECT demandes.dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, demandes.mat_id, demandes.salle_id, salle_nom, user_nom, dem_type FROM demandes, salles, users, materiels, interventions WHERE salles.salle_id=demandes.salle_id AND demandes.user_demandeur_id=users.user_id AND interventions.dem_id = demandes.dem_id AND interv_id=$interv_id ORDER BY dem_date" );
-		$req_info_demande = $db_gespac->queryAll ( "SELECT demandes.dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, demandes.mat_id, demandes.salle_id, user_nom, dem_type FROM demandes, users, materiels, interventions WHERE demandes.user_demandeur_id=users.user_id AND interventions.dem_id = demandes.dem_id AND interv_id=$interv_id ORDER BY dem_date" );
+		?>
+
+		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_demandes/post_interventions.php?action=add" method="post" name="frmTest" id="frmTest">
+
+			<center>
+			<table width=500>
+
+				<tr id="tr_type">
+					<TD>Type :</TD>
+					<TD><select id="type_intervention" name="type_intervention" onChange="change_type(type_intervention.value);">
+							<option selected value=""> >>> Type d'intervention <<< </option>
+							<option value="installation">installation</option>
+							<option value="reparation">réparation</option>
+							<option value="usages">usages</option>
+							<option value="formation">formation</option>
+							<option value="autre">Autre...</option>
+						</select>
+					</TD>
+				</tr>
+				
+				<tr id="tr_salle" style='display:none'>
+					<TD>Salle</TD>
+					<TD><select id="salle_intervention" name="salle_intervention" onChange="chainage_salle_pc(this, 'pc_intervention', 'tr_pc');">
+							<option selected>>>>Sélectionner une salle<<<</option>
+							<?PHP
+								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
+								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT salle_nom, salle_id FROM salles" );
+								foreach ( $req_salles_disponibles as $record) { 
+								
+									$salle_nom 	= $record[0];
+									$salle_id 	= $record[1];
+								?>
+									<option value="<?PHP echo $salle_id ?>"><?PHP echo $salle_nom ?></option>
+							<?PHP
+								}
+							?>
+						</select>
+					</TD>
+				</tr>
+				
+				<tr id="tr_pc" style='display:none'>
+					<TD>PC</TD> 
+					<TD><select id="pc_intervention" name="pc_intervention" onChange="change_pc();chainage_pc_historique(this,'historique')"></select>
+					</TD>
+				</tr>
+
+				<TR id="tr_texte" style='display:none'>
+					<TD>soucy</TD>
+					<TD><textarea cols=45 rows=15 name="texte_intervention" ></textarea></TD>
+				</TR>
+				
+			</table>
+
+			<br>
+				<input type=submit value='Créer l`intervention' onclick="refresh_quit();" >
+
+			</center>
+
+		</FORM>
 		
+		<div id=historique></div>
+	<?PHP	
+	
+	
+	
+	
+	/*******************************************************************
+	*
+	*			MODIFICATION INTERVENTION
+	*
+	*******************************************************************/
+	
+	
+	
+	
+	} else {
+	
+		
+		
+		$req_info_demande = $db_gespac->queryAll ( "SELECT demandes.dem_id, dem_date, dem_text, dem_etat, user_demandeur_id, user_intervenant_id, demandes.mat_id, demandes.salle_id, salle_nom, user_nom, dem_type FROM demandes, salles, users, materiels, interventions WHERE salles.salle_id=demandes.salle_id AND demandes.user_demandeur_id=users.user_id AND interventions.dem_id = demandes.dem_id AND interv_id=$interv_id ORDER BY dem_date" );
 		
 		$dem_id 				= $req_info_demande[0][0];
 		$dem_date 				= $req_info_demande[0][1];
-		$dem_text 				= stripslashes($req_info_demande[0][2]);
+		$dem_text 				= $req_info_demande[0][2];
 		$dem_etat 				= $req_info_demande[0][3];
 		$user_demandeur_id 		= $req_info_demande[0][4];
 		$user_intervenant_id 	= $req_info_demande[0][5];
 		$mat_id 				= $req_info_demande[0][6];
 		$salle_id 				= $req_info_demande[0][7];
-		$user_demandeur_nom		= stripslashes($req_info_demande[0][8]);
-		$dem_type				= $req_info_demande[0][9];
+		$salle_nom 				= $req_info_demande[0][8];
+		$user_demandeur_nom		= $req_info_demande[0][9];
+		$dem_type				= $req_info_demande[0][10];
 
 		
 		echo "<h2>MODIFIER l'intervention du dossier <b>$dem_id</b> créé le : $dem_date </h2><br>";
 		
 		
-		// on récupère le nom de la salle
-					if ($salle_id <> 0) {
-						$salle_nom = $db_gespac->queryOne ("SELECT salle_nom FROM salles WHERE salle_id = $salle_id");
-						$salle_nom = stripslashes($salle_nom);
-					} else {
-						$salle_nom = "Pas de salle";
-					}
-					
-					// on change la valeur de mat_nom en fonction de si il y a une salle ou pas
-					if ($salle_nom != "Pas de salle") {
-						// On récupère le nom du matériel
-						if ( $mat_id <> 0) {
-							$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
-							$mat_nom = stripslashes($liste_nom_materiel[0][0]);
-						} else {
-							$mat_nom = "TOUS";
-						}
-					} else {
-						$mat_nom = "Non  communiqué";
-					}
+		// On récupère le nom du matériel
+		if ( $mat_id <> 0) {
+			$liste_nom_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id=$mat_id" );
+			$mat_nom = $liste_nom_materiel[0][0];
+		}
+		else {	$mat_nom = "TOUS";	}
 		
 
 		echo "	<center>
@@ -302,14 +337,14 @@
 
 	
 	<div id="reponse" style="display:<?PHP echo $montre_reponse; ?>">
-		<form action="gestion_demandes/post_interventions.php?action=mod" method="post" name="post_form" id="post_form">
+		<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_demandes/post_interventions.php?action=mod" method="post" name="frmTest" id="frmTest">
 			
 			<input type=hidden name="inter" value= <?PHP echo $interv_id;?> >
 			<input type=hidden name="dossier" value= <?PHP echo $dem_id;?> >
 			<input type=hidden name="salle" value= <?PHP echo $salle_id;?> >
 			<input type=hidden name="mat" value= <?PHP echo $mat_id;?> >
 			
-			<textarea name="reponse" id="reponse_texte" cols=65 rows=10  onkeyup="validation_reponse();" ></textarea>
+			<textarea name="reponse" cols=65 rows=10 ></textarea>
 			<br>
 			<!--
 			<label>Changer l'état : </label>
@@ -319,7 +354,7 @@
 			</select>
 			-->
 			<br>
-			<input type=submit value="Clore l'intervention" id="post_reponse" disabled>
+			<input type=submit value="Clore l'intervention" onclick="refresh_quit();">
 	
 		</form>
 	
@@ -347,9 +382,9 @@
 		
 			foreach ( $historique_demandes as $record ) {
 			
-				$txt_date 	= $record[0];				
-				$txt_texte 	= stripslashes($record[1]);
-				$user_nom 	= stripslashes($record[2]);
+				$txt_date 	= $record[0];
+				$txt_texte 	= $record[1];
+				$user_nom 	= $record[2];
 				$txt_etat	= $record[3];
 				
 				echo "
@@ -367,3 +402,7 @@
 	
 			
 	</div>
+
+	<?PHP
+	}
+	?>

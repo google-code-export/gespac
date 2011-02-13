@@ -3,14 +3,14 @@
 
 <script type="text/javascript">	
 	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
+	document.getElementById('conteneur').style.backgroundColor = "#fff";
 	
 	
 	// filtrer les stats
 	function filtrer_stat (pc, datedebut, datefin) {
-		var pc_value = $('pc').value
-		var datedebut_value = $('datedebut').value
-		var datefin_value = $('datefin').value
+		var pc_value = document.getElementById('pc').value
+		var datedebut_value = document.getElementById('datedebut').value
+		var datefin_value = document.getElementById('datefin').value
 		/*
 		(datedebut_value == '') ? ();
 		? ();
@@ -21,7 +21,7 @@
 		if (datefin_value == '')
 			datefin_value='2050-01-01';
 				
-		$("conteneur").load("modules/stats/utilisation_parc.php?pc=" + pc_value + "&datefin=" + datefin_value + "&datedebut=" + datedebut_value);
+		HTML_AJAX.replace("conteneur", "modules/stats/utilisation_parc.php?pc=" + pc_value + "&datefin=" + datefin_value + "&datedebut=" + datedebut_value);
 	}
 	
 	
@@ -38,7 +38,7 @@
 	include_once ('../../config/databases.php');
 		
 	// adresse de connexion à la base de données
-	$dsn_fog     = 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
+	$dsn_fog 	= 'mysql://'. $user .':' . $pass . '@localhost/fog';
 
 	// cnx à la base de données FOG
 	$db_fog 	= & MDB2::factory($dsn_fog);

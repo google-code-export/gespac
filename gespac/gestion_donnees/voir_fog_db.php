@@ -21,7 +21,7 @@
 		
 		// si la réponse est TRUE ==> on lance la page import_ocs_db.php
 		if (valida) {
-			$('target').load('gestion_donnees/import_fog_db.php');
+			HTML_AJAX.replace('target', 'gestion_donnees/import_fog_db.php');
 		}
 	}
 
@@ -34,7 +34,7 @@
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 
 	// adresse de connexion à la base de données
-	$dsn_fog     = 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
+	$dsn_fog 	= 'mysql://'. $user .':' . $pass . '@localhost/fog';
 
 	// cnx à la base de données OCS
 	$db_fog 	= & MDB2::factory($dsn_fog);

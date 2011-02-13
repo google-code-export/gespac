@@ -2,9 +2,9 @@
 	session_start();
 	
 	
-	/****************************************************************
+	/**********************************************************
 	*	Changer le nom du skin avec le nom du fichier CSS à utiliser
-	****************************************************************/
+	***********************************************************/
 	
 	$skin_name = $_SESSION['skin'];
 	
@@ -12,9 +12,9 @@
 	// on vérifie si l'utilisateur est identifié
 	if (!isset( $_SESSION['login'])) {
 
-		// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié
-		// On redirige sur la page permettant de s'authentifier
-		header("Location: ../index.php");
+		// la variable de session n’existe pas, donc l'utilisateur n'est pas authentifié
+		// On redirige sur la page permettant de s’authentifier
+		header("Location: ../index.php"); //[AMELIORATION]
 			
 		// on arrête l'exécution
 		exit();
@@ -30,20 +30,22 @@
 		<link rel="SHORTCUT ICON" href="img/favicon.ico"/>
 		
 		<!--	CSS	-->
-		<link rel="stylesheet" href="css/sexylightbox.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="css/menu.css" type="text/css" media="screen"  />
+		<link rel="stylesheet" href="css/smoothbox.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/chart.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="css/dropdown/dropdown.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="css/dropdown/default.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/style_ff.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />
 		
 		<!--	JS	-->
 		<script type="text/javascript" src="js/mootools-1.2.3-core-yc.js"></script>	
 		<script type="text/javascript" src="js/mootools-1.2.3.1-more.js"></script>
-		<script type="text/javascript" src="js/sexylightbox.js"></script> 
+		<script type="text/javascript" src="js/smoothbox.js"></script> 
+		<script type="text/javascript" src="js/dropdown.js"></script>		
 		<script type="text/javascript" src="js/main.js"></script>
-
-
+	
+		<!-- 	AJAX	-->
+		<script type="text/javascript" src="server.php?client=all"></script>
+	
 		<title>GESPAC -> GEStion du PArc des Collèges</title>
 	
 	</head>
@@ -52,8 +54,8 @@
 	<BODY>
 
 		<?PHP	// Includes
-			include_once ('config/databases.php');	// fichiers de configuration des bases de données
-			include_once ('fonctions.php');			// fichier contenant les fonctions utilisées dans le reste des scripts
+			include_once ('config/databases.php');		// fichiers de configuration des bases de données
+			include_once ('fonctions.php');				// fichier contenant les fonctions utilisées dans le reste des scripts
 			include_once ('config/pear.php');		// fichiers de configuration des lib PEAR (setinclude + packages)
 		?>
 
@@ -68,7 +70,7 @@
 				<?PHP // Vérification de l'existence d'enregistrement dans la table COLLEGE
 				
 					// adresse de connexion à la base de données
-					$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+					$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 					// cnx à la base de données OCS
 					$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -87,9 +89,9 @@
 				<?PHP	// Inclusion des pages
 				
 				if ( $college_existe <> "" ) {	// la base de donnée contient des données sur le collège
-					echo "<script>AffichePage ('conteneur', './accueil.php');</script>";		// Pas d'include car les headers sont déjà postés			
+					echo "<script>OuvrirPage ('./accueil.php');</script>";		// Pas d'include car les headers sont déjà postés			
 				} else {
-					echo "<script>AffichePage ('conteneur', 'gestion_college/form_college.php');</script>";		// Pas d'include car les headers sont déjà postés
+					echo "<script>OuvrirPage ('gestion_college/form_college.php');</script>";		// Pas d'include car les headers sont déjà postés
 				}
 			}	
 				?>

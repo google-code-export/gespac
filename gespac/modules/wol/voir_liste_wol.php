@@ -13,160 +13,10 @@
 	include_once ('../../config/databases.php');
 ?>
 
-<script type="text/javascript">
-/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
-	
-	window.addEvent('domready', function(){
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML, filt) {
-					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('modules/wol/voir_liste_wol.php');", 1500);
-				}
-			
-			}).send(this.toQueryString());
-		});			
-	});
-	
-</script>
+<script type="text/javascript" src="server.php?client=all"></script>
 
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
-
-<?PHP
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
-	
-	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_mac FROM materiels, marques, salles WHERE (materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND mat_mac <> '' ) ORDER BY mat_nom" );
-?>
-	<h3>Réveil des machines à distance</h3><br>
-	
-	<span id="nb_selectionnes">[0]</span> machines à réveiller.
-	
-	
-	<center>
-	
-	<form name="post_form" id="post_form" action="modules/wol/post_wol.php" method="post">
-	
-		<!--------------------------------------------	LISTE DES ID A POSTER	------------------------------------------------>
-		<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
-
-		<input type=submit id="wakethem" value="Réveiller ces machines" style="display:none"><br>
-		
-	</form>
-	
-
-	<!-- 	bouton pour le filtrage du tableau	-->
-	<form>
-		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'wol_table', '1')" type="text"></center>
-	</form>
-	
-	
-	
-	<table class="tablehover" id="wol_table" width=870>
-	
-		<th> <input type=checkbox id=checkall onclick="checkall('wol_table');" > </th>
-		<th>Nom</th>
-		<!--<th>DSIT</th>-->
-		<th>Serial</th>
-		<th>Etat</th>
-		<!--<th>Famille</th>
-		<th>Sous-famille</th>
-		<th>Marque</th>
-		<th>Modèle</th>-->
-		<th>Salle</th>
-		<th>MacADD</th>
-		
-		<?PHP	
-			
-	
-		
-			$compteur = 0;
-			// On parcourt le tableau
-			foreach ( $liste_des_materiels as $record ) {
-				// On écrit les lignes en brut dans la page html
-
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-
-				
-				$nom 		= $record[0];
-				$dsit 		= $record[1];
-				$serial 	= $record[2];
-				$etat 		= $record[3];
-				$marque		= $record[4];
-				$model 		= $record[5];
-				$type 		= $record[6];
-				$stype		= $record[7];
-				$id 		= $record[8];
-				$salle 		= $record[9];
-				$salle_id 	= $record[10];
-				$mac 		= $record[11];
-			
-				
-				// test si la machine est prétée ou pas
-				$rq_machine_pretee = $db_gespac->queryAll ( "SELECT mat_id FROM materiels WHERE user_id<>1 AND mat_id=$id" );
-				$mat_id = @$rq_machine_pretee[0][0];	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, évidement
-						
-				if ( !isset($mat_id) ) {	// la machine n'est pas prêtée ($mat_id n'existe pas)
-						$id_pret = 0;
-					} else {	// la machine est prêtée ($mat_id existe)
-						$id_pret = 1;
-					}
-					
-				
-				echo "<tr id=tr_id$id class=$tr_class>";
-					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' rel='slb_wol' title='Caractéristiques de $nom'>$nom</a> </td>";
-					/*	dsit			echo "<td> $dsit </td>";*/
-					/*	serial	*/		echo "<td> $serial </td>";
-					/*	etat	*/		echo "<td> $etat </td>";
-					/*	type			echo "<td> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_wol' title='membres du type de marque $type'>$type</a></td>";*/
-					/*	stype			echo "<td> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' rel='slb_wol' title='membres de sous type $stype'>$stype</a></td>";*/
-					/*	marque		echo "<td> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_wol' title='membres de marque $marque'>$marque</a></td>";*/
-					/*	modele		echo "<td> <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_wol' title='membres de modèle $model'>$model</a></td>";*/
-					/*	salle	*/		echo "<td> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_wol' title='Membres de la salle $salle'>$salle</a> </td>";
-					/*	macaddr	*/	echo "<td> $mac </td>";
-
-				echo "</tr>";
-				
-				$compteur++;
-			}
-		?>		
-		
-	</table>
-	</center>
-	
-	<br>
-	
-	
-<?PHP
-	// On se déconnecte de la db
-	$db_gespac->disconnect();
-?>
-
-
-<script type="text/javascript">
-	
-	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_wol'});
-	});
+<script type="text/javascript">	
 
 	// init de la couleur de fond
 	document.getElementById('conteneur').style.backgroundColor = "#fff";
@@ -259,6 +109,20 @@
 				$('wakethem').style.display = "none";
 		}
 	}
+
+		
+	
+	// *********************************************************************************
+	//
+	//			ferme la smoothbox et rafraichis la page
+	//
+	// *********************************************************************************	
+	
+	function refresh_quit () {
+		// lance la fonction avec un délais de 1500ms
+		window.setTimeout("HTML_AJAX.replace('conteneur', 'modules/wol/voir_liste_wol.php');", 150000);
+		TB_remove();
+	}
 	
 	
 		
@@ -296,3 +160,124 @@
 	}	
 		
 </script>
+
+
+
+
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
+
+<?PHP
+	// adresse de connexion à la base de données
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
+
+	// cnx à la base de données GESPAC
+	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	
+	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_mac FROM materiels, marques, salles WHERE (materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND mat_mac <> '' ) ORDER BY mat_nom" );
+?>
+	
+	<span id="nb_selectionnes">[0]</span> machines à réveiller.
+	
+	
+	<center>
+	
+	<form name=elements_selectionnes id=elements_selectionnes  onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="modules/wol/post_wol.php" method="post">
+	
+		<!--------------------------------------------	LISTE DES ID A POSTER	------------------------------------------------>
+		<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
+
+		<input type=submit id="wakethem" value="Wake" onclick="refresh_quit ();" style="display:none">	
+		
+	</form>
+	
+
+	<!-- 	bouton pour le filtrage du tableau	-->
+	<form>
+		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'wol_table', '1')" type="text"></center>
+	</form>
+	
+	
+	
+	<table class="tablehover" id="wol_table" width=870>
+	
+		<th> <input type=checkbox id=checkall onclick="checkall('wol_table');" > </th>
+		<th>Nom</th>
+		<!--<th>DSIT</th>-->
+		<th>Serial</th>
+		<th>Etat</th>
+		<!--<th>Famille</th>
+		<th>Sous-famille</th>
+		<th>Marque</th>
+		<th>Modèle</th>-->
+		<th>Salle</th>
+		<th>MacADD</th>
+		
+		<?PHP	
+			
+	
+		
+			$compteur = 0;
+			// On parcourt le tableau
+			foreach ( $liste_des_materiels as $record ) {
+				// On écrit les lignes en brut dans la page html
+
+				// alternance des couleurs
+				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
+
+				
+				$nom 		= $record[0];
+				$dsit 		= $record[1];
+				$serial 	= $record[2];
+				$etat 		= $record[3];
+				$marque		= $record[4];
+				$model 		= $record[5];
+				$type 		= $record[6];
+				$stype		= $record[7];
+				$id 		= $record[8];
+				$salle 		= $record[9];
+				$salle_id 	= $record[10];
+				$mac 		= $record[11];
+			
+				
+				// test si la machine est prétée ou pas
+				$rq_machine_pretee = $db_gespac->queryAll ( "SELECT mat_id FROM materiels WHERE user_id<>1 AND mat_id=$id" );
+				$mat_id = @$rq_machine_pretee[0][0];	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, évidement
+						
+				if ( !isset($mat_id) ) {	// la machine n'est pas prêtée ($mat_id n'existe pas)
+						$id_pret = 0;
+					} else {	// la machine est prêtée ($mat_id existe)
+						$id_pret = 1;
+					}
+					
+				
+				echo "<tr id=tr_id$id class=$tr_class>";
+					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
+					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' class='smoothbox' title='Caractéristiques de $nom'>$nom</a> </td>";
+					/*	dsit			echo "<td> $dsit </td>";*/
+					/*	serial	*/		echo "<td> $serial </td>";
+					/*	etat	*/		echo "<td> $etat </td>";
+					/*	type			echo "<td> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' class='smoothbox' title='membres du type de marque $type'>$type</a></td>";*/
+					/*	stype			echo "<td> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' class='smoothbox' title='membres de sous type $stype'>$stype</a></td>";*/
+					/*	marque		echo "<td> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' class='smoothbox' title='membres de marque $marque'>$marque</a></td>";*/
+					/*	modele		echo "<td> <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' class='smoothbox' title='membres de modèle $model'>$model</a></td>";*/
+					/*	salle	*/		echo "<td> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' class='smoothbox' title='Membres de la salle $salle'>$salle</a> </td>";
+					/*	macaddr	*/	echo "<td> $mac </td>";
+
+				echo "</tr>";
+				
+				$compteur++;
+			}
+		?>		
+		
+	</table>
+	</center>
+	
+	<br>
+	
+	
+<?PHP
+	// On se déconnecte de la db
+	$db_gespac->disconnect();
+?>

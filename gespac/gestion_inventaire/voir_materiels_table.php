@@ -1,10 +1,6 @@
 <?PHP
 	
-	/* 
-	 
-	 Page 02-01
-	  
-	 fichier de visualisation de l'inventaire :
+	/* fichier de visualisation de l'inventaire :
 	
 		view de la db gespac avec tous le matos du parc
 
@@ -23,17 +19,16 @@
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 	
-	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
-	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-02-01#", $_SESSION['droits']);
-	
-	
-	if ( !isset($_SESSION['entetes']) ) $_SESSION['entetes'] = "0111001111";	// Cases à cocher par défaut
+	if ( !isset($_SESSION['entetes']) ) $_SESSION['entetes'] = "0111001111";
 			
 ?>
 
+<script type="text/javascript" src="server.php?client=all"></script>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
+
+
 
 
 
@@ -89,7 +84,7 @@
 	
 	
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -165,21 +160,22 @@
 		echo "<script>$('nb_filtre').innerHTML = ''</script>";
 	}
 	
+	
+
 ?>
 	
 	
-	<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="post_form" >
+	<form name=elements_selectionnes id=elements_selectionnes  onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_materiels.php?action=affect" method="post">
 	
 		<!--------------------------------------------	LISTE DES ID A POSTER	------------------------------------------------>
-		<input type=hidden name='materiel_a_poster' id='materiel_a_poster' value=''>	
+		<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
 		
 		<span>
 		
-		<?PHP 
-			if ( $E_chk ) {	// test de droit en écriture sur l'affectation de matériel, l'ajout de matériel et la modification par lot
+		<select name=salle_select id=salle_select>
 		
-				echo "<select name=salle_select id=salle_select>";
-		
+			<?PHP 
+			
 				// Pour le remplissage de la combobox des salles pour l'affectation
 					
 				// stockage des lignes retournées par sql dans un tableau nommé combo_des_salles
@@ -195,24 +191,22 @@
 					
 					echo "<option value=$option_id $defaut> $option_salle </option>";
 				}
-			
-			echo "</select>";
-			echo "<input type=submit value='Affecter' >";
-				
-			}
 			?>
 			
+		</select>
+		<input type=submit value="Affecter" onclick="refresh_quit ();">
 		</span>
 		
 		
-		<!-- Ajout d'un matériel et Modification par lot-->
-		<?PHP
-			if ( $E_chk ) {
-				echo "<span style='float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>";
-				echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/write.png'>Modifier lot</a> <span id='nb_selectionnes'></span> </span>";
-				echo "<span id='rename_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/write.png'>Renommer lot</a> </span>";
-			}
-		?>
+		<!-- Ajout d'un matériel -->
+		<span style="float:right; margin-right:20px"><a href='gestion_inventaire/form_materiels.php?height=600&width=640&id=-1' class='smoothbox' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>
+		
+		
+		
+		<span id="modif_selection" style="display:none; float:right; margin-right:20px"><a href='gestion_inventaire/form_materiels.php?height=180&width=640&id=lot' class='smoothbox' title='modifier selection'> <img src='img/write.png'>Modifier la sélection</a> <span id="nb_selectionnes"></span> </span>
+		<!--
+		<span id="rename_selection" style="float:right; margin-right:20px"><a href="gestion_inventaire/form_materiels.php?height=180&width=640&id=renamelot&liste='<script type='text/javascript'>	materiel_a_poster.value</script>'" class='smoothbox' title='modifier selection'> <img src='img/write.png'>Renommer la sélection</a></span>
+		-->
 		
 		
 		<!-- Gestion de l'affichage des colonnes ici. -->	
@@ -239,8 +233,7 @@
 	
 	<table class="tablehover" id="mat_table" width=870>
 		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
-		<?PHP if ( $E_chk ) echo "<th> <input type=checkbox id=checkall onclick=\"checkall('mat_table');\" > </th>"; ?>
-		
+		<th> <input type=checkbox id=checkall onclick="checkall('mat_table');" > </th>
 		<th title="1 : le nom de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_nom; ?>', $('filt').value);">
 			Nom<sup>1</sup> <?PHP echo $img_nom; ?></a></th>
@@ -282,15 +275,10 @@
 		<th class='td_origine' title="11 : Propriétaire et année d'achat du matériel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_origine; ?>', $('filt').value);">
 			Origine<sup>11</sup> <?PHP echo $img_origine; ?></a></th>
-	
-	<?PHP 
-	
-	if ( $E_chk ) {
-		echo "<th>&nbsp</th>
-		<th>&nbsp</th>";
-	}
-	
+		<th>&nbsp</th>
+		<th>&nbsp</th>
 		
+		<?PHP	
 
 			$compteur = 0;
 			// On parcourt le tableau
@@ -339,24 +327,20 @@
 				}
 				
 				echo "<tr id=tr_id$id class=$tr_class>";
-				
-					/*	chckbox	*/	if ( $E_chk ) echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='slb_mat' title='Nom du matériel : $nom'>$nom</a> </td>";
+					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
+					/*	nom	*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' class='smoothbox' title='Nom du matériel : $nom'>$nom</a> </td>";
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
 					/*	serial	*/	echo "<td class='td_serial'> $serial </td>";
-					/*	etat	*/	echo "<td class='td_etat'> <a href='gestion_inventaire/voir_membres_etat.php?height=480&width=640&etat=$etat' rel='slb_mat' title='Liste des materiels $etat'>$etat</a> </td>";
-					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_mat' title='Liste de la famille $type'>$type</a></td>";
-					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' rel='slb_mat' title='Liste de la sous famille $stype'>$stype</a></td>";
-					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_mat' title='Liste de la marque $marque'>$marque</a></td>";
-					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_mat' title='Liste du modèle $model'>$model</a></td>";
-					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_mat' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
-					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='slb_mat' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
-					
-					if ( $E_chk ) {
-						/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
-						/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel($id, '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
-					}
+					/*	etat	*/	echo "<td class='td_etat'> <a href='gestion_inventaire/voir_membres_etat.php?height=480&width=640&etat=$etat' class='smoothbox' title='Liste des materiels $etat'>$etat</a> </td>";
+					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' class='smoothbox' title='Liste de la famille $type'>$type</a></td>";
+					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' class='smoothbox' title='Liste de la sous famille $stype'>$stype</a></td>";
+					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' class='smoothbox' title='Liste de la marque $marque'>$marque</a></td>";
+					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' class='smoothbox' title='Liste du modèle $model'>$model</a></td>";
+					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' class='smoothbox' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
+					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' class='smoothbox' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
+					/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&id=$id&mat_ssn=$serial' class='smoothbox' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
+					/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel($id, '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 					
 				echo "</tr>";
 				
@@ -376,36 +360,10 @@
 	$db_gespac->disconnect();
 ?>
 
-
-
-<script type="text/javascript">
+<script type="text/javascript">	
 
 	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
-
-
-    window.addEvent('domready', function() {
-
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_mat'});
-
-		// AJAX		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML, filt) {
-					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php?filter=" +  $('filt').value + "');", 1500);
-				}
-			
-			}).send(this.toQueryString());
-		}); 
-    });
-    
+	document.getElementById('conteneur').style.backgroundColor = "#fff";
 
 	
 	// *********************************************************************************
@@ -413,7 +371,7 @@
 	//			Fonction de validation de la suppression d'un matériel
 	//
 	// *********************************************************************************
-		function validation_suppr_materiel (id, model, nom, row, id_pret) {
+	function validation_suppr_materiel (id, model, nom, row, id_pret) {
 		
 		if (id_pret == 0) {
 		
@@ -423,10 +381,10 @@
 			if (valida) {
 				
 				/*	poste la page en ajax	*/
-				$('target').load("gestion_inventaire/post_materiels.php?action=suppr&id=" + id);
+				HTML_AJAX.replace("target", "gestion_inventaire/post_materiels.php?action=suppr&id=" + id);
 				
 				/*	supprimer la ligne du tableau	*/
-				$('mat_table').deleteRow(row);
+				document.getElementById('mat_table').deleteRow(row);
 			}
 			
 		} else {
@@ -434,7 +392,6 @@
 			alert('Cette machine est déjà prêtée ! Rendez-la avant la suppression !');
 		}
 	}
-
 
 			
 	// *********************************************************************************
@@ -520,13 +477,10 @@
 			document.getElementById('materiel_a_poster').value = table_id.join(";");
 			
 
-			if ( $('materiel_a_poster').value != "" ) {
+			if ( $('materiel_a_poster').value != "" ) 
 				$('modif_selection').style.display = "";
-				$('rename_selection').style.display = "";
-			} else { 
+			else 
 				$('modif_selection').style.display = "none";
-				$('rename_selection').style.display = "none";
-			}
 		}
 	}
 
@@ -547,11 +501,25 @@
 		for (var r = 1; r < table.rows.length; r++){
 			if ( document.getElementsByName("chk")[r-1].checked == true ) {
 				
-				var lg = "<a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=" + salleid + "' rel='slb_mat' title='Membres de la salle " + salle_selected_text + "'>" + salle_selected_text + "</a>";
+				var lg = "<a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=" + salleid + "' class='smoothbox' title='Membres de la salle " + salle_selected_text + "'>" + salle_selected_text + "</a>";
 				// On change le texte de la salle par la nouvelle affectation
 				document.getElementById('mat_table').rows[r].cells[6].innerHTML = lg;
 			}
 		}
+	}
+	
+
+	
+	// *********************************************************************************
+	//
+	//			ferme la smoothbox et rafraichit la page
+	//
+	// *********************************************************************************	
+	
+	function refresh_quit () {
+		// lance la fonction avec un délais de 1500ms
+		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_materiels.php');", 1500);
+		TB_remove();
 	}
 	
 
@@ -575,7 +543,7 @@
 	
 	
 	function post_modif_entete () {
-		$('target').load("gestion_inventaire/post_materiels.php?action=entetes&value=" + etat_entetes() );
+		HTML_AJAX.replace("target", "gestion_inventaire/post_materiels.php?action=entetes&value=" + etat_entetes() );
 	}
 	
 	// *********************************************************************************
@@ -603,7 +571,7 @@
 	// *********************************************************************************	
 	
 	function order_by (tri, phrase) {
-		$('tableau').load("gestion_inventaire/voir_materiels_table.php?tri=" + tri + "&filter=" + phrase);
+		HTML_AJAX.replace('tableau', "gestion_inventaire/voir_materiels_table.php?tri=" + tri + "&filter=" + phrase);
 	}
 	
 	

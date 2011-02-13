@@ -24,7 +24,7 @@ session_start();
 
 	
 	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
+	$dsn_gespac	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';	
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -85,11 +85,10 @@ session_start();
 	
 			//Insertion d'un log (avant la suppression!)
 			//On récupère le nom du matériel en fonction du mat_id
-			$liste_materiel = $db_gespac->queryRow ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $id" );
-			$mat_nom = $liste_materiel [0];
-			$mat_serial = $liste_materiel [1];
+			$liste_materiel = $db_gespac->queryAll ( "SELECT mat_nom FROM materiels WHERE mat_id = $id" );
+			$mat_nom = $liste_materiel [0][0];
 
-			$log_texte = "Le materiel <b>$mat_nom</b> (numéro de série : <b>$mat_serial</b>) a été supprimé.";
+			$log_texte = "Le materiel $mat_nom a été supprimé";
 				
 			$req_log_suppr_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression matériel', '$log_texte' );";
 			$result = $db_gespac->exec ( $req_log_suppr_mat );
@@ -115,9 +114,8 @@ session_start();
 		$type   	= addslashes(utf8_decode(urldecode($_POST ['type'])));
 		$modele 	= addslashes(utf8_decode(urldecode($_POST ['modele'])));
 		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
-		
-		//$liste_noms   = "";
-		//$liste_serial = "";
+
+		//var_dump($_POST).'<br>';
 		
 		$lot_array = explode(";", $lot);
 		
@@ -160,10 +158,6 @@ session_start();
 				$req_modif_materiel = "UPDATE materiels SET " . $sql_etat . $sql_origine . $sql_salle . $sql_marque . " WHERE mat_id=$item ;";
 				$result = $db_gespac->exec ( $req_modif_materiel );
 				
-				//on récupérer le nom et le serial de chaque item
-				$req_nom_serial_materiel = $db_gespac->queryRow ("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
-				$liste_noms_serial   .=  '<b>'.$req_nom_serial_materiel[0].' (</b>serial : <b>'.$req_nom_serial_materiel[1].')</b>, ';
-				
 				// On log la requête SQL
 				fwrite($fp, date("Ymd His") . " " . $req_modif_materiel."\n");
 			}
@@ -171,52 +165,8 @@ session_start();
 		}
 	
 		//Insertion d'un log
-		//on supprime les caractères en fin de chaine
-		$liste_noms_serial = trim ($liste_noms_serial, ", ");
-		$log_texte = "Les materiels $liste_noms_serial ont été modifiés.";
-
-		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
-		$result = $db_gespac->exec ( $req_log_modif_mat );
-
-	}
-	
-	
-	/**************** RENOMMAGE D'UN LOT ********************/
-		
-	if ( $action == 'renomlot' ) {
-		
-		$lot		= addslashes(utf8_decode(urldecode($_POST ['lot'])));
-		$prefixe   	= addslashes(utf8_decode(urldecode($_POST ['prefixe'])));
-		$suffixe   	= $_POST ['suffixe'];
-		
-
-		$lot_array = explode(";", $lot);
-		
-		$sequence = $suffixe == "on" ? 1 : "" ;
-		
-		foreach ($lot_array as $item) {
-			
-			if ($item <> "") {
-				//on récupère le nom initial
-				$req_materiel_old = $db_gespac->queryRow("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
-				
-				$req_renomme_materiel = "UPDATE materiels SET mat_nom='" . $prefixe ."". $sequence . "' WHERE mat_id=$item ;";
-				$result = $db_gespac->exec ( $req_renomme_materiel );
-				
-				if ( $suffixe == 'on' ) $sequence++;	//Pour faire un suffixe séquentiel
-				$req_materiel_new = $db_gespac->queryRow("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
-				
-				$liste_nom_materiels .= 'Le nom initial (<b>'.$req_materiel_old[0].'</b>) a été changé en <b>'.$req_materiel_new[0].'</b>. Le numéro de série de la machine est : <b>'.$req_materiel_new[1].'</b>.<br>';
-				
-			}
-			
-			// On log la requête SQL
-			fwrite($fp, date("Ymd His") . " " . $req_renomme_materiel."\n");
-		
-		}
-	
-		//Insertion d'un log
-		$log_texte = $liste_nom_materiels;
+		$lot_w_space = str_replace (";", " ", $lot);
+		$log_texte = "Les materiels <b>$lot_w_space</b> ont été modifiés";
 
 		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
 		$result = $db_gespac->exec ( $req_log_modif_mat );
@@ -233,7 +183,6 @@ session_start();
 		$dsit 		= addslashes(utf8_decode(urldecode($_POST ['dsit'])));
 		$serial		= addslashes(utf8_decode(urldecode($_POST ['serial'])));
 		$etat   	= addslashes(utf8_decode(urldecode($_POST ['etat'])));
-		$gign   	= addslashes(utf8_decode(urldecode($_POST ['num_gign'])));
 		$salle  	= addslashes(utf8_decode(urldecode($_POST ['salle'])));
 		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
 		$mac_input	= addslashes(utf8_decode(urldecode($_POST ['mac_input'])));
@@ -250,7 +199,7 @@ session_start();
 		//fwrite($fp, print_r($_POST) ");
 		
 		if ( $marque_id ) {
-			$req_modif_materiel = "UPDATE materiels SET mat_nom='$nom', mat_dsit='$dsit', mat_serial='$serial', mat_etat='$etat-$gign', salle_id=$salle_id, marque_id=$marque_id, mat_origine = '$origine', mat_mac='$mac' WHERE mat_id=$id";
+			$req_modif_materiel = "UPDATE materiels SET mat_nom='$nom', mat_dsit='$dsit', mat_serial='$serial', mat_etat='$etat', salle_id=$salle_id, marque_id=$marque_id, mat_origine = '$origine', mat_mac='$mac' WHERE mat_id=$id";
 			$result = $db_gespac->exec ( $req_modif_materiel );
 			echo "<small>Modification du matériel <b>$nom</b> !</small>";
 			
@@ -260,7 +209,7 @@ session_start();
 	
 		//Insertion d'un log
 
-		$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été modifié";
+		$log_texte = "Le materiel $nom a été modifié";
 
 		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
 		$result = $db_gespac->exec ( $req_log_modif_mat );
@@ -299,7 +248,7 @@ session_start();
 		
 		//Insertion d'un log
 
-		$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été créé.";
+		$log_texte = "Le materiel $nom a été créé";
 		
 		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création matériel', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_modif_mat );
@@ -333,7 +282,7 @@ session_start();
 		
 		//Insertion d'un log
 
-		$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été créé.";
+		$log_texte = "Le materiel $nom a été créé";
 		
 		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création matériel', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_modif_mat );
@@ -349,8 +298,6 @@ session_start();
 		
 		$mat_ids_array = explode (";", $mat_ids);
 		$mat_ids_unique = array_unique ($mat_ids_array);
-		
-		
 		
 		foreach ($mat_ids_unique as $id) {
 			
@@ -379,9 +326,10 @@ session_start();
 					$liste_salle = $db_gespac->queryAll ( "SELECT salle_nom FROM salles WHERE salle_id = $salle_id" );
 					$salle_nom = $liste_salle [0][0];
 
-					$log_texte .= "Réaffectation de <b>$nom_materiel</b> dans la salle <b>$salle_nom</b><br> ";
+					$log_texte = "Réaffectation de <i>$nom_materiel</i> dans la salle <i>$salle_nom</i>";
 					
-					
+					$req_log_affect_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Affectation salle', '$log_texte' );";
+					$result = $db_gespac->exec ( $req_log_affect_salle );
 					
 					
 				} else {	// la machine est prêtée ($mat_id existe)
@@ -391,9 +339,6 @@ session_start();
 				}
 			}
 		}
-		
-		$req_log_affect_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Affectation salle', '$log_texte' );";
-		$result = $db_gespac->exec ( $req_log_affect_salle );
 	}
 	
 // Je ferme le fichier  de log sql

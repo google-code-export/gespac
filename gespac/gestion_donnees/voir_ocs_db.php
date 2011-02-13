@@ -21,8 +21,8 @@
 		
 		// si la réponse est TRUE ==> on lance la page import_ocs_db.php
 		if (valida) {
-			//$('target').load('gestion_donnees/import_ocs_db.php');
-			$('conteneur').load('gestion_donnees/import_ocs_db.php');
+			//HTML_AJAX.replace('target', 'gestion_donnees/import_ocs_db.php');
+			HTML_AJAX.replace('conteneur', 'gestion_donnees/import_ocs_db.php');
 		}
 	}
 
@@ -39,7 +39,7 @@
 	if(!mysql_select_db('ocsweb', $link_bases)) { echo "Base OCS non présente, il est impossible de continuer l'import."; }//si la base OCS n'existe pas on arrete la page
 	else {
 		// cnx à la base de données
-		$dsn_gespac		= 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+		$dsn_gespac		= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 		$db_gespac 		= & MDB2::factory($dsn_gespac);
 		$liste_ssn		= $db_gespac->queryAll ( "select mat_serial FROM materiels" );
 		
@@ -51,7 +51,7 @@
 
 		
 		// adresse de connexion à la base de données
-		$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
+		$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/ocsweb';
 
 		// cnx à la base de données
 		$db_ocs 	= & MDB2::factory($dsn_ocs);

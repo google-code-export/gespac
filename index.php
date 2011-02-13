@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <head>
 		<!--	CHROME FRAME	-->
-		<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
 		
 		<!--	CODAGE	-->
 		<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1" /> 
@@ -14,13 +14,16 @@
 		<!--	JS	-->
 		<script type="text/javascript" src="./gespac/js/mootools-1.2.3-core-yc.js"></script>	
 		<script type="text/javascript" src="./gespac/js/mootools-1.2.3.1-more.js"></script>
-		<script type="text/javascript" src="./gespac/js/main.js"></script>
+		<script type="text/javascript" src="./gespac/js/smoothbox.js"></script> 
+		<script type="text/javascript" src="./gespac/js/dropdown.js"></script>		
+		<script type="text/javascript" src="./gespac/js/main.js"></script>	
 		
 		<!--	CSS	-->
+		<link rel="stylesheet" href="./gespac/css/smoothbox.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="./gespac/css/style_ff.css" type="text/css" media="screen" />
 		
 		<!--Script de détection pour savoir si il y a un popup killer-->
-		<script type="text/JavaScript" language="javascript">
+		<script type="text/JavaScript" language="JavaScript">
  			var mine = window.open('','','width=1,height=1,left=0,top=0,scrollbars=no');
 			if(mine)
 				var popUpsBlocked = false
@@ -125,7 +128,7 @@
 					<img src='./gespac/img/ocs.png' height=48><br>OCS </a></div>";
 			}
 
-			echo "<div id=portail-menu-item style='display : $display_icon;'><a href='./gespac/gestion_donnees/form_upload_restauration.php?height=200&width=640' rel='sexylightbox' title='Restauration des bases de données'>
+			echo "<div id=portail-menu-item style='display : $display_icon;'><a href='./gespac/gestion_donnees/form_upload_restauration.php?height=200&width=640' class='smoothbox' title='Restauration des bases de données'>
 				<img src='./gespac/img/database.png' height=48><br>RESTAURATION </a></div>";	
 			
 			echo "<div style='float:right;' id=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
@@ -145,24 +148,24 @@
 	</h3>
 	</div>
 	
-	<br/>
+	<br>
 	
 	<div id=portail-conteneur>
-		<b>GESPAC : </b><?php echo $version_gespac;?><br/>
-		<b>SQL-GESPAC : </b><?php echo $version_sqlgespac;?><br/>
-		<b>Linux kernel : </b><?php echo $version_linux;?><br/>
+		<b>GESPAC : </b><?php echo $version_gespac;?><br>
+		<b>SQL-GESPAC : </b><?php echo $version_sqlgespac;?><br>
+		<b>Linux kernel : </b><?php echo $version_linux;?><br>
 		<b><?php echo $_SERVER['SERVER_SIGNATURE'];?></b>
-		<b>PHP : </b><?php echo  phpversion();?><b/>r>
-		<b>Zend engine version :</b> <?php echo zend_version(); ?><br/>
-		<b>Version GUI OCS : </b><?php echo $version_ocs;?><br/>
-		<b>Version FOG :</b> <?php echo $version_fog;?><br/>
-		<b>Navigateur utilisé : </b><?php echo $_SERVER["HTTP_USER_AGENT"];?><br/><br/><br/>
-				<b>SITE OFFICIEL : </b><br/>
-					<a href="http://gespac13.free.fr" target=_blank>GESPAC13</a> (Les procédures et manuels validés)<br/><br/>
-		<b>NAVIGATEURS : </b><br/>
-			- Gespac marche mieux avec Firefox 3.5.x, Firefox 3.6, Chrome et Safari (globalement si le navigateur gère le css3, pas de problème)<br/>
-			- Il marche avec pratiquement tous les autres navigateurs, mais c'est moins joli (par exemple Opera 10.5 ne gère pas les fonctions css3 utilisées, donc c'est carré) <br/>
-			- Il ne marche pas avec Internet Explorer mais si vous voulez quand même l'utiliser, Gespac tentera d'installer Google Frame (vous aurez donc l'interface ie avec le moteur webkit de chrome).<br/>
+		<b>PHP : </b><?php echo  phpversion();?><br>
+		<b>Zend engine version :</b> <?php echo zend_version(); ?><br>
+		<b>Version GUI OCS : </b><?php echo $version_ocs;?><br>
+		<b>Version FOG :</b> <?php echo $version_fog;?><br>
+		<b>Navigateur utilisé : </b><?php echo $_SERVER["HTTP_USER_AGENT"];?><br><br><br>
+				<b>SITE OFFICIEL : </b><br>
+					<a href="http://gespac13.free.fr" target=_blank>GESPAC13</a> (Les procédures et manuels validés)<br><br>
+		<b>NAVIGATEURS : </b><br>
+			- Gespac marche mieux avec Firefox 3.5.x, Firefox 3.6, Chrome et Safari (globalement si le navigateur gère le css3, pas de problème)<br>
+			- Il marche avec pratiquement tous les autres navigateurs, mais c'est moins joli (par exemple Opera 10.5 ne gère pas les fonctions css3 utilisées, donc c'est carré) <br>
+			- Il ne marche pas avec Internet Explorer mais si vous voulez quand même l'utiliser, Gespac tentera d'installer Google Frame (vous aurez donc l'interface ie avec le moteur webkit de chrome).<br>
 	</div>
 
 

@@ -10,7 +10,7 @@
 
 	
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -118,8 +118,8 @@
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit () {
 		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1500);
-		SexyLightbox.close();
+		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_materiels.php');", 1500);
+		TB_remove();
 	}
 	
 	

@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <?PHP
 	
 	/* fichier de visualisation de l'inventaire :
@@ -27,6 +26,9 @@
 <!--	Ancre haut de page	-->
 <a name="hautdepage"></a>
 
+<!--	Script serveur Ajax	-->
+<script type="text/javascript" src="server.php?client=all"></script>
+
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
@@ -35,7 +37,7 @@
 <?PHP
 
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -50,7 +52,7 @@
 		<center>
 		<div id="ligne-filtre">
 			<small>Filtrer <a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:1 / ecran:1` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI.');">[?]</a>:</small> 
-			<input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
+			<input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text">
 			<span id="nb_filtre"></span>
 			
 			<span id="liste_filtres" style=''><small>filtres perso</small>
@@ -66,8 +68,9 @@
 		</center>
 	</form>
 
-	<div id='tableau'>Chargement des données ...</div>
+	<br>
 
+	<div id='tableau'></div>
 	<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
 	
 <?PHP
@@ -77,20 +80,18 @@
 
 </body>
 
-
 <script type="text/javascript">	
 
 	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
+	document.getElementById('conteneur').style.backgroundColor = "#fff";
 
 	window.addEvent('domready', function(){
 	
 		// fonction de filtrage
 		function filter (phrase) {
-			$("tableau").load("gestion_inventaire/voir_materiels_table.php?filter=" + phrase);
-		};
+			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=" + phrase);
+		}
 			
-
 		// Tamporisation du filtre + envoi
 		$('filt').addEvent('keyup', function(el)  {
 			 el.stop();
@@ -98,7 +99,6 @@
 				 $clear(this.timer);
 			 this.timer = (function() { filter($('filt').value); }).delay(1000);
 		});
-		
 			
 		// Menu des filtres préprogrammés
 		$('liste_filtres').addEvent('mouseenter', function(el)  {
@@ -118,28 +118,28 @@
 		
 		$('filter_ecrans').addEvent('click', function(el)  {
 			$('filt').value = "ecran";
-			filter ("ecran");
+			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=ecran");
 		});
 		
 		$('filter_noecrans').addEvent('click', function(el)  {
 			$('filt').value = "/ecran";
-			filter ("/ecran");
+			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=/ecran");
 		});
 		
 		$('filter_ssnnc').addEvent('click', function(el)  {
 			$('filt').value = "nc:4";
-			filter ("nc:4");
+			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=nc:4");
 		});
 		
 		$('filter_ssnrand').addEvent('click', function(el)  {
 			$('filt').value = "rand:4";
-			filter ("rand:4");
+			HTML_AJAX.replace("tableau", "gestion_inventaire/voir_materiels_table.php?filter=rand:4");
 		});
 		
 	
 		// oncharge par défaut TOUS les enregistrements
-		filter("<?PHP echo $_GET['filter'];?>");
-		
+		filter('');
+
 	});
 	
 

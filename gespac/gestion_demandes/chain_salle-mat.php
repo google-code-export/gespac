@@ -18,7 +18,7 @@
 	
 	
 	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
+	$dsn_gespac	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';	
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -30,7 +30,7 @@
 	// on vide la select box
 	while( sbox.options.length > 0 ) sbox.options[0] = null;
 
-	sbox.options[sbox.options.length] = new Option(">>> Sélectionnez un PC <<<", '');
+	sbox.options[sbox.options.length] = new Option(">>> Sélectionnez un PC <<<");
 	sbox.options[sbox.options.length] = new Option("Toute la salle", 0);
 
 	<?PHP

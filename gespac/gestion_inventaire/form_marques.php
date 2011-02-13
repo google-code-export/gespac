@@ -20,7 +20,8 @@
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit (filt) {
 		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1500);
+		window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1500);
+		TB_remove();
 	}
 	
 	// masque le combo pour afficher le input et vis-versa
@@ -98,9 +99,9 @@
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 			//	poste la page en ajax
-			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
+			HTML_AJAX.replace("target", "gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
 			//	on recharge la page au bout de 1000ms
-			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
+			window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_marques.php');", 1000);
 			TB_remove();
 		}
 	}
@@ -147,9 +148,9 @@
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 			//	poste la page en ajax
-			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
+			HTML_AJAX.replace("target", "gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
 			//	on recharge la page au bout de 1000ms
-			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
+			window.setTimeout("HTML_AJAX.replace('conteneur', 'gestion_inventaire/voir_marques.php');", 1000);
 		}
 	}
 	
@@ -165,30 +166,8 @@
 		$('modif_modele_par_corr').style.display = "none";
 	}
 	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
 	
-	window.addEvent('domready', function(){
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML, filt) {
-					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					SexyLightbox.close();
-				}
-			
-			}).send(this.toQueryString());
-		});			
-	});
+	
 	
 	
 </script>
@@ -198,7 +177,7 @@
 	$id = $_GET['id'];
 	
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -217,7 +196,7 @@
 		echo "<h2>Formulaire de création d'une marque</h2><br>";
 		
 		// adresse de connexion à la base de données
-		$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+		$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 		// cnx à la base de données GESPAC
 		$db_gespac 	= & MDB2::factory($dsn_gespac);		
@@ -239,6 +218,8 @@
 		-->
 		<div id='creer_modele_par_corr'>
 			<form>
+			<!--<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_marques.php?action=add" method="post" name="frmTest" id="frmTest">-->
+
 				<center>
 			
 				<p>Choisir un modèle : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"></p>
@@ -288,7 +269,7 @@
 		
 		-->
 		<div id='creer_nouveau_modele' style='display:none'>
-			<form action="gestion_inventaire/post_marques.php?action=add" method="post" name="post_form" id="post_form">
+			<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_marques.php?action=add" method="post" name="frmTest" id="frmTest">
 
 				<center>
 				<table width=500>
@@ -414,7 +395,7 @@
 		// Requete pour récupérer les données des champs pour la marque à modifier
 		
 		// adresse de connexion à la base de données
-		$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+		$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 		// cnx à la base de données GESPAC
 		$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -498,7 +479,7 @@
 		-->
 		<DIV id='modif_manuelle_modele' style='display:none'>
 			
-			<form action="gestion_inventaire/post_marques.php?action=mod" method="post" name="post_form" id="post_form">
+			<form onsubmit="return !HTML_AJAX.formSubmit(this,'target');" action="gestion_inventaire/post_marques.php?action=mod" method="post" name="frmTest" id="frmTest">
 
 				<input type=hidden name=marqueid value=<?PHP echo $id;?> >
 				<center>

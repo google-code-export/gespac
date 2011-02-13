@@ -1,2 +1,4 @@
-"issues";"http://code.google.com/feeds/p/gespac/issueupdates/basic"
-"gespac wiki";"http://gespac13.free.fr/wiki/index.php?title=Gestion_flux:rss&feed=rss"
+"gespac updates";"http://code.google.com/feeds/p/gespac/updates/basic"
+"issues updates";"http://code.google.com/feeds/p/gespac/issueupdates/basic"
+"raoulpower";"http://raoulpower.free.fr/rss/index.php?dossier=img/divers/"
+"le monde";"http://www.lemonde.fr/rss/en_continu.xml"

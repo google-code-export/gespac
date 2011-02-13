@@ -1,6 +1,16 @@
 		<!--	CODAGE	-->
 		<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1" /> 
 		
+		<!--	CSS	-->
+		<link rel="stylesheet" href="css/smoothbox.css" type="text/css" media="screen" />
+
+		<!--	JS	-->
+		<script type="text/javascript" src="js/smoothbox.js"></script> 
+	
+		<!-- 	AJAX	-->
+		<script type="text/javascript" src="server.php?client=all"></script>
+
+
 <?PHP
 
 	// utiliser pe $_SERVER['HTTP_HOST']; pour avoir la racine du site ...

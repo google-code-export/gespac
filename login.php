@@ -7,7 +7,7 @@
         session_start();
 
         // adresse de connexion à la base de données
-        $dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+        $dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
         // cnx à la base de données GESPAC
         $db_gespac      = & MDB2::factory($dsn_gespac);
@@ -31,6 +31,7 @@
 									  `user_nom` varchar(255) DEFAULT NULL,
 									  `user_logon` varchar(20) NOT NULL,
 									  `user_password` varchar(15) DEFAULT NULL,
+									  `user_niveau` int(11) DEFAULT '3',
 									  `user_mail` varchar(100) NOT NULL,
 									  `user_skin` varchar(150) NOT NULL DEFAULT 'cg13',
 									  `user_accueil` varchar(255) NOT NULL,
@@ -40,7 +41,7 @@
 									  UNIQUE KEY `user_logon` (`user_logon`)
 									) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
 									
-			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', '0', '', 'cg13', 'modules/stats/csschart.php','','0');";
 			
 			//on exécute les requêtes ci-dessus
 			$result_creation_table = $db_gespac->exec($req_creation_table_users);
@@ -69,14 +70,14 @@
 					$result_maj_id = $db_gespac->exec($req_maj_id);
 					
 					//on crée ensuite le compte ati
-					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', '0', '', 'cg13', 'modules/stats/csschart.php','','0');";
 					$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
 					
 					
 				} else {
 				
 					// il n'y a pas de compte avec l'id à 1 : on crée le compte ati
-					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', '0', '', 'cg13', 'modules/stats/csschart.php','','0');";
 					$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
 				}
 			}
@@ -109,13 +110,11 @@
 				$message = 'Nom d`utilisateur et/ou mot de passe incorrect !';
 			} else {
 					
-				// extraction de données pour les mettre en variables de sessions
+				// extraction du grade de l'user connecté
 				$user = $_SESSION ['login'];
-				$rq_session_user = $db_gespac->queryAll ( "SELECT user_skin, grade_menu, grade_nom FROM users, grades WHERE users.grade_id=grades.grade_id AND user_logon='$user' " );
-				$_SESSION ['skin'] 	 = $rq_session_user[0][0];             
-				$_SESSION ['droits'] = $rq_session_user[0][1];
-				$_SESSION ['grade']  = $rq_session_user[0][2];
-				
+				$rq_session_user = $db_gespac->queryAll ( "SELECT user_niveau, user_skin FROM users WHERE user_logon='$user' " );
+				$_SESSION ['grade'] = $rq_session_user[0][0];             
+				$_SESSION ['skin'] = $rq_session_user[0][1];             
 				
 				header ("Location: ./index.php");
 				break;

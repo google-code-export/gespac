@@ -1,8 +1,6 @@
 <?PHP
 
 	/*
-	 
-		Page 02-02
 	
 		Visualisation des marques
 		
@@ -16,16 +14,14 @@
 	*/
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-	
-	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
-	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-02-02#", $_SESSION['droits']);
-	
 		
 ?>
 
 
 <h3>Visualisation des marques et modèles</h3>
 <br>
+
+<script type="text/javascript" src="server.php?client=all" ></script>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
@@ -38,7 +34,7 @@
 <?PHP 
 
 	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
@@ -47,7 +43,7 @@
 	$liste_des_marques = $db_gespac->queryAll ( "SELECT marque_id, marque_type, marque_stype, marque_model, marque_marque FROM marques WHERE marque_suppr = 0 ORDER BY marque_type, marque_stype, marque_marque, marque_model" );
 
 	
-	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
+	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' class='smoothbox' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
 ?>
 	<!-- Gestion de l'affichage des modèles vides ici	
 		<span style="float:right;"><input type="checkbox" id="case_cochee" onclick="cacher_modele(); alterner_couleurs ();" checked> Cacher les modèles vides </span>
@@ -62,16 +58,12 @@
 		<th>Sous-famille</th>
 		<th>Marque</th>
 		<th>Modèle</th>
+		<th>&nbsp</th>
+		<th>&nbsp</th>
+		<th>&nbsp</th>
+		
 		
 		<?PHP	
-		
-		if ( $E_chk )
-		echo "<th>&nbsp</th>
-		<th>&nbsp</th>
-		<th>&nbsp</th>";
-		
-		
-		
 
 			//$option_id = 0;
 			
@@ -103,16 +95,14 @@
 					$afficher_modifier = $quadruplet <> "" ? "none" : "" ;
 									
 					
-					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_marques' title='Liste des matériels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$soustype' rel='slb_marques' title='Liste des matériels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_marques' title='Liste des matériels de marque $marque'>" . $marque . "</a> [" . $nb_matos_de_cette_marque . "] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_marques' title='Liste des matériels de modèle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
+					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' class='smoothbox' title='Liste des matériels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$soustype' class='smoothbox' title='Liste des matériels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' class='smoothbox' title='Liste des matériels de marque $marque'>" . $marque . "</a> [" . $nb_matos_de_cette_marque . "] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' class='smoothbox' title='Liste des matériels de modèle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
+					echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=280&width=640&id=$id' class='smoothbox' title='Formulaire d`ajout d`un materiel'><img src='img/add.png'> </a></td>";
+					echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' class='smoothbox' title='Formulaire de modification de la marque $nom'><img src='img/write.png' style='display:$afficher_modifier'> </a></td>";
+					echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_marque($id, '$model', '$marque', this.parentNode.parentNode.rowIndex, '" . $nb_matos_de_ce_modele ."');\">	<img src='img/delete.png'>	</a> </td>";
 					
-					if ($E_chk) {
-						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=280&width=640&id=$id' rel='slb_marques' title='Formulaire d`ajout d`un materiel'><img src='img/add.png'> </a></td>";
-						echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' rel='slb_marques' title='Formulaire de modification de la marque $nom'><img src='img/write.png' style='display:$afficher_modifier'> </a></td>";
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_marque($id, '$model', '$marque', this.parentNode.parentNode.rowIndex, '" . $nb_matos_de_ce_modele ."');\">	<img src='img/delete.png'>	</a> </td>";
-					}
 					
 				echo "</tr>";
 				
@@ -128,7 +118,8 @@
 	
 
 <?PHP
-	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
+
+	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' class='smoothbox' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
 
 // On se déconnecte de la db
 $db_gespac->disconnect();
@@ -136,13 +127,7 @@ $db_gespac->disconnect();
 
 ?>
 
-
-<script type="text/javascript">
-
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_marques'});
-	});
-
+<script type="text/javascript">	
 
 	// init de la couleur de fond
 	$('conteneur').style.backgroundColor = "#fff";
@@ -170,7 +155,7 @@ $db_gespac->disconnect();
 			/*	supprimer la ligne du tableau	*/
 				document.getElementById('marque_table').deleteRow(row);
 			/*	poste la page en ajax	*/
-				$('target').load("gestion_inventaire/post_marques.php?action=suppr&id=" + id);
+				HTML_AJAX.replace("target", "gestion_inventaire/post_marques.php?action=suppr&id=" + id);
 			}
 		} else {
 			alert('IMPOSSIBLE de supprimer cette marque car des machines y sont associées !');

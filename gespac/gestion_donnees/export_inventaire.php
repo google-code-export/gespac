@@ -6,9 +6,9 @@ include_once ('../includes.php');	// fichier contenant les fonctions, la config 
 
 
 // adresse de connexion à la base de données
-$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/gespac';
 
-// cnx à la base de données OCS
+// cnx à la base de donnée GESPAC
 $db_gespac 	= & MDB2::factory($dsn_gespac);
 
 // stockage des lignes retournées par sql dans un tableau (je ne récupère que le matos associé à une marque)
@@ -33,7 +33,7 @@ $filename = preg_replace('/([^.a-z0-9]+)/i', '_', $filename);
 $fp = fopen('../dump/' .$filename, 'w+');
 
 // ENTETES
-fputcsv($fp, array('clg_uai', 'clg_nom', 'clg_cp', 'clg_ville', 'salle_nom', 'mat_nom', 'etat', 'origine', 'type', 'stype', 'marque', 'modele', 'inventaire', 'serial', 'vlan', 'etage', 'batiment', 'site_web', 'site_grr'), ',' );
+fputcsv($fp, array('clg_uai', 'clg_nom', 'clg_cp', 'clg_ville', 'salle_nom', 'mat_nom', 'etat', 'origine', 'type', 'stype', 'marque', 'modele', 'inventaire',  'lastcome' , 'fidelite' ,'serial', 'vlan', 'etage', 'batiment', 'site_web', 'site_grr'), ',' );
 
 foreach ($liste_export as $record) {
 	$clg_uai 	= mb_strtoupper($record[0]);
@@ -49,6 +49,7 @@ foreach ($liste_export as $record) {
 	$marque 	= mb_strtoupper($record[10]);
 	$modele 	= mb_strtoupper($record[11]);
 	$dsit 		= mb_strtoupper($record[12]);
+	
 	$serial 	= mb_strtoupper($record[13]);
 	$vlan 		= mb_strtoupper($record[14]);
 	$etage 		= strtr(mb_strtoupper($record[15]), 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜİàáâãäåçèéêëìíîïğòóôõöùúûüıÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
@@ -60,7 +61,7 @@ foreach ($liste_export as $record) {
 	//Partie fidelité OCS :-(
 
 	// adresse de connexion à la base de données
-	$dsn_ocsweb 	= 'mysql://'. $user .':' . $pass . '@localhost/'.$ocsweb;
+	$dsn_ocsweb 	= 'mysql://'. $user .':' . $pass . '@localhost/ocsweb';
 
 	// cnx à la base de données OCS
 	$db_ocsweb 	= & MDB2::factory($dsn_ocsweb);

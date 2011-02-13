@@ -68,7 +68,7 @@
 
 	
 	// adresse de connexion à la base de données
-	$dsn_fog     = 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
+	$dsn_fog 	= 'mysql://'. $user .':' . $pass . '@localhost/fog';
 
 	// cnx à la base de données FOG
 	$db_fog 	= & MDB2::factory($dsn_fog);
@@ -111,7 +111,7 @@
 				$id				= $record_fog[2];
 				
 				// adresse de connexion à la base de données
-				$dsn_fog 		= 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
+				$dsn_fog 		= 'mysql://'. $user .':' . $pass . '@localhost/fog';
 
 				// cnx aux bases de données FOG et GESPAC
 				$db_fog 	= & MDB2::factory($dsn_fog);
