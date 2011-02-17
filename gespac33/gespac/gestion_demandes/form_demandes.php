@@ -459,7 +459,7 @@
 
 				</select>
 				
-				<input type=submit id='post_reponse' value=poster disabled >
+				<input type=submit id='post_reponse' value=poster disabled onclick="$('post_reponse').disabled=true;" >
 		
 			</form>
 		
