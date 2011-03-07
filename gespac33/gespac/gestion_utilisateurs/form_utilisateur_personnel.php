@@ -44,7 +44,7 @@ session_start();
 				method: this.method,
 				url: this.action,
 
-				onSuccess: function(responseText, responseXML, filt) {
+				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
 					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('index.php');", 1500);
