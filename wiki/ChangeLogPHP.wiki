@@ -1,0 +1,12 @@
+Page récapitulative des changements dans les fonctionnalités de l'application
+
+= Change Log PHP =
+
+*gespac 3.3*
+  * ajout de la gestion des droits
+  * ajout de la notion de grades
+
+*gespac 3.2.1*
+  * possibilité d'ajouter un matériel qui n'est pas dans la table des correspondances
+
+*gespac 3.2*
