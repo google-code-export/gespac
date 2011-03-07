@@ -1,7 +1,11 @@
 <script type="text/javascript">	
 	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
+	$('conteneur').style.backgroundColor = "#fff";
 </script>
+	
+	
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
 	
 
 <?PHP

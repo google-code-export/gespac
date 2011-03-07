@@ -21,13 +21,16 @@
 
 ?>
 
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
 
 <h3>Récapitulatif FOG</h3>
 
 <script type="text/javascript">	
 	
 	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
+	$('conteneur').style.backgroundColor = "#fff";
 	
 	// *********************************************************************************
 	//

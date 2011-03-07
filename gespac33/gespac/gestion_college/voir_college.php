@@ -9,6 +9,9 @@ session_start();
 
 ?>
 
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
 <script type="text/javascript">	
 	// init de la couleur de fond
 	$('conteneur').style.backgroundColor = "#fff";

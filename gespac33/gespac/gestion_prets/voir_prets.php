@@ -20,8 +20,6 @@
 <h3>Visualisation des matériels disponibles au prêt</h3><br>
 
 
-<script type="text/javascript" src="server.php?client=all"></script>
-
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 

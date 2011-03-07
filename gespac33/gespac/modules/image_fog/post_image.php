@@ -26,7 +26,7 @@
 		$materiel = $db_gespac->queryRow ( "SELECT mat_nom, mat_mac FROM materiels WHERE mat_id = $id" );
 		$mat_nom = $materiel[0];
 		$mat_mac = $materiel[1];
-		$mat_mac_with_dash = preg_replace("[:]", "-", $mat_mac);
+		$mat_mac_with_dash = "01-" . preg_replace("[:]", "-", $mat_mac);
 		
 		$db_gespac->disconnect();
 		

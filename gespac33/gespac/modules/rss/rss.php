@@ -2,13 +2,11 @@
 	session_start();
 ?>
 
-
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
 <!--	CODAGE	-->
 <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1" /> 
 
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
 	
 <?php
 

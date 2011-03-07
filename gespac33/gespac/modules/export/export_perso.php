@@ -30,10 +30,9 @@
 
 <?PHP header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères ?>
 
+<!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
-<!--  SERVEUR AJAX 
-<script type="text/javascript" src="server.php?client=all"></script>-->
 <h3>Export personnalisé</h3><br>
 
 <form action="modules/export/post_export_perso.php" method="post" name="post_form" id="post_form">

@@ -1,10 +1,10 @@
-<?PHP
+
+	<!--	DIV target pour Ajax	-->
+	<div id="target"></div>
 
 
-include ('export_fog.php');
-include ('export_gespac_fog.php');
-include ('export_inventaire.php');
-
-
-
-?>
+	<?PHP
+		include ('export_fog.php');
+		include ('export_gespac_fog.php');
+		include ('export_inventaire.php');
+	?>

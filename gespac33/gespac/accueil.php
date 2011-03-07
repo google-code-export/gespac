@@ -1,5 +1,7 @@
 <?PHP	header("Content-Type:text/html; charset=iso-8859-15" ); 	// règle le problème d'encodage des caractères	?>
 
+<div id="target"></div>
+
 <?PHP
 
 	include_once ('config/databases.php');	// fichiers de configuration des bases de données
