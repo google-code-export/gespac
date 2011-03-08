@@ -3,8 +3,13 @@ Page récapitulative des changements dans les fonctionnalités de l'application
 = Change Log PHP =
 
 *gespac 3.3*
+  * refonte complète du moteur ajax. On passe de pear à js/mootools.
   * ajout de la gestion des droits
   * ajout de la notion de grades
+  * modification de son propre compte utilisateur
+  * renommer par lot les matériels
+  * ajout des numéros d'inventaire par csv
+  * ajout du mailing pour les dossiers / interventions
 
 *gespac 3.2.1*
   * possibilité d'ajouter un matériel qui n'est pas dans la table des correspondances
