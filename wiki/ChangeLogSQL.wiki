@@ -4,6 +4,8 @@ Page récapitulative des changements dans la base SQL de gespac
 
 *gespac 3.3*
   * Ajout table "grades"
+  * Ajout de users:user_mailing
+  * Suppression de users:user_niveau
 
 *gespac 3.2.1*
 
