@@ -10,6 +10,10 @@ Page récapitulative des changements dans les fonctionnalités de l'application
   * renommer par lot les matériels
   * ajout des numéros d'inventaire par csv
   * ajout du mailing pour les dossiers / interventions
+  * les logs sont maintenant plus précis
+  * possibilité de modifier par lot des utilisateurs
+  * ajout d'un code couleur pour les dossiers et les interventions
+  * un personnel peut lister uniquement ses dossiers ou tous ceux créés. Pour plus de confidentialité, le nom du créateur du dossier n'apparaît pas dans le listing des demandes.
 
 *gespac 3.2.1*
   * possibilité d'ajouter un matériel qui n'est pas dans la table des correspondances
