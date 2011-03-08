@@ -355,7 +355,7 @@
 					
 					if ( $E_chk ) {
 						/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
-						/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel($id, '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
+						/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 					}
 					
 				echo "</tr>";
@@ -422,11 +422,15 @@
 			// si la réponse est TRUE ==> on lance la page post_materiels.php
 			if (valida) {
 				
+				/* On déselectionne toutes les coches */
+				select_cette_ligne ( id, row, 0 );
+
 				/*	poste la page en ajax	*/
 				$('target').load("gestion_inventaire/post_materiels.php?action=suppr&id=" + id);
 				
 				/*	supprimer la ligne du tableau	*/
 				$('mat_table').deleteRow(row);
+				
 			}
 			
 		} else {
@@ -472,10 +476,10 @@
 	 
 	function select_cette_ligne( tr_id, num_ligne, check ) {
 
-		var chaine_id = document.getElementById('materiel_a_poster').value;
+		var chaine_id = $('materiel_a_poster').value;
 		var table_id = chaine_id.split(";");
-		
-		var nb_selectionnes = document.getElementById('nb_selectionnes');
+				
+		var nb_selectionnes = $('nb_selectionnes');
 		
 		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
 		var li = document.getElementById(ligne);	
@@ -492,10 +496,12 @@
 				break;
 				
 				case 0: // On force la déselection
-					table_id.erase(tr_id);
-					nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-					// alternance des couleurs calculée avec la parité
-					if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
+					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
+						table_id.erase(tr_id);
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+						// alternance des couleurs calculée avec la parité
+						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
+					}
 				break;
 				
 				
@@ -517,7 +523,7 @@
 			}
 	
 			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
-			document.getElementById('materiel_a_poster').value = table_id.join(";");
+			$('materiel_a_poster').value = table_id.join(";");
 			
 
 			if ( $('materiel_a_poster').value != "" ) {
