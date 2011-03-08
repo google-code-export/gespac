@@ -1,8 +1,9 @@
-#Page récapitulative des changements dans la base SQL de gespac
+Page récapitulative des changements dans la base SQL de gespac
 
 =Change Log SQL=
 
 *gespac 3.3*
+  * Ajout table "grades"
 
 *gespac 3.2.1*
 
