@@ -382,7 +382,7 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 				echo "<TD rowspan=$count_logiciels bgcolor=$bg_color_logiciel><b>Logiciels installés</b></TD>";
 			$i = 0;
 			foreach ($rq_liste_logiciels as $record) {
-				$NAME = htmlentities($record[0]);
+				$NAME = stripcslashes(urldecode(utf8_decode($record[0])));
 				$bg_color_image = $bg_color_image == "#e1ffd3" ? "#ffffff" : "#e1ffd3";
 				if ( $i == 0 ) {
 					echo "<td bgcolor=$bg_color_image>$NAME</td></tr>";
