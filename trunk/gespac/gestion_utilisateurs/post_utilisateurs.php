@@ -139,10 +139,6 @@
 		$mailing	= $_POST ['mailing'];
 		$grade		= $_POST ['grade'];
 		$skin		= addslashes(utf8_decode(urldecode($_POST ['skin'])));
-		//$page		= addslashes(utf8_decode(urldecode($_POST ['page'])));
-		
-		
-		var_dump($lot);
 		
 		$lot_array = explode(";", $lot);
 		
