@@ -135,11 +135,14 @@
 		
 	if ( $action == 'modlot' ) {
 		
-		$lot		= addslashes(utf8_decode(urldecode($_POST ['lot_users'])));
+		$lot		= $_POST ['lot_users'];
 		$mailing	= $_POST ['mailing'];
-		$grade		= addslashes(utf8_decode(urldecode($_POST ['grade'])));
+		$grade		= $_POST ['grade'];
 		$skin		= addslashes(utf8_decode(urldecode($_POST ['skin'])));
-		$page		= addslashes(utf8_decode(urldecode($_POST ['page'])));
+		//$page		= addslashes(utf8_decode(urldecode($_POST ['page'])));
+		
+		
+		var_dump($lot);
 		
 		$lot_array = explode(";", $lot);
 		
@@ -160,25 +163,19 @@
 				} else { $sql_grade = ""; }
 				
 				
-				//$page est le 3eme champ à UPDATER (ou pas)
-				if ( $page <> "" ) {
+				//$mailing est le 3eme champ à UPDATER (ou pas)
+				if ( $mailing <> 2 ) {
 
 					// dans la rq sql, met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)					
-					if ( $sql_skin == "" && $sql_grade == "" ) $sql_page = " user_accueil='$page' ";
-					else $sql_page = ", user_accueil='$page' " ;
-
-				} else { $sql_page = ""; }
-				
-				
-				//$mailing est le dernier champ à UPDATER (ou pas)
-				if ( $mailing <> 2 ) {
-					
-					if ( $sql_skin == "" && $sql_grade == "" && $sql_page == "" ) $sql_mailing = " user_mailing=$mailing";
+					if ( $sql_skin == "" && $sql_grade == "" ) $sql_mailing = " user_mailing=$mailing";
 					else $sql_mailing = " , user_mailing=$mailing" ;
-					
+
 				} else { $sql_mailing = ""; }
 				
-				$req_modif_user = "UPDATE users SET " . $sql_skin . $sql_grade . $sql_page . $sql_mailing . " WHERE user_id=$item ;";
+				
+
+				
+				$req_modif_user = "UPDATE users SET " . $sql_skin . $sql_grade . $sql_mailing . " WHERE user_id=$item ;";
 				$result = $db_gespac->exec ( $req_modif_user );
 				
 				//on récupérer le nom et l'id du user de chaque item pour les logs
