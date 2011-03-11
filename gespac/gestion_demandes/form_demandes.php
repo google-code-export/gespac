@@ -8,7 +8,7 @@
 	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-02#", $_SESSION['droits']);
-	
+
 ?>
 
 
@@ -321,7 +321,7 @@
 				
 				
 				
-				// L'utilisateur ATI peut créer directement l'intervention
+				// L'utilisateur avec des droits d'écriture sur inter peut créer directement l'intervention
 				if ( $E_chk ) { ?>
 					<br>
 					<br>
@@ -429,9 +429,8 @@
 					<option value=rectifier>	Rectifier le dossier	</option>
 
 					<?PHP 
-					$grade_user = $_SESSION ['grade'];
-					
-					if ( $grade_user <=2 ) { ?>
+
+					if ( $E_chk ) { ?>
 						<option value=precisions>	Demander précisions		</option>
 						
 						<?PHP
