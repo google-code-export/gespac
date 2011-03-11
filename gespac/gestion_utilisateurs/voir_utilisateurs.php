@@ -122,7 +122,7 @@
 							$suppr_user = "<td><img src='img/delete.png' style=display:none></td>";
 						} else {
 							$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id&action=mod' rel='slb_users' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
-							$suppr_user = "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user($id, '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
+							$suppr_user = "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user('$id', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 						}
 						
 						echo $modif_user;
@@ -173,6 +173,9 @@
 			var valida = confirm('Voulez-vous vraiment supprimer l\'utilisateur "' + nom + '" ?');
 			// si la réponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
+				
+				/* On déselectionne les lignes cocchées */
+				select_cette_ligne ( id, row, 0 );
 							
 				/*	supprimer la ligne du tableau	*/
 				document.getElementById('user_table').deleteRow(row);
@@ -275,10 +278,12 @@
 				break;
 				
 				case 0: // On force la déselection
-					table_id.erase(tr_id);
-					nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-					// alternance des couleurs calculée avec la parité
-					if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
+					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
+						table_id.erase(tr_id);
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+						// alternance des couleurs calculée avec la parité
+						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
+					}
 				break;
 				
 				
