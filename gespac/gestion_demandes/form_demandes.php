@@ -266,7 +266,7 @@
 		
 		?>
 
-		<form action="gestion_demandes/post_demandes.php?action=add" method="post" name="post_form" id="post_form">
+		<form action="gestion_demandes/post_demandes.php?action=add" method="post" name="post_form" id="post_form"  onsubmit="$('post_demandes').disabled=true;">
 
 			<center>
 			<table width=500>
@@ -330,7 +330,7 @@
 			
 			<br>
 			<br>
-				<input type=submit id=post_demandes value='Envoyer la demande' disabled>
+				<input type="submit" id="post_demandes" value='Envoyer la demande' disabled>
 
 			</center>
 
