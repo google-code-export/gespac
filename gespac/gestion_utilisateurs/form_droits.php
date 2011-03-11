@@ -20,9 +20,8 @@
 
 		var bt_submit = $("post_user");
 		var grade_nom = $("nom").value;
-		var grade_niveau = $("niveau").value;
 		
-		if (grade_nom == "" || grade_niveau == "") {
+		if (grade_nom == "") {
 			bt_submit.disabled = true;
 		} else {
 			bt_submit.disabled = false;
@@ -115,13 +114,12 @@
 	
 	
 	// Requete pour récupérer les données des champs pour le user à modifier
-	$grade_a_modifier = $db_gespac->queryRow ( "SELECT grade_id, grade_nom, grade_niveau, grade_menu FROM grades WHERE grade_id=$id" );		
+	$grade_a_modifier = $db_gespac->queryRow ( "SELECT grade_id, grade_nom, grade_menu FROM grades WHERE grade_id=$id" );		
 	
 	// valeurs à affecter aux champs
 	$grade_id 			= $grade_a_modifier[0];
 	$grade_nom	 		= $grade_a_modifier[1];
-	$grade_niveau	 	= $grade_a_modifier[2];
-	$grade_menu	 		= $grade_a_modifier[3];
+	$grade_menu	 		= $grade_a_modifier[2];
 
 	echo "<h2>formulaire de modification des droits du grade $grade_nom</h2><br>";
 
