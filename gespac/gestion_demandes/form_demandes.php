@@ -415,7 +415,7 @@
 
 	
 		<div id="reponse" style="display:<?PHP echo $montre_reponse; ?>">
-			<form action="gestion_demandes/post_demandes.php?action=mod" method="post" name="post_form" id="post_form">
+			<form action="gestion_demandes/post_demandes.php?action=mod" method="post" name="post_form" id="post_form" onsubmit="$('post_reponse').disabled=true;">
 				
 				<input type=hidden name="dossier" value= <?PHP echo $id;?> >
 				<input type=hidden name="salle" value= <?PHP echo $salle_id;?> >
@@ -454,7 +454,7 @@
 
 				</select>
 				
-				<input type=submit id='post_reponse' value=poster disabled onclick="$('post_reponse').disabled=true;" >
+				<input type=submit id='post_reponse' value=poster disabled >
 		
 			</form>
 		
