@@ -343,9 +343,10 @@
 		<form action="gestion_utilisateurs/post_utilisateurs.php?action=modlot" method="post" name="post_form" id="post_form">
 			<center>
 			
-			<input type=hidden name=lot_users id=lot_users>
-			<!-- Ici on récupère la valeur du champ utilisateur_a_poster de la page voir_utilisateurs.php -->
-			<script>$("lot_users").value = $('utilisateur_a_poster').value;</script>
+			<input type=hidden name='lot_users' id='lot_users'>
+			
+			<!-- Ici on récupère la valeur du champ users_a_poster de la page voir_utilisateurs.php -->
+			<script>$("lot_users").value = $('users_a_poster').value;</script>
 			
 
 			<table width=500>
@@ -400,25 +401,7 @@
 						</select>
 					</td>
 				</tr>
-				
-				<tr>
-					<?PHP 
-						$selected = $accueil == $user_accueil ? "selected" : "" ;
-					?>
-				
-					<TD>Page de Démarrage</TD>
-					<TD><select name="page" size="1">
-							<option value="">Ne pas modifier</option>
-							<option value="gestion_inventaire/voir_materiels.php">matériels</option>
-							<option value="modules/stats/csschart.php">stats</option>
-							<option value="modules/rss/rss.php">rss</option>
-							<option value="gestion_demandes/voir_demandes.php">demandes</option>
-							<option value="gestion_demandes/voir_interventions.php">interventions</option>
-							<option value="modules/stats/utilisation_parc.php">utilisation parc</option>
-							<option value="modules/wol/voir_liste_wol.php">WOL</option>
-						</select>
-					</TD>
-				</tr>
+
 			</table>
 
 			<br>
