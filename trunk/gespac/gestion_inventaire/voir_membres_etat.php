@@ -20,25 +20,23 @@
 	
 	// id ocs du matériel à afficher
 	$etat = $_GET ['etat'];
+	
+	$etat_explode = explode("-", $etat);
+	
+	$etat_std = $etat_explode[0];
+	$dossier = $etat_explode[1];
 
 
 	// adresse de connexion à la base de données
 	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
-
-	// options facultatives de cnx à la db
-	$options = array(
-		'debug'       => 2,
-		'portability' => MDB2_PORTABILITY_ALL,
-	);
-
-	// cnx à la base de données OCS
-	$db_gespac 	= & MDB2::connect($dsn_gespac, $options);
+	// cnx à la base de données GESPAC
+	$db_gespac 	= & MDB2::factory($dsn_gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, marque_type, marque_marque, marque_model, mat_id, salle_nom FROM materiels, marques, salles WHERE materiels.salle_id=salles.salle_id AND mat_etat='$etat' AND materiels.marque_id = marques.marque_id order by mat_nom" );
+	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, marque_type, marque_marque, marque_model, mat_id, salle_nom FROM materiels, marques, salles WHERE materiels.salle_id=salles.salle_id AND mat_etat LIKE '$etat_std%' AND materiels.marque_id = marques.marque_id order by mat_nom" );
 
-	echo "<p><small>" . count($liste_des_materiels) . " matériel(s) avec l'état $etat.</small></p>";
+	echo "<p><small>" . count($liste_des_materiels) . " matériel(s) avec l'état $etat_std.</small></p>";
 	
 	$fp = fopen('../dump/extraction.csv', 'w+');	//Ouverture du fichier
 	fputcsv($fp, array('nom', 'dsit', 'serial', 'famille', 'marque', 'modele', 'salle'), ',' );	// ENTETES
