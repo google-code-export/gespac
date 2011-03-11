@@ -298,7 +298,7 @@
 
 	
 	<div id="reponse" style="display:<?PHP echo $montre_reponse; ?>">
-		<form action="gestion_demandes/post_interventions.php?action=mod" method="post" name="post_form" id="post_form">
+		<form action="gestion_demandes/post_interventions.php?action=mod" method="post" name="post_form" id="post_form" onsubmit="$('post_reponse').disabled=true;">
 			
 			<input type=hidden name="inter" value= <?PHP echo $interv_id;?> >
 			<input type=hidden name="dossier" value= <?PHP echo $dem_id;?> >
