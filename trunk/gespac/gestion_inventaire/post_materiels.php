@@ -249,8 +249,12 @@ session_start();
 		
 		//fwrite($fp, print_r($_POST) ");
 		
+		// Si un dossier est entré, on concatène etat et dossier, sinon on ne colle que l'état.
+		if ( $gign ) $etat = $etat . "-" . $gign;
+			
+		
 		if ( $marque_id ) {
-			$req_modif_materiel = "UPDATE materiels SET mat_nom='$nom', mat_dsit='$dsit', mat_serial='$serial', mat_etat='$etat-$gign', salle_id=$salle_id, marque_id=$marque_id, mat_origine = '$origine', mat_mac='$mac' WHERE mat_id=$id";
+			$req_modif_materiel = "UPDATE materiels SET mat_nom='$nom', mat_dsit='$dsit', mat_serial='$serial', mat_etat='$etat', salle_id=$salle_id, marque_id=$marque_id, mat_origine = '$origine', mat_mac='$mac' WHERE mat_id=$id";
 			$result = $db_gespac->exec ( $req_modif_materiel );
 			echo "<small>Modification du matériel <b>$nom</b> !</small>";
 			
