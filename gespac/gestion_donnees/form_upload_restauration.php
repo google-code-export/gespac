@@ -30,7 +30,7 @@
 <script type="text/javascript" src="server.php?client=all"></script>
 
 
-<form action="gespac/gestion_donnees/post_restauration_DB.php" method="POST" target=_blank enctype="multipart/form-data">
+<form action="post_restauration_DB.php" method="POST" target=_blank enctype="multipart/form-data">
 	 <!-- On limite le fichier à 10000Ko -->
      <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
 	 <center>
