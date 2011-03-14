@@ -58,7 +58,7 @@
 		
 		// Si il n'existe pas, on le créé
 		if ( $grade_id_invite == "" ) {
-			$req_insert_grade_invite = "INSERT INTO grades ( grade_nom, grade_menu, grade_niveau ) VALUES ( 'invité', '', 100);";
+			$req_insert_grade_invite = "INSERT INTO grades ( grade_nom, grade_menu ) VALUES ( 'invité', '');";
 			$result = $db_gespac->exec ( $req_insert_grade_invite );
 			fwrite($fp, date("Ymd His") . " " . $req_insert_grade_invite."\n");
 		}
