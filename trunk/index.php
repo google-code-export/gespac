@@ -80,8 +80,11 @@
 		}
 		else {
 			$version_gespac = EXEC('apt-show-versions gespac');
+			$version_foggespac = EXEC('apt-show-versions fog-gespac');
+			$version_serveurgespac = EXEC('apt-show-versions serveur-gespac');
 			$version_sqlgespac = EXEC('apt-show-versions sql-gespac');
-			$version_linux = EXEC('uname -r');
+			$version_linux = EXEC('uname -a');
+			$version_sys = EXEC('cat -s /etc/issue');
 		}
 	
 		// on vérifie la connectivité avec le serveur avant d'aller plus loin
@@ -104,8 +107,9 @@
 		// on vérifie si l'utilisateur est identifié
 		if (!isset( $_SESSION['login'])) {
 			// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié -> On redirige sur la page permettant de s'authentifier
-			echo '<img src="./gespac/img/gespac.png" height=48> version développement';
+			echo '<img src="./gespac/img/gespac.png" height=48> Trunk version';
 			include 'login.php';
+			echo '<div align="right"><sub>R187</sub></div>';
 			exit();	// on arrête l'exécution
 
 		} else {
@@ -150,15 +154,18 @@
 	<div id=portail-conteneur>
 		<b>GESPAC : </b><?php echo $version_gespac;?><br/>
 		<b>SQL-GESPAC : </b><?php echo $version_sqlgespac;?><br/>
+		<b>FOG-GESPAC : </b><?php echo $version_foggespac;?><br/>
+		<b>SERVEUR-GESPAC : </b><?php echo $version_serveurgespac;?><br/>
 		<b>Linux kernel : </b><?php echo $version_linux;?><br/>
 		<b><?php echo $_SERVER['SERVER_SIGNATURE'];?></b>
-		<b>PHP : </b><?php echo  phpversion();?><b/>r>
-		<b>Zend engine version :</b> <?php echo zend_version(); ?><br/>
+		<b>PHP : </b><?php echo  phpversion();?><b/><br/>
 		<b>Version GUI OCS : </b><?php echo $version_ocs;?><br/>
 		<b>Version FOG :</b> <?php echo $version_fog;?><br/>
 		<b>Navigateur utilisé : </b><?php echo $_SERVER["HTTP_USER_AGENT"];?><br/><br/><br/>
+								<b><h3><center>GESPAC est régi par la licence CeCILL V2 soumise au droit français et respectant les principes de diffusion des logiciels libres.<br>
+								Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA  sur le site "http://www.cecill.info".</b></h3></center><br><br>
 				<b>SITE OFFICIEL : </b><br/>
-					<a href="http://gespac13.free.fr" target=_blank>GESPAC13</a> (Les procédures et manuels validés)<br/><br/>
+					<a href="http://gespac.free.fr" target=_blank>GESPAC</a> (Les procédures et manuels validés)<br/><br/>
 		<b>NAVIGATEURS : </b><br/>
 			- Gespac marche mieux avec Firefox 3.5.x, Firefox 3.6, Chrome et Safari (globalement si le navigateur gère le css3, pas de problème)<br/>
 			- Il marche avec pratiquement tous les autres navigateurs, mais c'est moins joli (par exemple Opera 10.5 ne gère pas les fonctions css3 utilisées, donc c'est carré) <br/>
