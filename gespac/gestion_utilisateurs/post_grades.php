@@ -54,7 +54,7 @@
 	    $result = $db_gespac->exec ( $req_log_suppr_grade );
 		
 		// On test si le grade invité existe
-		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom='invit'" );
+		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom LIKE 'invit%'" );
 		
 		// Si il n'existe pas, on le créé
 		if ( $grade_id_invite == "" ) {
