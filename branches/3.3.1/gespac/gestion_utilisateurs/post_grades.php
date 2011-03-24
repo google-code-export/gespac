@@ -4,11 +4,11 @@
 	/* fichier de creation / modif / suppr des grades
 	
 	Si j'ai un ID c'est une modification
-	Si j'en ai pas c'est une création
+	Si j'en ai pas c'est une crÃ©ation
 	
 	*/
 	
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// rÃ¨gle le problÃ¨me d'encodage des caractÃ¨res
 	
 	// lib
 	require_once ('../fonctions.php');
@@ -16,17 +16,17 @@
 	include_once ('../config/databases.php');
 	
 	
-	// on ouvre un fichier en écriture pour les log sql
+	// on ouvre un fichier en Ã©criture pour les log sql
 	$fp = fopen('../dump/log_sql.sql', 'a+');
 	
-	// adresse de connexion à la base de données	
+	// adresse de connexion Ã  la base de donnÃ©es	
 	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
 	
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$db_gespac 	= & MDB2::connect($dsn_gespac);
 	
 		
-	// on récupère les paramètres de l'url	
+	// on rÃ©cupÃ¨re les paramÃ¨tres de l'url	
 	$action 	= $_GET['action'];
 	$id 		= $_GET['id'];
 	
@@ -45,42 +45,42 @@
 
         //Insertion d'un log
 		
-		//On récupère le nom du grade en fonction de son id
+		//On rÃ©cupÃ¨re le nom du grade en fonction de son id
 	    $grade_nom = $db_gespac->queryOne ( "SELECT grade_nom FROM grades WHERE grade_id=$id" );
 
-	    $log_texte = "Le grade $grade_nom a été supprimé et les utilisateurs affectés sont désormais du grade \"invité\"";
+	    $log_texte = "Le grade $grade_nom a Ã©tÃ© supprimÃ© et les utilisateurs affectÃ©s sont dÃ©sormais du grade \"invitÃ©\"";
 
 	    $req_log_suppr_grade = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression grade', '$log_texte');";
 	    $result = $db_gespac->exec ( $req_log_suppr_grade );
 		
-		// On test si le grade invité existe
-		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom='invit'" );
+		// On test si le grade invitÃ© existe
+		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom LIKE 'invit%'" );
 		
-		// Si il n'existe pas, on le créé
+		// Si il n'existe pas, on le crÃ©Ã©
 		if ( $grade_id_invite == "" ) {
-			$req_insert_grade_invite = "INSERT INTO grades ( grade_nom, grade_menu ) VALUES ( 'invité', '');";
+			$req_insert_grade_invite = "INSERT INTO grades ( grade_nom, grade_menu ) VALUES ( 'invitÃ©', '');";
 			$result = $db_gespac->exec ( $req_insert_grade_invite );
 			fwrite($fp, date("Ymd His") . " " . $req_insert_grade_invite."\n");
 		}
 			
-		// On récupère le grade_id du grade "invité"
-		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom='invité'" );
+		// On rÃ©cupÃ¨re le grade_id du grade "invitÃ©"
+		$grade_id_invite = $db_gespac->queryOne ( "SELECT grade_id FROM grades WHERE grade_nom='invitÃ©'" );
 		
-		// On colle tous les utilisateurs du grade dans le grade générique "invité"
+		// On colle tous les utilisateurs du grade dans le grade gÃ©nÃ©rique "invitÃ©"
 		$req_maj_users = "UPDATE users SET grade_id=$grade_id_invite WHERE grade_id=$id;";
 		$result = $db_gespac->exec ( $req_maj_users );
 		
-		// On log la requête SQL
+		// On log la requÃªte SQL
 		fwrite($fp, date("Ymd His") . " " . $req_maj_users."\n");
 		
 		// Suppression du grade de la base
 		$req_suppr_grade = "DELETE FROM grades WHERE grade_id=$id;";
 		$result = $db_gespac->exec ( $req_suppr_grade );
 		
-		// On log la requête SQL
+		// On log la requÃªte SQL
 		fwrite($fp, date("Ymd His") . " " . $req_suppr_grade."\n");
 		
-		echo "<br><small>Le grade <b>$grade_nom</b> a été supprimé et les utilisateurs affectés sont désormais du grade \"invité\"</small>";
+		echo "<br><small>Le grade <b>$grade_nom</b> a Ã©tÃ© supprimÃ© et les utilisateurs affectÃ©s sont dÃ©sormais du grade \"invitÃ©\"</small>";
 	}
 
 	/**************** MODIFICATION ********************/	
@@ -92,16 +92,16 @@
 		$req_modif_grade = "UPDATE grades SET grade_nom='$nom' WHERE grade_id=$id";
 		$result = $db_gespac->exec ( $req_modif_grade );
 		
-		// On log la requête SQL
+		// On log la requÃªte SQL
 		fwrite($fp, date("Ymd His") . " " . $req_modif_grade."\n");
 		
-		// [BUG=>la requête est nok] Insertion d'un log
-		$log_texte = "Le grade $nom a été modifié";
+		// [BUG=>la requÃªte est nok] Insertion d'un log
+		$log_texte = "Le grade $nom a Ã©tÃ© modifiÃ©";
 		
 	    $req_log_modif_grade = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification compte', '$log_texte' );";
 	    $result = $db_gespac->exec ( $req_log_modif_grade );
 		
-		echo "<br><small>Le grade <b>$nom</b> a été modifié...</small>";
+		echo "<br><small>Le grade <b>$nom</b> a Ã©tÃ© modifiÃ©...</small>";
 	}
 	
 	/**************** INSERTION ********************/
@@ -112,16 +112,16 @@
 		$req_add_grade = "INSERT INTO grades ( grade_nom, grade_menu) VALUES ( '$nom', '' )";
 		$result = $db_gespac->exec ( $req_add_grade );
 		
-		// On log la requête SQL
+		// On log la requÃªte SQL
 		fwrite($fp, date("Ymd His") . " " . $req_add_grade."\n");
 		
-		// [BUG=>la requête est nok] Insertion d'un log
-		$log_texte = "Le grade $nom a été créé";
+		// [BUG=>la requÃªte est nok] Insertion d'un log
+		$log_texte = "Le grade $nom a Ã©tÃ© crÃ©Ã©";
 
-	    $req_log_creation_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création compte', '$log_texte' );";
+	    $req_log_creation_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'CrÃ©ation compte', '$log_texte' );";
 	    $result = $db_gespac->exec ( $req_log_creation_user );
 		
-		echo "<br><small>Le grade <b>$nom</b> a été ajouté...</small>";
+		echo "<br><small>Le grade <b>$nom</b> a Ã©tÃ© ajoutÃ©...</small>";
 	}
 	
 	// Je ferme le fichier  de log sql
