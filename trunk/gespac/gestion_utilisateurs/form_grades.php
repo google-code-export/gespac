@@ -12,9 +12,6 @@
 
 ?>
 
-<!--  SERVEUR AJAX -->
-<script type="text/javascript" src="server.php?client=all"></script>
-
 <script type="text/javascript"> 
 	
 	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
