@@ -270,10 +270,12 @@
 		
 		if ($('serial').readOnly == true) {
 			$('serial').readOnly = false;
-			$('activer_ssn').value = "Passer en Read only";
+			$('img_cadenas_ferme').style.display = '';
+			$('img_cadenas_ouvert').style.display = 'none';
 		} else if ($('serial').readOnly == false ) {
 			$('serial').readOnly = true;
-			$('activer_ssn').value = "Passer en écriture";
+			$('img_cadenas_ferme').style.display = 'none';
+			$('img_cadenas_ouvert').style.display = '';
 		}
 	}
 	
@@ -786,7 +788,12 @@
 				
 				<tr>
 					<TD>Numéro de série</TD>
-					<TD><input type="text" name="serial" id="serial" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/><input type=button value="Passer en écriture" id="activer_ssn" onclick="SSN_modifier ();"></TD>
+					<TD><input type="text" name="serial" id="serial" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
+						<a href='#' onclick='SSN_modifier();'>
+							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ouvert" style="display" title="Passer en écriture">
+							<img src='./img/cadenas_fermé.png' id="img_cadenas_ferme" style="display:none" title="Passer en Read only">
+						</a><!--<input type=button value="Passer en écriture" id="activer_ssn" onclick="SSN_modifier ();">-->
+					</TD>
 				</tr>
 				
 				<?PHP
