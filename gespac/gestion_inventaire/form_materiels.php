@@ -260,6 +260,22 @@
 		$('serial').value =  "NC" + number;
 	}
 	
+	/******************************************
+	*
+	*		Activer le changement du SSN
+	*
+	*******************************************/
+	
+	function SSN_modifier () {
+		
+		if ($('serial').readOnly == true) {
+			$('serial').readOnly = false;
+			$('activer_ssn').value = "Passer en Read only";
+		} else if ($('serial').readOnly == false ) {
+			$('serial').readOnly = true;
+			$('activer_ssn').value = "Passer en écriture";
+		}
+	}
 	
 	/******************************************
 	*
@@ -446,7 +462,7 @@
 				
 				<tr>
 					<TD>Numéro de série *</TD> 
-					<TD><input type=text id=serial name=serial onkeyup="validation();"/> <input type=button value="générer" onclick="SSNgenerator(); validation();"> </TD>
+					<TD><input type=text id=serial name=serial onkeyup="validation();"/> <input type=button value="générer" onclick="SSNgenerator(); validation();"><input type=button value="activer" onclick=""></TD>
 				</tr>
 				
 				<tr>
@@ -769,8 +785,8 @@
 				</tr>
 				
 				<tr>
-					<TD>Numéro de série</TD> 
-					<TD><input type="text" name="serial" value= "<?PHP echo $materiel_serial; ?>" readonly	/></TD>
+					<TD>Numéro de série</TD>
+					<TD><input type="text" name="serial" id="serial" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/><input type=button value="Passer en écriture" id="activer_ssn" onclick="SSN_modifier ();"></TD>
 				</tr>
 				
 				<?PHP
