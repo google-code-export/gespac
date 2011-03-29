@@ -57,7 +57,7 @@
 		
 		<?PHP	
 		
-			if ( $E_chk ) echo "<th>&nbsp</th><th>&nbsp</th><th>&nbsp</th>";
+			if ( $E_chk ) echo "<th>&nbsp</th><th>&nbsp</th><th>&nbsp</th><th>&nbsp</th>";
 			
 			$compteur = 0;
 			// On parcourt le tableau
@@ -78,11 +78,13 @@
 				
 					if ( $E_chk ) {
 						if ( $grade_nom <> "root" && $grade_nom <> "invité" ) {
+							echo "<td width=20><a href='gestion_utilisateurs/form_menu_portail.php?height=450&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du menu portail du grade $grade_nom'><img src='img/home.png'> </a></td>";
 							echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
 							echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
 							echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' title='supprimer $grade_nom'>	</a> </td>";
 						} else {
 							echo"<td width=20>&nbsp</td>
+							<td width=20>&nbsp</td>
 							<td width=20>&nbsp</td>
 							<td width=20>&nbsp</td>";
 						}

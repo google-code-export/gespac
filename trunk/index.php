@@ -80,11 +80,8 @@
 		}
 		else {
 			$version_gespac = EXEC('apt-show-versions gespac');
-			$version_foggespac = EXEC('apt-show-versions fog-gespac');
-			$version_serveurgespac = EXEC('apt-show-versions serveur-gespac');
 			$version_sqlgespac = EXEC('apt-show-versions sql-gespac');
-			$version_linux = EXEC('uname -a');
-			$version_sys = EXEC('cat -s /etc/issue');
+			$version_linux = EXEC('uname -r');
 		}
 	
 		// on vérifie la connectivité avec le serveur avant d'aller plus loin
@@ -107,30 +104,46 @@
 		// on vérifie si l'utilisateur est identifié
 		if (!isset( $_SESSION['login'])) {
 			// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié -> On redirige sur la page permettant de s'authentifier
-			echo '<img src="./gespac/img/gespac.png" height=48> Trunk version';
+			echo '<img src="./gespac/img/gespac.png" height=48> version développement';
 			include 'login.php';
-			echo '<div align="right"><sub>R187</sub></div>';
 			exit();	// on arrête l'exécution
 
 		} else {
 
-			$display_icon = ( $_SESSION['grade'] < 2 ) ? "" : "none" ;
+			//$display_icon = ( $_SESSION['grade'] < 2 ) ? "" : "none" ;
+
+			// si le grade du compte est root, on donne automatiquement les droits d'accès aux icones. Sinon, on teste si le compte a accès aux icones sinon.
+			
 				
 			echo "<div id=portail-menu-item><a href='./gespac'> 
 				<img src='./gespac/img/gespac.png' height=48><br>GESPAC </a></div>";
 			
-			if (file_exists($file_fog)) { //fichier présent active le lien vers interface FOG
-				echo "<div id=portail-menu-item style='display : $display_icon;'><a href='../fog/management/index.php' target=_blank> 
-					<img src='./gespac/img/fog.png' height=48><br>FOG </a></div>";
-			}	
-			
-			if (file_exists($file_ocs)) {	//fichier présent active le lien vers interface OCS
-				echo "<div id=portail-menu-item style='display : $display_icon;'><a href='../ocsreports' target=_blank> 
-					<img src='./gespac/img/ocs.png' height=48><br>OCS </a></div>";
-			}
+			include ('gespac/config/databases.php');
+			include ('gespac/config/pear.php');
+				
+			// adresse de connexion à la base de données
+			$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
-			echo "<div id=portail-menu-item style='display : $display_icon;'><a href='./gespac/gestion_donnees/form_upload_restauration.php?height=200&width=640' rel='sexylightbox' title='Restauration des bases de données'>
-				<img src='./gespac/img/database.png' height=48><br>RESTAURATION </a></div>";	
+			// cnx à la base de données GESPAC
+			$db_gespac 	= & MDB2::factory($dsn_gespac);
+
+			// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
+			$liste_des_icones = $db_gespac->queryAll ( "SELECT mp_id, mp_nom, mp_url, mp_icone FROM menu_portail ORDER BY mp_nom" );	
+			
+				
+			foreach ( $liste_des_icones as $record ) {
+			
+				$mp_id 		= $record[0];
+				$mp_nom 	= $record[1];
+				$mp_url 	= $record[2];
+				$mp_icone 	= $record[3];
+				
+				$affiche_item = ($_SESSION['grade'] == 'root') ? true : preg_match ("#item$mp_id#", $_SESSION['menu_portail']);
+				
+				if ( $affiche_item )
+					echo "<div id=portail-menu-item><a href='$mp_url' target=_blank> <img src='./gespac/img/$mp_icone' height=48><br>$mp_nom</a> </div>";
+
+			}	
 			
 			echo "<div style='float:right;' id=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
 				<img src='./gespac/img/cancel.png' height=48><br>Déconnexion </a></div>";
@@ -154,18 +167,15 @@
 	<div id=portail-conteneur>
 		<b>GESPAC : </b><?php echo $version_gespac;?><br/>
 		<b>SQL-GESPAC : </b><?php echo $version_sqlgespac;?><br/>
-		<b>FOG-GESPAC : </b><?php echo $version_foggespac;?><br/>
-		<b>SERVEUR-GESPAC : </b><?php echo $version_serveurgespac;?><br/>
 		<b>Linux kernel : </b><?php echo $version_linux;?><br/>
 		<b><?php echo $_SERVER['SERVER_SIGNATURE'];?></b>
-		<b>PHP : </b><?php echo  phpversion();?><b/><br/>
+		<b>PHP : </b><?php echo  phpversion();?><b/>r>
+		<b>Zend engine version :</b> <?php echo zend_version(); ?><br/>
 		<b>Version GUI OCS : </b><?php echo $version_ocs;?><br/>
 		<b>Version FOG :</b> <?php echo $version_fog;?><br/>
 		<b>Navigateur utilisé : </b><?php echo $_SERVER["HTTP_USER_AGENT"];?><br/><br/><br/>
-								<b><h3><center>GESPAC est régi par la licence CeCILL V2 soumise au droit français et respectant les principes de diffusion des logiciels libres.<br>
-								Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA  sur le site "http://www.cecill.info".</b></h3></center><br><br>
 				<b>SITE OFFICIEL : </b><br/>
-					<a href="http://gespac.free.fr" target=_blank>GESPAC</a> (Les procédures et manuels validés)<br/><br/>
+					<a href="http://gespac13.free.fr" target=_blank>GESPAC13</a> (Les procédures et manuels validés)<br/><br/>
 		<b>NAVIGATEURS : </b><br/>
 			- Gespac marche mieux avec Firefox 3.5.x, Firefox 3.6, Chrome et Safari (globalement si le navigateur gère le css3, pas de problème)<br/>
 			- Il marche avec pratiquement tous les autres navigateurs, mais c'est moins joli (par exemple Opera 10.5 ne gère pas les fonctions css3 utilisées, donc c'est carré) <br/>

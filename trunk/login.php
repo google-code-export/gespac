@@ -111,11 +111,11 @@
 					
 				// extraction de données pour les mettre en variables de sessions
 				$user = $_SESSION ['login'];
-				$rq_session_user = $db_gespac->queryAll ( "SELECT user_skin, grade_menu, grade_nom FROM users, grades WHERE users.grade_id=grades.grade_id AND user_logon='$user' " );
-				$_SESSION ['skin'] 	 = $rq_session_user[0][0];             
-				$_SESSION ['droits'] = $rq_session_user[0][1];
-				$_SESSION ['grade']  = $rq_session_user[0][2];
-				
+				$rq_session_user = $db_gespac->queryRow ( "SELECT user_skin, grade_menu, grade_nom, grade_menu_portail FROM users, grades WHERE users.grade_id=grades.grade_id AND user_logon='$user' " );
+				$_SESSION ['skin'] 			= $rq_session_user[0];             
+				$_SESSION ['droits'] 		= $rq_session_user[1];
+				$_SESSION ['grade']  		= $rq_session_user[2];
+				$_SESSION ['menu_portail']  = $rq_session_user[3];
 				
 				header ("Location: ./index.php");
 				break;
