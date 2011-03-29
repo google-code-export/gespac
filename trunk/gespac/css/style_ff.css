@@ -54,12 +54,21 @@ input, textarea, select {
 	-opera-border-radius	: 10px;
 }
 
-#portail-menu-item {
+.portail-menu-item {
 	text-align		: center;
 	width 			: auto;
 	float 			: left;
 	margin-right	: 20px;
 }
+
+.portail-menu-item:hover {
+	background				: #FFD48A; 
+	-moz-border-radius		: 5px;
+	-webkit-border-radius 	: 5px;
+	-khtml-border-radius 	: 5px;
+	-opera-border-radius	: 5px;
+}
+
 
 .spacer {
   clear: both;

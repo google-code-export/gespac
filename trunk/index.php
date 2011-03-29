@@ -115,7 +115,7 @@
 			// si le grade du compte est root, on donne automatiquement les droits d'accès aux icones. Sinon, on teste si le compte a accès aux icones sinon.
 			
 				
-			echo "<div id=portail-menu-item><a href='./gespac'> 
+			echo "<div class=portail-menu-item><a href='./gespac'> 
 				<img src='./gespac/img/gespac.png' height=48><br>GESPAC </a></div>";
 			
 			include ('gespac/config/databases.php');
@@ -141,11 +141,11 @@
 				$affiche_item = ($_SESSION['grade'] == 'root') ? true : preg_match ("#item$mp_id#", $_SESSION['menu_portail']);
 				
 				if ( $affiche_item )
-					echo "<div id=portail-menu-item><a href='$mp_url' target=_blank> <img src='./gespac/img/$mp_icone' height=48><br>$mp_nom</a> </div>";
+					echo "<div class=portail-menu-item><a href='$mp_url' target=_blank> <img src='./gespac/img/$mp_icone' height=48><br>$mp_nom</a> </div>";
 
 			}	
 			
-			echo "<div style='float:right;' id=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
+			echo "<div style='float:right;' class=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
 				<img src='./gespac/img/cancel.png' height=48><br>Déconnexion </a></div>";
 
 			echo "<div class='spacer'> </div>";
