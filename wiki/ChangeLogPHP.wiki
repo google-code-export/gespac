@@ -2,6 +2,10 @@ Page récapitulative des changements dans les fonctionnalités de l'application
 
 = Change Log PHP =
 
+* gespac 3.3.x*
+  * possibilité de déverrouiller le champ "serial" dans la modification d'un matériel
+  * création/modification/suppression d'un élément du menu portail
+
 *gespac 3.3*
   * refonte complète du moteur ajax. On passe de pear à js/mootools.
   * ajout de la gestion des droits
