@@ -790,7 +790,7 @@
 					<TD>Numéro de série</TD>
 					<TD><input type="text" name="serial" id="serial" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
 						<a href='#' onclick='SSN_modifier();' onkeyup='validation();'>
-							<img src='./img/cadenas_fermé.png' id="img_cadenas_ouvert" style="display" title="Passer en écriture">
+							<img src='./img/cadenas_ferme.png' id="img_cadenas_ouvert" style="display" title="Passer en écriture">
 							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ferme" style="display:none" title="Passer en Read only">
 						</a><!--<input type=button value="Passer en écriture" id="activer_ssn" onclick="SSN_modifier ();">-->
 					</TD>
