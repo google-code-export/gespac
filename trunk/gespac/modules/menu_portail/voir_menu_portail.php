@@ -141,10 +141,15 @@
 					echo "<td>" . $mp_nom . "</td>";
 					echo "<td>" . $mp_lien . "</td>";
 					
-					if ( $E_chk ) {
+					if ( $E_chk && $mp_nom <> "FOG" && $mp_nom <> "OCS" && $mp_nom <> "RESTAURATION"  ) {
 						echo "<td width=20><a href='modules/menu_portail/form_menu_portail.php?height=180&width=640&id=$mp_id' rel='slb_menu_portail' title='Formulaire de modification de l`item $mp_nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
 						echo "<td width=20> <a href='#' onclick=\"javascript:validation_suppr_item($mp_id, '$mp_nom');\">	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
 					}
+					else {
+						echo "<td width=20></td>";
+						echo "<td width=20></td>";
+					}
+					
 				echo "</tr>";
 				
 				$compteur++;
