@@ -184,7 +184,7 @@
 
 		var bt_submit  = document.getElementById("post_materiel");
 		var mat_nom    = document.getElementById("nom").value;
-		var mat_serial = document.getElementById("serial").value;
+		var mat_serial = $('serial').value;
 		var mat_modele = document.getElementById("modele_selectionne").value;
 		
 	
@@ -789,9 +789,9 @@
 				<tr>
 					<TD>Numéro de série</TD>
 					<TD><input type="text" name="serial" id="serial" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
-						<a href='#' onclick='SSN_modifier();'>
-							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ouvert" style="display" title="Passer en écriture">
-							<img src='./img/cadenas_fermé.png' id="img_cadenas_ferme" style="display:none" title="Passer en Read only">
+						<a href='#' onclick='SSN_modifier();' onkeyup='validation();'>
+							<img src='./img/cadenas_fermé.png' id="img_cadenas_ouvert" style="display" title="Passer en écriture">
+							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ferme" style="display:none" title="Passer en Read only">
 						</a><!--<input type=button value="Passer en écriture" id="activer_ssn" onclick="SSN_modifier ();">-->
 					</TD>
 				</tr>
