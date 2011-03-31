@@ -10,9 +10,6 @@
 <div id="target"></div>
 
 <script type="text/javascript">
-
-	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
 	
 	// Fonction de validation de l'import de la base OCS
 	function validation () {
@@ -21,7 +18,6 @@
 		
 		// si la réponse est TRUE ==> on lance la page import_ocs_db.php
 		if (valida) {
-			//$('target').load('gestion_donnees/import_ocs_db.php');
 			$('conteneur').load('gestion_donnees/import_ocs_db.php');
 		}
 	}
@@ -31,12 +27,18 @@
 
 
 <?PHP
+
+	header("Content-Type:text/html; charset=iso-8859-15" ); 	// règle le problème d'encodage des caractères
  
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-	include ('../../include/config.php'); //on récupère les variables pour le test des bases OCS
+	include_once ('../config/databases.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	include_once ('../config/pear.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
-	$link_bases = mysql_pconnect('localhost', 'root', $password_gespac);//connexion à la base de donnée
-	if(!mysql_select_db('ocsweb', $link_bases)) { echo "Base OCS non présente, il est impossible de continuer l'import."; }//si la base OCS n'existe pas on arrete la page
+	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion à la base de donnée
+	
+	if(!mysql_select_db('ocsweb', $link_bases)) { //si la base OCS n'existe pas on arrete la page
+		echo "Base OCS non présente, il est impossible de continuer l'import."; 
+	}
 	else {
 		// cnx à la base de données
 		$dsn_gespac		= 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
@@ -74,9 +76,8 @@
 
 		$liste_hardware_array = array();	// on initialise la variable comme un tableau
 		foreach ($liste_hardware as $row) { array_push ($liste_hardware_array, $row[4]);	} // On remplit le nouveau tableau avec un seul array et pas 2. $row[4] correspond au ssn ocs
-		
+			
 		$liste_doublons = array_unique(array_diff_assoc($liste_hardware_array, array_unique($liste_hardware_array))); // on extrait la liste des doublons dans un tableau
-
 		
 	?>
 		<!--	C'est le lien permettant de lancer l'import de la base	-->
@@ -118,7 +119,7 @@
 				// si le num de série est déjà dans gespac, on met le ssn en vert
 				if ( in_array($ssn, $liste_ssn_gespac) ) {
 						$tr_class = "tr_doublon";
-						$nb_materiels_dans_gespac++;
+						$nb_materiels_dans_gespac++;					
 				}
 				
 				// si le num de série est dans la liste des doublons on le passe en jaune

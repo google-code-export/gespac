@@ -110,25 +110,42 @@
 
 		} else {
 
-			$display_icon = ( $_SESSION['grade'] < 2 ) ? "" : "none" ;
+			//$display_icon = ( $_SESSION['grade'] < 2 ) ? "" : "none" ;
+
+			// si le grade du compte est root, on donne automatiquement les droits d'accès aux icones. Sinon, on teste si le compte a accès aux icones sinon.
+			
 				
-			echo "<div id=portail-menu-item><a href='./gespac'> 
+			echo "<div class=portail-menu-item><a href='./gespac'> 
 				<img src='./gespac/img/gespac.png' height=48><br>GESPAC </a></div>";
 			
-			if (file_exists($file_fog)) { //fichier présent active le lien vers interface FOG
-				echo "<div id=portail-menu-item style='display : $display_icon;'><a href='../fog/management/index.php' target=_blank> 
-					<img src='./gespac/img/fog.png' height=48><br>FOG </a></div>";
+			include ('gespac/config/databases.php');
+			include ('gespac/config/pear.php');
+				
+			// adresse de connexion à la base de données
+			$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+
+			// cnx à la base de données GESPAC
+			$db_gespac 	= & MDB2::factory($dsn_gespac);
+
+			// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
+			$liste_des_icones = $db_gespac->queryAll ( "SELECT mp_id, mp_nom, mp_url, mp_icone FROM menu_portail ORDER BY mp_nom" );	
+			
+				
+			foreach ( $liste_des_icones as $record ) {
+			
+				$mp_id 		= $record[0];
+				$mp_nom 	= $record[1];
+				$mp_url 	= $record[2];
+				$mp_icone 	= $record[3];
+				
+				$affiche_item = ($_SESSION['grade'] == 'root') ? true : preg_match ("#item$mp_id#", $_SESSION['menu_portail']);
+				
+				if ( $affiche_item )
+					echo "<div class=portail-menu-item><a href='$mp_url' target=_blank> <img src='./gespac/img/$mp_icone' height=48><br>$mp_nom</a> </div>";
+
 			}	
 			
-			if (file_exists($file_ocs)) {	//fichier présent active le lien vers interface OCS
-				echo "<div id=portail-menu-item style='display : $display_icon;'><a href='../ocsreports' target=_blank> 
-					<img src='./gespac/img/ocs.png' height=48><br>OCS </a></div>";
-			}
-
-			echo "<div id=portail-menu-item style='display : $display_icon;'><a href='./gespac/gestion_donnees/form_upload_restauration.php?height=200&width=640' rel='sexylightbox' title='Restauration des bases de données'>
-				<img src='./gespac/img/database.png' height=48><br>RESTAURATION </a></div>";	
-			
-			echo "<div style='float:right;' id=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
+			echo "<div style='float:right;' class=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
 				<img src='./gespac/img/cancel.png' height=48><br>Déconnexion </a></div>";
 
 			echo "<div class='spacer'> </div>";
