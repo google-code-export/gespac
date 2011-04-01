@@ -59,7 +59,7 @@
 
 				if ( $line[$row][0] <> "" && $line[$row][1] <> "") {	// On ne prend le champ que si le nom et le ssn sont non nuls
 					$req_import_csv = "INSERT INTO materiels (mat_nom, mat_serial, mat_dsit, mat_etat, mat_origine, salle_id, user_id, marque_id, mat_suppr) VALUES ('" . $line[$row][0] . "', '" . $line[$row][1] ."', '" . $line[$row][2] . "', '$etat', '$origine', 1, 1, $marque_id, 0 );";
-					//$result = $db_gespac->exec ( $req_import_csv );
+					$result = $db_gespac->exec ( $req_import_csv );
 					
 					// On log la requête SQL
 					fwrite($fp, date("Ymd His") . " " . $req_import_csv."\n");
