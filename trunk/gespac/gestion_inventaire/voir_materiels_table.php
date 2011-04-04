@@ -143,9 +143,6 @@
 			
 			$curseur_like++;
 		}
-		
-		// On nettoie la partie " AND " en trop
-		//$like = preg_replace("# AND $#", "", $like);
 			
 	}
 	
@@ -203,8 +200,10 @@
 	***************************/
 	
 	// permet de mettre la particule "AND" dans le cas ou le filtre d'exclusion existe
-	if ( $filter_explode_like <> "" && isset($filter_explode_notlike) ) $jonction = " AND ";
+	if ( $value_like_tab <> "" && $value_notlike_tab <> "" ) $jonction = " AND ";
 
+	
+	//echo $like . $jonction . $notlike;
 	
 		
 	if ( $_GET['filter'] <> '' ) {
