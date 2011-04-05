@@ -94,7 +94,8 @@
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 	
-	$filter_explode_exclusion = @explode ("/", $_GET['filter']);
+	$filtre = $_GET['filter'];
+	$filter_explode_exclusion = @explode ("/", $filtre);
 	$value_like_tab 	= $filter_explode_exclusion[0];	// Pour le filtre d'inclusion
 	$value_notlike_tab 	= $filter_explode_exclusion[1]; // Pour le filtre d'exclusion
 
@@ -257,11 +258,15 @@
 		
 		<!-- Ajout d'un matériel et Modification par lot-->
 		<?PHP
+			
+			echo "<span style='float:right; margin-right:20px'><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='img/csv.png'></a></span>";
+			
 			if ( $E_chk ) {
 				echo "<span style='float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>";
 				echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/write.png'>Modifier lot</a> <span id='nb_selectionnes'></span> </span>";
 				echo "<span id='rename_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/write.png'>Renommer lot</a> </span>";
 			}
+			
 		?>
 		
 		
