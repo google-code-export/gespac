@@ -165,16 +165,13 @@ session_start();
 					echo "<td>" . $batiment . "</td>";
 					
 					
-					if ( $est_modifiable == 1 ) {
-						$display_mod = "none";
-						$display_del = "none";
-					} else {
-						$display_mod = "";
-						$display_del = "";
-					}
 					if ( $E_chk ) {
-						echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
-						echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
+						if ( $est_modifiable == 1 ) {
+							echo "<td>&nbsp</td>	<td>&nbsp</td>";
+						} else {
+							echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/write.png'> </a></td>";
+							echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png'>	</a> </td>";
+						}	
 					}
 				echo "</tr>";
 				
