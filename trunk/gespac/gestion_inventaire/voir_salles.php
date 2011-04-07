@@ -153,26 +153,23 @@ session_start();
 					// On récupère la valeur inverse pour la poster
 					$change_apreter = $apreter == 1 ? 0 : 1;
 					
-					//SELECT count(distinct mat_nom), marque_model FROM materiels, marques where materiels.marque_id=marques.marque_id group by marque_model
-					
-					
-					//$nb_matos_de_ce_type 		= $db_gespac->queryAll ( "SELECT COUNT DISTINCT, marque_type, marque_model, marque_apreter FROM marques" );
-					$nb_matos_dans_cette_salle 	= $db_gespac->queryAll ( "SELECT COUNT(*) FROM materiels WHERE salle_id=$id" );
+					//faire un queryOne
+					$nb_matos_dans_cette_salle 	= $db_gespac->queryOne ( "SELECT COUNT(*) FROM materiels WHERE salle_id=$id" );
 
-					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$id' rel='slb_salles' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle[0][0] ."] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$id' rel='slb_salles' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle ."] </td>";
 					echo "<td>" . $vlan . "</td>";
 					echo "<td>" . $etage . "</td>";
 					echo "<td>" . $batiment . "</td>";
 					
 					
-					if ( $E_chk ) {
-						if ( $est_modifiable == 1 ) {
-							echo "<td>&nbsp</td>	<td>&nbsp</td>";
-						} else {
-							echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/write.png'> </a></td>";
-							echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png'>	</a> </td>";
-						}	
-					}
+					if ( $E_chk && $est_modifiable ) {
+						echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/write.png'> </a></td>";
+						echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png'>	</a> </td>";
+							
+					} else {
+						echo "<td>&nbsp</td>	<td>&nbsp</td>";
+					}	
+					
 				echo "</tr>";
 				
 				$compteur++;
