@@ -134,6 +134,7 @@ CREATE TABLE `salles` (
   `salle_batiment` varchar(30) default NULL,
   `clg_uai` varchar(10) default NULL,
   `salle_suppr` tinyint(1) NOT NULL default '0',
+  `est_modifiable` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`salle_id`),
   UNIQUE KEY `salle_nom` (`salle_nom`),
   KEY `FK_salles_clg_uai` (`clg_uai`)
@@ -150,6 +151,7 @@ CREATE TABLE `users` (
   `user_mail` varchar(100) NOT NULL,
   `user_mailing` tinyint(1) NOT NULL default '0',
   `user_suppr` tinyint(1) NOT NULL,
+  `est_modifiable` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `user_logon` (`user_logon`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
@@ -171,6 +173,7 @@ CREATE TABLE `grades` (
   `grade_nom` varchar(255) NOT NULL,
   `grade_menu` text NOT NULL,
   `grade_menu_portail` text NOT NULL,
+  `est_modifiable` tinyint(1) NOT NULL default '1',
   PRIMARY KEY (`grade_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
@@ -179,6 +182,7 @@ CREATE TABLE `menu_portail` (
   `mp_nom` varchar(255) NOT NULL,
   `mp_url` varchar(255) NOT NULL,
   `mp_icone` varchar(255) NOT NULL,
+  `est_modifiable` tinyint(1) NOT NULL default '1',
   PRIMARY KEY (`mp_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
