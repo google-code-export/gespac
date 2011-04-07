@@ -13,10 +13,11 @@
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
 	// lib
-	require_once ('../fonctions.php');
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	/*require_once ('../fonctions.php');
 	require_once ('../config/pear.php');
 	include_once ('../config/databases.php');
-	
+	*/
 	// on ouvre un fichier en écriture pour les log sql
 	$fp = fopen('../dump/log_sql.sql', 'a+');
 	
@@ -65,17 +66,17 @@
 		
 		echo "<br><small>Création du collège <b>$clg_nom</b> !</small><br>";
 		
-		$req_add_salle_stock = "INSERT INTO salles (salle_id, salle_nom, clg_uai) VALUES (1, 'STOCK', '$clg_uai' )";
+		$req_add_salle_stock = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (1, 'STOCK', '$clg_uai', 0 )";
 		$result = $db_gespac->exec ( $req_add_salle_stock );
 		
 		echo "<small>Création de la salle <b>Stock</b> !</small><br>";
 		
-		$req_add_salle_d3e = "INSERT INTO salles (salle_id, salle_nom, clg_uai) VALUES (2, 'D3E', '$clg_uai' )";
+		$req_add_salle_d3e = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (2, 'D3E', '$clg_uai', 0 )";
 		$result = $db_gespac->exec ( $req_add_salle_d3e );
 		
 		echo "<small>Création de la salle <b>D3E</b> !</small><br>";
 		
-		$req_add_salle_pret = "INSERT INTO salles (salle_id, salle_nom, clg_uai) VALUES (3, 'PRETS', '$clg_uai' )";
+		$req_add_salle_pret = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (3, 'PRETS', '$clg_uai', 0 )";
 		$result = $db_gespac->exec ( $req_add_salle_pret );
 		
 		echo "<small>Création de la salle <b>PRETS</b> !</small><br>";
@@ -92,10 +93,7 @@
 		
 		$req_log_creer_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création collège', '$log_texte');";
 		$result = $db_gespac->exec ( $req_log_creer_college );
-	
-		// Après la création du collège dans la base, on affiche la barre de menu
-		echo "<script> $('main_menu').style.display = ''; </script>";
-
+		
 	}
 	
 	
