@@ -182,7 +182,7 @@ CREATE TABLE `menu_portail` (
   PRIMARY KEY (`mp_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
-INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', '0', '', 'cg13', 'modules/stats/cssschart.php','','0');
+INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', '0', '', 'cg13', 'modules/stats/cssschart.php','','0', '0');
 
 INSERT IGNORE INTO `etats` (`etat`) VALUES
 ('ATTENTE SAV'),
