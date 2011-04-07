@@ -104,7 +104,7 @@
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_icones = $db_gespac->queryAll ( "SELECT mp_id, mp_icone, mp_nom, mp_url FROM menu_portail ORDER BY mp_nom" );
+	$liste_des_icones = $db_gespac->queryAll ( "SELECT mp_id, mp_icone, mp_nom, mp_url, est_modifiable FROM menu_portail ORDER BY mp_nom" );
 
 
 	if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'> <img src='img/add.png'>Ajouter un item</a>";
@@ -131,21 +131,21 @@
 						
 				echo "<tr class=$tr_class>";
 					
-					$mp_id		 	= $record[0];	
-					$mp_icone	 	= "./img/" . $record[1];
-					$mp_nom 		= $record[2];
-					$mp_lien		= $record[3];		
+					$mp_id		 		= $record[0];	
+					$mp_icone	 		= "./img/" . $record[1];
+					$mp_nom 			= $record[2];
+					$mp_lien			= $record[3];
+					$est_modifiable		= $record[4];
 					
 					
 					echo "<td width=40><img height=30 src=$mp_icone></td>";
 					echo "<td>" . $mp_nom . "</td>";
 					echo "<td>" . $mp_lien . "</td>";
 					
-					if ( $E_chk && $mp_nom <> "FOG" && $mp_nom <> "OCS" && $mp_nom <> "RESTAURATION"  ) {
+					if ( $E_chk && $est_modifiable) {
 						echo "<td width=20><a href='modules/menu_portail/form_menu_portail.php?height=180&width=640&id=$mp_id' rel='slb_menu_portail' title='Formulaire de modification de l`item $mp_nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
 						echo "<td width=20> <a href='#' onclick=\"javascript:validation_suppr_item($mp_id, '$mp_nom');\">	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
-					}
-					else {
+					} else {
 						echo "<td width=20></td>";
 						echo "<td width=20></td>";
 					}
