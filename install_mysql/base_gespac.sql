@@ -234,18 +234,18 @@ INSERT IGNORE INTO `origines` (`origine`) VALUES
 ('MUT2011'),
 ('MUT2012');
 
-INSERT INTO `grades` (`grade_id`, `grade_nom`, `grade_menu`, `grade_menu_portail`) VALUES
-(1, 'root', '','{"item1":"on"}'),
-(3, 'PROFESSEURS', '{"L-02-03":"on","L-03-01":"on","E-03-01":"on","L-03-02":"on","L-06-04":"on","E-06-04":"on","L-08-01":"on"}','{"item1":"on"}'),
-(4, 'INTENDANCE', '','{"item1":"on"}'),
-(5, 'DIRECTION', '','{"item1":"on"}'),
-(6, 'TICE', '{"L-02-01":"on","L-02-03":"on","L-03-01":"on","E-03-01":"on","L-03-02":"on","L-05-01":"on","L-06-01":"on","L-06-04":"on","E-06-04":"on","L-07-02":"on","E-07-02":"on","L-08-01":"on","L-08-02":"on","L-08-04":"on","E-08-04":"on"}','{"item1":"on"}'),
-(7, 'VIE SCOLAIRE', '','{"item1":"on"}'),
-(8, 'ADMINISTRATIF', '','{"item1":"on"}'),
-(2, 'ATI', '{"L-01-01":"on","E-01-01":"on","L-02-01":"on","E-02-01":"on","L-02-02":"on","E-02-02":"on","L-02-03":"on","E-02-03":"on","L-03-01":"on","E-03-01":"on","L-03-02":"on","E-03-02":"on","L-04-01":"on","E-04-01":"on","L-04-02":"on","E-04-02":"on","L-04-03":"on","E-04-03":"on","L-04-04":"on","E-04-04":"on","L-04-05":"on","E-04-05":"on","L-04-06":"on","E-04-06":"on","L-05-01":"on","E-05-01":"on","L-06-01":"on","E-06-01":"on","L-06-02":"on","E-06-02":"on","L-06-03":"on","E-06-03":"on","L-06-04":"on","E-06-04":"on","L-07-01":"on","E-07-01":"on","L-07-02":"on","E-07-02":"on","L-07-03":"on","E-07-03":"on","L-07-04":"on","E-07-04":"on","L-07-05":"on","E-07-05":"on","L-08-01":"on","E-08-01":"on","L-08-02":"on","E-08-02":"on","L-08-03":"on","E-08-03":"on","L-08-04":"on","E-08-04":"on","L-08-05":"on","E-08-05":"on"}','{"item1":"on"}');
+INSERT INTO `grades` (`grade_id`, `grade_nom`, `grade_menu`, `grade_menu_portail`, `est_modifiable` ) VALUES
+(1, 'root', '','{"item1":"on"}', '0'),
+(3, 'PROFESSEURS', '{"L-02-03":"on","L-03-01":"on","E-03-01":"on","L-03-02":"on","L-06-04":"on","E-06-04":"on","L-08-01":"on"}','{"item1":"on"}', '1'),
+(4, 'INTENDANCE', '','{"item1":"on"}', '1'),
+(5, 'DIRECTION', '','{"item1":"on"}', '1'),
+(6, 'TICE', '{"L-02-01":"on","L-02-03":"on","L-03-01":"on","E-03-01":"on","L-03-02":"on","L-05-01":"on","L-06-01":"on","L-06-04":"on","E-06-04":"on","L-07-02":"on","E-07-02":"on","L-08-01":"on","L-08-02":"on","L-08-04":"on","E-08-04":"on"}','{"item1":"on"}', '1'),
+(7, 'VIE SCOLAIRE', '','{"item1":"on"}', '1'),
+(8, 'ADMINISTRATIF', '','{"item1":"on"}', '1'),
+(2, 'ATI', '{"L-01-01":"on","E-01-01":"on","L-02-01":"on","E-02-01":"on","L-02-02":"on","E-02-02":"on","L-02-03":"on","E-02-03":"on","L-03-01":"on","E-03-01":"on","L-03-02":"on","E-03-02":"on","L-04-01":"on","E-04-01":"on","L-04-02":"on","E-04-02":"on","L-04-03":"on","E-04-03":"on","L-04-04":"on","E-04-04":"on","L-04-05":"on","E-04-05":"on","L-04-06":"on","E-04-06":"on","L-05-01":"on","E-05-01":"on","L-06-01":"on","E-06-01":"on","L-06-02":"on","E-06-02":"on","L-06-03":"on","E-06-03":"on","L-06-04":"on","E-06-04":"on","L-07-01":"on","E-07-01":"on","L-07-02":"on","E-07-02":"on","L-07-03":"on","E-07-03":"on","L-07-04":"on","E-07-04":"on","L-07-05":"on","E-07-05":"on","L-08-01":"on","E-08-01":"on","L-08-02":"on","E-08-02":"on","L-08-03":"on","E-08-03":"on","L-08-04":"on","E-08-04":"on","L-08-05":"on","E-08-05":"on"}','{"item1":"on"}', '1');
 
-INSERT INTO `menu_portail` (`mp_id`, `mp_nom`, `mp_url`, `mp_icone`) VALUES
-(2, 'FOG', 'http://gespac/fog', 'fog.png'),
-(3, 'OCS', 'http://gespac/ocsreports', 'ocs.png'),
-(4, 'RESTAURATION', './gespac/gestion_donnees/form_upload_restauration.php', 'database.png');
+INSERT INTO `menu_portail` (`mp_id`, `mp_nom`, `mp_url`, `mp_icone`, `est_modifiable`) VALUES
+(2, 'FOG', 'http://gespac/fog', 'fog.png', '0'),
+(3, 'OCS', 'http://gespac/ocsreports', 'ocs.png', '0'),
+(4, 'RESTAURATION', './gespac/gestion_donnees/form_upload_restauration.php', 'database.png', '0');
 
