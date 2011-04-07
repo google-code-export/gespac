@@ -113,7 +113,7 @@ session_start();
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_salles = $db_gespac->queryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment FROM salles ORDER BY salle_nom" );
+	$liste_des_salles = $db_gespac->queryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment, est_modifiable FROM salles ORDER BY salle_nom" );
 
 	if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
 ?>
@@ -140,11 +140,12 @@ session_start();
 						
 				echo "<tr class=$tr_class>";
 						
-					$id		 	= $record[0];
-					$nom 		= $record[1];
-					$vlan 		= $record[2];
-					$etage 		= $record[3];
-					$batiment 	= $record[4];
+					$id		 		= $record[0];
+					$nom	 		= $record[1];
+					$vlan 			= $record[2];
+					$etage 			= $record[3];
+					$batiment 		= $record[4];
+					$est_modifiable = $record[5];
 					
 					// valeur nominale pour la checkbox
 					$chkbox_state = $apreter == 1 ? "checked" : "unchecked";
@@ -164,7 +165,7 @@ session_start();
 					echo "<td>" . $batiment . "</td>";
 					
 					
-					if ( $id == 1 | $id == 2 | $id == 3 | $nom == "MATERIEL VOLE" ) {
+					if ( $est_modifiable == 1 ) {
 						$display_mod = "none";
 						$display_del = "none";
 					} else {
