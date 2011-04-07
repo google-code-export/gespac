@@ -5,6 +5,8 @@ Page récapitulative des changements dans les fonctionnalités de l'application
 * gespac 3.3.x*
   * possibilité de déverrouiller le champ "serial" dans la modification d'un matériel
   * création/modification/suppression d'un élément du menu portail
+  * amélioration du filtre des matériels avec l'opérateur +.
+  * bouton CSV dans l'inventaire pour générer un fichier du matériel filtré
 
 *gespac 3.3*
   * refonte complète du moteur ajax. On passe de pear à js/mootools.
