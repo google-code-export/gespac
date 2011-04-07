@@ -34,7 +34,7 @@
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_utilisateurs = $db_gespac->queryAll ( "SELECT user_nom, user_logon, user_password, grade_nom, user_mail, user_id, user_skin, user_mailing FROM users, grades WHERE users.grade_id=grades.grade_id ORDER BY user_nom" );
+	$liste_des_utilisateurs = $db_gespac->queryAll ( "SELECT user_nom, user_logon, user_password, grade_nom, user_mail, user_id, user_skin, user_mailing, users.est_modifiable FROM users, grades WHERE users.grade_id=grades.grade_id ORDER BY user_nom" );
 
 ?>
 	
@@ -74,14 +74,15 @@
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 						
-					$nom 		= $record[0];
-					$logon 		= $record[1];
-					$password 	= $record[2];
-					$grade		= $record[3];
-					$mail 		= $record[4];
-					$id			= $record[5];
-					$skin		= $record[6];
-					$mailing	= $record[7];
+					$nom 			= $record[0];
+					$logon 			= $record[1];
+					$password 		= $record[2];
+					$grade			= $record[3];
+					$mail 			= $record[4];
+					$id				= $record[5];
+					$skin			= $record[6];
+					$mailing		= $record[7];
+					$est_modifiable	= $record[8];
 					
 					$mailing_chk = $mailing == 1 ? "<img src='img/ok.png' height=16px width=16px>" : "";
 					
@@ -99,14 +100,13 @@
 					
 					echo "<tr id=tr_id$id class=$tr_class>";
 					
-					// on affiche pas la checkbox pour le compte ati (pas modifiable)
-					if ( $E_chk ) {
-						if ( $logon == "ati" ) {
-							$chk_box = "<td>&nbsp</td>";
-						} else {
-							$chk_box = "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur); \"> </td>";	
-						}
+					// on affiche pas la checkbox pour les comptes dont le champ "est_modifiable" est TRUE
+					if ( $E_chk && $est_modifiable) {
+						echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur); \"> </td>";	
+					} else {
+						echo "<td>&nbsp</td>";
 					}
+					
 					
 					echo $chk_box;
 					echo "<td> $nom </td>";
@@ -116,17 +116,15 @@
 					echo "<td> $skin </td>";
 					echo "<td> $mailing_chk </td>";
 					
-					if ( $E_chk ) {
-						if ( $logon == "ati" ) {
-							$modif_user = "<td><img src='img/write.png' style=display:none></td>";
-							$suppr_user = "<td><img src='img/delete.png' style=display:none></td>";
-						} else {
-							$modif_user = "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id&action=mod' rel='slb_users' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
-							$suppr_user = "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user('$id', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
-						}
+					if ( $E_chk && $est_modifiable) {
 						
-						echo $modif_user;
-						echo $suppr_user; 				
+						echo "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id&action=mod' rel='slb_users' title='Formulaire de modification de l`utilisateur $nom'><img src='img/write.png'> </a></td>";
+						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user('$id', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
+							
+					} else {
+						echo "<td>&nbsp</td>";
+						echo "<td>&nbsp</td>";
+					
 					}
 					
 				echo "</tr>";
