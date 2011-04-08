@@ -19,9 +19,9 @@
 		<!--	CSS	-->
 		<link rel="stylesheet" href="./gespac/css/style_ff.css" type="text/css" media="screen" />
 		
-		<!--Script de détection pour savoir si il y a un popup killer-->
+		<!--Script de dÃ©tection pour savoir si il y a un popup killer-->
 		<script type="text/JavaScript" language="javascript">
- 			var mine = window.open('','','width=1,height=1,left=0,top=0,scrollbars=no');
+ 			var mine = window.open('','','width=1,height=1,left=0,top=0,scrollbars=no');
 			if(mine)
 				var popUpsBlocked = false
 			else
@@ -58,42 +58,44 @@
 	require_once ('./include/config.php');
 
 	//Analyse des versions OCS et FOG
-	$file_ocs = '/usr/share/ocsinventory-reports/ocsreports/preferences.php';//fichier ou est stocké la version du GUI d'OCS
+	$file_ocs = '/usr/share/ocsinventory-reports/ocsreports/preferences.php';//fichier ou est stockÃ© la version du GUI d'OCS
 	if (file_exists($file_ocs)) {
 		require_once ('/usr/share/ocsinventory-reports/ocsreports/preferences.php');
-		$version_ocs = GUI_VER;//récupère la version du GUI d'OCS
+		$version_ocs = GUI_VER;//rÃ©cupÃ¨re la version du GUI d'OCS
 	}
-	else {$version_ocs = "Il semblerait qu'OCS ne soit pas installé";}//le fichier n'est pas trouvé
+	else {$version_ocs = "Il semblerait qu'OCS ne soit pas installÃ©";}//le fichier n'est pas trouvÃ©
 	
-	$file_fog = '/var/www/fog/commons/config.php';//fichier ou est stocké la version de FOG
+	$file_fog = '/var/www/fog/commons/config.php';//fichier ou est stockÃ© la version de FOG
 	if (file_exists($file_fog)) {
 		require_once ('/var/www/fog/commons/config.php'); 
-		$version_fog = FOG_VERSION;//récupère la version de FOG
+		$version_fog = FOG_VERSION;//rÃ©cupÃ¨re la version de FOG
 	}
-	else {$version_fog = "Il semblerait que FOG ne soit pas installé";}//Fichier config FOG non trouvé
+	else {$version_fog = "Il semblerait que FOG ne soit pas installÃ©";}//Fichier config FOG non trouvÃ©
 	
 		//Les commandes sous linux
-		if (!EXEC('uname -r')) {//on vérifie le système avec une commande sh
-			$version_gespac = 'Non déterminé car le système ne semble pas être un Linux';
-			$version_sqlgespac = 'Non déterminé car le système ne semble pas être un Linux';
-			$version_linux = 'Horreur votre système est un WIN32';//Message un peu dur, mais salutaire!!!
+		if (!EXEC('uname -r')) {//on vÃ©rifie le systÃ¨me avec une commande sh
+			$version_gespac = 'Non dÃ©terminÃ© car le systÃ¨me ne semble pas Ãªtre un Linux';
+			$version_sqlgespac = 'Non dÃ©terminÃ© car le systÃ¨me ne semble pas Ãªtre un Linux';
+			$version_linux = 'Horreur votre systÃ¨me est un WIN32';//Message un peu dur, mais salutaire!!!
 		}
 		else {
 			$version_gespac = EXEC('apt-show-versions gespac');
+         $version_foggespac = EXEC('apt-show-versions fog-gespac');
+			$version_serveurgespac = EXEC('apt-show-versions serveur-gespac');
 			$version_sqlgespac = EXEC('apt-show-versions sql-gespac');
 			$version_linux = EXEC('uname -r');
 		}
 	
-		// on vérifie la connectivité avec le serveur avant d'aller plus loin
+		// on vÃ©rifie la connectivitÃ© avec le serveur avant d'aller plus loin
 		if(!mysql_connect($hostname_gespac, $username_gespac, $password_gespac)) {
 			echo 'Merci de renseigner le fichier "config.php" se trouvant dans le dossier include.<br>';
 			exit();
 		}
 
-		// on vérifie la connectivité avec la base avant d'aller plus loin	
+		// on vÃ©rifie la connectivitÃ© avec la base avant d'aller plus loin	
 		if(!mysql_select_db($database_gespac)) {
 			echo '<img src="./gespac/img/info.png"><br>
-			vous devez installer au préalable la base de données en cliquant <a href="install_mysql/installation.php">ici</a>';
+			vous devez installer au prÃ©alable la base de donnÃ©es en cliquant <a href="install_mysql/installation.php">ici</a>';
 			exit();
 		}	
 
@@ -101,18 +103,18 @@
 		
 		session_start();
 		
-		// on vérifie si l'utilisateur est identifié
+		// on vÃ©rifie si l'utilisateur est identifiÃ©
 		if (!isset( $_SESSION['login'])) {
-			// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié -> On redirige sur la page permettant de s'authentifier
-			echo '<img src="./gespac/img/gespac.png" height=48> version développement';
+			// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifiÃ© -> On redirige sur la page permettant de s'authentifier
+			echo '<img src="./gespac/img/gespac.png" height=48> version dÃ©veloppement';
 			include 'login.php';
-			exit();	// on arrête l'exécution
+			exit();	// on arrÃªte l'exÃ©cution
 
 		} else {
 
 			//$display_icon = ( $_SESSION['grade'] < 2 ) ? "" : "none" ;
 
-			// si le grade du compte est root, on donne automatiquement les droits d'accès aux icones. Sinon, on teste si le compte a accès aux icones sinon.
+			// si le grade du compte est root, on donne automatiquement les droits d'accÃ¨s aux icones. Sinon, on teste si le compte a accÃ¨s aux icones sinon.
 			
 				
 			echo "<div class=portail-menu-item><a href='./gespac'> 
@@ -121,13 +123,13 @@
 			include ('gespac/config/databases.php');
 			include ('gespac/config/pear.php');
 				
-			// adresse de connexion à la base de données
+			// adresse de connexion Ã  la base de donnÃ©es
 			$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
-			// cnx à la base de données GESPAC
+			// cnx Ã  la base de donnÃ©es GESPAC
 			$db_gespac 	= & MDB2::factory($dsn_gespac);
 
-			// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
+			// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© liste_des_materiels
 			$liste_des_icones = $db_gespac->queryAll ( "SELECT mp_id, mp_nom, mp_url, mp_icone FROM menu_portail ORDER BY mp_nom" );	
 			
 				
@@ -146,7 +148,7 @@
 			}	
 			
 			echo "<div style='float:right;' class=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
-				<img src='./gespac/img/cancel.png' height=48><br>Déconnexion </a></div>";
+				<img src='./gespac/img/cancel.png' height=48><br>DÃ©connexion </a></div>";
 
 			echo "<div class='spacer'> </div>";
 	
@@ -154,9 +156,9 @@
 		}
 	?>
 	
-	<!--On lance la détection du popup killer -->
+	<!--On lance la dÃ©tection du popup killer -->
 	<script type="text/JavaScript" language="JavaScript">
-		if ( popUpsBlocked ) alert('POPUP KILLERS :\nPrêter ou rendre un portable génère un popup pour les conventions.\nLe popup killer bloquera l`affichage de ces conventions.\nPensez à autoriser les popups pour GESPAC.');
+		if ( popUpsBlocked ) alert('POPUP KILLERS :\nPrÃªter ou rendre un portable gÃ©nÃ¨re un popup pour les conventions.\nLe popup killer bloquera l`affichage de ces conventions.\nPensez Ã  autoriser les popups pour GESPAC.');
 	</script>
 	
 	</h3>
@@ -167,19 +169,23 @@
 	<div id=portail-conteneur>
 		<b>GESPAC : </b><?php echo $version_gespac;?><br/>
 		<b>SQL-GESPAC : </b><?php echo $version_sqlgespac;?><br/>
-		<b>Linux kernel : </b><?php echo $version_linux;?><br/>
+		<b>FOG-GESPAC : </b><?php echo $version_foggespac;?><br/>
+		<b>SERVEUR-GESPAC : </b><?php echo $version_serveurgespac;?><br/>
+      <b>Linux kernel : </b><?php echo $version_linux;?><br/>
 		<b><?php echo $_SERVER['SERVER_SIGNATURE'];?></b>
-		<b>PHP : </b><?php echo  phpversion();?><b/>r>
+     <b>PHP : </b><?php echo  phpversion();?><br/>
 		<b>Zend engine version :</b> <?php echo zend_version(); ?><br/>
 		<b>Version GUI OCS : </b><?php echo $version_ocs;?><br/>
 		<b>Version FOG :</b> <?php echo $version_fog;?><br/>
-		<b>Navigateur utilisé : </b><?php echo $_SERVER["HTTP_USER_AGENT"];?><br/><br/><br/>
+		
+      <br/><br/>
+		<b><h3><center>GESPAC est rÃ©gi par la licence CeCILL V2 soumise au droit franÃ§ais et respectant les principes de diffusion des logiciels libres.<br>
+								Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL telle que diffusÃ©e par le CEA, le CNRS et l'INRIA  sur le site "http://www.cecill.info".</b></h3></center><br><br>
 				<b>SITE OFFICIEL : </b><br/>
-					<a href="http://gespac13.free.fr" target=_blank>GESPAC13</a> (Les procédures et manuels validés)<br/><br/>
+					<a href="http://gespac.free.fr" target=_blank>GESPAC</a> (Les procÃ©dures et manuels validÃ©s)<br/><br/>
 		<b>NAVIGATEURS : </b><br/>
-			- Gespac marche mieux avec Firefox 3.5.x, Firefox 3.6, Chrome et Safari (globalement si le navigateur gère le css3, pas de problème)<br/>
-			- Il marche avec pratiquement tous les autres navigateurs, mais c'est moins joli (par exemple Opera 10.5 ne gère pas les fonctions css3 utilisées, donc c'est carré) <br/>
-			- Il ne marche pas avec Internet Explorer mais si vous voulez quand même l'utiliser, Gespac tentera d'installer Google Frame (vous aurez donc l'interface ie avec le moteur webkit de chrome).<br/>
+			- Gespac marche mieux avec les navigateurs respectant la norme W3C (globalement si le navigateur gÃ¨re le css3, pas de problÃ¨me)<br/>
+        - Dans le cas ou vous utilisez Internet Explorer, Gespac tentera d'installer <a href="http://code.google.com/intl/fr-FR/chrome/chromeframe/" target=_blank>Google Frame</a><br/>
 	</div>
 
 
