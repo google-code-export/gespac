@@ -4,6 +4,7 @@
 02-03;"visualiser salles";"gestion_invetaire/voir_salles.php"
 03-01;"voir les dossiers";"gestion_demandes/voir_demandes.php"
 03-02;"voir les interventions";"gestion_demandes/voir_interventions.php"
+03-03;"dossiers beta";"gestion_dossiers/voir_dossiers.php"
 04-01;"Importer DB OCS";"gestion_donnees/voir_ocs_db.php" 
 04-02;"Exports";"gestion_donnees/exports.php"
 04-03;"Dump base GESPAC";"gestion_donnees/dump_db_gespac.php"
