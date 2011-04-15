@@ -32,10 +32,10 @@ fclose($fp);
 
 
 
-echo "<center><h1><a href=./dump/$dump_logs>Fichier CSV des LOGS</a></h1></center>";
+	//echo "<center><h1><a href=./dump/$dump_logs>Fichier CSV des LOGS</a></h1></center>";
 
 	//Insertion d'un log
-	$log_texte = "Le fichier $dump_logs a été créé ou mis à jour";
+	$log_texte = "Le fichier <a href=./dump/$dump_logs>$dump_logs</a> a été créé ou mis à jour";
 		
 	$req_log_dump_logs = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Dump LOGS', '$log_texte' );";
 	$result = $db_gespac->exec ( $req_log_dump_logs );
