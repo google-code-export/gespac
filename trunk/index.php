@@ -79,7 +79,9 @@
 			$version_linux = 'Horreur votre système est un WIN32';//Message un peu dur, mais salutaire!!!
 		}
 		else {
-			$version_gespac = EXEC('apt-show-versions gespac');
+	        $version_gespac = EXEC('apt-show-versions gespac');
+            $version_foggespac = EXEC('apt-show-versions fog-gespac');
+			$version_serveurgespac = EXEC('apt-show-versions serveur-gespac');
 			$version_sqlgespac = EXEC('apt-show-versions sql-gespac');
 			$version_linux = EXEC('uname -r');
 		}
@@ -167,20 +169,25 @@
 	<div id=portail-conteneur>
 		<b>GESPAC : </b><?php echo $version_gespac;?><br/>
 		<b>SQL-GESPAC : </b><?php echo $version_sqlgespac;?><br/>
-		<b>Linux kernel : </b><?php echo $version_linux;?><br/>
+		<b>FOG-GESPAC : </b><?php echo $version_foggespac;?><br/>
+		<b>SERVEUR-GESPAC : </b><?php echo $version_serveurgespac;?><br/>
+        <b>Linux kernel : </b><?php echo $version_linux;?><br/>
 		<b><?php echo $_SERVER['SERVER_SIGNATURE'];?></b>
-		<b>PHP : </b><?php echo  phpversion();?><b/>r>
+        <b>PHP : </b><?php echo  phpversion();?><br/>
 		<b>Zend engine version :</b> <?php echo zend_version(); ?><br/>
 		<b>Version GUI OCS : </b><?php echo $version_ocs;?><br/>
 		<b>Version FOG :</b> <?php echo $version_fog;?><br/>
-		<b>Navigateur utilisé : </b><?php echo $_SERVER["HTTP_USER_AGENT"];?><br/><br/><br/>
+		
+      <br/><br/>
+		<b><h3><center>GESPAC est régi par la licence CeCILL V2 soumise au droit français et respectant les principes de diffusion des logiciels libres.<br>
+								Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA  sur le site "http://www.cecill.info".</b></h3></center><br><br>
 				<b>SITE OFFICIEL : </b><br/>
-					<a href="http://gespac13.free.fr" target=_blank>GESPAC13</a> (Les procédures et manuels validés)<br/><br/>
+					<a href="http://gespac.free.fr" target=_blank>GESPAC</a> (Les procédures et manuels validés)<br/><br/>
 		<b>NAVIGATEURS : </b><br/>
-			- Gespac marche mieux avec Firefox 3.5.x, Firefox 3.6, Chrome et Safari (globalement si le navigateur gère le css3, pas de problème)<br/>
-			- Il marche avec pratiquement tous les autres navigateurs, mais c'est moins joli (par exemple Opera 10.5 ne gère pas les fonctions css3 utilisées, donc c'est carré) <br/>
-			- Il ne marche pas avec Internet Explorer mais si vous voulez quand même l'utiliser, Gespac tentera d'installer Google Frame (vous aurez donc l'interface ie avec le moteur webkit de chrome).<br/>
+			- Gespac marche mieux avec les navigateurs respectant la norme W3C (globalement si le navigateur gère le css3, pas de problème)<br/>
+        - Dans le cas ou vous utilisez Internet Explorer, Gespac tentera d'installer <a href="http://code.google.com/intl/fr-FR/chrome/chromeframe/" target=_blank>Google Frame</a><br/>
 	</div>
+
 
 
 </body>
