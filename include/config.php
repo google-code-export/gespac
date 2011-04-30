@@ -1,8 +1,6 @@
 <?php
-# FileName="Connection_php_mysql.htm"
-# Type="MYSQL"
-# HTTP="true"
-require_once = "gespac/config/databases.php";
+//Ce fichier de configuration sert pour la création de la base de donnée et aussi la lecture pour rechercher la présence de OCS & FOG & GESPAC
+require_once ('gespac/config/databases.php');//on écrit maintenant les informations de configuration dans gespac/config/databases.php
 $hostname_gespac = $host;
 $database_gespac = $gespac;
 $username_gespac = $user;
