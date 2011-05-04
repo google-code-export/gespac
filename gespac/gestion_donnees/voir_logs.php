@@ -35,8 +35,6 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_logs.php
 		if (valida) {
-			AffichePage('conteneur', 'gestion_donnees/dump_logs.php');
-			
 			//	poste la page en ajax	
 			$("target").load("gestion_donnees/post_logs.php");
 			window.setTimeout("$('conteneur').load('gestion_donnees/voir_logs.php');", 1000);
@@ -118,7 +116,7 @@
 	
 				$date 		= $record[0];
 				$type 		= $record[1];
-				$texte		= $record[2];
+				$texte		= urldecode($record[2]);
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
