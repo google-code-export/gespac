@@ -306,14 +306,16 @@
 		});	
 		
 		
-		
+
 		// Fait apparaitre le numéro GIGN dans le cas d'un ETAT particulier
-		$('CB_etat').addEvent('change', function(e) {
-			new Event(e).stop();
-			
-			if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} ) {	$('tr_gign').style.display = ""; }
-			else { $('tr_gign').style.display = "none";	}
-		});
+		if ($('CB_etat')) {
+			$('CB_etat').addEvent('change', function(e) {
+				new Event(e).stop();
+				
+				if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} ) {	$('tr_gign').style.display = ""; }
+				else { $('tr_gign').style.display = "none";	}
+			});
+		}
 
 	
 	});
