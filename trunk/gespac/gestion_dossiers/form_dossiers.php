@@ -3,7 +3,6 @@
 	Pour la création :
 	- On entre le type
 	- On sélectionne les mat
-	- On ajoute la sélection à la liste
 	- On renseigne le pb
 	- On envoie le bouzin
 	
@@ -16,18 +15,21 @@
 <style>
 	
 	.dossier_section {
-		float : left;
+		float : top;
 		width : auto;
-		min-width : 25%;
-		height : 300px;
 		overflow : auto;
 		margin : 10px;
 		padding : 10px;
 		border : 1px dotted black;
 	}
 	
+	.dossier_section span{
+		margin : 20px;
+		
+	}
+	
 	.liste_section {
-		float : left;
+		float : top;
 		width : auto;
 		min-width : 65%;
 		height : 300px;
@@ -36,31 +38,11 @@
 		padding : 10px;
 		border : 1px dotted black;
 	}
-	
-	
-	#encart {
-		float:left;
-		border : 1px dotted black;
-		width:90%;
-	}
+
 	
 </style>
 
-
-<form>
-	
-	TYPE : 
-	<select id="type" name="type">
-		<option value='reparation'>		REPARATION</option>
-		<option value='installation'>	INSTALLATION</option>
-		<option value='usage'>			USAGE</option>
-		<option value='formation'>		FORMATION</option>
-	</select>
-	
-	
-
-	
-</form>
+<div id='target'></div>
 
 
 <?PHP
@@ -75,7 +57,6 @@
 	$liste_types = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
 	$liste_salles = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
 
-
 		/*	LA LISTE DES FILTRES */
 		
 		echo "<div class='dossier_section'>";
@@ -86,10 +67,10 @@
 		*		FILTRE des MATERIELS
 		*
 		**************************************-->
-		
-<form id="filterform">
-	Nom <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'dossiers_mat_table', 1);" type="text" value=<?PHP echo $_GET['filter'];?> >
-</form>
+	
+		<span>
+			Nom <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'dossiers_mat_table', 1);" type="text" >
+		</span>
 
 <?PHP
 
@@ -100,7 +81,7 @@
 		*
 		**************************************/
 
-
+			echo "<span>";
 			echo "Salle ";
 			echo "<SELECT id='CB_salles' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 3);\">";
 				echo "<option>---</option>";
@@ -110,16 +91,16 @@
 					echo "<option value=$salle_id>$salle_nom</option>";
 				}
 			echo "</SELECT>";
+			echo "</span>";
 			
-			
-			echo "<br><br>";
 		
 		/*************************************
 		*
 		*		COMBOBOX des TYPES
 		*
 		**************************************/
-
+			
+			echo "<span>";
 			echo "Type ";
 			echo "<SELECT id='CB_types' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 2);\">";
 				echo "<option>---</option>";
@@ -129,10 +110,9 @@
 					echo "<option value=$marque_id>$marque_type</option>";
 				}
 			echo "</SELECT>";
-			
-			
-			echo "<br>";
-			
+			echo "</span>";
+					
+		
 		echo "</div>";
 
 
@@ -176,24 +156,59 @@
 		echo "</div>";
 		
 ?>
+<center>
+<form action="gestion_dossiers/post_dossiers.php?action=add" method="post" name="post_form" id="post_form" >
+	
+	<div>
+		Type : <br>
+		<select id="type" name="type">
+			<option value='reparation'>		REPARATION</option>
+			<option value='installation'>	INSTALLATION</option>
+			<option value='usage'>			USAGE</option>
+			<option value='formation'>		FORMATION</option>
+		</select>
+	</div>
 
-<div>
-	Commentaire :<br>
-	<textarea cols=127 rows=6></textarea>
-</div>
-
-<form>
 	<br>
-	<center>
-		<span id='nb_selectionnes'></span><br><br>
-		<input type=hidden name='liste_mat' id='liste_mat'>	
-		<input type=button value='poster la demande' id ='post_dossier'>
-	</center>
-</form>
+	
+	<div>
+		Commentaire :<br>
+		<textarea cols=90 rows=6 name='commentaire'></textarea>
+	</div>
 
+
+	<br>
+		<span id='nb_selectionnes'></span><br><br>
+		<input type='hidden' name='liste_mat' id='liste_mat'>	
+		<input type='submit' value='poster la demande'>
+	
+</form>
+</center>
 
 
 <script>
+	
+	
+	  window.addEvent('domready', function() {
+
+		// AJAX		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php", 1500);
+				}
+			
+			}).send(this.toQueryString());
+		}); 
+    });
+	
 	
 	// *********************************************************************************
 	//
@@ -288,13 +303,6 @@
 	
 			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
 			$('liste_mat').value = table_id.join(";");
-
-			if ( $('liste_mat').value != "" ) {
-				$('post_dossier').style.display = "";
-
-			} else { 
-				$('post_dossier').style.display = "none";
-			}
 		}
 	}
 
