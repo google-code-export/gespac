@@ -220,18 +220,37 @@ img {
 }
 
 .tablehover tr:hover {
-	background-color : #FFD769;
-	padding : 2px 0px;
+	background-color 	: #FFD769;
+	padding 			: 2px 0px;
 }
 
 .tablehover td {
-	padding: 2px 4px;
-	font-size: 11px;
+	padding		: 2px 4px;
+	font-size	: 11px;
 }
 
 .tablehover th {
-	font-size		 	: 12px;
+	font-size : 12px;
 }
+
+.innertable {
+	float:right;
+	width:850px;
+}
+
+.innertable th{
+	font-size		 : 11px;
+	background-color : #000;
+}
+
+.innertable td{
+	padding		: 2px 4px;
+	font-size	: 9px;
+	border 		: 1px grey solid;
+}
+
+
+
 
 /*	Pour les lignes selectionnées	*/
 .selected {
