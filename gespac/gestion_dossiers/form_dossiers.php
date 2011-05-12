@@ -42,7 +42,8 @@
 	
 </style>
 
-<div id='target'></div>
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
 
 
 <?PHP
@@ -51,139 +52,273 @@
 	include_once ('../config/databases.php');
 	include_once ('../../class/Sql.class.php');
 
+	$dossierid = $_GET["id"];
+
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
+
+
+/*****************************************************************************
+*
+*					Formulaire CREATION d'un DOSSIER
+*
+*****************************************************************************/		
+		
+if ( $dossierid == -1 ) {
+
+
 	$liste_materiels = $con_gespac->QueryAll ('Select mat_id, mat_nom, marque_type, salle_nom FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id;');
 	$liste_types = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
 	$liste_salles = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
 
-		/*	LA LISTE DES FILTRES */
-		
-		echo "<div class='dossier_section'>";
-		
-?>
-		<!--*************************************
-		*
-		*		FILTRE des MATERIELS
-		*
-		**************************************-->
+	echo "<h3>FORMULAIRE DE CREATION D'UN DOSSIER</h3>";
 	
-		<span>
-			Nom <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'dossiers_mat_table', 1);" type="text" >
-		</span>
+	/*	LA LISTE DES FILTRES */
+	
+	echo "<div class='dossier_section'>";
+	
+?>
+	<!--*************************************
+	*
+	*		FILTRE des MATERIELS
+	*
+	**************************************-->
+
+	<span>
+		Nom <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'dossiers_mat_table', 1);" type="text" >
+	</span>
 
 <?PHP
 
+	
+	/*************************************
+	*
+	*		COMBOBOX des SALLES
+	*
+	**************************************/
+
+		echo "<span>";
+		echo "Salle ";
+		echo "<SELECT id='CB_salles' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 3);\">";
+			echo "<option>---</option>";
+			foreach ($liste_salles as $record) {
+				$salle_nom = $record['salle_nom'];
+				$salle_id = $record['salle_id'];
+				echo "<option value=$salle_id>$salle_nom</option>";
+			}
+		echo "</SELECT>";
+		echo "</span>";
 		
-		/*************************************
-		*
-		*		COMBOBOX des SALLES
-		*
-		**************************************/
-
-			echo "<span>";
-			echo "Salle ";
-			echo "<SELECT id='CB_salles' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 3);\">";
-				echo "<option>---</option>";
-				foreach ($liste_salles as $record) {
-					$salle_nom = $record['salle_nom'];
-					$salle_id = $record['salle_id'];
-					echo "<option value=$salle_id>$salle_nom</option>";
-				}
-			echo "</SELECT>";
-			echo "</span>";
-			
+	
+	/*************************************
+	*
+	*		COMBOBOX des TYPES
+	*
+	**************************************/
 		
-		/*************************************
-		*
-		*		COMBOBOX des TYPES
-		*
-		**************************************/
-			
-			echo "<span>";
-			echo "Type ";
-			echo "<SELECT id='CB_types' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 2);\">";
-				echo "<option>---</option>";
-				foreach ($liste_types as $record) {
-					$marque_type = $record['marque_type'];
-					$marque_id = $record['marque_id'];
-					echo "<option value=$marque_id>$marque_type</option>";
-				}
-			echo "</SELECT>";
-			echo "</span>";
-					
-		
-		echo "</div>";
-
-
-
-		
-		/*************************************
-		*
-		*		LISTE DE SELECTION
-		*
-		**************************************/
-
-
-		echo "<div class='liste_section'>";
-			echo "<table id='dossiers_mat_table' width=100%>";
-			
-			$compteur = 0;
-
-			foreach ($liste_materiels as $record) {
+		echo "<span>";
+		echo "Type ";
+		echo "<SELECT id='CB_types' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 2);\">";
+			echo "<option>---</option>";
+			foreach ($liste_types as $record) {
+				$marque_type = $record['marque_type'];
+				$marque_id = $record['marque_id'];
+				echo "<option value=$marque_id>$marque_type</option>";
+			}
+		echo "</SELECT>";
+		echo "</span>";
 				
-				$mat_id	= $record['mat_id'];
-				$nom 	= $record['mat_nom'];
-				$type 	= $record['marque_type'];
-				$salle 	= $record['salle_nom'];
+	
+	echo "</div>";
+
+
+
+	
+	/*************************************
+	*
+	*		LISTE DE SELECTION
+	*
+	**************************************/
+
+
+	echo "<div class='liste_section'>";
+		echo "<table id='dossiers_mat_table' width=100%>";
+		
+		$compteur = 0;
+
+		foreach ($liste_materiels as $record) {
+			
+			$mat_id	= $record['mat_id'];
+			$nom 	= $record['mat_nom'];
+			$type 	= $record['marque_type'];
+			$salle 	= $record['salle_nom'];
+			
+			// alternance des couleurs
+			$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
+			
+			echo "<tr id=tr_id$mat_id  class=$tr_class>
+			
+				<td> <input type=checkbox name=chk indexed=true value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $compteur); \"> </td>
+				<td>$nom</td>
+				<td>$type</td>
+				<td>$salle</td>
+			</tr>";
+			
+			$compteur++;
+		}
+		
+		echo "</table>";	
+		
+	echo "</div>";
+	
+	?>
+	<center>
+	<form action="gestion_dossiers/post_dossiers.php?action=add" method="post" name="post_form" id="post_form" >
+		
+		<div>
+			Type : <br>
+			<select id="type" name="type">
+				<option value='reparation'>		REPARATION</option>
+				<option value='installation'>	INSTALLATION</option>
+				<option value='usage'>			USAGE</option>
+				<option value='formation'>		FORMATION</option>
+			</select>
+		</div>
+
+		<br>
+		
+		<div>
+			Commentaire :<br>
+			<textarea cols=90 rows=6 name='commentaire'></textarea>
+		</div>
+
+
+		<br>
+			<span id='nb_selectionnes'></span><br><br>
+			<input type='hidden' name='liste_mat' id='liste_mat'>	
+			<input type='submit' value='poster la demande'>
+		
+	</form>
+	</center>
+
+<?PHP
+}	// fin du IF de la création du dossier
+
+
+
+/*****************************************************************************
+*
+*					Formulaire AJOUT PAGE au DOSSIER
+*
+*****************************************************************************/		
+
+if ( $dossierid <> -1 ) {
+
+	echo "<h3>FORMULAIRE DE MODIFICATION D'UN DOSSIER</h3>";
+	
+	$dossier_courant = $con_gespac->QueryRow ("SELECT * FROM dossiers WHERE dossier_id = $dossierid");
+		
+	$dossier_courant_type 	= $dossier_courant[1];
+	$dossier_courant_mat 	= $dossier_courant[2];
+	
+	
+	// type de dossier
+	echo "<p>TYPE <b>$dossier_courant_type</b></p>";
+	
+	
+	// Liste du matériel concerné par le dossier
+	echo "<p>";
+	
+		echo "MATERIELS ";
+	
+		$arr_dossier_courant_mat = explode(";", $dossier_courant_mat);
+		
+		foreach ($arr_dossier_courant_mat as $mat) {
+			
+			if ($mat <> '') {
+				$mat_nom = $con_gespac->QueryOne ("SELECT mat_nom FROM materiels WHERE mat_id = $mat");
+				echo $mat_nom . " / ";
+			}
+			
+		}
+
+	echo "</p>";
+	
+	echo "<form action='gestion_dossiers/post_dossiers.php?action=modif' method='post' name='post_form' id='post_form' >";
+	
+		// Id du dossier
+		echo "<input type=hidden name='dossierid' value='$dossierid'>";
+		
+		// Nouvel état du dossier
+		echo "<select name=etat>";
+			echo "<option value='precision'>Demander des précisions</option>";
+			echo "<option value='intervention'>Déclencher Intervention</option>";
+			echo "<option value='cloture'>Clore le dossier</option>";
+		echo "</select>";
+		
+		echo "<br>";
+		
+		// Commentaire de la modification
+		echo "<textarea name='commentaire'></textarea>";
+		
+		echo "<br>";
+		
+		// Bouton pour poster le formulaire
+		echo "<input type='submit' name='bt_submit'>";
+	
+	echo "</form>";
+	
+	// historique du dossier
+ 
+	echo "<center><h4>HISTORIQUE</h4>";
+	
+	$page_dossier = $con_gespac->QueryAll ("SELECT txt_id, txt_date, txt_texte, txt_etat, users.user_nom FROM dossiers_textes, users WHERE dossier_id=$dossierid AND txt_user=user_id");
+
+		echo "<table width=750px>";
+			echo "<th>utilisateur</th>";
+			echo "<th>date</th>";
+			echo "<th>etat</th>";
+		
+		
+			foreach ( $page_dossier as $page) {
 				
+				$txt_id 	= $page['txt_id'];
+				$txt_date 	= $page['txt_date'];
+				$txt_texte 	= $page['txt_texte'];
+				$txt_etat 	= $page['txt_etat'];
+				$user_nom 	= $page['user_nom'];
+			
+			
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 				
-				echo "<tr id=tr_id$mat_id  class=$tr_class>
+				echo "<tr class=$tr_class>";
+					echo "<td>$txt_date</td>";
+					echo "<td>$user_nom</td>";
+					echo "<td>$txt_etat</td>";
+				echo "</tr>";
 				
-					<td> <input type=checkbox name=chk indexed=true value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $compteur); \"> </td>
-					<td>$nom</td>
-					<td>$type</td>
-					<td>$salle</td>
-				</tr>";
+				echo "<tr class=$tr_class>";
+					echo "<td colspan=4>$txt_texte</td>";
+				echo "</tr>";
 				
-				$compteur++;
 			}
-			
-			echo "</table>";	
-			
-		echo "</div>";
+		echo "</table>";
 		
+}
+
+
+
 ?>
-<center>
-<form action="gestion_dossiers/post_dossiers.php?action=add" method="post" name="post_form" id="post_form" >
-	
-	<div>
-		Type : <br>
-		<select id="type" name="type">
-			<option value='reparation'>		REPARATION</option>
-			<option value='installation'>	INSTALLATION</option>
-			<option value='usage'>			USAGE</option>
-			<option value='formation'>		FORMATION</option>
-		</select>
-	</div>
-
-	<br>
-	
-	<div>
-		Commentaire :<br>
-		<textarea cols=90 rows=6 name='commentaire'></textarea>
-	</div>
 
 
-	<br>
-		<span id='nb_selectionnes'></span><br><br>
-		<input type='hidden' name='liste_mat' id='liste_mat'>	
-		<input type='submit' value='poster la demande'>
-	
-</form>
-</center>
+
+
+
+
+
+
+
 
 
 <script>
@@ -202,7 +337,7 @@
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
 					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php", 1500);
+					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php')", 1500);
 				}
 			
 			}).send(this.toQueryString());
