@@ -159,7 +159,7 @@
 		
 		
 		
-		# GETTERS
+		# SETTERS
 		
 		
 		public function SetDatabase ($db) {
@@ -183,7 +183,7 @@
 		
 		
 		
-		# SETTERS
+		# GETTERS
 		
 		public function GetDatabase () {
 			return $this->db;

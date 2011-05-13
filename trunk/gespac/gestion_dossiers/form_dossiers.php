@@ -12,35 +12,6 @@
 
 -->
 
-<style>
-	
-	.dossier_section {
-		float : top;
-		width : auto;
-		overflow : auto;
-		margin : 10px;
-		padding : 10px;
-		border : 1px dotted black;
-	}
-	
-	.dossier_section span{
-		margin : 20px;
-		
-	}
-	
-	.liste_section {
-		float : top;
-		width : auto;
-		min-width : 65%;
-		height : 300px;
-		overflow : auto;
-		margin : 10px;
-		padding : 10px;
-		border : 1px dotted black;
-	}
-
-	
-</style>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
@@ -225,24 +196,7 @@ if ( $dossierid <> -1 ) {
 	// type de dossier
 	echo "<p>TYPE <b>$dossier_courant_type</b></p>";
 	
-	
-	// Liste du matériel concerné par le dossier
-	echo "<p>";
-	
-		echo "MATERIELS ";
-	
-		$arr_dossier_courant_mat = explode(";", $dossier_courant_mat);
-		
-		foreach ($arr_dossier_courant_mat as $mat) {
-			
-			if ($mat <> '') {
-				$mat_nom = $con_gespac->QueryOne ("SELECT mat_nom FROM materiels WHERE mat_id = $mat");
-				echo $mat_nom . " / ";
-			}
-			
-		}
 
-	echo "</p>";
 	
 	echo "<form action='gestion_dossiers/post_dossiers.php?action=modif' method='post' name='post_form' id='post_form' >";
 	
@@ -259,7 +213,7 @@ if ( $dossierid <> -1 ) {
 		echo "<br>";
 		
 		// Commentaire de la modification
-		echo "<textarea name='commentaire'></textarea>";
+		echo "<textarea name='commentaire' cols=90 rows=6></textarea>";
 		
 		echo "<br>";
 		
@@ -268,18 +222,60 @@ if ( $dossierid <> -1 ) {
 	
 	echo "</form>";
 	
+	
+	
+	
+		
+	// Liste du matériel concerné par le dossier
+	echo "<p>";
+	
+		echo "<center><h4>MATERIELS</h4>";
+	
+		$arr_dossier_courant_mat = explode(";", $dossier_courant_mat);
+		
+		echo "<div class='dossier_section'>";
+		
+			echo "<table width=100%>";
+				echo "<th>Matériel</th>";
+				echo "<th>Type</th>";
+				echo "<th>Salle</th>";
+			
+			foreach ($arr_dossier_courant_mat as $mat) {
+				
+				if ($mat <> '') {
+					$mat = $con_gespac->QueryRow ("Select mat_id, mat_nom, marque_type, salle_nom FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id AND mat_id = $mat");
+					
+					$mat_nom = $mat[1];
+					$mat_type = $mat[2];
+					$mat_salle = $mat[3];
+					
+					echo "<tr><td>$mat_nom</td><td>$mat_type</td><td>$mat_salle</td></tr>";
+				}
+				
+			}
+			
+			echo "</table>";
+	
+		echo "</div>";
+
+	echo "</p>";
+	
+	
+	
+	
 	// historique du dossier
  
-	echo "<center><h4>HISTORIQUE</h4>";
+	echo "<h4>HISTORIQUE</h4>";
 	
 	$page_dossier = $con_gespac->QueryAll ("SELECT txt_id, txt_date, txt_texte, txt_etat, users.user_nom FROM dossiers_textes, users WHERE dossier_id=$dossierid AND txt_user=user_id");
 
 		echo "<table width=750px>";
-			echo "<th>utilisateur</th>";
 			echo "<th>date</th>";
+			echo "<th>utilisateur</th>";
 			echo "<th>etat</th>";
 		
-		
+			$compteur = 0;
+			
 			foreach ( $page_dossier as $page) {
 				
 				$txt_id 	= $page['txt_id'];
@@ -293,14 +289,16 @@ if ( $dossierid <> -1 ) {
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 				
 				echo "<tr class=$tr_class>";
-					echo "<td>$txt_date</td>";
-					echo "<td>$user_nom</td>";
-					echo "<td>$txt_etat</td>";
+					echo "<td width=60px>$txt_date</td>";
+					echo "<td width=60px>$user_nom</td>";
+					echo "<td width=60px>$txt_etat</td>";
 				echo "</tr>";
 				
 				echo "<tr class=$tr_class>";
 					echo "<td colspan=4>$txt_texte</td>";
 				echo "</tr>";
+				
+				$compteur++;
 				
 			}
 		echo "</table>";
