@@ -186,6 +186,23 @@ CREATE TABLE `menu_portail` (
   PRIMARY KEY (`mp_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
+CREATE TABLE IF NOT EXISTS `dossiers` (
+  `dossier_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `dossier_type` varchar(255) NOT NULL,
+  `dossier_mat` text NOT NULL,
+  PRIMARY KEY (`dossier_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `dossiers_textes` (
+  `txt_id` int(11) NOT NULL AUTO_INCREMENT,
+  `dossier_id` int(11) NOT NULL,
+  `txt_user` int(11) NOT NULL,
+  `txt_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `txt_texte` text NOT NULL,
+  `txt_etat` varchar(255) NOT NULL,
+  PRIMARY KEY (`txt_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
 INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', '0', '', 'cg13', 'modules/stats/cssschart.php','','0', '0');
 
 INSERT IGNORE INTO `etats` (`etat`) VALUES
