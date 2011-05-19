@@ -18,6 +18,37 @@
   * export csv de la page
   * tri des colonnes
   * SLB sur chaque champ cliquable
+  * export CSV de la SLB
   * fiche inventaire d'un matériel
+  * flèche haut et bas de page
+
+===Marques===
+  * ajout d'une marque
+  * création d'une marque
+  * modification d'une marque
+  * suppression d'une marque
+  * ajout d'un matériel par sa marque
+  * filtre
+  * SLB sur chaque champ cliquable
+  * export CSV de la SLB
+  
+===Salles===
+
+  * ajout d'une salle
+  * modification d'une salle
+  * suppression d'une salle
+  * filtrage
+  * SLB sur champs cliquables
+  * export CSV dans la SLB
 
 ==Dossiers==
+
+==Données==
+
+==Prêts==
+
+==Utilisateurs==
+
+==Modules==
+
+==Infos==
