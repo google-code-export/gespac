@@ -1,0 +1,9 @@
+#Checklist des fonctionnalités pour debug.
+
+= Checklist des fonctionnalités =
+
+===Page de démarrage===
+
+===Inventaire===
+
+===Dossiers===
