@@ -2,8 +2,22 @@
 
 = Checklist des fonctionnalités =
 
-===Page de démarrage===
+==Page de démarrage==
 
-===Inventaire===
+==Inventaire==
+===Matériels===
+  * filtre
+  * filtres rapides
+  * renommage par lot
+  * Modification par lot
+  * ajout d'un matériel
+  * modification d'un matériel
+  * suppression d'un matériel
+  * affectation d'un matériel / d'un groupe à une salle
+  * masquage / affichage des colonnes
+  * export csv de la page
+  * tri des colonnes
+  * SLB sur chaque champ cliquable
+  * fiche inventaire d'un matériel
 
-===Dossiers===
+==Dossiers==
