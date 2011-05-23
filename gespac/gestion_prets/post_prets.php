@@ -73,6 +73,7 @@
 	
 		$matid 		= $_GET['matid'];
 		$userid		= $_GET['userid'];
+	
 		
 		// On récupère le nom de l'utilisateur en fonction du user_id
 		$liste_user = $db_gespac->queryAll ( "SELECT user_nom FROM users WHERE user_id = $userid" );
@@ -83,14 +84,14 @@
 		$mat_nom = $liste_materiel [0][0];
 		$mat_serial = $liste_materiel [0][1];
 		
-		$log_texte = "$user_nom a rendu le matériel $mat_nom (Numéro de série : <b>$mat_serial</b>)";
+		$log_texte = urlencode("<a href='./gestion_prets/convention_retour.php?matid=$matid&userid=$userid&id_conv=0' target=_blank>$user_nom a rendu le matériel $mat_nom (Numéro de série : <b>$mat_serial</b>)</a>");
 		
 		// On insère une ligne dans les logs pour tracer tout ça
 		$req_log_rendu_materiel = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Rendu', '$log_texte' );";
 		$result = $db_gespac->exec ( $req_log_rendu_materiel );
 				
 		// On ouvre une autre fenêtre pour la convention de retour
-		echo "<script type='text/javascript'>window.open(\"gestion_prets/convention_retour.php?matid=$matid&userid=$userid\", 'CONVENTION DE RETOUR');</script>";
+		echo "<script type='text/javascript'>window.open(\"gestion_prets/convention_retour.php?matid=$matid&userid=$userid&id_conv=1\", 'CONVENTION DE RETOUR');</script>";
 		
 	
 		// On ne rend pas ici le matériel mais dans le fichier convention_retour.php car la mise à jour de la table est trop rapide et les données n'existent plus lors de la création de la convention (donc convention vierge)
