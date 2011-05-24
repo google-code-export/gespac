@@ -2,7 +2,7 @@
 
 = Checklist des fonctionnalités =
 
-#==Page de démarrage==
+# ==Page de démarrage==
 
 ==Inventaire==
 ===Matériels===
