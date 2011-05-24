@@ -45,6 +45,16 @@
 
 ==Données==
 
+===
+  * importer base OCS
+  * export vers OCS
+  * export vers FOG
+  * export inventaire
+  * dump base ocs
+  * dump base gespac
+  * vider les logs
+  * 
+
 ==Prêts==
 
 ==Utilisateurs==
