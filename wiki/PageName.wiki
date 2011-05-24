@@ -2,9 +2,9 @@
 
 = Checklist des fonctionnalités =
 
-# ==Page de démarrage==
+== 1. Page de démarrage==
 
-==Inventaire==
+== 2. Inventaire==
 ===Matériels===
   * filtre
   * filtres rapides
@@ -38,9 +38,9 @@
   * SLB sur champs cliquables
   * export CSV dans la SLB
 
-==Dossiers==
+== 3. Dossiers==
 
-==Données==
+== 4 .Données==
 ===importer base OCS===
 ===Eports===
   * export vers OCS
@@ -55,12 +55,12 @@
   * rééditer un bon de retour
 ===Import CSV===
 
-==Prêts==
+== 5. Prêts==
   * prêter un matériel
   * rendre un matériel
   * rééditer la convention de prêt
 
-==Utilisateurs==
+== 6. Utilisateurs==
 ===Gestion des utilisateurs===
   * filtrer
   * ajouter
@@ -77,6 +77,6 @@
 ===Import IACA===
 ===Modifier son compte===
 
-==Modules==
+== 7. Modules==
 
-==Infos==
+== 8. Infos==
