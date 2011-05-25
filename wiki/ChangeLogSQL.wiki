@@ -2,7 +2,7 @@ Page récapitulative des changements dans la base SQL de gespac
 
 =Change Log SQL=
 
-*gespac 3.3.x*
+*gespac 3.3.1*
   * ajout de la table menu_portail
   * ajout du champ grades:grade_menu_portail
   * ajout du champ est_modifiable pour les salles, users, grades et menu_portail
