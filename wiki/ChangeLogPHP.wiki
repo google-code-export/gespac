@@ -2,7 +2,9 @@ Page récapitulative des changements dans les fonctionnalités de l'application
 
 = Change Log PHP =
 
-* gespac 3.3.x*
+*gespac 3.4*
+
+*gespac 3.3.1*
   * possibilité de déverrouiller le champ "serial" dans la modification d'un matériel
   * création/modification/suppression d'un élément du menu portail
   * amélioration du filtre des matériels avec l'opérateur +.
