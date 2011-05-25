@@ -2,8 +2,10 @@
 	echo '<center>';
 	echo 'Mise en place de la nouvelle base GESPAC<br>';
 
-	require_once ('../include/config.php');
- 	mysql_select_db($database_gespac, $gespac);
+	require_once ('../gespac/config/databases.php');
+	$ressource = mysql_pconnect($host, $user, $pass) or trigger_error(mysql_error(),E_USER_ERROR); 
+	
+ 	mysql_select_db($gespac, $ressource);
  
  
 	$requetes="";
@@ -17,7 +19,7 @@
  
 	$reqs = split(";",$requetes);// on sépare les requêtes
 	foreach($reqs as $req){	// et on les éxécute
-		if (!mysql_query($req,$gespac) && trim($req)!=""){
+		if (!mysql_query($req,$ressource) && trim($req)!=""){
 			die("ERROR : ".$req); // stop si erreur 
 		}
 	}
