@@ -78,5 +78,22 @@
 ===Modifier son compte===
 
 == 7. Modules==
+===Récap FOG===
+===Wake On Lan===
+===Export Perso===
+===Menu Portail===
+  * filtrer
+  * ajouter un item
+  * modifier un item
+  * supprimer un item
 
 == 8. Infos==
+===Fiche Collège===
+  * modifier
+===Flux RSS===
+  * ajouter un flux
+  * modifier un flux
+  * supprimer un flux
+===Stats camemberts===
+===Stats bâtons===
+===Stats globales===
