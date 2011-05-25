@@ -55,7 +55,8 @@
 
 	//installation de la base GESPAC
 	
-	require_once ('./include/config.php');
+	require_once ('gespac/config/databases.php');
+	include ('gespac/config/pear.php');
 
 	//Analyse des versions OCS et FOG
 	$file_ocs = '/usr/share/ocsinventory-reports/ocsreports/preferences.php';//fichier ou est stocké la version du GUI d'OCS
@@ -87,13 +88,13 @@
 		}
 	
 		// on vérifie la connectivité avec le serveur avant d'aller plus loin
-		if(!mysql_connect($hostname_gespac, $username_gespac, $password_gespac)) {
+		if(!mysql_connect($host, $user, $pass)) {
 			echo 'Merci de renseigner le fichier "config.php" se trouvant dans le dossier include.<br>';
 			exit();
 		}
 
 		// on vérifie la connectivité avec la base avant d'aller plus loin	
-		if(!mysql_select_db($database_gespac)) {
+		if(!mysql_select_db($gespac)) {
 			echo '<img src="./gespac/img/info.png"><br>
 			vous devez installer au préalable la base de données en cliquant <a href="install_mysql/installation.php">ici</a>';
 			exit();
@@ -120,8 +121,6 @@
 			echo "<div class=portail-menu-item><a href='./gespac'> 
 				<img src='./gespac/img/gespac.png' height=48><br>GESPAC </a></div>";
 			
-			include ('gespac/config/databases.php');
-			include ('gespac/config/pear.php');
 				
 			// adresse de connexion à la base de données
 			$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
