@@ -35,11 +35,12 @@
 <?PHP 
 	if ( $E_chk ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=-1');\"> <img src='img/add.png'>Créer un dossier </a>"; 
 		
-	$liste_dossiers = $con_gespac->QueryAll ("SELECT dossiers.dossier_id as dossier_id, dossier_type, dossier_mat, txt_date, txt_etat, txt_texte FROM dossiers, dossiers_textes WHERE dossiers.dossier_id = dossiers_textes.dossier_id AND txt_etat='ouverture';");
+	$liste_dossiers = $con_gespac->QueryAll ("SELECT dossiers.dossier_id as dossier_id, dossier_type, dossier_mat, txt_date, txt_etat, txt_texte FROM dossiers, dossiers_textes WHERE dossiers.dossier_id = dossiers_textes.dossier_id GROUP BY dossiers.dossier_id;");
 	
 	echo "<table id='dossiers_table' width='900px'>";
 	
 		echo "<th>&nbsp;</th>";
+		echo "<th>dossier</th>";
 		echo "<th>date</th>";
 		echo "<th>type</th>";
 		echo "<th>etat</th>";
@@ -65,9 +66,10 @@
 			
 			echo "<tr id='tr_$dossier_id' class=$tr_class>";
 				echo "<td width=20px><a href='#' onclick=\"toggleDossier($dossier_id);\"><img src='img/deplier.png'></a></td>";
+				echo "<td width=20px>$dossier_id</td>";
 				echo "<td width=100px>$date_ouverture</td>";
 				echo "<td width=60px>$dossier_type</td>";
-				echo "<td width=60px>$last_etat</td>";
+				echo "<td width=60px class='td_$last_etat'>$last_etat</td>";
 				echo "<td>$txt_texte</td>";
 				if ( $E_chk ) echo "<td width=20px><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=$dossier_id');\"> <img src='img/write.png'> </a></td>";
 			
@@ -81,11 +83,7 @@
 			
 			echo "<td colspan=6 class='inner_td'>";
 				echo "<table class='innertable'>";
-					echo "<th>utilisateur</th>";
-					echo "<th>date</th>";
-					echo "<th>etat</th>";
-				
-				
+
 					foreach ( $page_dossier as $page) {
 						
 						$txt_id 	= $page['txt_id'];
@@ -96,14 +94,16 @@
 					
 						
 						echo "<tr>";
-							echo "<td>$user_nom</td>";
+							echo "<td class='td_$txt_etat'>$txt_etat</td>";
 							echo "<td>$txt_date</td>";
-							echo "<td>$txt_etat</td>";
+							echo "<td>$user_nom</td>";
 						echo "</tr>";
 						
 						echo "<tr>";
 							echo "<td colspan=4>$txt_texte</td>";
 						echo "</tr>";
+						
+						echo "<tr><td colspan=4 style='border:none;background-color:white;'>&nbsp;</td></tr>";
 						
 					}
 					
@@ -127,7 +127,6 @@
 	function toggleDossier(dossier) {
 		if ( $('dossiers' + dossier).style.display == "none" ) {
 			$('dossiers' + dossier).style.display = "";
-			//$('tr_' + dossier).className = "selectedrow";
 			$('tr_' + dossier).style.borderStyle = "solid";
 			$('tr_' + dossier).style.borderBottom = "none";
 			$('tr_' + dossier).style.borderColor = "blue";

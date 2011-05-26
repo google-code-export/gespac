@@ -18,6 +18,7 @@
 
 
 <?PHP
+
 	// lib
 	require_once ('../fonctions.php');
 	include_once ('../config/databases.php');
@@ -27,7 +28,6 @@
 
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
-
 
 /*****************************************************************************
 *
@@ -73,8 +73,8 @@ if ( $dossierid == -1 ) {
 		echo "<SELECT id='CB_salles' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 3);\">";
 			echo "<option>---</option>";
 			foreach ($liste_salles as $record) {
-				$salle_nom = $record['salle_nom'];
-				$salle_id = $record['salle_id'];
+				$salle_nom 	= stripcslashes(urldecode($record['salle_nom']));
+				$salle_id 	= $record['salle_id'];
 				echo "<option value=$salle_id>$salle_nom</option>";
 			}
 		echo "</SELECT>";
@@ -147,13 +147,14 @@ if ( $dossierid == -1 ) {
 	<form action="gestion_dossiers/post_dossiers.php?action=add" method="post" name="post_form" id="post_form" >
 		
 		<div>
-			Type : <br>
-			<select id="type" name="type">
+			Type :
+				<select id="type" name="type">
 				<option value='reparation'>		REPARATION</option>
 				<option value='installation'>	INSTALLATION</option>
 				<option value='usage'>			USAGE</option>
 				<option value='formation'>		FORMATION</option>
 			</select>
+				
 		</div>
 
 		<br>
@@ -161,6 +162,12 @@ if ( $dossierid == -1 ) {
 		<div>
 			Commentaire :<br>
 			<textarea cols=90 rows=6 name='commentaire'></textarea>
+		</div>
+		
+		<div>
+			<span class='chk_span'><label for='add_inter'>Intervention Directe <label><input type='checkbox' name='add_inter'></span>
+			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing' checked></span>
+			<span class='chk_span'><label for='mat_hs'>Mettre le matériel HS <label><input type='checkbox' name='mat_hs'></span>
 		</div>
 
 

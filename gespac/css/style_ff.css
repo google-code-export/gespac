@@ -240,6 +240,7 @@ img {
 	float:right;
 	width:850px;
 	background-color : #D9DBDC;
+	border : none;
 }
 
 .innertable td{
@@ -248,8 +249,10 @@ img {
 	border 		: 1px grey solid;
 }
 
-.innertable th {
-	background-color : yellow !important;
+.innertable th{
+	font-size	: 10px;
+	background-color : green;
+	padding : 0px;
 }
 
 .inner_tr {
@@ -258,11 +261,9 @@ img {
 	border-top : none;
 }
 
-
 .inner_td {
 	padding : 10px;
 }
-
 
 .dossier_section {
 	float : top;
@@ -288,6 +289,18 @@ img {
 	padding : 10px;
 	border : 1px dotted black;
 }
+
+.chk_span {
+	padding : 10px;}
+
+.td_ouverture {
+	background-color : #5AC8FF;}
+.td_cloture {
+	background-color : #46FF80;}
+.td_intervention {
+	background-color : #FF464A;}
+.td_precision {
+	background-color : #FF9B46;}
 
 
 /*	Pour les lignes selectionnées	*/
@@ -390,17 +403,13 @@ img {
 /*************************************** 	RSS / ATOM  *******************************************/
 
 #rss_title {
-	font: 14px Arial, Helvetica, sans-serif;
-}
-
+	font: 14px Arial, Helvetica, sans-serif;}
 
 #rss_title a{
-	font: 14px Arial, Helvetica, sans-serif;
-}
+	font: 14px Arial, Helvetica, sans-serif;}
 
 #rss_content {
-	font: 12px Arial, Helvetica, sans-serif;
-}
+	font: 12px Arial, Helvetica, sans-serif;}
 
 #rss_news {
 	border : 1px solid black;
