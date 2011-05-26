@@ -3,8 +3,8 @@
 	// Mon fichier de config pour les bases de données
 	
   $host = 'localhost';
-  $user = 'root';
-  $pass = '15Rd9N1'; 
+  $user = '';
+  $pass = ''; 
 
    //identification de base de données  
   $gespac='gespac';
