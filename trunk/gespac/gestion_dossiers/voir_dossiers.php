@@ -45,6 +45,7 @@
 		echo "<th>type</th>";
 		echo "<th>etat</th>";
 		echo "<th>commentaire</th>";
+		echo "<th>&nbsp;</th>";
 		if ( $E_chk ) echo "<th>&nbsp;</th>";	
 		
 		$compteur = 0;
@@ -71,6 +72,7 @@
 				echo "<td width=60px>$dossier_type</td>";
 				echo "<td width=60px class='td_$last_etat'>$last_etat</td>";
 				echo "<td>$txt_texte</td>";
+				echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?height=480&width=500&dossier=$dossier_id' rel='slb_dossiers' title='Liste des matériels du dossier $dossier_id'><img src='img/outils.png'></a></td>";
 				if ( $E_chk ) echo "<td width=20px><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=$dossier_id');\"> <img src='img/write.png'> </a></td>";
 			
 			echo "</tr>";
@@ -81,7 +83,7 @@
 
 			echo "<tr id='dossiers$dossier_id' style='display:none' class='inner_tr'>";
 			
-			echo "<td colspan=6 class='inner_td'>";
+			echo "<td colspan=8 class='inner_td'>";
 				echo "<table class='innertable'>";
 
 					foreach ( $page_dossier as $page) {
@@ -122,6 +124,10 @@
 
 
 <script>
+	
+	window.addEvent('domready', function(){
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_dossiers'});
+	});
 	
 	// Montre / cache les pages d'un dossier
 	function toggleDossier(dossier) {
