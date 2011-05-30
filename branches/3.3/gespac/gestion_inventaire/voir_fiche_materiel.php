@@ -19,7 +19,7 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
 	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-	include ('../../include/config.php'); 	//on récupère les variables pour le test des bases OCS et FOG
+	//include ('../../include/config.php'); 	//on récupère les variables pour le test des bases OCS et FOG
 	
 	// le ssn est le champ charnière pour récupérer les informations des différentes bases
 	$mat_ssn = $_GET ['mat_ssn'];
@@ -42,7 +42,7 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	********************************************/
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
-	$link_bases = mysql_pconnect('localhost', 'root', $password_gespac);//connexion à la base de donnée
+	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion à la base de donnée	
 	if(!mysql_select_db($ocsweb, $link_bases)) { echo "BASE OCS introuvable";}
 	else {
 		// adresse de connexion à la base de données	
@@ -73,7 +73,7 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	********************************************/
 	
 	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user . ':' . $pass . '@localhost/' . $database_gespac;
+	$dsn_gespac     = 'mysql://'. $user . ':' . $pass . '@localhost/' . $gespac;
 	
 	// cnx à la base de données GESPAC
 	$db_gespac 	= & MDB2::factory($dsn_gespac);
