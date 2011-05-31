@@ -298,7 +298,7 @@
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
 					//$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste un champ trop grand on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php?filter=" + $('filt').value + "');", 1500);
+					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php?filter=" + encodeURIComponent($('filt').value) + "');", 1500);
 					SexyLightbox.close();
 				}
 			
