@@ -165,21 +165,37 @@
 	
 	if ( $action == 'modif_corr' ) {
 	
-		$corr_id = $_GET['corr_id'];
-		$marque_id = $_GET['marque_id'];
+		$corr_id 	= $_GET['corr_id'];
+		$marque_id 	= $_GET['marque_id'];
+		
 		
 		$marque_a_inserer = $db_gespac->queryRow("SELECT corr_type, corr_stype, corr_marque, corr_modele FROM correspondances WHERE corr_id=$corr_id;");
-		
+				
 		$famille 	= $marque_a_inserer[0];
 		$sfamille 	= $marque_a_inserer[1];
 		$marque 	= $marque_a_inserer[2];
 		$modele 	= $marque_a_inserer[3];
 		
-		$test_existence_dans_table_marques = $db_gespac->queryRow("SELECT * FROM marques WHERE marque_model='$modele' AND marque_type='$famille' AND marque_stype='$sfamille' AND marque_marque='$marque'");
+		$test_existence_dans_table_marques = $db_gespac->queryOne("SELECT marque_id FROM marques WHERE marque_model='$modele' AND marque_type='$famille' AND marque_stype='$sfamille' AND marque_marque='$marque'");
 		
 		if ( $test_existence_dans_table_marques ) {
-			echo "La marque <b>$marque $modele</b> existe déjà.";
-			echo "<script>alert('La marque $marque $modele existe déjà.');</script>";
+			
+			$marque_de_depart = $db_gespac->queryRow("SELECT marque_marque, marque_model FROM marques WHERE marque_id=$marque_id;");
+					
+			$marque_dep 	= $marque_de_depart[0];
+			$modele_dep 	= $marque_de_depart[1];
+			
+			echo "Le matériel est transféré de la marque $marque_dep $modele_dep vers $marque $modele";
+			echo "<script>alert('La marque $marque $modele existe déjà. Je transbahute donc tout le matériel de $marque_dep $modele_dep vers $marque $modele');</script>";
+			
+			// On transvase les mat de l'ancienne marque vers la marque avec correspondance.
+
+			$req_reaffectation_marque = "UPDATE materiels SET marque_id = $test_existence_dans_table_marques WHERE marque_id = $marque_id;";	
+			$result = $db_gespac->exec ( $req_reaffectation_marque );
+			
+			// On log la requête SQL
+			fwrite($fp, date("Ymd His") . " " . $req_reaffectation_marque."\n");
+			
 		}
 		else {
 		
