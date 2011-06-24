@@ -81,6 +81,12 @@
 		
 		$mailing = $mailing == "on" ? 1 : 0 ;
 
+		// si on modifie le grade, la page de démarrage devient la page de bienvenue
+		$ancien_grade = $db_gespac->queryOne("SELECT grade_id FROM users WHERE user_id=$id");
+		
+		if ($grade <> $ancien_grade) $page="bienvenue.php";
+
+
 		// on récupére les anciennes valeurs du compte pour les logs
 		$req_infos_compte_old = $db_gespac->queryRow("SELECT user_nom FROM users WHERE user_id=$id");
 		$nom_old = $req_infos_compte_old[0];
@@ -144,6 +150,14 @@
 		
 		foreach ($lot_array as $item) {
 			if ( $item <> "" ) {	// permet de virer les éléments vides
+			
+				// si on modifie le grade, la page de démarrage devient la page de bienvenue
+				$ancien_grade = $db_gespac->queryOne("SELECT grade_id FROM users WHERE user_id=$item");
+		
+				if ($grade <> $ancien_grade) 
+					$page="bienvenue.php";
+				else
+					$page = $db_gespac->queryOne("SELECT user_accueil FROM users WHERE user_id=$item");
 				
 				
 				//$skin est le 1er champ à UPDATER (ou pas)
@@ -171,7 +185,7 @@
 				
 
 				
-				$req_modif_user = "UPDATE users SET " . $sql_skin . $sql_grade . $sql_mailing . " WHERE user_id=$item ;";
+				$req_modif_user = "UPDATE users SET " . $sql_skin . $sql_grade . $sql_mailing . ", user_accueil='$page' WHERE user_id=$item ;";
 				$result = $db_gespac->exec ( $req_modif_user );
 				
 				//on récupérer le nom et l'id du user de chaque item pour les logs
