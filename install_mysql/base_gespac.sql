@@ -203,7 +203,9 @@ CREATE TABLE IF NOT EXISTS `dossiers_textes` (
   PRIMARY KEY (`txt_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/cssschart.php', '1', '','0','0', '0');
+
+INSERT INTO users (user_id, user_nom, user_logon, user_password, grade_id, user_skin, user_accueil, user_mail, user_mailing, user_suppr, est_modifiable) VALUES (1, 'ati', 'ati', 'azerty', 1, 'cg13', 'modules/stats/csschart.php', '', 1, 0, 0);
+
 
 INSERT IGNORE INTO `etats` (`etat`) VALUES
 ('ATTENTE SAV'),
