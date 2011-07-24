@@ -49,7 +49,7 @@
 	</head>
 
 	
-	<BODY>
+	<BODY onload="resizeContent();" onResize="resizeContent();">
 
 		<?PHP	// Includes
 			include_once ('config/databases.php');	// fichiers de configuration des bases de données
