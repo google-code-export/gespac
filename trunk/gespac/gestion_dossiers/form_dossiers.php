@@ -41,6 +41,7 @@ if ( $dossierid == -1 ) {
 	$liste_materiels = $con_gespac->QueryAll ('Select mat_id, mat_nom, marque_type, salle_nom FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id;');
 	$liste_types = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
 	$liste_salles = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
+	$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
 
 	echo "<h3>FORMULAIRE DE CREATION D'UN DOSSIER</h3>";
 	
@@ -58,6 +59,8 @@ if ( $dossierid == -1 ) {
 	<span>
 		Nom <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'dossiers_mat_table', 1);" type="text" >
 	</span>
+	
+	Ou
 
 <?PHP
 
@@ -73,7 +76,7 @@ if ( $dossierid == -1 ) {
 		echo "<SELECT id='CB_salles' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 3);\">";
 			echo "<option>---</option>";
 			foreach ($liste_salles as $record) {
-				$salle_nom 	= stripcslashes(urldecode($record['salle_nom']));
+				$salle_nom 	= stripcslashes(utf8_encode($record['salle_nom']));
 				$salle_id 	= $record['salle_id'];
 				echo "<option value=$salle_id>$salle_nom</option>";
 			}
@@ -86,7 +89,7 @@ if ( $dossierid == -1 ) {
 	*		COMBOBOX des TYPES
 	*
 	**************************************/
-		
+		/*
 		echo "<span>";
 		echo "Type ";
 		echo "<SELECT id='CB_types' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 2);\">";
@@ -98,7 +101,7 @@ if ( $dossierid == -1 ) {
 			}
 		echo "</SELECT>";
 		echo "</span>";
-				
+		*/		
 	
 	echo "</div>";
 
@@ -167,7 +170,16 @@ if ( $dossierid == -1 ) {
 		<div>
 			<span class='chk_span'><label for='add_inter'>Intervention Directe <label><input type='checkbox' name='add_inter'></span>
 			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing' checked></span>
-			<span class='chk_span'><label for='mat_hs'>Mettre le matériel HS <label><input type='checkbox' name='mat_hs'></span>
+			<span class='chk_span'><label for='mat_hs'>Changer l'état du matériel <label><input type='checkbox' name='mat_hs' id='mat_hs'></span>
+			<span class='chk_span'>
+				<select name="etat" id="CB_etats" style="display:none;">
+					<option selected><?PHP echo $materiel_etat; ?></option>
+					<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
+				</select>
+			</span>
+			
+			<span class='chk_span' id ="gign" style="display:none;">GIGN : <input type="text" size=6 name="gign"></span>
+	
 		</div>
 
 
@@ -212,9 +224,9 @@ if ( $dossierid <> -1 ) {
 		
 		// Nouvel état du dossier
 		echo "<select name=etat>";
-			echo "<option value='precision'>Demander des précisions</option>";
+			echo "<option value='precisions'>Demander des précisions</option>";
 			echo "<option value='intervention'>Déclencher Intervention</option>";
-			echo "<option value='cloture'>Clore le dossier</option>";
+			echo "<option value='clos'>Clore le dossier</option>";
 		echo "</select>";
 		
 		echo "<br>";
@@ -347,6 +359,28 @@ if ( $dossierid <> -1 ) {
 			
 			}).send(this.toQueryString());
 		}); 
+		
+		
+		$('mat_hs').addEvent('change', function(e) {
+		
+			if ( $('mat_hs').checked ) {
+				$('CB_etats').style.display = "";
+			} 
+			else {
+				$('CB_etats').style.display = "none";
+				$('gign').style.display = "none";
+			}
+			
+		});
+		
+		$('CB_etats').addEvent('change', function(e) {
+				new Event(e).stop();
+				
+				if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} ) {	$('gign').style.display = ""; }
+				else { $('gign').style.display = "none";	}
+		});
+		
+		
     });
 	
 	
