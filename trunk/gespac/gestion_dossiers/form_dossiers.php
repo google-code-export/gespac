@@ -132,7 +132,7 @@ if ( $dossierid == -1 ) {
 			
 			echo "<tr id=tr_id$mat_id  class=$tr_class>
 			
-				<td> <input type=checkbox name=chk indexed=true value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $compteur); \"> </td>
+				<td> <input class=chkbx type=checkbox name=chk indexed=true value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $compteur); \"> </td>
 				<td>$nom</td>
 				<td>$type</td>
 				<td>$salle</td>
@@ -170,7 +170,7 @@ if ( $dossierid == -1 ) {
 		<div>
 			<span class='chk_span'><label for='add_inter'>Intervention Directe <label><input type='checkbox' name='add_inter'></span>
 			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing' checked></span>
-			<span class='chk_span'><label for='mat_hs'>Changer l'état du matériel <label><input type='checkbox' name='mat_hs' id='mat_hs'></span>
+			<span class='chk_span' id='mat_hs_label' style='display:none;'><label for='mat_hs'>Changer l'état du matériel <label><input type='checkbox' name='mat_hs' id='mat_hs'></span>
 			<span class='chk_span'>
 				<select name="etat" id="CB_etats" style="display:none;">
 					<option selected><?PHP echo $materiel_etat; ?></option>
@@ -178,7 +178,7 @@ if ( $dossierid == -1 ) {
 				</select>
 			</span>
 			
-			<span class='chk_span' id ="gign" style="display:none;">GIGN : <input type="text" size=6 name="gign"></span>
+			<span class='chk_span' id ="gign" style="display:none;">GIGN : <input id='gign_txt' type="text" size=6 name="gign"></span>
 	
 		</div>
 
@@ -362,8 +362,8 @@ if ( $dossierid <> -1 ) {
 		
 		
 		$('mat_hs').addEvent('change', function(e) {
-		
-			if ( $('mat_hs').checked ) {
+					
+			if ( $('mat_hs').checked) {
 				$('CB_etats').style.display = "";
 			} 
 			else {
@@ -376,10 +376,37 @@ if ( $dossierid <> -1 ) {
 		$('CB_etats').addEvent('change', function(e) {
 				new Event(e).stop();
 				
-				if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} ) {	$('gign').style.display = ""; }
+				var mystr = $('liste_mat').value;
+				
+				// On vérifie si l'état est cassé, volé ... et surtout si on a seulement un matériel sélectionné pour gign
+				if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} && mystr.split(';').length == 2) {	$('gign').style.display = ""; }
 				else { $('gign').style.display = "none";	}
 		});
 		
+		
+		$$('.chkbx').addEvent('click', function(e) {
+			var mystr = $('liste_mat').value;
+			
+			if (mystr.split(';').length > 1) {
+				$('mat_hs_label').style.display = "";
+				
+				// On vire le gign si il y a 0 ou plus de 1 matériel sélectionné
+				if ( mystr.split(';').length > 2) {
+					$('gign_txt').value = "";
+					$('gign').style.display = "none";
+				}
+								
+			}
+			else {
+				$('mat_hs').checked = false;
+				$('gign_txt').value = "";
+				$('CB_etats').value = "";
+				
+				$('mat_hs_label').style.display = "none";
+				$('CB_etats').style.display = "none";
+				$('gign').style.display = "none";
+			}
+		});
 		
     });
 	
