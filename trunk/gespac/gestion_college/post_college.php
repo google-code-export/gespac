@@ -60,12 +60,19 @@
 		$clg_web 		= addslashes(utf8_decode(urldecode($_POST['clg_web'])));
 		$clg_grr 		= addslashes(utf8_decode(urldecode($_POST['clg_grr'])));
 	
-	
+		// création du collège
 		$req_add_college = "INSERT INTO college VALUES ( '$clg_uai', '$clg_nom', '$clg_ati', '$clg_ati_mail', '$clg_adresse', '$clg_cp', '$clg_ville', '$clg_tel', '$clg_fax', '$clg_web', '$clg_grr')";
 		$result = $db_gespac->exec ( $req_add_college );
 		
 		echo "<br><small>Création du collège <b>$clg_nom</b> !</small><br>";
 		
+		// Mise à jour de l'adresse mail dans le compte ati
+		$req_maj_mail_ati = "UPDATE users SET user_mail = '$clg_ati_mail' WHERE user_nom='ati'";
+		$result = $db_gespac->exec ( $req_maj_mail_ati );
+		
+		echo "<br><small>Mise à jour du mail du compte ATI !</small><br>";
+		
+		// Création de diverses salles
 		$req_add_salle_stock = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (1, 'STOCK', '$clg_uai', 0 )";
 		$result = $db_gespac->exec ( $req_add_salle_stock );
 		
@@ -83,6 +90,7 @@
 
 		// On log la requête SQL
 		fwrite($fp, date("Ymd His") . " " . $req_add_college."\n");
+		fwrite($fp, date("Ymd His") . " " . $req_maj_mail_ati."\n");
 		fwrite($fp, date("Ymd His") . " " . $req_add_salle_stock."\n");
 		fwrite($fp, date("Ymd His") . " " . $req_add_salle_d3e."\n");
 		fwrite($fp, date("Ymd His") . " " . $req_add_salle_pret."\n");
@@ -122,8 +130,17 @@
 							  clg_site_web = '$clg_web', clg_site_grr = '$clg_grr' WHERE clg_uai='$old_uai'";
 		$result = $db_gespac->exec ( $req_modif_college );
 		
+		// Mise à jour de l'adresse mail dans le compte ati
+		$req_maj_mail_ati = "UPDATE users SET user_mail = '$clg_ati_mail' WHERE user_nom='ati'";
+		$result = $db_gespac->exec ( $req_maj_mail_ati );
+		
+		echo "<br><small>Mise à jour du mail du compte ATI !</small><br>";
+		
+		
+		
 		// On log la requête SQL
 		fwrite($fp, date("Ymd His") . " " . $req_modif_college."\n");
+		fwrite($fp, date("Ymd His") . " " . $req_maj_mail_ati."\n");
 		
 		//Insertion d'un log
 		
