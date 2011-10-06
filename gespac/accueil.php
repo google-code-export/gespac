@@ -17,17 +17,15 @@
 	$db_gespac      = & MDB2::factory($dsn_gespac);
 
 	$user = $_SESSION ['login'];
-	$rq_accueil_user = $db_gespac->queryAll ( "SELECT user_accueil FROM users WHERE user_logon='$user' " );
-	$page_accueil = $rq_accueil_user[0][0];
+	$page_accueil = $db_gespac->queryOne ( "SELECT user_accueil FROM users WHERE user_logon='$user' " );
+
+	if ($page_accueil == "") $page_accueil = "bienvenue.php";
 	
 
 ?>
 
 
 <script type="text/javascript">	
-	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
-	
 	AffichePage('conteneur', '<?PHP echo $page_accueil;?>');
 </script>
 	
