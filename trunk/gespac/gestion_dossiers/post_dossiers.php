@@ -26,10 +26,10 @@
 		$commentaire 	= addslashes($_POST ['commentaire']);
 		$liste_mat 		= preg_replace("[^;]", "", $_POST ['liste_mat']); // On vire le premier ; dans la liste du matériel
 		$add_inter		= $_POST ['add_inter'];
-		$active_mailing	= $_POST ['active_mailing']; $mailing = $active_mailing <> "off" ? 1 : 0 ;
+		$active_mailing	= $_POST ['active_mailing']; $mailing = $active_mailing <> "" ? 1 : 0 ;
 		$mat_hs			= $_POST ['mat_hs'];
 		$current_user	= $con_gespac->QueryOne("SELECT user_id FROM users WHERE user_logon = '" . $_SESSION['login'] . "'");
-	
+
 		
 		// On créé le dossier
 		$rq = "INSERT INTO dossiers (dossier_type, dossier_mat, dossier_mailing) VALUES ('$type', '$liste_mat', $mailing);";
@@ -116,8 +116,6 @@
 			$headers .='Reply-To: '.$mail_root."\n"; 
 			$headers .='Content-Type: text/html; charset="iso-8859-1"'."\n"; 
 			$headers .='Content-Transfer-Encoding: 8bit'; 
-			
-			echo $headers;
 					
 			if (mail($mail_destinataire, $sujet_mail, $message, $headers)) 
 				echo 'Le(s) mail(s) a (ont) bien été envoyé(s) !<br>'; 
