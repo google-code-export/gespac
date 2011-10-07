@@ -26,7 +26,7 @@
 		$commentaire 	= addslashes($_POST ['commentaire']);
 		$liste_mat 		= preg_replace("[^;]", "", $_POST ['liste_mat']); // On vire le premier ; dans la liste du matériel
 		$add_inter		= $_POST ['add_inter'];
-		$active_mailing	= $_POST ['active_mailing']; $mailing = $active_mailing == "on" ? 1 : 0 ;
+		$active_mailing	= $_POST ['active_mailing']; $mailing = $active_mailing <> "off" ? 1 : 0 ;
 		$mat_hs			= $_POST ['mat_hs'];
 		$current_user	= $con_gespac->QueryOne("SELECT user_id FROM users WHERE user_logon = '" . $_SESSION['login'] . "'");
 	

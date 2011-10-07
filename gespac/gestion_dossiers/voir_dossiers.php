@@ -73,7 +73,8 @@
 				echo "<td width=60px class='td_$last_etat'>$last_etat</td>";
 				echo "<td>$txt_texte</td>";
 				echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?height=480&width=500&dossier=$dossier_id' rel='slb_dossiers' title='Liste des matériels du dossier $dossier_id'><img src='img/outils.png'></a></td>";
-				if ( $E_chk ) echo "<td width=20px><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=$dossier_id');\"> <img src='img/write.png'> </a></td>";
+				if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=$dossier_id');\"> <img src='img/write.png'> </a></td>";
+				else echo "<td>&nbsp;</td>";
 			
 			echo "</tr>";
 					
