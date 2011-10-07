@@ -1,3 +1,5 @@
+<?PHP session_start(); ?>
+
 <!--
 
 	Pour la création :
@@ -27,6 +29,10 @@
 	$dossierid = $_GET["id"];
 
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	
+			
+	// gestion des droits particuliers (clore des dossiers, changer l'état d'un dossier ...)
+	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-04#", $_SESSION['droits']);
 	
 
 /*****************************************************************************
@@ -167,9 +173,13 @@ if ( $dossierid == -1 ) {
 			<textarea cols=90 rows=6 name='commentaire'></textarea>
 		</div>
 		
+		<?PHP
+			if ( $droits_supp ) {
+		?>
 		<div>
+
 			<span class='chk_span'><label for='add_inter'>Intervention Directe <label><input type='checkbox' name='add_inter'></span>
-			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing'></span>
+			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing' checked></span>
 			<span class='chk_span' id='mat_hs_label' style='display:none;'><label for='mat_hs'>Changer l'état du matériel <label><input type='checkbox' name='mat_hs' id='mat_hs'></span>
 			<span class='chk_span'>
 				<select name="etat" id="CB_etats" style="display:none;">
@@ -181,6 +191,8 @@ if ( $dossierid == -1 ) {
 			<span class='chk_span' id ="gign" style="display:none;">GIGN : <input id='gign_txt' type="text" size=6 name="gign"></span>
 	
 		</div>
+		
+		<?PHP } // End if ($droits_supp) ?>
 
 
 		<br>
@@ -224,9 +236,12 @@ if ( $dossierid <> -1 ) {
 		
 		// Nouvel état du dossier
 		echo "<select name=etat>";
-			echo "<option value='precisions'>Demander des précisions</option>";
-			echo "<option value='intervention'>Déclencher Intervention</option>";
-			echo "<option value='clos'>Clore le dossier</option>";
+			echo "<option value='precisions'>Précisions sur le dossier</option>";
+			
+			if ($droits_supp) {
+				echo "<option value='intervention'>Déclencher Intervention</option>";
+				echo "<option value='clos'>Clore le dossier</option>";
+			}
 		echo "</select>";
 		
 		echo "<br>";
