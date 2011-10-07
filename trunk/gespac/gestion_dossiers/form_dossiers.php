@@ -263,11 +263,11 @@ if ( $dossierid <> -1 ) {
 	// Liste du matériel concerné par le dossier
 	echo "<p>";
 	
-		echo "<center><h4>MATERIELS</h4>";
+		echo "<center><h4><a href='#' onclick='toggleMateriels();'>LISTE DU MATERIEL CONCERNE</a></h4>";
 	
 		$arr_dossier_courant_mat = explode(";", $dossier_courant_mat);
 		
-		echo "<div class='dossier_section'>";
+		echo "<div class='dossier_section' id='materiels' style='display:none;'>";
 		
 			echo "<table width=100%>";
 				echo "<th>Matériel</th>";
@@ -340,15 +340,7 @@ if ( $dossierid <> -1 ) {
 }
 
 
-
 ?>
-
-
-
-
-
-
-
 
 
 
@@ -369,7 +361,7 @@ if ( $dossierid <> -1 ) {
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
 					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php')", 150000);
+					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php')", 1500);
 				}
 			
 			}).send(this.toQueryString());
@@ -421,7 +413,8 @@ if ( $dossierid <> -1 ) {
 				$('CB_etats').style.display = "none";
 				$('gign').style.display = "none";
 			}
-		});
+		});	
+		
 		
     });
 	
@@ -521,6 +514,21 @@ if ( $dossierid <> -1 ) {
 			$('liste_mat').value = table_id.join(";");
 		}
 	}
+	
+	// *********************************************************************************
+	//
+	//	Show / Hide la partie MATERIELS dans le formulaire de modification des dossiers
+	//
+	// *********************************************************************************
+
+	function toggleMateriels () {
+		
+		if ( $('materiels').style.display == "none" ) $('materiels').style.display = "";
+		else $('materiels').style.display = "none";
+		
+	}
+	
+	
 
 </script>
 
