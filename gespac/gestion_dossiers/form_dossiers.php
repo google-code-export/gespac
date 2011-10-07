@@ -169,7 +169,7 @@ if ( $dossierid == -1 ) {
 		
 		<div>
 			<span class='chk_span'><label for='add_inter'>Intervention Directe <label><input type='checkbox' name='add_inter'></span>
-			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing' checked></span>
+			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing'></span>
 			<span class='chk_span' id='mat_hs_label' style='display:none;'><label for='mat_hs'>Changer l'état du matériel <label><input type='checkbox' name='mat_hs' id='mat_hs'></span>
 			<span class='chk_span'>
 				<select name="etat" id="CB_etats" style="display:none;">
@@ -354,7 +354,7 @@ if ( $dossierid <> -1 ) {
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
 					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php')", 1500);
+					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php')", 150000);
 				}
 			
 			}).send(this.toQueryString());
