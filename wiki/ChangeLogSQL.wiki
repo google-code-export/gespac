@@ -2,7 +2,7 @@ Page récapitulative des changements dans la base SQL de gespac
 
 =Change Log SQL=
 
-*gespac 3.4 ?
+*gespac 3.4
   * ajout table "droits"
   * ajout de la table "dossiers"
   * ajout de la table "dossiers_textes"
