@@ -153,7 +153,7 @@ if ( $dossierid == -1 ) {
 	
 	?>
 	<center>
-	<form action="gestion_dossiers/post_dossiers.php?action=add" method="post" name="post_form" id="post_form" >
+	<form action="gestion_dossiers/post_dossiers.php?action=add" method="post" name="post_form" id="post_form" onsubmit="$('post_dossier').disabled=true;">
 		
 		<div>
 			Type :
@@ -170,7 +170,7 @@ if ( $dossierid == -1 ) {
 		
 		<div>
 			Commentaire :<br>
-			<textarea cols=90 rows=6 name='commentaire'></textarea>
+			<textarea cols=90 rows=6 name='commentaire' id='commentaire' onkeyup="validation();"></textarea>
 		</div>
 		
 		<?PHP
@@ -198,7 +198,7 @@ if ( $dossierid == -1 ) {
 		<br>
 			<span id='nb_selectionnes'></span><br><br>
 			<input type='hidden' name='liste_mat' id='liste_mat'>	
-			<input type='submit' value='poster la demande'>
+			<input type='submit' value='Créer le dossier' id='post_dossier' disabled>
 		
 	</form>
 	</center>
@@ -218,10 +218,14 @@ if ( $dossierid <> -1 ) {
 
 	echo "<h3>FORMULAIRE DE MODIFICATION D'UN DOSSIER</h3>";
 	
-	$dossier_courant = $con_gespac->QueryRow ("SELECT * FROM dossiers WHERE dossier_id = $dossierid");
-		
-	$dossier_courant_type 	= $dossier_courant[1];
-	$dossier_courant_mat 	= $dossier_courant[2];
+	$dossier_courant 	 = $con_gespac->QueryRow ("SELECT * FROM dossiers WHERE dossier_id = $dossierid");
+	
+	//Récupérer le txt_id le plus récent pour avoir le dernier état
+	$dossier_courant_txt = $con_gespac->QueryRow ("SELECT * FROM dossiers_textes WHERE dossier_id = $dossierid ORDER BY txt_id DESC");
+	
+	$dossier_courant_type 	  = $dossier_courant[1];
+	$dossier_courant_mat 	  = $dossier_courant[2];
+	$dossier_courant_txt_etat = $dossier_courant_txt[5];
 	
 	
 	// type de dossier
@@ -229,7 +233,7 @@ if ( $dossierid <> -1 ) {
 	
 
 	
-	echo "<form action='gestion_dossiers/post_dossiers.php?action=modif' method='post' name='post_form' id='post_form' >";
+	echo "<form action='gestion_dossiers/post_dossiers.php?action=modif' method='post' name='post_form' id='post_form' onsubmit=$('post_modif').disabled=true>";
 	
 		// Id du dossier
 		echo "<input type=hidden name='dossierid' value='$dossierid'>";
@@ -239,7 +243,9 @@ if ( $dossierid <> -1 ) {
 			echo "<option value='precisions'>Précisions sur le dossier</option>";
 			
 			if ($droits_supp) {
-				echo "<option value='intervention'>Déclencher Intervention</option>";
+				if ($dossier_courant_txt_etat <> 'intervention') {
+					echo "<option value='intervention'>Déclencher Intervention</option>";
+				}
 				echo "<option value='clos'>Clore le dossier</option>";
 			}
 		echo "</select>";
@@ -247,12 +253,12 @@ if ( $dossierid <> -1 ) {
 		echo "<br>";
 		
 		// Commentaire de la modification
-		echo "<textarea name='commentaire' cols=90 rows=6></textarea>";
+		echo "<textarea name='commentaire' id='commentaire' cols=90 rows=6 onkeyup=validation_modif();></textarea>";
 		
 		echo "<br>";
 		
 		// Bouton pour poster le formulaire
-		echo "<input type='submit' name='bt_submit'>";
+		echo "<input type='submit' name='bt_submit' value='Modifier le dossier' id='post_modif' disabled>";
 	
 	echo "</form>";
 	
@@ -529,6 +535,35 @@ if ( $dossierid <> -1 ) {
 	}
 	
 	
+	// *********************************************************************************
+	//
+	// 		vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	//
+	// *********************************************************************************
+	
+	function validation () {
 
+		var bt_submit  	= $("post_dossier");
+		var commentaire	= $("commentaire").value;
+		
+		if (commentaire == "") {
+				bt_submit.disabled = true;
+			} else {
+				bt_submit.disabled = false;
+		}
+	}
+	
+	function validation_modif () {
+
+		var bt_submit  	= $("post_modif");
+		var commentaire	= $("commentaire").value;
+		
+		if (commentaire == "") {
+				bt_submit.disabled = true;
+			} else {
+				bt_submit.disabled = false;
+		}
+	}
+	
 </script>
 
