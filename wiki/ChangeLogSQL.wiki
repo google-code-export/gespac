@@ -2,6 +2,12 @@ Page récapitulative des changements dans la base SQL de gespac
 
 =Change Log SQL=
 
+*gespac 3.4 ?
+  * ajout table "droits"
+  * ajout de la table "dossiers"
+  * ajout de la table "dossiers_textes"
+
+
 *gespac 3.3.1*
   * ajout de la table menu_portail
   * ajout du champ grades:grade_menu_portail
