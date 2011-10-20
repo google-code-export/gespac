@@ -190,6 +190,7 @@ CREATE TABLE IF NOT EXISTS `dossiers` (
   `dossier_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `dossier_type` varchar(255) NOT NULL,
   `dossier_mat` text NOT NULL,
+  `dossier_mailing` tinyint(1) NOT NULL default '1',
   PRIMARY KEY (`dossier_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
@@ -203,9 +204,20 @@ CREATE TABLE IF NOT EXISTS `dossiers_textes` (
   PRIMARY KEY (`txt_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `droits` (
+  `droit_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `droit_index` varchar(5) NOT NULL,
+  `droit_titre` varchar(255) NOT NULL,
+  `droit_page` varchar(255) NOT NULL,
+  `droit_etendue` tinyint(1) NOT NULL DEFAULT '1',
+  `droit_description` varchar(255) NOT NULL,
+  PRIMARY KEY (`droit_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+
+
 
 INSERT INTO users (user_id, user_nom, user_logon, user_password, grade_id, user_skin, user_accueil, user_mail, user_mailing, user_suppr, est_modifiable) VALUES (1, 'ati', 'ati', 'azerty', 1, 'cg13', 'modules/stats/csschart.php', '', 1, 0, 0);
-
 
 INSERT IGNORE INTO `etats` (`etat`) VALUES
 ('ATTENTE SAV'),
@@ -267,4 +279,36 @@ INSERT INTO `menu_portail` (`mp_id`, `mp_nom`, `mp_url`, `mp_icone`, `est_modifi
 (2, 'FOG', 'http://gespac/fog', 'fog.png', '0'),
 (3, 'OCS', 'http://gespac/ocsreports', 'ocs.png', '0'),
 (4, 'RESTAURATION', './gespac/gestion_donnees/form_upload_restauration.php', 'database.png', '0');
+
+INSERT IGNORE INTO `droits` (`droit_id`, `droit_index`, `droit_titre`, `droit_page`, `droit_etendue`, `droit_description`) VALUES
+(1, '01-01', 'Retour au portail', 'index.php', 0, 'Affiche le menu de retour au portail.'),
+(2, '02-01', 'Visualiser les matériels', 'gestion_inventaire/voir_materiels.php', 1, 'Voir/Créer des matériels dans inventaire'),
+(3, '02-02', 'Visualiser les marques', 'gestion_invetaire/voir_marques.php', 1, 'Voir/Créer des marques'),
+(4, '02-03', 'Visualiser les salles', 'gestion_invetaire/voir_salles.php', 1, 'Voir/Créer des salles'),
+(5, '03-01', 'Voir les dossiers', 'gestion_demandes/voir_demandes.php', 1, 'Voir/Créer des dossiers'),
+(6, '03-02', 'Voir les interventions', 'gestion_demandes/voir_interventions.php', 1, 'Voir/Créer des interventions'),
+(7, '03-03', 'Dossiers beta', 'gestion_dossiers/voir_dossiers.php', 1, 'Voir/Créer des dossiers'),
+(8, '03-04', 'Créer des interventions', '', 0, 'Autoriser la création des interventions et la cloture des dossiers.'),
+(9, '04-01', 'Importer DB OCS', 'gestion_donnees/voir_ocs_db.php', 1, 'Voir/Importer la base OCS.'),
+(10, '04-02', 'Exports', 'gestion_donnees/exports.php', 0, 'Afficher la page des exports.'),
+(11, '04-03', 'Dump base GESPAC', 'gestion_donnees/dump_db_gespac.php', 0, 'Autoriser le dump de la base Gespac.'),
+(12, '04-04', 'Dump base OCS', 'gestion_donnees/dump_db_ocs.php', 0, 'Autoriser le dump de la base OCS.'),
+(13, '04-05', 'Voir les Logs', 'gestion_donnees/voir_logs.php', 1, 'Voir/Vider les logs'),
+(14, '04-06', 'Importer CSV', 'gestion_inventaire/form_import_csv.php', 0, 'Importer un fichier CSV de matériels.'),
+(15, '05-01', 'Prêts', 'gestion_prets/voir_prets.php', 1, 'Voir/Prêter/Rendre un matériel.'),
+(16, '06-01', 'Visualiser les utilisateurs', 'gestion_utilisateurs/voir_utilisateurs.php', 1, 'Voir, créer ou modifier un utilisateur.'),
+(17, '06-02', 'Visualiser les grades', 'gestion_utilisateurs/voir_grades.php', 1, 'Voir, créer ou modifier un grade et gérer les droits.'),
+(18, '06-03', 'Importer les comptes IACA', 'gestion_utilisateurs/form_comptes_iaca.php', 0, 'Import des comptes IACA.'),
+(19, '06-04', 'Modifier mon compte', 'gestion_utilisateurs/form_utilisateur_personnel.php', 0, 'Modifier son propre compte.'),
+(20, '07-01', 'Récapitulatif FOG', 'modules/fog/recap_fog.php', 0, 'Afficher un récapitulatif Fog'),
+(21, '07-02', 'Wake On Lan', 'modules/wol/voir_liste_wol.php', 0, 'Autoriser le WAKE ON LAN.'),
+(22, '07-03', 'Export Perso', 'modules/export/export_perso.php', 0, 'Permet les exports personnalisés.'),
+(23, '07-04', 'MAJ tags DSIT', 'modules/ssn_dsit/form_import_csv.php', 0, 'Mise à jour des numéros inventaire par le numéro de série.'),
+(24, '07-05', 'Images Fog', 'modules/image_fog/voir_liste.php', 1, 'Clonage direct par Fog.'),
+(25, '07-06', 'Menu portail', 'modules/menu_portail/voir_menu_portail.php', 1, 'Voir, créer ou modifier le menu du portail.'),
+(26, '08-01', 'Fiche collège', 'gestion_college/voir_college.php', 1, 'Voir ou modifier la fiche du collège.'),
+(27, '08-02', 'Flux RSS', 'modules/rss/rss.php', 1, 'Voir, ajouter ou modifier un flux RSS.'),
+(28, '08-03', 'Stats camemberts', 'modules/stats/camembert.php', 0, 'Voir les stats camembert.'),
+(29, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
+(30, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.');
 
