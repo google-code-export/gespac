@@ -7,8 +7,10 @@
 
 	header("Content-Type:text/html; charset=iso-8859-1"); 	// règle le problème d'encodage des caractères
 
-	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 
 ?>
 
@@ -104,17 +106,14 @@
 
 <?PHP
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// cnx à la base
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	$id = $_GET['id'];
 	
 	
 	// Requete pour récupérer les données des champs pour le user à modifier
-	$grade_a_modifier = $db_gespac->queryRow ( "SELECT grade_id, grade_nom, grade_menu FROM grades WHERE grade_id=$id" );		
+	$grade_a_modifier = $con_gespac->QueryRow ( "SELECT grade_id, grade_nom, grade_menu FROM grades WHERE grade_id=$id" );		
 	
 	// valeurs à affecter aux champs
 	$grade_id 			= $grade_a_modifier[0];
@@ -136,20 +135,24 @@
 			<th>Ecriture <input type=checkbox id=E_CheckAll> </th>
 
 			<?PHP
-				$lines = file('../menu.txt');
 				$menu_precedent = "00"; // J'initialise le menu pour la gestion des groupes d'items
 				$tr_class = "tr1";
 
+				$liste_items = $con_gespac->QueryAll ( "SELECT * FROM droits" );		
+	
 
-				foreach ($lines as $line) {
-				
-					$line = str_replace('"','',$line);
-					$explode_line = explode (";", $line);
-					$id = $explode_line[0];
-					$value = $explode_line[1];
+				foreach ($liste_items as $ligne) {
 					
-					$explode_id = explode ("-", $id);
-					$menu = $explode_id[0];	// Le menu courant
+					$droit_id = $ligne ['droit_id'];
+					$droit_index = $ligne ['droit_index'];
+					$droit_titre = $ligne ['droit_titre'];
+					$droit_page = $ligne ['droit_page'];
+					$droit_etendue = $ligne ['droit_etendue'];
+					$droit_description = $ligne ['droit_description'];
+					
+										
+					$explode_index = explode ("-", $droit_index);
+					$menu = $explode_index[0];	// Le menu courant (pour la couleur des lignes)
 
 					// Si jamais on change de bloc d'items
 					if ( $menu <> $menu_precedent ) {
@@ -157,25 +160,27 @@
 						$menu_precedent = $menu;	
 					}
 					
-					
+										
 					// J'initialise, on sait jamais
 					$L_value = "";
-					$E_value = "";
+					if ($droit_etendue == 1) $E_value = "";
 					
 					// Si je trouve une valeur L-id ou E-id dans mon tableau -> alors je coche.
-					$L_value = preg_match ("#L-$id#", $grade_menu);
-					$E_value = preg_match ("#E-$id#", $grade_menu);
+					$L_value = preg_match ("#L-$droit_index#", $grade_menu);
+					if ($droit_etendue == 1) $E_value = preg_match ("#E-$droit_index#", $grade_menu);
 					
 					$L_check = $L_value == 1 ? "checked" : "" ;
-					$E_check = $E_value == 1 ? "checked" : "" ;
+					if ($droit_etendue == 1) $E_check = $E_value == 1 ? "checked" : "" ;
 					
 					
-					echo "
-						<tr class='$tr_class'>
-							<TD>$value</TD>
-							<TD><input type=checkbox id='L-$id' class='Lchk' name='L-$id' $L_check onclick=\"decocher_ecriture('$id'); \"/></TD>
-							<TD><input type=checkbox id='E-$id' class='Echk' name='E-$id' $E_check onclick=\"cocher_lecture('$id'); \"/></TD>
-						</tr>";
+					echo "<tr class='$tr_class' title='$droit_description'>";
+						echo "<TD>$droit_titre</TD>";
+						echo "<TD><input type=checkbox id='L-$droit_index' class='Lchk' name='L-$droit_index' $L_check onclick=\"decocher_ecriture('$droit_index'); \"/></TD>";
+						if ($droit_etendue == 1) echo "<TD><input type=checkbox id='E-$droit_index' class='Echk' name='E-$droit_index' $E_check onclick=\"cocher_lecture('$droit_index'); \"/></TD>";
+						else echo "<TD>&nbsp;</TD>";
+					echo "</tr>";
+					
+					
 				}
 			?>
 		
