@@ -45,9 +45,10 @@ if ( $dossierid == -1 ) {
 
 
 	$liste_materiels = $con_gespac->QueryAll ('Select mat_id, mat_nom, marque_type, salle_nom FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id;');
-	$liste_types = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
-	$liste_salles = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
-	$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
+	$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
+	$liste_salles 	 = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
+	$liste_etats 	 = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
+	$liste_types 	 = $con_gespac->QueryAll ( "SELECT type FROM dossiers_type" );
 
 	echo "<h3>FORMULAIRE DE CREATION D'UN DOSSIER</h3>";
 	
@@ -158,11 +159,8 @@ if ( $dossierid == -1 ) {
 		<div>
 			Type :
 				<select id="type" name="type">
-				<option value='reparation'>		REPARATION</option>
-				<option value='installation'>	INSTALLATION</option>
-				<option value='usage'>			USAGE</option>
-				<option value='formation'>		FORMATION</option>
-			</select>
+					<?PHP 	foreach ($liste_types as $type) { echo "<option value='" . $type['type'] ."'>" . $type['type'] ."</option>"; } ?>
+				</select>
 				
 		</div>
 
