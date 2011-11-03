@@ -59,7 +59,7 @@ if ( $action == 'suppr') {
 	
 	//Si l'extension n'est pas dans le tableau
 	if ( in_array($extension, $extensions) )
-		 $erreur = 'Vous ne pas uploader ce type de fichier ...';
+		 $erreur = 'Vous ne pouvez pas uploader ce type de fichier ...';
 		 
 	//Si le fichier existe déjà
 	$existe = $con_gespac->QueryOne("SELECT fichier_id FROM fichiers WHERE fichier_chemin='$fichier'");
