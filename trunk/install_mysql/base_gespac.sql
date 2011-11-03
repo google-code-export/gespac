@@ -214,7 +214,12 @@ CREATE TABLE IF NOT EXISTS `droits` (
   PRIMARY KEY (`droit_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
-
+CREATE TABLE IF NOT EXISTS `fichiers` (
+  `fichier_id` int(11) NOT NULL AUTO_INCREMENT,
+  `fichier_chemin` varchar(255) NOT NULL,
+  `fichier_description` text NOT NULL,
+  PRIMARY KEY (`fichier_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 
 INSERT INTO users (user_id, user_nom, user_logon, user_password, grade_id, user_skin, user_accueil, user_mail, user_mailing, user_suppr, est_modifiable) VALUES (1, 'ati', 'ati', 'azerty', 1, 'cg13', 'modules/stats/csschart.php', '', 1, 0, 0);
