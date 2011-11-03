@@ -138,7 +138,7 @@
 				$menu_precedent = "00"; // J'initialise le menu pour la gestion des groupes d'items
 				$tr_class = "tr1";
 
-				$liste_items = $con_gespac->QueryAll ( "SELECT * FROM droits" );		
+				$liste_items = $con_gespac->QueryAll ( "SELECT * FROM droits order by droit_index" );		
 	
 
 				foreach ($liste_items as $ligne) {
