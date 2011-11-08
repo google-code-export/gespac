@@ -221,6 +221,9 @@ CREATE TABLE IF NOT EXISTS `fichiers` (
   PRIMARY KEY (`fichier_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
+CREATE TABLE IF NOT EXISTS `dossiers_types` (
+  `type` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 INSERT INTO users (user_id, user_nom, user_logon, user_password, grade_id, user_skin, user_accueil, user_mail, user_mailing, user_suppr, est_modifiable) VALUES (1, 'ati', 'ati', 'azerty', 1, 'cg13', 'modules/stats/csschart.php', '', 1, 0, 0);
 
@@ -236,6 +239,12 @@ INSERT IGNORE INTO `etats` (`etat`) VALUES
 ('PERDU'),
 ('REPARATION PAR L`ATI'),
 ('VOLE');
+
+INSERT IGNORE INTO `dossiers_types` (`type`) VALUES
+('REPARATION'),
+('INSTALLATION'),
+('USAGE'),
+('FORMATION');
 
 INSERT IGNORE INTO `origines` (`origine`) VALUES
 ('CLG2003'),
