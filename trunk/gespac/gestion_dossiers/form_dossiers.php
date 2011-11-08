@@ -48,7 +48,7 @@ if ( $dossierid == -1 ) {
 	$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
 	$liste_salles 	 = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
 	$liste_etats 	 = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
-	$liste_types 	 = $con_gespac->QueryAll ( "SELECT type FROM dossiers_type" );
+	$liste_types 	 = $con_gespac->QueryAll ( "SELECT type FROM dossiers_types" );
 
 	echo "<h3>FORMULAIRE DE CREATION D'UN DOSSIER</h3>";
 	
