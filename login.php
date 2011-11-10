@@ -86,11 +86,11 @@
 		
         if (!empty($_POST['login']) AND !empty($_POST['passwd'])) {
 
-			$login  = htmlentities($_POST['login']);
+			$login  = mysql_real_escape_string(htmlentities($_POST['login']));
 			$_SESSION['login'] = $login;
 			$log_session = $_SESSION['login'];
 	   
-			$passwd = htmlentities($_POST['passwd']);
+			$passwd = mysql_real_escape_string(htmlentities($_POST['passwd']));
 			$_SESSION['passwd'] = $passwd;
 			$pass_session = $_SESSION['passwd'];
 	   
