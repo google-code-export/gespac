@@ -23,9 +23,6 @@
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-03#", $_SESSION['droits']);
 	
-	//$login = $_SESSION['login'];
-	//$grade_nom = $con_gespac->QueryOne ("SELECT grade_nom FROM users, grades WHERE grades.grade_id = users.grade_id AND user_logon='$login'");
-	
 	if ($_SESSION['grade'] == 'ATI' | $_SESSION['grade'] == 'root') {
 		// si le grade est celui d'un ati ou du root on met la valeur de la session à 1
 		$_SESSION['entete_demandeur'] = 1;
@@ -109,7 +106,7 @@
 						echo "<tr>";
 							echo "<td class='td_$txt_etat'>$txt_etat</td>";
 							echo "<td>$txt_date</td>";
-							echo "<td class='td_demandeur'>$user_nom</td>";
+							echo "<td style='display:none'>$user_nom</td>";
 						echo "</tr>";
 						
 						echo "<tr>";
