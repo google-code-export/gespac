@@ -32,7 +32,7 @@
 	
 			
 	// gestion des droits particuliers (clore des dossiers, changer l'état d'un dossier ...)
-	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-04#", $_SESSION['droits']);
+	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#L-03-04#", $_SESSION['droits']);
 	
 
 /*****************************************************************************
@@ -309,7 +309,7 @@ if ( $dossierid <> -1 ) {
 
 		echo "<table width=750px>";
 			echo "<th>date</th>";
-			echo "<th>utilisateur</th>";
+			echo "<th>Utilisateur</th>";
 			echo "<th>etat</th>";
 		
 			$compteur = 0;
@@ -320,7 +320,12 @@ if ( $dossierid <> -1 ) {
 				$txt_date 	= $page['txt_date'];
 				$txt_texte 	= $page['txt_texte'];
 				$txt_etat 	= $page['txt_etat'];
-				$user_nom 	= $page['user_nom'];
+				
+				if ($_SESSION['grade'] == 'ati' | $_SESSION['grade'] == 'root') {
+					$user_nom 	= $page['user_nom'];
+				} else {
+					$user_nom 	= 'Anonyme';
+				}
 			
 			
 				// alternance des couleurs
@@ -328,12 +333,12 @@ if ( $dossierid <> -1 ) {
 				
 				echo "<tr class=$tr_class>";
 					echo "<td width=60px>$txt_date</td>";
-					echo "<td width=60px>$user_nom</td>";
+					echo "<td width='60px'>$user_nom</td>";
 					echo "<td width=60px>$txt_etat</td>";
 				echo "</tr>";
 				
 				echo "<tr class=$tr_class>";
-					echo "<td colspan=4>$txt_texte</td>";
+					echo "<td colspan=3>$txt_texte</td>";
 				echo "</tr>";
 				
 				$compteur++;
@@ -349,7 +354,7 @@ if ( $dossierid <> -1 ) {
 
 
 
-<script>
+<script type="text/javascript">
 	
 	
 	  window.addEvent('domready', function() {
@@ -562,6 +567,7 @@ if ( $dossierid <> -1 ) {
 				bt_submit.disabled = false;
 		}
 	}
+	
 	
 </script>
 
