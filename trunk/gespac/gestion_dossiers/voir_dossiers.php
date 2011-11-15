@@ -23,13 +23,15 @@
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-03#", $_SESSION['droits']);
 	
-	if ($_SESSION['grade'] == 'ATI' | $_SESSION['grade'] == 'root') {
+	/*if ($_SESSION['grade'] == 'ATI' | $_SESSION['grade'] == 'root') {
 		// si le grade est celui d'un ati ou du root on met la valeur de la session à 1
 		$_SESSION['entete_demandeur'] = 1;
 	} else {
 		$_SESSION['entete_demandeur'] = 0;
 	}
+	*/
 	
+	var_dump($_SESSION);
 ?>
 
 <h3>Visualisation des dossiers</h3>
@@ -84,7 +86,8 @@
 				else echo "<td>&nbsp;</td>";
 			
 			echo "</tr>";
-					
+			
+			
 			
 			// 	Les pages du dossier 	 	 	 	 
 			$page_dossier = $con_gespac->QueryAll ("SELECT txt_id, txt_date, txt_texte, txt_etat, users.user_nom FROM dossiers_textes, users WHERE dossier_id=$dossier_id AND txt_user=user_id");
@@ -100,13 +103,17 @@
 						$txt_date 	= date ("d-m-Y H:i", strtotime($page['txt_date']));
 						$txt_texte 	= $page['txt_texte'];
 						$txt_etat 	= $page['txt_etat'];
-						$user_nom 	= $page['user_nom'];
-					
+						if ($_SESSION['grade'] == 'ATI' | $_SESSION['grade'] == 'root') {
+							$user_nom 	= $page['user_nom'];
+						} else {
+							$user_nom 	= 'Anonyme';
+						} 
+						
 						
 						echo "<tr>";
 							echo "<td class='td_$txt_etat'>$txt_etat</td>";
 							echo "<td>$txt_date</td>";
-							echo "<td style='display:none'>$user_nom</td>";
+							echo "<td>$user_nom</td>";
 						echo "</tr>";
 						
 						echo "<tr>";
@@ -154,7 +161,7 @@
 	}
 	
 	
-	function hidethem (col_name, show) { 
+	/*function hidethem (col_name, show) { 
 	
 		if ( show == true)
 			var state = "";
@@ -175,5 +182,5 @@
 	}
 	
 	init_entetes ('<?PHP echo $_SESSION['entete_demandeur'];?>');
-	
+	*/
 </script>
