@@ -25,12 +25,20 @@
 	
 ?>
 
+
 <h3>Visualisation des fichiers</h3>
 
 <br>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
+
+
+<!-- 	bouton pour le filtrage du tableau	-->
+<form id="filterform">
+	<center><small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'fichiers_table');" type="text" value=<?PHP echo $_GET['filter'];?> ></center>
+</form>
+
 
 <?PHP 
 	if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?height=320&width=640' rel='slb_fichiers' title='Ajout fichier'>	Ajouter un fichier	</a>"; 
@@ -105,6 +113,40 @@
 	
 		}
 	}
+	
+	
+	// *********************************************************************************
+	//
+	//				Fonction de filtrage des tables
+	//
+	// *********************************************************************************
+
+	function filter (phrase, _id){
+
+		var words = phrase.value.toLowerCase().split(" ");
+		var table = document.getElementById(_id);
+		var ele;
+		var elements_liste = "";
+				
+		for (var r = 1; r < table.rows.length; r++){
+			
+			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
+			var displayStyle = 'none';
+			
+			for (var i = 0; i < words.length; i++) {
+				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
+					displayStyle = '';
+				}	
+				else {	// on masque les rows qui ne correspondent pas
+					displayStyle = 'none';
+					break;
+				}
+			}
+			
+			// Affichage on / off en fonction de displayStyle
+			table.rows[r].style.display = displayStyle;	
+		}
+	}	
 
 			
 </script>
