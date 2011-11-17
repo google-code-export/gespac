@@ -23,15 +23,6 @@
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-03#", $_SESSION['droits']);
 	
-	/*if ($_SESSION['grade'] == 'ATI' | $_SESSION['grade'] == 'root') {
-		// si le grade est celui d'un ati ou du root on met la valeur de la session à 1
-		$_SESSION['entete_demandeur'] = 1;
-	} else {
-		$_SESSION['entete_demandeur'] = 0;
-	}
-	*/
-	
-	var_dump($_SESSION);
 ?>
 
 <h3>Visualisation des dossiers</h3>
@@ -160,27 +151,4 @@
 		}
 	}
 	
-	
-	/*function hidethem (col_name, show) { 
-	
-		if ( show == true)
-			var state = "";
-		else var state = "none";
-	
-		$$(col_name).each(function(item) {
-			item.style.display = state;
-		})
-	}
-	
-	function init_entetes (value) {
-		
-		if (value.substr(0, 1) == "1") { 
-			hidethem('.td_demandeur', true);
-		} else {
-			hidethem('.td_demandeur', false);
-		}
-	}
-	
-	init_entetes ('<?PHP echo $_SESSION['entete_demandeur'];?>');
-	*/
 </script>
