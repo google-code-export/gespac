@@ -1,0 +1,18 @@
+#summary One-sentence summary of this page.
+
+= Objet =
+
+Faire un suivi de la migration des fichiers concernés dans GESPAC vers la nouvelle classe SQL
+
+
+Pages à modifier	     Fait	Testé
+form_droits	             OK	        NON
+form_grades	             OK 	OK
+form_menu_portail	     OK 	OK
+form_utilisateur_personnel   OK	        OK
+form_utilisateurs	     OK	        OK
+post_comptes_iaca	     OK	        KO
+post_droits	             OK	        OK
+post_grades	             OK 	OK
+post_menu_portail	     OK	
+post_utilisateur_personnel   OK 	OK
