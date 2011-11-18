@@ -7,8 +7,7 @@
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
-	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
 
 ?>
 
@@ -57,11 +56,8 @@
 
 <?PHP
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	//connexion à la base de données GESPAC
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	$id = $_GET['id'];
 
@@ -117,7 +113,7 @@
 		echo "<h2>formulaire de modification d'un grade</h2><br>";
 		
 		// Requete pour récupérer les données des champs pour le user à modifier
-		$grade_a_modifier = $db_gespac->queryRow ( "SELECT grade_id, grade_nom FROM grades WHERE grade_id=$id" );		
+		$grade_a_modifier = $con_gespac->QueryRow ( "SELECT grade_id, grade_nom FROM grades WHERE grade_id=$id" );		
 		
 		// valeurs à affecter aux champs
 		$grade_id 			= $grade_a_modifier[0];
