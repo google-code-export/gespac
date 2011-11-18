@@ -14,22 +14,17 @@
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
-	include ('../config/databases.php');		// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 	
 	
 	// id ocs du matériel à afficher
 	$grade_id = $_GET ['grade_id'];
 
-
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_users = $db_gespac->queryAll ( "SELECT user_nom, user_logon, user_mail, user_skin, user_accueil, user_mailing FROM users WHERE grade_id=$grade_id" );
+	$liste_des_users = $con_gespac->QueryAll ( "SELECT user_nom, user_logon, user_mail, user_skin, user_accueil, user_mailing FROM users WHERE grade_id=$grade_id" );
 
 	echo "<p><small>" . count($liste_des_users) . " utilisateur(s) dans ce grade.</small></p>";
 	
@@ -61,12 +56,12 @@
 						
 				echo "<tr class=$tr_class>";
 						
-					$nom 		= $record[0];
-					$login 		= $record[1];
-					$mail 		= $record[2];
-					$skin 		= $record[3];
-					$accueil 	= $record[4];
-					$mailing 	= $record[5];
+					$nom 		= $record['user_nom'];
+					$login 		= $record['user_logon'];
+					$mail 		= $record['user_mail'];
+					$skin 		= $record['user_skin'];
+					$accueil 	= $record['user_accueil'];
+					$mailing 	= $record['user_mailing'];
 					
 					
 					if ($mailing == 1) {
@@ -103,7 +98,7 @@
 <?PHP
 
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 
 
 ?>

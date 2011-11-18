@@ -8,8 +8,12 @@
 	header("Content-Type:text/html; charset=iso-8859-1"); 	// règle le problème d'encodage des caractères
 
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-
+	//include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../../class/Sql.class.php');
+	
 ?>
 
 
@@ -45,23 +49,19 @@
 
 
 <?PHP 
-
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données OCS
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
 	
-		
 	$grade_id = $_GET['id'];
+	
+	// cnx à la base de données OCS
+	$con_gespac 	= new Sql ($host, $user, $pass, $gespac);
 	
 	
 	// Requete pour récupérer les données des champs pour le grade à modifier
-	$droits_menu_portail = $db_gespac->queryOne ( "SELECT grade_menu_portail FROM grades WHERE grade_id=$grade_id" );		
+	$droits_menu_portail = $con_gespac->QueryOne ( "SELECT grade_menu_portail FROM grades WHERE grade_id=$grade_id");
 	
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_icones = $db_gespac->queryAll ( "SELECT mp_id, mp_icone, mp_nom, mp_url FROM menu_portail ORDER BY mp_nom" );
+	$liste_des_icones = $con_gespac->QueryAll ( "SELECT mp_id, mp_icone, mp_nom, mp_url FROM menu_portail ORDER BY mp_nom" );
 
 ?>
 
@@ -93,10 +93,10 @@
 						
 				echo "<tr class=$tr_class>";
 					
-					$mp_id		 	= $record[0];	
-					$mp_icone	 	= "./img/" . $record[1];
-					$mp_nom 		= $record[2];
-					$mp_lien		= $record[3];	
+					$mp_id		 	= $record['mp_id'];	
+					$mp_icone	 	= "./img/" . $record['mp_icone'];
+					$mp_nom 		= $record['mp_nom'];
+					$mp_lien		= $record['mp_url'];	
 					
 					$menu_portail_exist = preg_match ("#item$mp_id#", $droits_menu_portail);
 					$check = $menu_portail_exist == 1 ? "checked" : "" ;	

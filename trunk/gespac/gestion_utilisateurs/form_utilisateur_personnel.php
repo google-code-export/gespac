@@ -5,8 +5,11 @@ session_start();
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
+	// lib
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	//include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	require_once ('../fonctions.php');
+	include_once ('../../class/Sql.class.php');
 
 	$login =  $_SESSION['login'];
 
@@ -62,11 +65,8 @@ session_start();
 
 	if ( $login <> "ati" ) {
 
-		// adresse de connexion à la base de données
-		$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-		// cnx à la base de données GESPAC
-		$db_gespac 	= & MDB2::factory($dsn_gespac);
+		// connexion à la base de données GESPAC
+		$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 			
 			#***************************************************************************
@@ -75,21 +75,21 @@ session_start();
 			
 			
 			// Requete pour récupérer les données des champs pour le user à modifier
-			$user_a_modifier = $db_gespac->queryAll ( "SELECT user_id, user_nom, user_logon, user_password, user_mail, user_skin, user_accueil, user_mailing FROM users WHERE user_logon='$login'" );		
+			$user_a_modifier = $con_gespac->QueryRow ( "SELECT user_id, user_nom, user_logon, user_password, user_mail, user_skin, user_accueil, user_mailing FROM users WHERE user_logon='$login'" );
 			
 			// valeurs à affecter aux champs
-			$user_id 			= $user_a_modifier[0][0];
-			$user_nom	 		= $user_a_modifier[0][1];
-			$user_logon	 		= $user_a_modifier[0][2];
-			$user_password 		= $user_a_modifier[0][3];
-			$user_mail 			= $user_a_modifier[0][4];
-			$user_skin 			= $user_a_modifier[0][5];
-			$user_accueil		= $user_a_modifier[0][6];
-			$user_mailing		= $user_a_modifier[0][7];
+			$user_id 			= $user_a_modifier[0];
+			$user_nom	 		= $user_a_modifier[1];
+			$user_logon	 		= $user_a_modifier[2];
+			$user_password 		= $user_a_modifier[3];
+			$user_mail 			= $user_a_modifier[4];
+			$user_skin 			= $user_a_modifier[5];
+			$user_accueil		= $user_a_modifier[6];
+			$user_mailing		= $user_a_modifier[7];
 			
 			$checked = $user_mailing == 1 ? "checked" : "";
 		
-			echo "<h2>formulaire de modification de $user_nom</h2><br>";
+			echo "<h2>Formulaire de modification de $user_nom</h2><br>";
 			
 			?>
 			

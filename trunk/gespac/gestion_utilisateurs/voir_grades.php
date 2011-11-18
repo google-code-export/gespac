@@ -28,14 +28,11 @@
 
 <?PHP 
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom, grade_menu, est_modifiable FROM grades ORDER BY grade_nom" );
+	$liste_des_grades = $con_gespac->QueryAll ( "SELECT grade_id, grade_nom, grade_menu, est_modifiable FROM grades ORDER BY grade_nom" );
 
 ?>
 	
@@ -68,12 +65,12 @@
 						
 				echo "<tr class=$tr_class>";
 						
-					$grade_id 			= $record[0];
-					$grade_nom 			= $record[1];
-					$grade_menu 		= $record[2];
-					$est_modifiable 	= $record[3];
+					$grade_id 			= $record['grade_id'];
+					$grade_nom 			= $record['grade_nom'];
+					$grade_menu 		= $record['grade_menu'];
+					$est_modifiable 	= $record['est_modifiable'];
 					
-					$nb_users_du_grade = $db_gespac->queryOne ( "SELECT count(*) as compte FROM users WHERE grade_id=$grade_id" );
+					$nb_users_du_grade = $con_gespac->QueryOne ( "SELECT count(*) as compte FROM users WHERE grade_id=$grade_id" );
 					
 					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='slb_grades' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
@@ -107,7 +104,7 @@
 		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='slb_grades' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
 	
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close ();
 ?>
 
 

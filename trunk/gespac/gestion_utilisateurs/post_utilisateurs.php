@@ -1,12 +1,11 @@
 <?PHP
 
 
-	/* fichier de creation / modif / suppr du matériel
+	/* fichier de creation / modif / suppr d'un utilisateur
 	
 	Si j'ai un ID c'est une modification
 	Si j'en ai pas c'est une création
 	
-	reste à coder pour la suppression
 	
 	*/
 	
@@ -16,18 +15,15 @@
 	require_once ('../fonctions.php');
 	require_once ('../config/pear.php');
 	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');		
+	include_once ('../../class/Log.class.php');		
 	
 	
-	// on ouvre un fichier en écriture pour les log sql
-	$fp = fopen('../dump/log_sql.sql', 'a+');
+	// Cnx à la base
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	$log = new Log ("../dump/log_sql.sql");
 	
-	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
 	
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::connect($dsn_gespac);
-	
-		
 	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
 	$id 		= $_GET['id'];
@@ -48,20 +44,22 @@
         //Insertion d'un log
 		
 		//On récupère le nom de l'utilisateur en fonction du user_id
-	    $liste_noms = $db_gespac->queryAll ( "SELECT user_nom FROM users WHERE user_id=$id" );
-	    $user_nom = $liste_noms [0][0];
+	    $user_nom = $con_gespac->QueryOne ( "SELECT user_nom FROM users WHERE user_id=$id" );
 
 	    $log_texte = "Le compte <b>$user_nom</b> a été supprimé.";
 
 	    $req_log_suppr_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression compte', '$log_texte');";
-	    $result = $db_gespac->exec ( $req_log_suppr_user );
-	
+	    $con_gespac->Execute ( $req_log_suppr_user );
+		
+		//on log la requête
+		$log->Insert( $req_log_suppr_user );
+		
 		// Suppression de l'utilisateur de la base
 		$req_suppr_user = "DELETE FROM users WHERE user_id=$id;";
-		$result = $db_gespac->exec ( $req_suppr_user );
+		$con_gespac->Execute ( $req_suppr_user );
 		
 		// On log la requête SQL
-		fwrite($fp, date("Ymd His") . " " . $req_suppr_user."\n");
+		$log->Insert( $req_suppr_user );
 		
 		echo "<br><small>L'utilisateur <b>$user_nom</b> a été supprimé !</small>";
 	}
@@ -82,27 +80,30 @@
 		$mailing = $mailing == "on" ? 1 : 0 ;
 
 		// si on modifie le grade, la page de démarrage devient la page de bienvenue
-		$ancien_grade = $db_gespac->queryOne("SELECT grade_id FROM users WHERE user_id=$id");
+		$ancien_grade = $con_gespac->QueryOne("SELECT grade_id FROM users WHERE user_id=$id");
 		
 		if ($grade <> $ancien_grade) $page="bienvenue.php";
 
 
 		// on récupére les anciennes valeurs du compte pour les logs
-		$req_infos_compte_old = $db_gespac->queryRow("SELECT user_nom FROM users WHERE user_id=$id");
+		$req_infos_compte_old = $con_gespac->QueryRow("SELECT user_nom FROM users WHERE user_id=$id");
 		$nom_old = $req_infos_compte_old[0];
 		
 		
 		$req_modif_user = "UPDATE users SET user_nom='$nom', user_logon='$login', user_password='$password', grade_id=$grade, user_mail='$mail', user_skin='$skin', user_accueil='$page', user_mailing=$mailing WHERE user_id=$id";
-		$result = $db_gespac->exec ( $req_modif_user );
+		$con_gespac->Execute ( $req_modif_user );
 		
 		// On log la requête SQL
-		fwrite($fp, date("Ymd His") . " " . $req_modif_user."\n");
+		$log->Insert( $req_modif_user );
 		
 		//Insertion d'un log
 		$log_texte = "Le compte (anciennement <b>$nom_old</b>) a été modifié en <b>$nom</b>.";
 		
 	    $req_log_modif_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification compte', '$log_texte' );";
-	    $result = $db_gespac->exec ( $req_log_modif_user );
+	    $con_gespac->Execute ( $req_log_modif_user );
+		
+		// On log la requête SQL
+		$log->Insert( $req_log_modif_user );
 		
 		echo "<br><small>L'utilisateur <b>$nom</b> a bien été modifié...</small>";
 	}
@@ -122,16 +123,19 @@
 		$mailing = $mailing == "on" ? 1 : 0 ;
 		
 		$req_add_user = "INSERT INTO users ( user_nom, user_logon, user_password, grade_id, user_mail, user_skin, user_accueil, user_mailing) VALUES ( '$nom', '$login', '$password', $grade, '$mail', '$skin', '$page', $mailing)";
-		$result = $db_gespac->exec ( $req_add_user );
+		$con_gespac->Execute ( $req_add_user );
 		
 		// On log la requête SQL
-		fwrite($fp, date("Ymd His") . " " . $req_add_user."\n");
+		$log->Insert( $req_add_user );
 		
 		//Insertion d'un log
 		$log_texte = "Le compte <b>$nom</b> a été créé.";
 
 	    $req_log_creation_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création compte', '$log_texte' );";
-	    $result = $db_gespac->exec ( $req_log_creation_user );
+	    $con_gespac->Execute ( $req_log_creation_user );
+		
+		// On log la requête SQL
+		$log->Insert( $req_log_creation_user );
 		
 		echo "<br><small>L'utilisateur <b>$nom</b> a bien été ajouté...</small>";
 	}
@@ -152,12 +156,12 @@
 			if ( $item <> "" ) {	// permet de virer les éléments vides
 			
 				// si on modifie le grade, la page de démarrage devient la page de bienvenue
-				$ancien_grade = $db_gespac->queryOne("SELECT grade_id FROM users WHERE user_id=$item");
+				$ancien_grade = $con_gespac->QueryOne("SELECT grade_id FROM users WHERE user_id=$item");
 		
 				if ($grade <> $ancien_grade) 
 					$page="bienvenue.php";
 				else
-					$page = $db_gespac->queryOne("SELECT user_accueil FROM users WHERE user_id=$item");
+					$page = $con_gespac->QueryOne("SELECT user_accueil FROM users WHERE user_id=$item");
 				
 				
 				//$skin est le 1er champ à UPDATER (ou pas)
@@ -186,14 +190,14 @@
 
 				
 				$req_modif_user = "UPDATE users SET " . $sql_skin . $sql_grade . $sql_mailing . ", user_accueil='$page' WHERE user_id=$item ;";
-				$result = $db_gespac->exec ( $req_modif_user );
+				$con_gespac->Execute ( $req_modif_user );
 				
 				//on récupérer le nom et l'id du user de chaque item pour les logs
-				$req_nom_id_user = $db_gespac->queryRow ("SELECT user_nom, user_id FROM users WHERE user_id=$item");
+				$req_nom_id_user = $con_gespac->QueryRow ("SELECT user_nom, user_id FROM users WHERE user_id=$item");
 				$liste_noms_id   .=  '<b>'.$req_nom_id_user[0].' (</b>serial : <b>'.$req_nom_id_user[1].')</b>, ';
 				
 				// On log la requête SQL
-				fwrite($fp, date("Ymd His") . " " . $req_modif_user."\n");
+				$log->Insert( $req_modif_user );
 			}
 
 		}
@@ -204,13 +208,11 @@
 		$log_texte = "Les utilisateurs $liste_noms_id ont été modifiés.";
 
 		$req_log_modif_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification compte', '$log_texte' );";
-		$result = $db_gespac->exec ( $req_log_modif_user );
-
+		$con_gespac->Execute ( $req_log_modif_user );
+		
+		// On log la requête SQL
+		$log->Insert( $req_log_modif_user );
 	}
-
-	
-	// Je ferme le fichier  de log sql
-	fclose($fp);
 
 ?>
 

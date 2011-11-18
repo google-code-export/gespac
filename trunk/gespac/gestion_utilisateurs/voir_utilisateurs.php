@@ -27,14 +27,11 @@
 
 <?PHP 
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_utilisateurs = $db_gespac->queryAll ( "SELECT user_nom, user_logon, user_password, grade_nom, user_mail, user_id, user_skin, user_mailing, users.est_modifiable FROM users, grades WHERE users.grade_id=grades.grade_id ORDER BY user_nom" );
+	$liste_des_utilisateurs = $con_gespac->QueryAll ( "SELECT user_nom, user_logon, user_password, grade_nom, user_mail, user_id, user_skin, user_mailing, users.est_modifiable FROM users, grades WHERE users.grade_id=grades.grade_id ORDER BY user_nom" );
 
 ?>
 	
@@ -74,22 +71,22 @@
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 						
-					$nom 			= $record[0];
-					$logon 			= $record[1];
-					$password 		= $record[2];
-					$grade			= $record[3];
-					$mail 			= $record[4];
-					$id				= $record[5];
-					$skin			= $record[6];
-					$mailing		= $record[7];
-					$est_modifiable	= $record[8];
+					$nom 			= $record['user_nom'];
+					$logon 			= $record['user_logon'];
+					$password 		= $record['user_password'];
+					$grade			= $record['grade_nom'];
+					$mail 			= $record['user_mail'];
+					$id				= $record['user_id'];
+					$skin			= $record['user_skin'];
+					$mailing		= $record['user_mailing'];
+					$est_modifiable	= $record['est_modifiable'];
 					
 					$mailing_chk = $mailing == 1 ? "<img src='img/ok.png' height=16px width=16px>" : "";
 					
 					
 					// test si la machine est prétée ou pas
-					$rq_machine_pretee = $db_gespac->queryAll ( "SELECT mat_id FROM materiels WHERE user_id=$id AND user_id<>1" );
-					$mat_id = @$rq_machine_pretee[0][0];	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, évidement
+					$rq_machine_pretee = $con_gespac->QueryAll ( "SELECT mat_id FROM materiels WHERE user_id=$id AND user_id<>1" );
+					$mat_id = @$rq_machine_pretee['mat_id'];	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, évidement
 							
 					if ( !isset($mat_id) ) {	// la machine n'est pas prêtée ($mat_id n'existe pas)
 							$id_pret = 0;
@@ -143,7 +140,7 @@
 		echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='slb_users' title='ajout d un utilisateur'> <img src='img/add.png'>Ajouter un utilisateur </a>";
 
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 ?>
 
 

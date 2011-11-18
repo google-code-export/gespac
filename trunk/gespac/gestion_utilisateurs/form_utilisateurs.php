@@ -5,10 +5,12 @@
 
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
+	
+	// lib
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
 	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-	
+	require_once ('../fonctions.php');
+	include_once ('../../class/Sql.class.php');
 	
 ?>
 
@@ -63,11 +65,8 @@
 
 <?PHP
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// connexion à la base de données GESPAC
+	$con_gespac 	= new Sql ($host, $user,$pass, $gespac);
 	
 	$id 	= $_GET['id'];
 	$action = $_GET['action'];
@@ -123,12 +122,12 @@
 					<TD><select name="grade">
 						<?PHP
 							// Requete pour récupérer la liste des grades
-							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
+							$liste_grades = $con_gespac->QueryAll ( "SELECT grade_id, grade_nom FROM grades" );		
 							
 							foreach ( $liste_grades as $record ) {
 							
-								$grade_id 	= $record[0];
-								$grade_nom 	= $record[1];
+								$grade_id 	= $record['grade_id'];
+								$grade_nom 	= $record['grade_nom'];
 							
 								echo "<option value=$grade_id>$grade_nom</option>";
 							}
@@ -215,19 +214,19 @@
 		echo "<h2>formulaire de modification d'un utilisateur</h2><br>";
 		
 		// Requete pour récupérer les données des champs pour le user à modifier
-		$user_a_modifier = $db_gespac->queryAll ( "SELECT user_id, user_nom, user_logon, user_password, users.grade_id, user_mail, user_skin, user_accueil, grade_nom, user_mailing FROM users, grades WHERE users.grade_id=grades.grade_id AND user_id=$id" );		
+		$user_a_modifier = $con_gespac->QueryRow ( "SELECT user_id, user_nom, user_logon, user_password, users.grade_id, user_mail, user_skin, user_accueil, grade_nom, user_mailing FROM users, grades WHERE users.grade_id=grades.grade_id AND user_id=$id" );		
 		
 		// valeurs à affecter aux champs
-		$user_id 			= $user_a_modifier[0][0];
-		$user_nom	 		= $user_a_modifier[0][1];
-		$user_logon	 		= $user_a_modifier[0][2];
-		$user_password 		= $user_a_modifier[0][3];
-		$grade_id	 		= $user_a_modifier[0][4];
-		$user_mail 			= $user_a_modifier[0][5];
-		$user_skin 			= $user_a_modifier[0][6];
-		$user_accueil		= $user_a_modifier[0][7];
-		$grade_nom			= $user_a_modifier[0][8];
-		$user_mailing		= $user_a_modifier[0][9];
+		$user_id 			= $user_a_modifier[0];
+		$user_nom	 		= $user_a_modifier[1];
+		$user_logon	 		= $user_a_modifier[2];
+		$user_password 		= $user_a_modifier[3];
+		$grade_id	 		= $user_a_modifier[4];
+		$user_mail 			= $user_a_modifier[5];
+		$user_skin 			= $user_a_modifier[6];
+		$user_accueil		= $user_a_modifier[7];
+		$grade_nom			= $user_a_modifier[8];
+		$user_mailing		= $user_a_modifier[9];
 
 		$checked = $user_mailing == 1 ? "checked" : "";
 		
@@ -274,12 +273,12 @@
 					<TD><select name="grade">
 						<?PHP
 							// Requete pour récupérer la liste des grades
-							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
+							$liste_grades = $con_gespac->QueryAll ( "SELECT grade_id, grade_nom FROM grades" );		
 							
 							foreach ( $liste_grades as $record ) {
 							
-								$grade_id_lst 	= $record[0];
-								$grade_nom_lst 	= $record[1];
+								$grade_id_lst 	= $record['grade_id'];
+								$grade_nom_lst 	= $record['grade_nom'];
 						
 								$selected = $grade_id_lst == $grade_id ? "selected" : "";
 							
@@ -367,12 +366,12 @@
 						<option value="">Ne pas modifier</option>
 						<?PHP
 							// Requete pour récupérer la liste des grades
-							$liste_grades = $db_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
+							$liste_grades = $con_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
 							
 							foreach ( $liste_grades as $record ) {
 							
-								$grade_id_lst 	= $record[0];
-								$grade_nom_lst 	= $record[1];
+								$grade_id_lst 	= $record['grade_id'];
+								$grade_nom_lst 	= $record['grade_nom'];
 						
 								$selected = $grade_id_lst == $grade_id ? "selected" : "";
 							
