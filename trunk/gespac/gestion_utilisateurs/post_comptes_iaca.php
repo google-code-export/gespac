@@ -6,7 +6,7 @@
 	*
 	********************************************************/
 		
-	$dossier = '..\\dump\\'; 		// dossier où sera déplacé le fichier
+	$dossier = '../dump/'; 		// dossier où sera déplacé le fichier
 	
 	$fichier = basename($_FILES['myfile']['name']);
 	$extensions = array('.txt', '.csv');
@@ -21,6 +21,7 @@
 		//On formate le nom du fichier ici...
 		$fichier = strtr($fichier, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 		$fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
+	
 		 
 		//On upload et on teste si la fonction renvoie TRUE
 		if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . $fichier) ) {
@@ -29,7 +30,11 @@
 			
 			// ************ Traitement du fichier uploadé *****************
 	
-			include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
+			// Libs
+			require_once ('../fonctions.php');
+			include_once ('../config/databases.php');
+			include_once ('../../class/Sql.class.php');
+			include_once ('../../class/Log.class.php');
 			
 			// connexion à la base de données GESPAC
 			$con_gespac = new Sql($host, $user, $pass, $gespac);
@@ -43,6 +48,8 @@
 			$handle = fopen($chemin_import, "r");
 
 			$row = 0;	// [AMELIORATION] penser à virer l'entête
+			
+			$grade = $con_gespac->QueryOne ( "SELECT grade_id FROM grades WHERE grade_nom='professeur';" );	// Le grade par défaut dans lequel nous allons ranger tous les utilisateurs.
 
 			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
 				
@@ -51,7 +58,7 @@
 				$line[$row][2] = $data[2];
 
 				if ($line[$row][0] <> "NOMCOMPL" )	{
-					$req_import_comptes = "INSERT INTO users (user_nom, user_logon, user_password) VALUES ('" . $line[$row][0] . "', '" . $line[$row][1] ."', '" . $line[$row][2] . "' );";
+					$req_import_comptes = "INSERT INTO users (user_nom, user_logon, user_password, grade_id) VALUES ('" . $line[$row][0] . "', '" . $line[$row][1] ."', '" . $line[$row][2] . "', $grade );";
 					$con_gespac->Execute ( $req_import_comptes );
 					$log->Insert ( $req_import_comptes );
 				}
@@ -69,16 +76,16 @@
 
 			// On se déconnecte de la db
 			//$con_gespac->Close();	
-			?>
+?>
 			
 			<script>window.close();</script>
 			
-			<?PHP
-		} else {	// En cas d'échec d'upload
+<?PHP
+		} else	// En cas d'échec d'upload
 			echo 'Echec de l\'upload !';
 			  
-	} else {// En cas d'erreur dans l'extension
+	} else // En cas d'erreur
 		 echo $erreur;
-	}
+
 
 ?>

@@ -2,8 +2,8 @@
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit () {
 		// lance la fonction avec un délais de 1000ms
+		SexyLightbox.close();
 		window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1000);
-		TB_remove();
 	}
 </script>
 
