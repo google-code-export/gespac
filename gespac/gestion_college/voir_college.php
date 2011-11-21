@@ -28,28 +28,24 @@ session_start();
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-08-01#", $_SESSION['droits']);
 	
-
-	
-	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
 	
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac 	= new Sql ($host, $user, $pass, $gespac);
 	
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$college_info = $db_gespac->queryAll ( "SELECT clg_uai, clg_nom, clg_ati, clg_ati_mail, clg_adresse, clg_cp, clg_ville, clg_tel, clg_fax, clg_site_web, clg_site_grr FROM college;" );
+	$college_info = $con_gespac->QueryRow ( "SELECT clg_uai, clg_nom, clg_ati, clg_ati_mail, clg_adresse, clg_cp, clg_ville, clg_tel, clg_fax, clg_site_web, clg_site_grr FROM college;" );
 
-	$clg_uai 		= stripslashes($college_info [0][0]);
-	$clg_nom 		= stripslashes($college_info [0][1]);
-	$clg_ati 		= stripslashes($college_info [0][2]);
-	$clg_ati_mail 	= stripslashes($college_info [0][3]);
-	$clg_adresse 	= stripslashes($college_info [0][4]);
-	$clg_cp 		= $college_info [0][5];
-	$clg_ville 		= stripslashes($college_info [0][6]);
-	$clg_tel 		= $college_info [0][7];
-	$clg_fax 		= $college_info [0][8];
-	$clg_site_web 	= stripslashes($college_info [0][9]);
-	$clg_site_grr 	= stripslashes($college_info [0][10]);
+	$clg_uai 		= stripslashes($college_info [0]);
+	$clg_nom 		= stripslashes($college_info [1]);
+	$clg_ati 		= stripslashes($college_info [2]);
+	$clg_ati_mail 	= stripslashes($college_info [3]);
+	$clg_adresse 	= stripslashes($college_info [4]);
+	$clg_cp 		= $college_info [5];
+	$clg_ville 		= stripslashes($college_info [6]);
+	$clg_tel 		= $college_info [7];
+	$clg_fax 		= $college_info [8];
+	$clg_site_web 	= stripslashes($college_info [9]);
+	$clg_site_grr 	= stripslashes($college_info [10]);
 	
 	
 echo "<h3>Fiche d'informations du collège $clg_nom</h3><br>
