@@ -14,18 +14,12 @@
 
 	// lib
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-	/*require_once ('../fonctions.php');
-	require_once ('../config/pear.php');
-	include_once ('../config/databases.php');
-	*/
-	// on ouvre un fichier en écriture pour les log sql
-	$fp = fopen('../dump/log_sql.sql', 'a+');
-	
-	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
 	
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::connect($dsn_gespac);
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	
+	//Log des requêtes SQL
+	$log = new Log ("../dump/log_sql.sql");
 	
 		
 	// on récupère les paramètres de l'url	
@@ -62,45 +56,56 @@
 	
 		// création du collège
 		$req_add_college = "INSERT INTO college VALUES ( '$clg_uai', '$clg_nom', '$clg_ati', '$clg_ati_mail', '$clg_adresse', '$clg_cp', '$clg_ville', '$clg_tel', '$clg_fax', '$clg_web', '$clg_grr')";
-		$result = $db_gespac->exec ( $req_add_college );
+		$con_gespac->Execute ( $req_add_college );
+		
+		// On log la requête SQL
+		$log->Insert( $req_add_college );
 		
 		echo "<br><small>Création du collège <b>$clg_nom</b> !</small><br>";
 		
 		// Mise à jour de l'adresse mail dans le compte ati
 		$req_maj_mail_ati = "UPDATE users SET user_mail = '$clg_ati_mail' WHERE user_nom='ati'";
-		$result = $db_gespac->exec ( $req_maj_mail_ati );
+		$con_gespac->Execute ( $req_maj_mail_ati );
+		
+		// On log la requête SQL
+		$log->Insert( $req_maj_mail_ati );
 		
 		echo "<br><small>Mise à jour du mail du compte ATI !</small><br>";
 		
 		// Création de diverses salles
 		$req_add_salle_stock = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (1, 'STOCK', '$clg_uai', 0 )";
-		$result = $db_gespac->exec ( $req_add_salle_stock );
+		$con_gespac->Execute ( $req_add_salle_stock );
+		
+		// On log la requête SQL
+		$log->Insert( $req_add_salle_stock );
 		
 		echo "<small>Création de la salle <b>Stock</b> !</small><br>";
 		
 		$req_add_salle_d3e = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (2, 'D3E', '$clg_uai', 0 )";
-		$result = $db_gespac->exec ( $req_add_salle_d3e );
+		$con_gespac->Execute ( $req_add_salle_d3e );
+		
+		// On log la requête SQL
+		$log->Insert( $req_add_salle_d3e );
 		
 		echo "<small>Création de la salle <b>D3E</b> !</small><br>";
 		
 		$req_add_salle_pret = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (3, 'PRETS', '$clg_uai', 0 )";
-		$result = $db_gespac->exec ( $req_add_salle_pret );
+		$con_gespac->Execute ( $req_add_salle_pret );
+		
+		// On log la requête SQL
+		$log->Insert( $req_add_salle_pret );
 		
 		echo "<small>Création de la salle <b>PRETS</b> !</small><br>";
 
-		// On log la requête SQL
-		fwrite($fp, date("Ymd His") . " " . $req_add_college."\n");
-		fwrite($fp, date("Ymd His") . " " . $req_maj_mail_ati."\n");
-		fwrite($fp, date("Ymd His") . " " . $req_add_salle_stock."\n");
-		fwrite($fp, date("Ymd His") . " " . $req_add_salle_d3e."\n");
-		fwrite($fp, date("Ymd His") . " " . $req_add_salle_pret."\n");
-		
 		//Insertion d'un log
 		
 		$log_texte = "La fiche informative a été créée. Nom actuel : <b>$clg_nom</b>";
 		
 		$req_log_creer_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création collège', '$log_texte');";
-		$result = $db_gespac->exec ( $req_log_creer_college );
+		$con_gespac->Execute ( $req_log_creer_college );
+		
+		// On log la requête SQL
+		$log->Insert( $req_log_creer_college );
 		
 	}
 	
@@ -128,34 +133,35 @@
 		$req_modif_college = "UPDATE college SET clg_uai = '$clg_uai', clg_nom = '$clg_nom', clg_ati = '$clg_ati', clg_ati_mail = '$clg_ati_mail', 
 							  clg_adresse = '$clg_adresse',	clg_cp = '$clg_cp', clg_ville = '$clg_ville', clg_tel = '$clg_tel', clg_fax = '$clg_fax', 
 							  clg_site_web = '$clg_web', clg_site_grr = '$clg_grr' WHERE clg_uai='$old_uai'";
-		$result = $db_gespac->exec ( $req_modif_college );
+		$con_gespac->Execute ( $req_modif_college );
+		
+		// On log la requête SQL
+		$log->Insert( $req_modif_college );
 		
 		// Mise à jour de l'adresse mail dans le compte ati
 		$req_maj_mail_ati = "UPDATE users SET user_mail = '$clg_ati_mail' WHERE user_nom='ati'";
-		$result = $db_gespac->exec ( $req_maj_mail_ati );
+		$con_gespac->Execute ( $req_maj_mail_ati );
+		
+		// On log la requête SQL
+		$log->Insert( $req_maj_mail_ati );
 		
 		echo "<br><small>Mise à jour du mail du compte ATI !</small><br>";
 		
-		
-		
-		// On log la requête SQL
-		fwrite($fp, date("Ymd His") . " " . $req_modif_college."\n");
-		fwrite($fp, date("Ymd His") . " " . $req_maj_mail_ati."\n");
 		
 		//Insertion d'un log
 		
 		$log_texte = "La fiche informative a été modifiée. Nom actuel : <b>$clg_nom</b>";
 		
 		$req_log_modif_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification collège', '$log_texte');";
-		$result = $db_gespac->exec ( $req_log_modif_college );
+		$con_gespac->Execute ( $req_log_modif_college );
+		
+		// On log la requête SQL
+		$log->Insert( $req_log_modif_college );
 		
 		$clg_nom = stripslashes($clg_nom);
 		
 		echo "<small>Modification du collège <b>$clg_nom</b>.</small>";
 	
-	}	
-	
-	// Je ferme le fichier  de log sql
-	fclose($fp);
+	}
 	
 ?>
