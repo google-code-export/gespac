@@ -25,16 +25,13 @@
 
 
 <?PHP
-	
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac ) ;
 
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_prets 
 	// SAlle_id = 3 (à la fin de la rq) parce que 3 correspond à la salle "PRETS"
-	$liste_des_prets = $db_gespac->queryAll ( "SELECT mat_nom, mat_serial, marque_type, marque_model, salle_nom, user_nom, mat_id, materiels.salle_id, materiels.user_id, mat_dsit, mat_etat FROM materiels, marques, salles, users WHERE ( materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id and materiels.user_id=users.user_id and materiels.salle_id=3	) ORDER BY mat_nom" );	
+	$liste_des_prets = $con_gespac->QueryAll ( "SELECT mat_nom, mat_serial, marque_type, marque_model, salle_nom, user_nom, mat_id, materiels.salle_id, materiels.user_id, mat_dsit, mat_etat FROM materiels, marques, salles, users WHERE ( materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id and materiels.user_id=users.user_id and materiels.salle_id=3	) ORDER BY mat_nom" );	
 
 ?>
 	
@@ -72,17 +69,17 @@
 						
 				echo "<tr class=$tr_class>";
 						
-					$mat 		= $record[0];
-					$serial 	= $record[1];
-					$type 		= $record[2];
-					$model 		= $record[3];
-					$salle 		= $record[4];
-					$user	 	= $record[5];
-					$mat_id		= $record[6];
-					$salle_id	= $record[7];
-					$user_id	= $record[8];
-					$inventaire	= $record[9];
-					$etat		= $record[10];
+					$mat 		= $record['mat_nom'];
+					$serial 	= $record['mat_serial'];
+					$type 		= $record['marque_type'];
+					$model 		= $record['marque_model'];
+					$salle 		= $record['salle_nom'];
+					$user	 	= $record['user_nom'];
+					$mat_id		= $record['mat_id'];
+					$salle_id	= $record['salle_id'];
+					$user_id	= $record['user_id'];
+					$inventaire	= $record['mat_dsit'];
+					$etat		= $record['mat_etat'];
 					
 					
 					
@@ -153,12 +150,12 @@
 				// Pour le remplissage de la combobox des user pour l'affectation du matériel prêté
 					
 				// stockage des lignes retournées par sql dans un tableau nommé combo_des_users
-				$combo_des_users = $db_gespac->queryAll ( "SELECT user_id, user_nom FROM users ORDER BY user_nom;" );
+				$combo_des_users = $con_gespac->QueryAll ( "SELECT user_id, user_nom FROM users ORDER BY user_nom;" );
 							
 				foreach ($combo_des_users as $combo_option ) {
 				
-					$option_id 		= $combo_option[0];
-					$option_user 	= $combo_option[1];
+					$option_id 		= $combo_option['user_id'];
+					$option_user 	= $combo_option['user_nom'];
 										
 					echo "<option value=$option_id name=$option_user> $option_user </option>";
 				}
@@ -188,7 +185,7 @@
 	
 <?PHP
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 ?>
 
 

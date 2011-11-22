@@ -7,20 +7,11 @@
 	*/
 
 	
-	// lib
-	require_once ('../fonctions.php');
-	require_once ('../config/pear.php');
-	include_once ('../config/databases.php');
-	
-	
-	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
-	
-	// options facultatives de cnx à la db
-	$options = array('debug' => 2, 'portability' => MDB2_PORTABILITY_ALL,);
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
 
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::connect($dsn_gespac, $options);
+	// Connexion à la base de données GESPAC
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	$log = new Log ("../dump/log_sql.sql");
 	
 	
 	// on récupère les paramètres de l'url	
@@ -44,22 +35,27 @@
 		$userid		= $_GET['userid'];
 			
 		$req_preter_materiel = "UPDATE materiels SET user_id = $userid WHERE mat_id =$matid ;";
-		$result = $db_gespac->exec ( $req_preter_materiel );
+		$con_gespac->Execute ( $req_preter_materiel );
+		
+		//on log la requête SQL
+		$log->Insert($req_preter_materiel);
 		
 		//On récupère le nom d'utilisateur en fonction du user_id
-		$liste_user 	= $db_gespac->queryAll ( "SELECT user_nom FROM users WHERE user_id = $userid" );
-		$user_nom = $liste_user [0][0];
+		$user_nom = $con_gespac->QueryOne ( "SELECT user_nom FROM users WHERE user_id = $userid" );
 		
 		//On récupère le nom de matériel en fonction du mat_id
-		$liste_materiel = $db_gespac->queryAll ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $matid" );
-		$mat_nom = $liste_materiel [0][0];
-		$mat_serial = $liste_materiel [0][1];
+		$liste_materiel = $con_gespac->QueryRow ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $matid" );
+		$mat_nom = $liste_materiel[0];
+		$mat_serial = $liste_materiel[1];
 		
 		$log_texte = "Le matériel $mat_nom (Numéro de série : <b>$mat_serial</b>) a été prêté à $user_nom";
 		
 		// On insère une ligne dans les logs pour tracer tout ça
 		$req_log_preter_materiel = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Prêté', '$log_texte' );";
-		$result = $db_gespac->exec ( $req_log_preter_materiel );
+		$con_gespac->Execute ( $req_log_preter_materiel );
+		
+		//on log la requête SQL
+		$log->Insert($req_log_preter_materiel);
 		
 		// On ouvre une autre fenêtre pour la convention de pret
 		echo "<script type='text/javascript'>window.open(\"gestion_prets/convention_pret.php?matid=$matid&userid=$userid\", 'CONVENTION DE PRET');</script>";
@@ -76,19 +72,22 @@
 	
 		
 		// On récupère le nom de l'utilisateur en fonction du user_id
-		$liste_user = $db_gespac->queryAll ( "SELECT user_nom FROM users WHERE user_id = $userid" );
-		$user_nom = $liste_user [0][0];
+		$user_nom = $con_gespac->QueryOne ( "SELECT user_nom FROM users WHERE user_id = $userid" );
+		
 		
 		// On récupère le nom du matériel en fonction du mat_id
-		$liste_materiel = $db_gespac->queryAll ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $matid" );
-		$mat_nom = $liste_materiel [0][0];
-		$mat_serial = $liste_materiel [0][1];
+		$liste_materiel = $con_gespac->QueryRow ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $matid" );
+		$mat_nom = $liste_materiel [0];
+		$mat_serial = $liste_materiel [1];
 		
 		$log_texte = urlencode("<a href='./gestion_prets/convention_retour.php?matid=$matid&userid=$userid&id_conv=0' target=_blank>$user_nom a rendu le matériel $mat_nom (Numéro de série : <b>$mat_serial</b>)</a>");
 		
 		// On insère une ligne dans les logs pour tracer tout ça
 		$req_log_rendu_materiel = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Rendu', '$log_texte' );";
-		$result = $db_gespac->exec ( $req_log_rendu_materiel );
+		$con_gespac->Execute ( $req_log_rendu_materiel );
+		
+		//on log la requête SQL
+		$log->Insert($req_log_rendu_materiel);
 				
 		// On ouvre une autre fenêtre pour la convention de retour
 		echo "<script type='text/javascript'>window.open(\"gestion_prets/convention_retour.php?matid=$matid&userid=$userid&id_conv=1\", 'CONVENTION DE RETOUR');</script>";
