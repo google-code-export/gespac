@@ -1,32 +1,23 @@
 <?PHP
 	
-	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
 
-
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// options facultatives de cnx à la db
-	$options = array('debug' => 2, 'portability' => MDB2_PORTABILITY_ALL,);
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::connect($dsn_gespac, $options);
-
+	// Connexion à la base de données GESPAC
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 	$matid 	= $_GET['matid'];
 	$userid = $_GET['userid'];
 
 	
-	$liste_pour_convention = $db_gespac->queryAll ( "SELECT clg_nom, mat_serial, mat_dsit, marque_type, marque_model, user_nom, clg_ville FROM materiels, marques, users, college WHERE (materiels.user_id = $userid AND materiels.mat_id = $matid AND materiels.marque_id = marques.marque_id and users.user_id = materiels.user_id)" );
+	$liste_pour_convention = $con_gespac->QueryRow ( "SELECT clg_nom, mat_serial, mat_dsit, marque_type, marque_model, user_nom, clg_ville FROM materiels, marques, users, college WHERE (materiels.user_id = $userid AND materiels.mat_id = $matid AND materiels.marque_id = marques.marque_id and users.user_id = materiels.user_id)" );
 
-	$clg_nom		= stripslashes($liste_pour_convention[0][0]); 
-	$mat_serial		= $liste_pour_convention[0][1]; 
-	$mat_dsit		= $liste_pour_convention[0][2]; 
-	$marque_type	= $liste_pour_convention[0][3]; 
-	$marque_model	= $liste_pour_convention[0][4]; 
-	$user_nom		= stripslashes($liste_pour_convention[0][5]); 
-	$clg_ville		= stripslashes($liste_pour_convention[0][6]); 
+	$clg_nom		= stripslashes($liste_pour_convention[0]); 
+	$mat_serial		= $liste_pour_convention[1]; 
+	$mat_dsit		= $liste_pour_convention[2]; 
+	$marque_type	= $liste_pour_convention[3]; 
+	$marque_model	= $liste_pour_convention[4]; 
+	$user_nom		= stripslashes($liste_pour_convention[5]); 
+	$clg_ville		= stripslashes($liste_pour_convention[6]); 
 
 ?>
 
