@@ -106,14 +106,11 @@ session_start();
 
 <?PHP 
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données OCS
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// Connexion à la base de données GESPAC
+	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_salles = $db_gespac->queryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment, est_modifiable FROM salles ORDER BY salle_nom" );
+	$liste_des_salles = $con_gespac->QueryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment, est_modifiable FROM salles ORDER BY salle_nom" );
 
 	if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
 ?>
@@ -140,12 +137,12 @@ session_start();
 						
 				echo "<tr class=$tr_class>";
 						
-					$id		 		= $record[0];
-					$nom	 		= $record[1];
-					$vlan 			= $record[2];
-					$etage 			= $record[3];
-					$batiment 		= $record[4];
-					$est_modifiable = $record[5];
+					$id		 		= $record['salle_id'];
+					$nom	 		= $record['salle_nom'];
+					$vlan 			= $record['salle_vlan'];
+					$etage 			= $record['salle_etage'];
+					$batiment 		= $record['salle_batiment'];
+					$est_modifiable = $record['est_modifiable'];
 					
 					// valeur nominale pour la checkbox
 					$chkbox_state = $apreter == 1 ? "checked" : "unchecked";
@@ -154,7 +151,7 @@ session_start();
 					$change_apreter = $apreter == 1 ? 0 : 1;
 					
 					//faire un queryOne
-					$nb_matos_dans_cette_salle 	= $db_gespac->queryOne ( "SELECT COUNT(*) FROM materiels WHERE salle_id=$id" );
+					$nb_matos_dans_cette_salle 	= $con_gespac->QueryOne ( "SELECT COUNT(*) FROM materiels WHERE salle_id=$id" );
 
 					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$id' rel='slb_salles' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle ."] </td>";
 					echo "<td>" . $vlan . "</td>";
@@ -186,7 +183,7 @@ session_start();
 if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
 
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 ?>
 
 <script type="text/javascript">
