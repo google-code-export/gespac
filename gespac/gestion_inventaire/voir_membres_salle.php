@@ -12,31 +12,17 @@
 
 <?PHP
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../config/databases.php');		// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
 	
 	
 	// id ocs du matériel à afficher
 	$salle_id = $_GET ['salle_id'];
 
-
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-
-	// options facultatives de cnx à la db
-	$options = array(
-		'debug'       => 2,
-		'portability' => MDB2_PORTABILITY_ALL,
-	);
-
 	// cnx à la base de données OCS
-	$db_gespac 	= & MDB2::connect($dsn_gespac, $options);
+	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_model, marque_type, mat_id, user_nom FROM materiels, marques, users WHERE materiels.user_id=users.user_id AND materiels.salle_id=$salle_id AND materiels.marque_id = marques.marque_id order by mat_nom" );
+	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_model, marque_type, mat_id, user_nom FROM materiels, marques, users WHERE materiels.user_id=users.user_id AND materiels.salle_id=$salle_id AND materiels.marque_id = marques.marque_id order by mat_nom" );
 
 	echo "<p><small>" . count($liste_des_materiels) . " matériel(s) dans cette salle.</small></p>";
 	
@@ -69,14 +55,14 @@
 						
 				echo "<tr class=$tr_class>";
 						
-					$nom 		= $record[0];
-					$dsit 		= $record[1];
-					$serial 	= $record[2];
-					$etat 		= $record[3];
-					$model 		= $record[4];
-					$type 		= $record[5];
-					$id 		= $record[6];
-					$user 		= $record[7];
+					$nom 		= $record['mat_nom'];
+					$dsit 		= $record['mat_dsit'];
+					$serial 	= $record['mat_serial'];
+					$etat 		= $record['mat_etat'];
+					$model 		= $record['marque_model'];
+					$type 		= $record['marque_type'];
+					$id 		= $record['mat_id'];
+					$user 		= $record['user_nom'];
 					
 					echo "<td> $nom </td>";
 					echo "<td> $user </td>";
@@ -105,7 +91,7 @@
 <?PHP
 
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 
 
 ?>

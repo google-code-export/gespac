@@ -5,10 +5,10 @@
 
 
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../config/databases.php');		// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
+	
+	// Connexion à la base de données GESPAC
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 ?>
 
@@ -126,31 +126,16 @@
 	
 		echo "<h2>formulaire de modification d'une salle</h2><br>";
 		
-		#***************************************************************************
-		# Requete pour récupérer les données des champs pour la salle à modifier
-		#***************************************************************************
-		
-		// adresse de connexion à la base de données
-		$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-		// options facultatives de cnx à la db
-		$options = array(
-			'debug'       => 2,
-			'portability' => MDB2_PORTABILITY_ALL,
-		);
-
-		// cnx à la base de données OCS
-		$db_gespac 	= & MDB2::connect($dsn_gespac, $options);
 
 		// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-		$salle_a_modifier = $db_gespac->queryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment FROM salles WHERE salle_id=$id" );
+		$salle_a_modifier = $con_gespac->QueryRow ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment FROM salles WHERE salle_id=$id" );
 
 		// valeur à affecter aux champs
-		$salle_id 		= $salle_a_modifier[0][0];
-		$salle_nom 		= $salle_a_modifier[0][1];
-		$salle_vlan 	= $salle_a_modifier[0][2];
-		$salle_etage 	= $salle_a_modifier[0][3];
-		$salle_bat 		= $salle_a_modifier[0][4];
+		$salle_id 		= $salle_a_modifier[0];
+		$salle_nom 		= $salle_a_modifier[1];
+		$salle_vlan 	= $salle_a_modifier[2];
+		$salle_etage 	= $salle_a_modifier[3];
+		$salle_bat 		= $salle_a_modifier[4];
 
 		?>
 		
@@ -167,7 +152,7 @@
 			
 				<tr>
 					<TD>Nom salle</TD>
-					<TD><input type=text name=nom id=nom value= "<?PHP echo $salle_nom; ?>"	/><input type=hidden name=ancien_nom id=nom value= "<?PHP echo $salle_nom; ?>"	/></TD>	<!-- Je colle en hidden l'ancien nom pour voir si ce dernier a été modifié ou pas -->
+					<TD><input type=text name=nom id=nom value= "<?PHP echo $salle_nom; ?>"	/>
 				</tr>
 				
 				<tr>
