@@ -186,7 +186,7 @@
 			$modele_dep 	= $marque_de_depart[1];
 			
 			echo "Le matériel est transféré de la marque $marque_dep $modele_dep vers $marque $modele";
-			echo "<script>alert('La marque $marque $modele existe déjà. Je transbahute donc tout le matériel de $marque_dep $modele_dep vers $marque $modele');</script>";
+			echo "<script>alert('La marque $marque $modele existe déjà. Réaffectation du matériel de $marque_dep $modele_dep vers $marque $modele');</script>";
 			
 			// On transvase les mat de l'ancienne marque vers la marque avec correspondance.
 
@@ -195,6 +195,17 @@
 			
 			// On log la requête SQL
 			fwrite($fp, date("Ymd His") . " " . $req_reaffectation_marque."\n");
+			
+			
+			// On supprime l'ancienne marque 
+
+			$req_suppr_ancienne_marque = "DELETE FROM marques WHERE marque_id = $marque_id;";	
+			$result = $db_gespac->exec ( $req_suppr_ancienne_marque );
+			
+			// On log la requête SQL
+			fwrite($fp, date("Ymd His") . " " . $req_suppr_ancienne_marque."\n");
+			
+			
 			
 		}
 		else {
