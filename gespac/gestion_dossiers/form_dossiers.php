@@ -321,7 +321,7 @@ if ( $dossierid <> -1 ) {
 				$txt_texte 	= $page['txt_texte'];
 				$txt_etat 	= $page['txt_etat'];
 				
-				if ($_SESSION['grade'] == 'ati' | $_SESSION['grade'] == 'root') {
+				if (strtoupper($_SESSION['grade']) == 'ATI' || strtoupper($_SESSION['grade']) == 'ROOT') {
 					$user_nom 	= $page['user_nom'];
 				} else {
 					$user_nom 	= 'Anonyme';
