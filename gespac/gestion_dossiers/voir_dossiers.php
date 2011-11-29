@@ -94,7 +94,7 @@
 						$txt_date 	= date ("d-m-Y H:i", strtotime($page['txt_date']));
 						$txt_texte 	= $page['txt_texte'];
 						$txt_etat 	= $page['txt_etat'];
-						if ($_SESSION['grade'] == 'ATI' | $_SESSION['grade'] == 'root') {
+						if (strtoupper($_SESSION['grade']) == 'ATI' || strtoupper($_SESSION['grade']) == 'ROOT') {
 							$user_nom 	= $page['user_nom'];
 						} else {
 							$user_nom 	= 'Anonyme';
