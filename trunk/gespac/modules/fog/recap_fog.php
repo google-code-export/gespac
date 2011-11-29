@@ -12,10 +12,9 @@
 	require_once ('../../fonctions.php');
 	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
-	include ('../../../include/config.php'); //on récupère les variables pour le test des bases FOG
 	
 	// On regarde si la base FOG existe car dans le cas de sa non existance la page ne s'affiche pas correctement
-	$link_bases = mysql_pconnect('localhost', 'root', $password_gespac);//connexion à la base de donnée
+	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion à la base de donnée
 	if(!mysql_select_db('fog', $link_bases)) {echo "Base FOG non présente, il est impossible de continuer l'affichage.";}//si la base FOG n'existe pas on arrete la page
 	else {
 
