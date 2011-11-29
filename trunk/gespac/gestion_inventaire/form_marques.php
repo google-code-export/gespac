@@ -150,6 +150,7 @@
 			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
 			//	on recharge la page au bout de 1000ms
 			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
+			SexyLightbox.close();
 		}
 	}
 	
