@@ -7,7 +7,6 @@ session_start();
 
 	// lib
 	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	//include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
 	require_once ('../fonctions.php');
 	include_once ('../../class/Sql.class.php');
 
@@ -152,19 +151,24 @@ session_start();
 						$lines = file('../menu.txt');
 
 						echo "<option value='bienvenue.php'>Bienvenue</option>";	// Page par défaut
-
-						foreach ($lines as $line) {
 						
-							$line = str_replace('"','',$line);
-							$explode_line = explode (";", $line);
-							$id = $explode_line[0];
-							$value = $explode_line[1];
-							$path = $explode_line[2];
+						
+						// Requête de récupération des droits
+						$liste_items = $con_gespac->QueryAll ( "SELECT * FROM droits order by droit_index" );
+						
+						foreach ($liste_items as $ligne) {
+					
+							$droit_id = $ligne ['droit_id'];
+							$droit_index = $ligne ['droit_index'];
+							$droit_titre = $ligne ['droit_titre'];
+							$droit_page = $ligne ['droit_page'];
+							$droit_etendue = $ligne ['droit_etendue'];
+							$droit_description = $ligne ['droit_description'];
 
-							$L_chk = preg_match ("#$id#", $_SESSION['droits']) ;
+							$L_chk = preg_match ("#$droit_index#", $_SESSION['droits']) ;
 
-							if ($L_chk && $value <> "Retour au portail")	// Oui parce que si on met en page de démarrage la page de retour au menu, ça sert à rien !
-								echo "<option value='$path'>$value</option>";
+							if ($L_chk && ($droit_index <> "03-04" && $droit_index <> "01-01"))	// Oui parce que si on met en page de démarrage la page de retour au menu, ça sert à rien !
+								echo "<option value='$droit_page'>$droit_titre</option>";
 						}
 					?>
 					
