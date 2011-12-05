@@ -1,5 +1,7 @@
 <?PHP
 
+	session_start();
+
 	// lib
 	require_once ('../../fonctions.php');
 	include_once ('../../config/databases.php');
@@ -50,8 +52,11 @@ if ( $action == 'suppr') {
 		
 	$dossier = '../../fichiers/'; 		// dossier où sera déplacé le fichier
 	
-	$titre = $_POST["titre"];
-	$description = $_POST["description"];
+	$titre 			= $_POST["titre"];
+	$description 	= $_POST["description"];
+	$droits 		= $_POST["droits"];
+	$user 			= $_SESSION['login'];
+	$user_id		= $con_gespac->QueryOne("SELECT user_id FROM users WHERE user_logon='$user'");
 	
 	$fichier = basename($_FILES['myfile']['name']);
 	$extensions = array('.sh', '.bat', '.vbs', '.php', '.js');
@@ -79,7 +84,7 @@ if ( $action == 'suppr') {
 			
 			// ************ Traitement du fichier uploadé *****************
 
-			$req_ajout_fichier = "INSERT INTO fichiers ( fichier_chemin, fichier_description ) VALUES ( '$fichier', '$description' );";
+			$req_ajout_fichier = "INSERT INTO fichiers ( fichier_chemin, fichier_description, fichier_droits, user_id ) VALUES ( '$fichier', '$description', '$droits', $user_id );";
 			$con_gespac->Execute($req_ajout_fichier);
 
 			//Insertion d'un log
