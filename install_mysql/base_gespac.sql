@@ -218,6 +218,8 @@ CREATE TABLE IF NOT EXISTS `fichiers` (
   `fichier_id` int(11) NOT NULL AUTO_INCREMENT,
   `fichier_chemin` varchar(255) NOT NULL,
   `fichier_description` text NOT NULL,
+  `fichier_droits` varchar(2) NOT NULL DEFAULT '00',
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`fichier_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
@@ -324,5 +326,6 @@ INSERT IGNORE INTO `droits` (`droit_id`, `droit_index`, `droit_titre`, `droit_pa
 (27, '08-02', 'Flux RSS', 'modules/rss/rss.php', 1, 'Voir, ajouter ou modifier un flux RSS.'),
 (28, '08-03', 'Stats camemberts', 'modules/stats/camembert.php', 0, 'Voir les stats camembert.'),
 (29, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
-(30, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.');
+(30, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.'),
+(31, '07-08', 'Migration Fog','modules/migration_fog/voir_migration.php', 1, 'Permet de migrer les noms de machine de Gespac à Fog');
 
