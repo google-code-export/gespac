@@ -322,10 +322,11 @@ INSERT IGNORE INTO `droits` (`droit_id`, `droit_index`, `droit_titre`, `droit_pa
 (23, '07-04', 'MAJ tags DSIT', 'modules/ssn_dsit/form_import_csv.php', 0, 'Mise à jour des numéros inventaire par le numéro de série.'),
 (24, '07-05', 'Images Fog', 'modules/image_fog/voir_liste.php', 1, 'Clonage direct par Fog.'),
 (25, '07-06', 'Menu portail', 'modules/menu_portail/voir_menu_portail.php', 1, 'Voir, créer ou modifier le menu du portail.'),
-(26, '08-01', 'Fiche collège', 'gestion_college/voir_college.php', 1, 'Voir ou modifier la fiche du collège.'),
-(27, '08-02', 'Flux RSS', 'modules/rss/rss.php', 1, 'Voir, ajouter ou modifier un flux RSS.'),
-(28, '08-03', 'Stats camemberts', 'modules/stats/camembert.php', 0, 'Voir les stats camembert.'),
-(29, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
-(30, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.'),
-(31, '07-08', 'Migration Fog','modules/migration_fog/voir_migration.php', 1, 'Permet de migrer les noms de machine de Gespac à Fog');
+(26, '07-07', 'Gestionnaire de fichiers', 'modules/gestion_fichiers/voir_fichiers.php', 1, 'Voir, créer ou modifier des fichiers.'),
+(27, '07-08', 'Migration Fog','modules/migration_fog/voir_migration.php', 1, 'Permet de migrer les noms de machine de Gespac à Fog'),
+(28, '08-01', 'Fiche collège', 'gestion_college/voir_college.php', 1, 'Voir ou modifier la fiche du collège.'),
+(29, '08-02', 'Flux RSS', 'modules/rss/rss.php', 1, 'Voir, ajouter ou modifier un flux RSS.'),
+(30, '08-03', 'Stats camemberts', 'modules/stats/camembert.php', 0, 'Voir les stats camembert.'),
+(31, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
+(32, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.');
 
