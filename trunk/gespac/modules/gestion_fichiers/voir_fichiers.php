@@ -49,31 +49,91 @@
 	
 		echo "<th>fichier</th>";
 		echo "<th>description</th>";
-		if ( $E_chk ) echo "<th>&nbsp;</th>";	
+		echo "<th>proprietaire</th>";
+		echo "<th>&nbsp;</th>";	
+		echo "<th>&nbsp;</th>";	
 		
 		$compteur = 0;
 		
 		foreach ( $liste_fichiers as $fichier) {
 			
 			$fichier_id 	= $fichier['fichier_id'];
+			$user_id 		= $fichier['user_id'];
+			$droits 		= $fichier['fichier_droits'];
 			$fichier_chemin = stripslashes($fichier['fichier_chemin']);
 			$fichier_desc 	= stripslashes($fichier['fichier_description']);
+			$proprio_nom 	= $con_gespac->QueryOne ("SELECT user_nom FROM users WHERE user_id = $user_id;");
+			$proprio_grade	= $con_gespac->QueryOne ("SELECT grade_nom FROM grades, users WHERE users.grade_id = grades.grade_id AND user_id = $user_id;");
+			$proprio_login	= $con_gespac->QueryOne ("SELECT user_logon FROM users WHERE user_id = $user_id;");
 			
-
+			
+			$lecture = false;
+			$ecriture = false;
+			
+			// On teste les droits
+			
+			// Si 00 -> juste le root et le propriétaire
+			// Si 10 -> lecture au groupe
+			// Si 11 -> lecture pour tout le monde
+			// Si 20 -> lecture et écriture au groupe
+			// Si 21 -> lecture et écriture au groupe, lecture seule à tout le monde
+			// Si 22 -> lecture et écriture à tout le monde
+			// 01 et 02 impossible (le groupe est inclus dans tout le monde)
+			
+			if ( $proprio_login == $_SESSION['login'] || $_SESSION['grade'] == 'root' ) {
+				$lecture = true; 
+				$ecriture = true;
+			}
+			else {
+			
+				if ( $droits == '10' ) {  
+					$lecture = $_SESSION['grade'] == $proprio_grade ? true : false ;	// Si le grade du propriétaire est le même que l'utilsateur courant lecture ok
+					$ecriture = false; 
+				}	
+				
+				if ( $droits == '20' ) {  
+					
+					if ($_SESSION['grade'] == $proprio_grade) {
+						$lecture = true;
+						$ecriture = false; 
+					}		
+				}
+								
+				if ( $droits == '21' ) {  
+					$ecriture = $_SESSION['grade'] == $proprio_grade ? true : false ;	// Si le grade du propriétaire est le même que l'utilsateur courant ecriture ok
+					$lecture = true; 
+				}
+				
+				if ( $droits == '22' ) { $lecture = true; $ecriture = true;	}
+				
+				if ( $droits == '11' ) { $lecture = true; $ecriture = false; }		
+				
+	
+			}
+			
+					
 			// alternance des couleurs
 			$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 			
 			// Le dossier
 			
-			echo "<tr class=$tr_class>";
-				echo "<td width='200px'><a href='fichiers/$fichier_chemin' target=_blank>$fichier_chemin</a></td>";
-				echo "<td>$fichier_desc</td>";
-				if ( $E_chk ) echo "<td width=20px><a href='#' onclick=\"validation_suppr_fichier($fichier_id, '$fichier_chemin');\"> <img src='img/delete.png'> </a></td>";
-				else echo "<td>&nbsp;</td>";
-			
-			echo "</tr>";
-	
-			echo "</td></tr>";
+			if ( $lecture ) {
+				echo "<tr class=$tr_class>";
+					echo "<td width='200px'><a href='fichiers/$fichier_chemin' target=_blank>$fichier_chemin</a></td>";
+					echo "<td>$fichier_desc</td>";
+					echo "<td>$proprio_nom</td>";
+					
+					if ( $ecriture && $E_chk ) { // Il faut avoir les droits en écriture sur le fichier ET les droits d'écriture par l'administrateur
+						echo "<td width=20px><a href='#' onclick=\"validation_suppr_fichier($fichier_id, '$fichier_chemin');\"> <img src='img/write.png'> </a></td>";
+						echo "<td width=20px><a href='#' onclick=\"validation_suppr_fichier($fichier_id, '$fichier_chemin');\"> <img src='img/delete.png'> </a></td>";
+					} else {
+						echo "<td>&nbsp;</td>";
+						echo "<td>&nbsp;</td>";
+					}
+					
+				echo "</tr>";
+		
+			}
 
 			$compteur++;
 
