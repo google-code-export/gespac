@@ -41,7 +41,7 @@
 
 
 <?PHP 
-	if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?height=320&width=640' rel='slb_fichiers' title='Ajout fichier'>	Ajouter un fichier	</a>"; 
+	if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?height=320&width=640&id=-1' rel='slb_fichiers' title='Ajout fichier'>	Ajouter un fichier	</a>"; 
 		
 	$liste_fichiers = $con_gespac->QueryAll ("SELECT * FROM fichiers;");
 	
@@ -124,7 +124,7 @@
 					echo "<td>$proprio_nom</td>";
 					
 					if ( $ecriture && $E_chk ) { // Il faut avoir les droits en écriture sur le fichier ET les droits d'écriture par l'administrateur
-						echo "<td width=20px><a href='#' onclick=\"validation_suppr_fichier($fichier_id, '$fichier_chemin');\"> <img src='img/write.png'> </a></td>";
+						echo "<td width=20px><a href='modules/gestion_fichiers/form_fichiers.php?height=320&width=640&id=$fichier_id' rel='slb_fichiers' title='Modifier fichier'> <img src='img/write.png'> </a></td>";
 						echo "<td width=20px><a href='#' onclick=\"validation_suppr_fichier($fichier_id, '$fichier_chemin');\"> <img src='img/delete.png'> </a></td>";
 					} else {
 						echo "<td>&nbsp;</td>";
