@@ -1,64 +1,152 @@
-<h3>Ajouter un fichier</h3>
 
-<br>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
-<!--  SERVEUR AJAX -->
-<script type="text/javascript" src="server.php?client=all"></script>
+<?PHP
 
+$id = $_GET['id'];
 
-<form method="POST" action="modules/gestion_fichiers/post_fichiers.php" target=_blank enctype="multipart/form-data">
-<!--<form method="POST" action="gestion_utilisateurs/post_comptes_iaca.php" enctype="multipart/form-data">-->
-	 <!-- On limite le fichier à 10000Ko -->
-     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-	 <center>
-	 <table width=400 align=center cellpadding=10px>
-		
-		<tr>
-			<td>Fichier</td>
-			<td><input type="file" name="myfile"></td>
-		</tr>
-		
-		<tr>
-			<td>Description</td>
-			<td><textarea name="description"></textarea> </td>
-		</tr>
-		
+if ( $id == -1 ) {
 
-	</table>
-	 
+?>
+	<h3>Ajouter un fichier</h3>
+
 	<br>
+
+	<form method="POST" action="modules/gestion_fichiers/post_fichiers.php" target=_blank enctype="multipart/form-data">
+
+		 <!-- On limite le fichier à 10000Ko -->
+		 <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+		 <center>
+		 <table width=400 align=center cellpadding=10px>
+			
+			<tr>
+				<td>Fichier</td>
+				<td><input type="file" name="myfile"></td>
+			</tr>
+			
+			<tr>
+				<td>Description</td>
+				<td><textarea name="description"></textarea> </td>
+			</tr>
+			
+
+		</table>
+		 
+		<br>
+		
+		droits <input type=hidden id="droits" name="droits" value="00">
+		 
+		<table width=50px>
+			<td>&nbsp;</td>
+			<td>lecture</td>
+			<td>écriture</td>
+			<tr>
+				<td>grade</td>
+				<td><input type=checkbox id=grade_lecture></td>
+				<td><input type=checkbox id=grade_ecriture></td>
+			</tr>
+			<tr>
+				<td>tous</td>
+				<td><input type=checkbox id=tous_lecture></td>
+				<td><input type=checkbox id=tous_ecriture></td>
+			</tr>
+		</table>
+		 
+		<br>
+		
+		<br>
+		<input type="submit" name="envoyer" value="Envoyer le fichier" onclick="refresh_quit();">
+		<br> 
+		<small>fichier limité à 10Mio.</small>
+		 
+		</center>
+		  
+	</form>
+
+<?PHP
+}
+
+
+// MODIFICATION
+
+if ( $id <> -1 ) {
+
+	// lib
+	require_once ('../../fonctions.php');
+	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 	
-	droits <input type=hidden id="droits" name="droits" value="00">
-	 
-	<table width=50px>
-		<td>&nbsp;</td>
-		<td>lecture</td>
-		<td>écriture</td>
-		<tr>
-			<td>grade</td>
-			<td><input type=checkbox id=grade_lecture></td>
-			<td><input type=checkbox id=grade_ecriture></td>
-		</tr>
-		<tr>
-			<td>tous</td>
-			<td><input type=checkbox id=tous_lecture></td>
-			<td><input type=checkbox id=tous_ecriture></td>
-		</tr>
-	</table>
-	 
-	<br>
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
+	$fichier = $con_gespac->QueryRow ('SELECT * FROM fichiers WHERE fichier_id='.$id);
+	
+	$fic_id 	= $fichier[0];
+	$fic_chemin = $fichier[1];
+	$fic_desc 	= $fichier[2];
+	$fic_droits = $fichier[3];
+
+?>
+	<h3>Modifier un fichier</h3>
+
 	<br>
-	<input type="submit" name="envoyer" value="Envoyer le fichier" onclick="refresh_quit();">
-	<br> 
-	<small>fichier limité à 10Mio.</small>
-	 
-	</center>
-      
-</form>
+
+	<script>AffectDroits("<?PHP echo $fic_droits;?>");</script>
+	
+	<form method="POST" action="modules/gestion_fichiers/post_fichiers.php" target=_blank>
+
+		<input type=hidden value=<?PHP echo $fic_id;?>>
+		<center>
+		<table width=400 align=center cellpadding=10px>
+			
+			<tr>
+				<td>Fichier</td>
+				<td><input type="text" disabled name="myfile" value=<?PHP echo $fic_chemin;?> size=27></td>
+			</tr>
+			
+			<tr>
+				<td>Description</td>
+				<td><textarea name="description"><?PHP echo $fic_desc;?></textarea> </td>
+			</tr>
+			
+
+		</table>
+		 
+		<br>
+		
+		droits <input type=text id="droits" name="droits" value=<?PHP echo $fic_droits;?>>
+		 
+		<table width=50px>
+			<td>&nbsp;</td>
+			<td>lecture</td>
+			<td>écriture</td>
+			<tr>
+				<td>grade</td>
+				<td><input type=checkbox id=grade_lecture></td>
+				<td><input type=checkbox id=grade_ecriture></td>
+			</tr>
+			<tr>
+				<td>tous</td>
+				<td><input type=checkbox id=tous_lecture></td>
+				<td><input type=checkbox id=tous_ecriture></td>
+			</tr>
+		</table>
+		 
+		<br>
+		
+		<br>
+		<input type="submit" name="envoyer" value="Envoyer le fichier" onclick="refresh_quit();">
+		 
+		</center>
+		  
+	</form>
+
+<?PHP
+	}
+?>
+
+
 
 
 <script type="text/javascript"> 
@@ -68,6 +156,7 @@
 		SexyLightbox.close();
 	}
 	
+	// Permet de mettre une valeur numérique aux cases cochées
 	function CalcDroits () {
 		var chiffre1 = "0";
 		var chiffre2 = "0";
@@ -81,12 +170,32 @@
 		$("droits").value = chiffre1+chiffre2;
 	}
 	
+	// Permet de cocher les cases en fonction d'une valeur numérique
+	function AffectDroits (valeur) {
+
+			if ( valeur == "00") {
+				$("grade_lecture").checked = false; $("grade_ecriture").checked = false; $("tous_lecture").checked = false;	$("tous_ecriture").checked = false; }
+			if ( valeur == "10") {
+				$("grade_lecture").checked = true; $("grade_ecriture").checked = false;	$("tous_lecture").checked = false; $("tous_ecriture").checked = false; }	
+			if ( valeur == "11") {
+				$("grade_lecture").checked = true; $("grade_ecriture").checked = false;	$("tous_lecture").checked = true; $("tous_ecriture").checked = false; }
+			if ( valeur == "20") {
+				$("grade_lecture").checked = true; $("grade_ecriture").checked = true; $("tous_lecture").checked = false; $("tous_ecriture").checked = false; }	
+			if ( valeur == "21") {
+				$("grade_lecture").checked = true; $("grade_ecriture").checked = true; $("tous_lecture").checked = true; $("tous_ecriture").checked = false; }			
+			if ( valeur == "22") {
+				$("grade_lecture").checked = true; $("grade_ecriture").checked = true; $("tous_lecture").checked = true; $("tous_ecriture").checked = true; }
+	}
+	
 	window.addEvent('domready', function(){
 		
 		$('grade_ecriture').addEvent ('click', function(e) {
 			
 			if ( $('grade_ecriture').checked == true ) {
 				$('grade_lecture').checked=true;
+			}
+			else {
+				$('tous_ecriture').checked=false;
 			}
 			
 			CalcDroits();
@@ -96,6 +205,8 @@
 			
 			if ( $('grade_lecture').checked == false ) {
 				$('grade_ecriture').checked=false;
+				$('tous_ecriture').checked=false;
+				$('tous_lecture').checked=false;
 			}
 			
 			CalcDroits();
