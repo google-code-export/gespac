@@ -1,5 +1,3 @@
-
-
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
@@ -14,7 +12,7 @@ if ( $id == -1 ) {
 
 	<br>
 
-	<form method="POST" action="modules/gestion_fichiers/post_fichiers.php" target=_blank enctype="multipart/form-data">
+	<form method="POST" action="modules/gestion_fichiers/post_fichiers.php?action=creation" target=_blank enctype="multipart/form-data">
 
 		 <!-- On limite le fichier à 10000Ko -->
 		 <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
@@ -36,7 +34,7 @@ if ( $id == -1 ) {
 		 
 		<br>
 		
-		droits <input type=hidden id="droits" name="droits" value="00">
+		<b>droits</b> <input type=hidden id="droits" name="droits" value="00">
 		 
 		<table width=50px>
 			<td>&nbsp;</td>
@@ -94,9 +92,8 @@ if ( $id <> -1 ) {
 
 	<script>AffectDroits("<?PHP echo $fic_droits;?>");</script>
 	
-	<form method="POST" action="modules/gestion_fichiers/post_fichiers.php" target=_blank>
+	<form method="POST" action="modules/gestion_fichiers/post_fichiers.php?action=mod&id=<?PHP echo $fic_id; ?>" name="post_form" id="post_form">
 
-		<input type=hidden value=<?PHP echo $fic_id;?>>
 		<center>
 		<table width=400 align=center cellpadding=10px>
 			
@@ -115,7 +112,7 @@ if ( $id <> -1 ) {
 		 
 		<br>
 		
-		droits <input type=text id="droits" name="droits" value=<?PHP echo $fic_droits;?>>
+		<b>droits</b> <input type=hidden id="droits" name="droits" value=<?PHP echo $fic_droits;?>>
 		 
 		<table width=50px>
 			<td>&nbsp;</td>
@@ -150,6 +147,35 @@ if ( $id <> -1 ) {
 
 
 <script type="text/javascript"> 
+
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML, filt) {
+					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					SexyLightbox.close();
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
+
+
+
+
 	function refresh_quit () {
 		// lance la fonction avec un délais de 1500ms
 		window.setTimeout("$('conteneur').load('modules/gestion_fichiers/voir_fichiers.php');", 1500);

@@ -6,23 +6,28 @@
 	require_once ('../../fonctions.php');
 	include_once ('../../config/databases.php');
 	include_once ('../../../class/Sql.class.php');
+	include_once ('../../../class/Log.class.php');
 	
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	$log = new Log ("../../dump/log_sql.sql");
 	
 	$action = $_GET ["action"];
 
 
-	/*******************************************************
-	*
-	*			Suppression d'un fichier
-	*
-	********************************************************/
+
+/*************************************************
+ *
+ *	 		SUPPRESSION DU FICHIER
+ * 
+ ************************************************/
+
+
 
 if ( $action == 'suppr') {
 	
 	$id = $_GET ["id"];
 	
-	// Le fichier à dégommer
+	// Le fichier Ã  dÃ©gommer
 	$fichier = $con_gespac->QueryOne ("SELECT fichier_chemin FROM fichiers WHERE fichier_id=$id");
 	
 	// On test la supression du fichier
@@ -41,18 +46,22 @@ if ( $action == 'suppr') {
 		echo "fichier introuvable...";
 	}
 	
-} else {
+} 
 
 
-	/*******************************************************
-	*
-	*					Ajout d'un fichier
-	*
-	********************************************************/
-		
-	$dossier = '../../fichiers/'; 		// dossier où sera déplacé le fichier
+
+/*************************************************
+ *
+ * 				CREATION DU FICHIER
+ * 
+ ************************************************/
+
+
+
+if ($action == "creation") {
+
+	$dossier = '../../fichiers/'; 		// dossier oÃ¹ sera dÃ©placÃ© le fichier
 	
-	$titre 			= $_POST["titre"];
 	$description 	= $_POST["description"];
 	$droits 		= $_POST["droits"];
 	$user 			= $_SESSION['login'];
@@ -66,23 +75,23 @@ if ( $action == 'suppr') {
 	if ( in_array($extension, $extensions) )
 		 $erreur = 'Vous ne pouvez pas uploader ce type de fichier ...';
 		 
-	//Si le fichier existe déjà
+	//Si le fichier existe dÃ©jÃ 
 	$existe = $con_gespac->QueryOne("SELECT fichier_id FROM fichiers WHERE fichier_chemin='$fichier'");
 	if ( $existe )
-		$erreur = 'Le fichier existe déjà ...';
+		$erreur = 'Le fichier existe dÃ©jÃ  ...';
 
 	if (!isset($erreur)) {	//S'il n'y a pas d'erreur, on upload
 
 		//On formate le nom du fichier ici...
-		$fichier = strtr($fichier, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
+		$fichier = strtr($fichier, 'Ã€ÃÃ‚ÃƒÃ„Ã…Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃŽÃÃ’Ã“Ã”Ã•Ã–Ã™ÃšÃ›ÃœÃÃ Ã¡Ã¢Ã£Ã¤Ã¥Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã²Ã³Ã´ÃµÃ¶Ã¹ÃºÃ»Ã¼Ã½Ã¿', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 		$fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
 		
 		//On upload et on teste si la fonction renvoie TRUE
 		if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . $fichier) ) {
-			echo $fichier . " envoyé avec succès !";
+			echo $fichier . " envoyÃ© avec succÃ¨s !";
 			
 			
-			// ************ Traitement du fichier uploadé *****************
+			// ************ Traitement du fichier uploadÃ© *****************
 
 			$req_ajout_fichier = "INSERT INTO fichiers ( fichier_chemin, fichier_description, fichier_droits, user_id ) VALUES ( '$fichier', '$description', '$droits', $user_id );";
 			$con_gespac->Execute($req_ajout_fichier);
@@ -98,11 +107,42 @@ if ( $action == 'suppr') {
 			
 <?PHP
 		}
-		else	// En cas d'échec d'upload
+		else	// En cas d'Ã©chec d'upload
 			echo 'Echec de l\'upload  de ' . $dossier . $fichier;
 		 
 	} else	// En cas d'erreur dans l'extension
 		 echo $erreur;
 
 }
+
+
+/*************************************************
+ *
+ * 			MODIFICATION DU FICHIER 
+ * 
+ ************************************************/
+
+
+if ($action == "mod") {
+	
+	$fichier_id 	= $_GET['id'];
+	
+	$fichier	 	= $_POST["myfile"];
+	$description 	= $_POST["description"];
+	$droits 		= $_POST["droits"];
+	
+	$rq_modif_fichier = "UPDATE fichiers SET fichier_description='$description', fichier_droits='$droits' WHERE fichier_id=$fichier_id";
+	$modif_fichier = $con_gespac->Execute ($rq_modif_fichier);
+	
+	// On log la requÃªte SQL
+	$log->Insert( $rq_modif_fichier );
+	
+	echo $log_texte = "Le fichier $fichier a Ã©tÃ© modifiÃ©";
+	
+	$req_log_modif_fichier = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification fichier', '$log_texte' );";
+	$con_gespac->Execute ( $req_log_modif_fichier );
+	
+	
+}
+
 ?>
