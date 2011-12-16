@@ -28,15 +28,15 @@ include_once ('fonctions.php');
 		// Activation des icones sur clic
 		function change_icon_onclick (div) {	
 			// on désactive tous les boutons
-			$('accueil').className = "accueil";
-			$('inventaire').className = "inventaire";
-			$('demandes').className = "demandes";
-			$('donnees').className = "donnees";
-			$('prets').className = "prets";
-			$('utilisateurs').className = "utilisateurs";
-			$('plugins').className = "plugins";
-			//$('college').className = "college";
-			$('info').className = "info";
+			
+			if ($('accueil')) $('accueil').className = "accueil";
+			if ($('inventaire')) $('inventaire').className = "inventaire";
+			if ($('demandes')) $('demandes').className = "demandes";
+			if ($('donnees')) $('donnees').className = "donnees";
+			if ($('prets')) $('prets').className = "prets";
+			if ($('utilisateurs')) $('utilisateurs').className = "utilisateurs";
+			if ($('plugins')) $('plugins').className = "plugins";
+			if ($('info')) $('info').className = "info";
 			
 			// On active le bon bouton
 			$(div).className = div + "-clicked";
