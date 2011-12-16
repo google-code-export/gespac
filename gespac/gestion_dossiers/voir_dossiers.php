@@ -22,6 +22,7 @@
 	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-03-03#", $_SESSION['droits']);
+		
 	
 ?>
 
@@ -29,14 +30,22 @@
 
 <br>
 
+
+<form id="filterform">
+	<center><small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'dossiers_table');" type="text" value=<?PHP echo $_GET['filter'];?> ></center>
+</form>
+
+
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
 <?PHP 
 	if ( $E_chk ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=-1');\"> <img src='img/add.png'>Créer un dossier </a>"; 
-		
-	$liste_dossiers = $con_gespac->QueryAll ("SELECT dossiers.dossier_id as dossier_id, dossier_type, dossier_mat, txt_date, txt_etat, txt_texte FROM dossiers, dossiers_textes WHERE dossiers.dossier_id = dossiers_textes.dossier_id GROUP BY dossiers.dossier_id;");
 	
+	$filtre = $_GET["filter"];	
+		
+	$liste_dossiers = $con_gespac->QueryAll ("SELECT dossiers.dossier_id as dossier_id, dossier_type, dossier_mat, txt_date, txt_etat, txt_texte FROM dossiers, dossiers_textes WHERE dossiers.dossier_id = dossiers_textes.dossier_id GROUP BY dossiers.dossier_id ORDER BY dossier_id DESC;");
+		
 	echo "<table id='dossiers_table' width='900px'>";
 	
 		echo "<th>&nbsp;</th>";
@@ -132,7 +141,8 @@
 <script>
 	
 	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_dossiers'});
+	  
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_dossiers'});	  
 	});
 	
 	// Montre / cache les pages d'un dossier
@@ -150,5 +160,46 @@
 			$('tr_' + dossier).style.border = "none";
 		}
 	}
+	
+	
+	// *********************************************************************************
+	//
+	//				Fonction de filtrage des tables
+	//
+	// *********************************************************************************
+
+	function filter (phrase, _id){
+
+		var words = phrase.value.toLowerCase().split(" ");
+		var table = document.getElementById(_id);
+		var ele;
+		var elements_liste = "";
+				
+		for (var r = 1; r < table.rows.length; r++){
+					
+			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
+			var displayStyle = 'none';
+			
+			if (table.rows[r].className != 'inner_tr') {
+			
+				for (var i = 0; i < words.length; i++) {
+					if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
+						displayStyle = '';
+					}	
+					else {	// on masque les rows qui ne correspondent pas
+						displayStyle = 'none';
+						break;
+					}
+				}
+				
+			}
+			
+			// Affichage on / off en fonction de displayStyle
+			table.rows[r].style.display = displayStyle;	
+		}
+		
+	}	
+	
+	
 	
 </script>
