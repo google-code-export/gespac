@@ -177,7 +177,7 @@ if ( $dossierid == -1 ) {
 		<div>
 
 			<span class='chk_span'><label for='add_inter'>Intervention Directe <label><input type='checkbox' name='add_inter'></span>
-			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing' checked></span>
+			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing' checked ></span>
 			<span class='chk_span' id='mat_hs_label' style='display:none;'><label for='mat_hs'>Changer l'état du matériel <label><input type='checkbox' name='mat_hs' id='mat_hs'></span>
 			<span class='chk_span'>
 				<select name="etat" id="CB_etats" style="display:none;">
@@ -190,6 +190,11 @@ if ( $dossierid == -1 ) {
 	
 		</div>
 		
+		<?PHP } else { // si pas de droits supplémentaires, on dessine l'active mailing mais on le cache ?>
+			
+		<div>
+			<span class='chk_span'><label for='active_mailing' style="display:none;">Activer le Mailing <label><input type='checkbox' name='active_mailing' checked style="display:none;"></span>
+		</div>
 		<?PHP } // End if ($droits_supp) ?>
 
 
