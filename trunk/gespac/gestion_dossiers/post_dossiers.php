@@ -86,11 +86,11 @@
 			
 			
 			//on récupère le mail et le nom du créateur de l'intervention (si le mailing est activé)
-			$req_mail_demandeur	= $con_gespac->QueryRow("SELECT user_mail, user_nom FROM users WHERE user_id=$current_user");
-			$mail_demandeur     = $req_mail_demandeur["user_mail"];
-			$nom_demandeur      = $req_mail_demandeur["user_nom"];
+			$req_mail_demandeur	= $con_gespac->QueryRow("SELECT user_mail, user_nom FROM users WHERE user_id=$current_user AND user_mailing=1");
+			$mail_demandeur     = $req_mail_demandeur[0];
+			$nom_demandeur      = $req_mail_demandeur[1];
 			
-			echo '<br>'.$nom_demandeur.'<br>'.$mail_demandeur;
+			echo '<br>'.$nom_demandeur.'<br>'.$mail_demandeur.'<br><br>';
 			
 			// CORPS DU MAIL
 			$corps_mail = "Le dossier <b>$dossier</b> a été créé. Vous pouvez le suivre en consultant la liste de vos dossiers sur votre interface GESPAC.<br><br>";
@@ -113,7 +113,7 @@
 				if (empty($mail_ati)) { //le champ $mail_ati est vide
 					$liste_mail_ati .= ''; //on ne concatène rien dans la variable $liste_mail_ati
 				} else { // si ce champ n'est pas vide
-					$liste_mail_ati .= $mail_root.','; //on colle à la variable la valeur de $mail_ati suivi d'une virgule
+					$liste_mail_ati .= $mail_ati.','; //on colle à la variable la valeur de $mail_ati suivi d'une virgule
 				}
 			}
 			
