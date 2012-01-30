@@ -89,6 +89,7 @@
 ===Gestionnaire de fichiers===
   * ajouter un fichier
   * supprimer un fichier
+  * modifier un fichier
 
 == 8. Infos==
 ===Fiche Collège===
