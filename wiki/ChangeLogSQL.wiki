@@ -3,10 +3,12 @@ Page récapitulative des changements dans la base SQL de gespac
 =Change Log SQL=
 
 *gespac 3.4*
-  * ajout de la table "dossiers_types"
-  * ajout table "droits"
+  * ajout table "fichiers"
+  * ajout table "droits" et données associées
   * ajout de la table "dossiers"
   * ajout de la table "dossiers_textes"
+  * ajout de la table "dossiers_types" et données associées
+
 
 
 *gespac 3.3.1*
