@@ -90,7 +90,8 @@
   * ajouter un fichier
   * supprimer un fichier
   * modifier un fichier
-
+===Migration des tags DSIT vers Fog===
+  * migration
 == 8. Infos==
 ===Fiche Collège===
   * modifier
