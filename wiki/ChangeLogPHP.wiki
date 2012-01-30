@@ -3,6 +3,19 @@ Page récapitulative des changements dans les fonctionnalités de l'application
 = Change Log PHP =
 
 *gespac 3.4*
+  * Nouveau système pour les dossiers.
+  * Gestionnaire de fichiers.
+  * Correction d'une faille d'injection SQL.
+  * L'import IACA fonctionne à nouveau.
+  * Réaffectation d'un matériel à une autre marque.
+  * Réparation du module "Récap Fog".
+  * Création d'un module de migration des noms d'hôtes Fog avec le num DSIT.
+
+  * correction de bugs divers et variés (clignotement de la page d'accueil, trim des données sur import CSV, cohérence des pages de démarrage ...)
+  * hauteur automatique du site en fonction de la résolution d'écran
+  * mise à jour de l'adresse mail du compte ATI avec l'adresse dans la fiche collège.
+  * Migration vers les classes SQL (pas fini, mais ça avance).
+
 
 *gespac 3.3.1*
   * possibilité de déverrouiller le champ "serial" dans la modification d'un matériel
