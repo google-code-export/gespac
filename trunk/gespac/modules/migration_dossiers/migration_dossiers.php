@@ -13,7 +13,7 @@
 	include_once ('../../../class/Sql.class.php');
 
 
-	// cnx Ã  gespac
+	// cnx à gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	// rq pour la liste des PC
@@ -30,62 +30,81 @@
 		$dem_user	= $demande ["user_demandeur_id"];
 		$mat_id		= $demande ["mat_id"];
 		$salle_id	= $demande ["salle_id"];
-
 		
-		 // je crÃ©Ã© le dossier pour cette demande
-		$con_gespac->Execute("INSERT INTO dossiers (dossier_type) VALUES ('$dem_type')");
-		// On devrait vÃ©rifier l'existence de ce type de dossier dans dossiers_types
+		// On regarde si cette demande existe déjà
+		$demande_traitee = $con_gespac->QueryOne ("SELECT dossier_id FROM dossiers_textes WHERE txt_etat='ouverture' AND txt_date='$dem_date';");
 		
-		//On rÃ©cupÃ¨re l'id du dossier qu'on vient de crÃ©er
-		$dossier_id = $con_gespac->GetLastID();
-		
-		// Ne pas oublier la premiÃ¨re page du dossier
-		$con_gespac->Execute("INSERT INTO dossiers_textes (dossier_id, txt_user, txt_date, txt_etat, txt_texte) VALUES ($dossier_id, $dem_user, '$dem_date', 'ouverture', '$dem_text')");
-		
-		
-		// Si le mat_id <> 0 c'est qu'on a qu'un seul matÃ©riel affectÃ© par 
-		if ( $mat_id <> 0 ) {
-			
-			// On met Ã  jour le dernier dossier crÃ©Ã© avec le bon mat_id
-			$maj_mat_id = "UPDATE dossiers SET dossier_mat='$mat_id' WHERE dossier_id=$dossier_id;";
-			$con_gespac->Execute ($maj_mat_id);
-			
+		if ( $demande_traitee ) {
+			echo "Cette demande a déjà été traitée. <br>";
 		}
 		else {
-		
-			// On sÃ©lectionne tous les pc de la demandes.salle_id
-			$liste_materiels_salle = $con_gespac->QueryAll("SELECT mat_id FROM materiels WHERE salle_id=$salle_id");
+			
+			// On blablatte un peu histoire de dire ce qu'on fait :
+			echo "<b>Traitement de la demande $dem_id</b><br>";
 
-			// On concatÃ¨ne tous les matÃ©riels de la salle dans une chaine
-			foreach ($liste_materiels_salle as $mat) {
-				$concat_mat .= ";" . $mat['mat_id'];
+			
+			 // je créé le dossier pour cette demande
+			$con_gespac->Execute("INSERT INTO dossiers (dossier_type) VALUES ('$dem_type')");
+			// On devrait vérifier l'existence de ce type de dossier dans dossiers_types
+			
+			//On récupère l'id du dossier qu'on vient de créer
+			$dossier_id = $con_gespac->GetLastID();
+			
+			// Ne pas oublier la première page du dossier
+			$con_gespac->Execute("INSERT INTO dossiers_textes (dossier_id, txt_user, txt_date, txt_etat, txt_texte) VALUES ($dossier_id, $dem_user, '$dem_date', 'ouverture', '$dem_text')");
+
+			// blabla
+			echo "<li>$dem_date : " . stripcslashes($dem_text);
+			
+			// Si le mat_id <> 0 c'est qu'on a qu'un seul matériel affecté par 
+			if ( $mat_id <> 0 ) {
+				
+				// On met à jour le dernier dossier créé avec le bon mat_id
+				$maj_mat_id = "UPDATE dossiers SET dossier_mat='$mat_id' WHERE dossier_id=$dossier_id;";
+				$con_gespac->Execute ($maj_mat_id);
+				
+			}
+			else {
+			
+				// On sélectionne tous les pc de la demandes.salle_id
+				$liste_materiels_salle = $con_gespac->QueryAll("SELECT mat_id FROM materiels WHERE salle_id=$salle_id");
+
+				// On concatène tous les matériels de la salle dans une chaine
+				foreach ($liste_materiels_salle as $mat) {
+					$concat_mat .= ";" . $mat['mat_id'];
+				}
+				
+				// On supprime le dernier ;
+				$concat_mat = preg_replace("[^;]", "", $concat_mat);
+				
+				// On met à jour le dernier dossier créé avec le bon mat_id
+				$maj_mat_id = "UPDATE dossiers SET dossier_mat='$concat_mat' WHERE dossier_id=$dossier_id;";
+				$con_gespac->Execute ($maj_mat_id);
+				
 			}
 			
-			// On supprime le dernier ;
-			$concat_mat = preg_replace("[^;]", "", $concat_mat);
 			
-			// On met Ã  jour le dernier dossier crÃ©Ã© avec le bon mat_id
-			$maj_mat_id = "UPDATE dossiers SET dossier_mat='$concat_mat' WHERE dossier_id=$dossier_id;";
-			$con_gespac->Execute ($maj_mat_id);
+			
+			// Pour chaque page supplémentaire de la demande, on insère une page au dossiers_textes
+			$liste_demandes_textes = $con_gespac->QueryAll ("SELECT * FROM demandes_textes WHERE dem_id=$dem_id");
+			
+			foreach ($liste_demandes_textes as $texte) {
+			
+				$txt_id 	= $texte['txt_id'];
+				$txt_date 	= $texte['txt_date']; 	
+				$txt_etat 	= $texte['txt_etat']; 	
+				$txt_texte 	= addslashes($texte['txt_texte']); 	
+				$user_id 	= $texte['user_id'];
+					
+				$con_gespac->Execute("INSERT INTO dossiers_textes (dossier_id, txt_user, txt_date, txt_etat, txt_texte) VALUES ($dossier_id, $user_id, '$txt_date', '$txt_etat', '$txt_texte')");
+				
+				// blabla
+				echo "<li>$txt_date : " . stripcslashes($txt_texte);
+			}
 			
 		}
-		
-		
-		
-		// Pour chaque page supplÃ©mentaire de la demande, on insÃ¨re une page au dossiers_textes
-		$liste_demandes_textes = $con_gespac->QueryAll ("SELECT * FROM demandes_textes WHERE dem_id=$dem_id");
-		
-		foreach ($liste_demandes_textes as $texte) {
-		
-			$txt_id 	= $texte['txt_id'];
-			$txt_date 	= $texte['txt_date']; 	
-			$txt_etat 	= $texte['txt_etat']; 	
-			$txt_texte 	= addslashes($texte['txt_texte']); 	
-			$user_id 	= $texte['user_id'];
-				
-			$con_gespac->Execute("INSERT INTO dossiers_textes (dossier_id, txt_user, txt_date, txt_etat, txt_texte) VALUES ($dossier_id, $user_id, '$txt_date', '$txt_etat', '$txt_texte')");
-				
-		}
+	
+		echo "<hr>";
 			
 	}
 
