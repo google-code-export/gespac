@@ -3,7 +3,7 @@
 	Permet la migration entre les anciens dossiers et les nouveaux
 
 -->
-	
+		
 
 <?PHP
 
@@ -11,6 +11,8 @@
 	require_once ('../../fonctions.php');
 	include_once ('../../config/databases.php');
 	include_once ('../../../class/Sql.class.php');
+	
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
 
 	// cnx à gespac
