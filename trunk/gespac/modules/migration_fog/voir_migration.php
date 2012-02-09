@@ -36,9 +36,11 @@
 	<form name="post_form" id="post_form" action="modules/migration_fog/post_migration.php" method="post">
 		<center>
 		<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
-		<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration'>	
-		<span id='nb_selectionnes'>[0] </span> sélectionné(s)
+		<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration'>	<br>
+		<span id='nb_selectionnes'>[0] </span> sélectionné(s)	<br>
+		<input type=checkbox name='import_nom' id='import_nom'><label for='import_nom' title="Met à jour le champ description dans fog avec le nom du matériel. Ca simplifie la recherche dans fog...">Nom dans la description</label>
 		</center>
+		
 	</form>
 	
 	
@@ -142,7 +144,7 @@
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
 					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('modules/migration_fog/voir_migration.php')", 15000);
+					window.setTimeout("$('conteneur').load('modules/migration_fog/voir_migration.php')", 1500);
 				}
 			
 			}).send(this.toQueryString());
