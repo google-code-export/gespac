@@ -92,6 +92,7 @@
   * modifier un fichier
 ===Migration des tags DSIT vers Fog===
   * migration
+  * maj description fog avec label
 == 8. Infos==
 ===Fiche Collège===
   * modifier
