@@ -146,6 +146,7 @@ include_once ('fonctions.php');
 					if (checkdroit("L-08-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/graph.php');change_icon_onclick('info');\">Stats camemberts</a></li>";
 					if (checkdroit("L-08-04") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/csschart.php');change_icon_onclick('info');\">Stats bâtons</a></li>";
 					if (checkdroit("L-08-05") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/utilisation_parc.php');change_icon_onclick('info');\">Stats utilisation du parc</a></li>";	
+					if (checkdroit("L-08-06") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/infoserveur/infoserveur.php');change_icon_onclick('info');\">Infos serveur</a></li>";
 					echo "</ul>
 				</li>";
 			}
