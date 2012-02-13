@@ -330,4 +330,5 @@ INSERT IGNORE INTO `droits` (`droit_id`, `droit_index`, `droit_titre`, `droit_pa
 (30, '08-03', 'Stats camemberts', 'modules/stats/camembert.php', 0, 'Voir les stats camembert.'),
 (31, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
 (32, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.');
+(33, '08-06', 'Info serveur', 'modules/infoserveur/infoserveur.php', 0, 'Voir les info du serveur.');
 
