@@ -138,7 +138,7 @@ include_once ('fonctions.php');
 			
 			
 			
-			if ( checkalldroits("L-08-01,L-08-02,L-08-03,L-08-04,L-08-05") ) {	
+			if ( checkalldroits("L-08-01,L-08-02,L-08-03,L-08-04,L-08-05,L-08-06") ) {	
 			echo "<li class='dir'><a href='#' onclick=\"AffichePage('conteneur', 'info.php');change_icon_onclick('info');\"><div id='info' class='info' title='info'></div></a>";
 				echo "<ul>";
 					if (checkdroit("L-08-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_college/voir_college.php'); change_icon_onclick('info');\">Fiche collège</a></li>";
