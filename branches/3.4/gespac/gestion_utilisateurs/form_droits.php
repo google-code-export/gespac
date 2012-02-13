@@ -145,7 +145,7 @@
 					
 					$droit_id = $ligne ['droit_id'];
 					$droit_index = $ligne ['droit_index'];
-					$droit_titre = $ligne ['droit_titre'];
+					$droit_titre = utf8_decode($ligne ['droit_titre']);
 					$droit_page = $ligne ['droit_page'];
 					$droit_etendue = $ligne ['droit_etendue'];
 					$droit_description = $ligne ['droit_description'];
