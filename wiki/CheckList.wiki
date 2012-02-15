@@ -96,6 +96,8 @@
 ===Migration des tags DSIT vers Fog===
   * migration
   * maj description fog avec label
+===Migration des dossiers===
+  * migration des vieux dossiers vers les nouveaux
 == 8. Infos==
 ===Fiche Collège===
   * modifier
