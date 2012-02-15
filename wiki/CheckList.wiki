@@ -39,7 +39,10 @@
   * export CSV dans la SLB
 
 == 3. Dossiers==
-
+  * créer un dossier
+  * filtrer les dossiers
+  * modifier les dossiers
+  * mailing
 == 4 .Données==
 ===importer base OCS===
 ===Eports===
