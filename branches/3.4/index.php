@@ -57,7 +57,7 @@
 	
 	require_once ('gespac/config/databases.php');
 	include ('gespac/config/pear.php');
-
+	include ('version');
 	
 	
 		// on vérifie la connectivité avec le serveur avant d'aller plus loin
@@ -80,7 +80,7 @@
 		// on vérifie si l'utilisateur est identifié
 		if (!isset( $_SESSION['login'])) {
 			// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié -> On redirige sur la page permettant de s'authentifier
-			echo '<img src="./gespac/img/gespac.png" height=48> version développement';
+			echo '<img src="./gespac/img/gespac.png" height=48> '.$version;
 			include 'login.php';
 			exit();	// on arrête l'exécution
 
