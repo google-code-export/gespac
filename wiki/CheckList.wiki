@@ -109,3 +109,4 @@
 ===Stats camemberts===
 ===Stats bâtons===
 ===Stats globales===
+===Infos serveur===
