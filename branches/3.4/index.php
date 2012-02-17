@@ -108,7 +108,7 @@
 			foreach ( $liste_des_icones as $record ) {
 			
 				$mp_id 		= $record[0];
-				$mp_nom 	= $record[1];
+				$mp_nom 	= utf8_decode($record[1]);
 				$mp_url 	= $record[2];
 				$mp_icone 	= $record[3];
 				
