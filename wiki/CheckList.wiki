@@ -21,6 +21,7 @@
   * export CSV de la SLB
   * fiche inventaire d'un matériel
   * flèche haut et bas de page
+  * changement de l'adresse MAC par la fiche matériel
 ===Marques===
   * ajout d'une marque
   * création d'une marque
