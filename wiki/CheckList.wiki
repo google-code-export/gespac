@@ -22,6 +22,7 @@
   * fiche inventaire d'un matériel
   * flèche haut et bas de page
   * changement de l'adresse MAC par la fiche matériel
+  * vérouiller / dévérouiller et modifier le champ serial lors de la modification d'un matériel
 ===Marques===
   * ajout d'une marque
   * création d'une marque
