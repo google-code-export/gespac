@@ -23,16 +23,17 @@
   * flèche haut et bas de page
   * changement de l'adresse MAC par la fiche matériel
   * vérouiller / dévérouiller et modifier le champ serial lors de la modification d'un matériel
+  * export du tableau de matériels (bouton CSV vert)
 ===Marques===
-  * ajout d'une marque
-  * création d'une marque
-  * modification d'une marque
+  * ajouter un modèle manuellement
+  * ajouter un modèle via la table des correspondances
+  * modification d'un modèle manuellement
+  * modification d'un modèle via la table des correspondances
   * suppression d'une marque
   * ajout d'un matériel par sa marque
   * filtre
   * SLB sur chaque champ cliquable
   * export CSV de la SLB
-  * export du tableau de matériels (bouton CSV vert)
 ===Salles===
   * ajout d'une salle
   * modification d'une salle
