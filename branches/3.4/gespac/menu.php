@@ -132,6 +132,7 @@ include_once ('fonctions.php');
 					if (checkdroit("L-07-07") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/gestion_fichiers/voir_fichiers.php');change_icon_onclick('plugins');\">Gestion des fichiers</a></li>";
 					if (checkdroit("L-07-08") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_fog/voir_migration.php');change_icon_onclick('plugins');\">Migration Fog</a></li>";
 					if (checkdroit("L-07-09") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_dossiers/migration_dossiers.php');change_icon_onclick('plugins');\">Migration Dossiers</a></li>";
+					if (checkdroit("L-07-10") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/generate_inv/voir_generate.php');change_icon_onclick('plugins');\">Générer inventaire</a></li>";
 					echo "</ul>
 				</li>";
 			}
