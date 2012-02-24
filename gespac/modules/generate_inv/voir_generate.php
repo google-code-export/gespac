@@ -45,7 +45,7 @@
 	<form name="post_form" id="post_form" action="modules/generate_inv/post_generate.php" method="post">
 		<center>
 		<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
-		<input type=submit name='post_selection' id='post_selection' value='générer'><br>
+		<input type=submit name='post_selection' id='post_selection' value='générer' style='display:none;'><br>
 		<span id='nb_selectionnes'> [0] </span> sélectionné(s)	<br>
 		</center>
 		
@@ -71,7 +71,7 @@
 	
 	
 	// rq pour la liste des PC
-	$liste_materiels_gespac = $con_gespac->QueryAll ("SELECT mat_id, mat_nom, mat_dsit, mat_serial, marque_type, marque_stype FROM materiels, marques WHERE materiels.marque_id=marques.marque_id AND (mat_dsit='' OR mat_dsit IS NULL) ;");
+	$liste_materiels_gespac = $con_gespac->QueryAll ("SELECT mat_id, mat_nom, mat_dsit, mat_serial, marque_type, marque_stype FROM materiels, marques WHERE materiels.marque_id=marques.marque_id AND (mat_dsit='' OR mat_dsit IS NULL);");
 			
 	/*************************************
 	*
@@ -161,7 +161,7 @@
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
 					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('modules/migration_fog/voir_migration.php')", 1500);
+					window.setTimeout("$('conteneur').load('modules/generate_inv/voir_generate.php')", 1500);
 				}
 			
 			}).send(this.toQueryString());
