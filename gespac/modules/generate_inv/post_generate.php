@@ -50,11 +50,10 @@
 			$con_gespac->Execute($maj_dsit);
 			
 			$log->Insert($maj_dsit);
-			
-			echo "Mise à jour des numéros d'inventaire effectuée.<br>";
-			
-			
+				
 		}
 	}
+	
+	echo "Mise à jour des numéros d'inventaire effectuée.<br>";
 
 ?>
