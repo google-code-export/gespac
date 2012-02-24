@@ -36,7 +36,7 @@
 	<form name="post_form" id="post_form" action="modules/migration_fog/post_migration.php" method="post">
 		<center>
 		<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
-		<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration'>	<br>
+		<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration' style='display:none;'>	<br>
 		<span id='nb_selectionnes'>[0] </span> sélectionné(s)	<br>
 		<input type=checkbox name='import_nom' id='import_nom'><label for='import_nom' title="Met à jour le champ description dans fog avec le nom du matériel. Ca simplifie la recherche dans fog...">Nom dans la description</label>
 		</center>

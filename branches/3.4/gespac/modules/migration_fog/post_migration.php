@@ -3,6 +3,7 @@
 	// lib
 	require_once ('../../fonctions.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Log.class.php');
 	include_once ('../../../class/Sql.class.php');
 
 	$maj_desc 	= $_POST ['import_nom'];
@@ -11,6 +12,9 @@
 
 	// cnx à la db gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	
+	// Log des requêtes SQL
+	$log = new Log ("../../dump/log_sql.sql");
 	
 	$liste = "";
 
@@ -36,10 +40,14 @@
 		$hostID = $con_fog->QueryOne ("SELECT iHostID FROM inventory WHERE iSysserial='$gespac_serial'");
 		
 		if ( $maj_desc ) {
-			$con_fog->Execute("UPDATE hosts SET hostName = '$gespac_dsit', hostDesc = '$gespac_nom' WHERE hostID=$hostID");
+			$sql = "UPDATE hosts SET hostName = '$gespac_dsit', hostDesc = '$gespac_nom' WHERE hostID=$hostID";
+			$con_fog->Execute($sql);
+			$log->Insert($sql);
 		}
 		else {
-			$con_fog->Execute("UPDATE hosts SET hostName = '$gespac_dsit' WHERE hostID=$hostID");
+			$sql = "UPDATE hosts SET hostName = '$gespac_dsit' WHERE hostID=$hostID";
+			$con_fog->Execute($sql);
+			$log->Insert($sql);
 		}
 
 	}
