@@ -114,9 +114,12 @@
 				
 				$affiche_item = ($_SESSION['grade'] == 'root') ? true : preg_match ("#item$mp_id#", $_SESSION['menu_portail']);
 				
-				if ( $affiche_item )
-					echo "<div class=portail-menu-item><a href='$mp_url' target=_blank> <img src='./gespac/img/$mp_icone' height=48><br>$mp_nom</a> </div>";
-
+				if ( $affiche_item ) {
+					if ( file_exists("./gespac/img/$mp_icone") ) $icon_path = "./gespac/img/$mp_icone";
+					else $icon_path = "./gespac/img/application.png";
+					
+					echo "<div class=portail-menu-item><a href='$mp_url' target=_blank> <img src='$icon_path' height=48><br>$mp_nom</a> </div>";
+				}
 			}	
 			
 			echo "<div style='float:right;' class=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
