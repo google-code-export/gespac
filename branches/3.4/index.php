@@ -122,10 +122,10 @@
 				if ($mp_nom == 'dell') {$mp_url = 'https://'.$adresse.':1311';} elseif ($mp_nom == 'webmin') {$mp_url = 'https://'.$adresse.':10000';}
 				//On reprend l'affichage du menu
 
-				if ( $affiche_item )
-					echo "<div class=portail-menu-item><a href='$mp_url' target=_blank> <img src='./gespac/img/$mp_icone' height=48><br>$mp_nom</a> </div>";
+//en double		//if ( $affiche_item )
+					//echo "<div class=portail-menu-item><a href='$mp_url' target=_blank> <img src='./gespac/img/$mp_icone' height=48><br>$mp_nom</a> </div>";
 
-
+//fin du en double
 				if ( $affiche_item ) {
 					if ( file_exists("./gespac/img/$mp_icone") ) $icon_path = "./gespac/img/$mp_icone";
 					else $icon_path = "./gespac/img/application.png";
