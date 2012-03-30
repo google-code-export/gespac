@@ -40,8 +40,21 @@
 			if ( $type == "TBI") $id_type = "V";
 			if ( $type == "ECRAN") $id_type = "E";
 			
-			// bourrage de zero de l'index sur 3 digits
-			$num_unique = sprintf("%1$03d", $mat_id);
+		
+			// On limite le id à 3 digits
+			if ( $mat_id > 999 ) {
+				// On change le mat_id avec le premier id libre dans la table materiels.
+				$free_mat_id = $con_gespac->QueryOne("SELECT mat_id+1 FROM materiels WHERE (mat_id + 1) NOT IN (SELECT mat_id FROM materiels) ORDER BY mat_id LIMIT 1;");
+				$tr_color = " style=background-color:yellow;";
+			
+				// bourrage de zero de l'index sur 3 digits
+				$num_unique = sprintf("%1$03d", $free_mat_id);
+			}
+			else {
+				// bourrage de zero de l'index sur 3 digits
+				$num_unique = sprintf("%1$03d", $mat_id);
+			}
+		
 			
 			$numinventaire = $inventaire . $id_type . $num_unique;
 		
