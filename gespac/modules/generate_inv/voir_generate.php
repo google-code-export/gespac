@@ -35,7 +35,7 @@
 
 
 	echo "<h3>CREATION DES NUMEROS d'INVENTAIRE</h3>";
-	echo "<br><small><i>On génère un numéro d'inventaire codifié pour chaque matériel sans numéro DSIT.</small></i>";
+	echo "<br><small><i>On génère un numéro d'inventaire codifié pour chaque matériel sans numéro DSIT.<br> En jaune, les lignes avec un id qui dépasse 999.<br> En rouge, les matériels avec une origine DOTATION supérieure à 2010.</small></i>";
 	echo "<br><br>";
 	
 	
@@ -71,7 +71,7 @@
 	
 	
 	// rq pour la liste des PC
-	$liste_materiels_gespac = $con_gespac->QueryAll ("SELECT mat_id, mat_nom, mat_dsit, mat_serial, marque_type, marque_stype FROM materiels, marques WHERE materiels.marque_id=marques.marque_id AND (mat_dsit='' OR mat_dsit IS NULL);");
+	$liste_materiels_gespac = $con_gespac->QueryAll ("SELECT mat_id, mat_nom, mat_dsit, mat_serial, marque_type, marque_stype, marque_marque, marque_model, mat_origine FROM materiels, marques WHERE materiels.marque_id=marques.marque_id AND (mat_dsit='' OR mat_dsit IS NULL);");
 			
 	/*************************************
 	*
@@ -88,8 +88,11 @@
 		<th>id</th>
 		<th>Nom</th>
 		<th>Serial</th>
-		<th>Type</th>
-		<th>Stype</th>
+		<th>Famille</th>
+		<th>SFamille</th>
+		<th>Marque</th>
+		<th>Modèle</th>
+		<th>Origine</th>
 		<th>Inventaire</th>
 	";
 
@@ -101,6 +104,9 @@
 		$serial	= $record['mat_serial'];
 		$type	= $record['marque_type'];
 		$stype	= $record['marque_stype'];
+		$marque	= $record['marque_marque'];
+		$modele	= $record['marque_model'];
+		$origine= $record['mat_origine'];
 		
 		// J'initialise le type à X. comme xorro ;p
 		$id_type = "X";
@@ -111,8 +117,31 @@
 		if ( $type == "TBI") $id_type = "V";
 		if ( $type == "ECRAN") $id_type = "E";
 		
-		// bourrage de zero de l'index sur 3 digits
-		$num_unique = sprintf("%1$03d", $mat_id);
+		// On limite le id à 3 digits
+		if ( $mat_id > 999 ) {
+			// On change le mat_id avec le premier id libre dans la table materiels.
+			$free_mat_id = $con_gespac->QueryOne("SELECT mat_id+1 FROM materiels WHERE (mat_id + 1) NOT IN (SELECT mat_id FROM materiels) ORDER BY mat_id LIMIT 1;");
+			$tr_color = " style=background-color:yellow;";
+		
+			// bourrage de zero de l'index sur 3 digits
+			$num_unique = sprintf("%1$03d", $free_mat_id);
+		}
+		else {
+			
+			$tr_color = " style=background-color:;";
+			
+			// bourrage de zero de l'index sur 3 digits
+			$num_unique = sprintf("%1$03d", $mat_id);
+		}
+		
+		
+		$origine_annee = intval(substr($origine, -4));
+		$origine_type = substr($origine, 0, 3);
+		
+		if ($origine <> "INCONNU" && $origine_type=="DOT" && $origine_annee>2010)	
+			$tr_color = " style=background-color:red;";
+		else 
+			$tr_color = " style=background-color:none;";
 		
 		
 		$numinventaire = $inventaire . $id_type . $num_unique;
@@ -121,7 +150,7 @@
 		// alternance des couleurs
 		$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 		
-		echo "<tr id=tr_id$mat_id  class=$tr_class>";
+		echo "<tr id=tr_id$mat_id class=$tr_class $tr_color>";
 		
 			echo "<td><input class=chkbx type=checkbox name=chk indexed=true value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $compteur); \"></td>";
 			echo "<td>$mat_id</td>";
@@ -129,6 +158,9 @@
 			echo "<td>$serial</td>";
 			echo "<td>$type</td>";
 			echo "<td>$stype</td>";
+			echo "<td>$marque</td>";
+			echo "<td>$modele</td>";
+			echo "<td>$origine</td>";
 			echo "<td>$numinventaire</td>";
 
 		
