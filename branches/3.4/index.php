@@ -53,12 +53,12 @@
 	
 	<?php
 
-	//installation de la base GESPAC
-	
-	require_once ('gespac/config/databases.php');
-	include ('gespac/config/pear.php');
-	include ('version');
-	
+		//installation de la base GESPAC
+		
+		require_once ('gespac/config/databases.php');
+		include ('gespac/config/pear.php');
+		include ('version');
+		
 	
 		// on vérifie la connectivité avec le serveur avant d'aller plus loin
 		if(!mysql_connect($host, $user, $pass)) {
