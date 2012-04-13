@@ -2,7 +2,7 @@
 	
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
 
-	// Connexion à la base de données GESPAC
+	// Connexion Ã  la base de donnÃ©es GESPAC
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 	$matid 	= $_GET['matid'];
@@ -31,55 +31,55 @@
 </center>
 
 
-Entre les soussignés, 
+Entre les soussignÃ©s, 
 
 
-- Le Collège <b><?PHP echo $clg_nom;?> </b>, représenté par son chef d'établissement, 
-- MME, MELLE, MR <b><?PHP echo $user_nom;?></b><br>
-Affecté(e) au collège en qualité de ............................. matière .............................
+- Le CollÃ¨ge <b><?PHP echo $clg_nom;?> </b>, reprÃ©sentÃ© par son chef d'Ã©tablissement, 
+- MME, MR <b><?PHP echo $user_nom;?></b><br>
+AffectÃ©(e) au collÃ¨ge en qualitÃ© de ............................. matiÃ¨re .............................
 
-Il a été convenu et arrêté ce qui suit :
+Il a Ã©tÃ© convenu et arrÃªtÃ© ce qui suit :
 
 <u>Article 1er :</u> Objet
 
-Le Collège prête à l'utilisateur qui l'accepte, pour l'année scolaire 20__-20__ et pour toute la durée de son
-affectation dans l'établissement un ordinateur portable et accessoires correspondants, référencé sous le numéro
+Le CollÃ¨ge prÃªte Ã  l'utilisateur qui l'accepte, pour l'annÃ©e scolaire 20__-20__ et pour toute la durÃ©e de son
+affectation dans l'Ã©tablissement un ordinateur portable et accessoires correspondants, rÃ©fÃ©rencÃ© sous le numÃ©ro
 d'inventaire suivant: 
 
 
 				<h3><b><center><?PHP echo $mat_dsit. "(" . $mat_serial . ")";?></center></b></h3>
 
-<u>Article 2 :</u> Propriété des biens
+<u>Article 2 :</u> PropriÃ©tÃ© des biens
 
-Conformément aux dispositions de l'article L-421-17 du Code de l'Education, ce matériel est la propriété du
-collège qui assure la mise en œuvre de la garantie contractuelle. 
-
-
-<u>Article 3 :</u> Utilisation du matériel 
+ConformÃ©ment aux dispositions de l'article L-421-17 du Code de l'Education, ce matÃ©riel est la propriÃ©tÃ© du
+collÃ¨ge qui assure la mise en Âœuvre de la garantie contractuelle. 
 
 
-Le matériel mis à la disposition de l'utilisateur est uniquement destiné à un usage pédagogique et éducatif dans
-le cadre des enseignements organisés par le Collège.
-Le Collège ne pourra donc être tenu pour responsable, à quelque titre que ce soit, pour toute utilisation autre,
-quelle qu'elle soit, qui pourrait être faite par l'utilisateur, et pour tous les dommages qui pourraient en
-résulter (atteinte aux droits de tiers, infractions diverses par exemple).
-En tout état de cause, l'utilisateur reste responsable de l'usage fait du matériel à titre privé.
+<u>Article 3 :</u> Utilisation du matÃ©riel 
+
+
+Le matÃ©riel mis Ã  la disposition de l'utilisateur est uniquement destinÃ© Ã  un usage pÃ©dagogique et Ã©ducatif dans
+le cadre des enseignements organisÃ©s par le CollÃ¨ge.
+Le CollÃ¨ge ne pourra donc Ãªtre tenu pour responsable, Ã  quelque titre que ce soit, pour toute utilisation autre,
+quelle qu'elle soit, qui pourrait Ãªtre faite par l'utilisateur, et pour tous les dommages qui pourraient en
+rÃ©sulter (atteinte aux droits de tiers, infractions diverses par exemple).
+En tout Ã©tat de cause, l'utilisateur reste responsable de l'usage fait du matÃ©riel Ã  titre privÃ©.
 
 <u>Article 4 :</u> Obligations de l'utilisateur 
-L'utilisateur est tenu d'avertir le collège en cas de vol ou perte du matériel et de produire une déclaration de
-police dans le cas où le vol ou la perte aurait lieu hors du collège.
-De même, en cas de panne, de dysfonctionnement ou de dommage causé au matériel, l'utilisateur doit ramener le
-matériel au collège afin de permettre la mise en œuvre éventuelle de la garantie contractuelle.
-Dans l'hypothèse où l'utilisateur quitterait définitivement le collège, le matériel devrait être restitué.
+L'utilisateur est tenu d'avertir le collÃ¨ge en cas de vol ou perte du matÃ©riel et de produire une dÃ©claration de
+police dans le cas oÃ¹ le vol ou la perte aurait lieu hors du collÃ¨ge.
+De mÃªme, en cas de panne, de dysfonctionnement ou de dommage causÃ© au matÃ©riel, l'utilisateur doit ramener le
+matÃ©riel au collÃ¨ge afin de permettre la mise en Âœuvre Ã©ventuelle de la garantie contractuelle.
+Dans l'hypothÃ¨se oÃ¹ l'utilisateur quitterait dÃ©finitivement le collÃ¨ge, le matÃ©riel devrait Ãªtre restituÃ©.
 
-Dans le cas d'une multi affectation dans plusieurs collèges du département des Bouches du Rhône, l'utilisateur
-déclare ne pas bénéficier d'un matériel similaire prêté dans un autre collège.
-Les utilisateurs quittant définitivement le Collège devront au préalable sauvegarder leur données personnelles.
+Dans le cas d'une multi affectation dans plusieurs collÃ¨ges du dÃ©partement des Bouches du RhÃ´ne, l'utilisateur
+dÃ©clare ne pas bÃ©nÃ©ficier d'un matÃ©riel similaire prÃªtÃ© dans un autre collÃ¨ge.
+Les utilisateurs quittant dÃ©finitivement le CollÃ¨ge devront au prÃ©alable sauvegarder leur donnÃ©es personnelles.
 
-La présente convention prend effet dès sa signature par les parties concernées. 
+La prÃ©sente convention prend effet dÃ¨s sa signature par les parties concernÃ©es. 
 
 
-Fait à <?PHP echo $clg_ville;?>, le <?PHP echo date(d."/".m."/".y);?>
+Fait Ã  <?PHP echo $clg_ville;?>, le <?PHP echo date(d."/".m."/".y);?>
 
 LE CHEF D'ETABLISSEMENT 							L'UTILISATEUR
 </pre>
