@@ -37,7 +37,7 @@
 
 	//Suppression de tous les logs dans la db
 		
-	$req_suppr_logs = "DELETE FROM logs;";
+	$req_suppr_logs = "DELETE FROM logs";
 	$result = $db_gespac->exec ( $req_suppr_logs );
 	
 	echo "Suppression des logs ...";

@@ -3,6 +3,7 @@
 	// lib
 	require_once ('../../fonctions.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Log.class.php');
 	include_once ('../../../class/Sql.class.php');
 
 	$maj_desc 	= $_POST ['import_nom'];
@@ -11,6 +12,9 @@
 
 	// cnx à la db gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	
+	// Log des requêtes SQL
+	$log = new Log ("../../dump/log_sql.sql");
 	
 	$liste = "";
 
@@ -32,14 +36,23 @@
 		$gespac_dsit = $pc['mat_dsit'];
 		$gespac_nom = $pc['mat_nom'];
 		
-		// On récupère le hostID grace au serial
-		$hostID = $con_fog->QueryOne ("SELECT iHostID FROM inventory WHERE iSysserial='$gespac_serial'");
+		// On récupère les hostIDs grace au serial
+		$hostIDs = $con_fog->QueryAll ("SELECT iHostID FROM inventory WHERE iSysserial='$gespac_serial'");
 		
-		if ( $maj_desc ) {
-			$con_fog->Execute("UPDATE hosts SET hostName = '$gespac_dsit', hostDesc = '$gespac_nom' WHERE hostID=$hostID");
-		}
-		else {
-			$con_fog->Execute("UPDATE hosts SET hostName = '$gespac_dsit' WHERE hostID=$hostID");
+		foreach ( $hostIDs as $hostID ) {
+		
+			$id = $hostID["iHostID"];	
+				
+			if ( $maj_desc ) {
+				$sql = "UPDATE hosts SET hostName = '$gespac_dsit', hostDesc = '$gespac_nom' WHERE hostID=$id";
+				$con_fog->Execute($sql);
+				$log->Insert($sql);
+			}
+			else {
+				$sql = "UPDATE hosts SET hostName = '$gespac_dsit' WHERE hostID=$id";
+				$con_fog->Execute($sql);
+				$log->Insert($sql);
+			}
 		}
 
 	}

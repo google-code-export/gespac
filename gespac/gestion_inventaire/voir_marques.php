@@ -37,14 +37,11 @@
 
 <?PHP 
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
-
+	$con_gespac 	= new Sql ($host, $user, $pass, $gespac);
+	
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_marques = $db_gespac->queryAll ( "SELECT marque_id, marque_type, marque_stype, marque_model, marque_marque FROM marques WHERE marque_suppr = 0 ORDER BY marque_type, marque_stype, marque_marque, marque_model" );
+	$liste_des_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_model, marque_marque FROM marques WHERE marque_suppr = 0 ORDER BY marque_type, marque_stype, marque_marque, marque_model" );
 
 	
 	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
@@ -72,20 +69,24 @@
 		
 		
 		
-
+			$compteur = 0;
 			//$option_id = 0;
 			
 			// On parcourt le tableau
 			foreach ($liste_des_marques as $record ) {
 				// On écrit les lignes en brut dans la page html
 				
-				echo "<tr>";
+				// alternance des couleurs
+				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
+				
+				//echo "<tr>";
+				echo "<tr id=tr_id$id class=$tr_class>";
 						
-					$id		 	= $record[0];
-					$type 		= $record[1];
-					$soustype 	= $record[2];
-					$model 		= $record[3];
-					$marque 	= $record[4];
+					$id		 	= $record['marque_id'];
+					$type 		= $record['marque_type'];
+					$soustype 	= $record['marque_stype'];
+					$model 		= $record['marque_model'];
+					$marque 	= $record['marque_marque'];
 					
 					// valeur nominale pour la checkbox
 					$chkbox_state = $apreter == 1 ? "checked" : "unchecked";
@@ -93,13 +94,13 @@
 					// On récupère la valeur inverse pour la poster
 					$change_apreter = $apreter == 1 ? 0 : 1;
 										
-					$nb_matos_de_ce_type 		= $db_gespac->queryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_type = '$type'" );
-					$nb_matos_de_ce_soustype 	= $db_gespac->queryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_stype = '$soustype'" );
-					$nb_matos_de_cette_marque 	= $db_gespac->queryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_marque = '$marque'" );
-					$nb_matos_de_ce_modele 		= $db_gespac->queryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_model = '$model'" );
+					$nb_matos_de_ce_type 		= $con_gespac->QueryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_type = '$type'" );
+					$nb_matos_de_ce_soustype 	= $con_gespac->QueryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_stype = '$soustype'" );
+					$nb_matos_de_cette_marque 	= $con_gespac->QueryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_marque = '$marque'" );
+					$nb_matos_de_ce_modele 		= $con_gespac->QueryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_model = '$model'" );
 					
 					// On teste si le quadruplet famille/sfamille/marque/modele existe dans la table des correspondances. Si c'est le cas, on interdit la modification.
-					$quadruplet	= $db_gespac->queryOne ( "SELECT corr_id FROM correspondances WHERE corr_type = '$type' AND corr_stype='$soustype' AND corr_marque='$marque' AND corr_modele='$model' " );
+					$quadruplet	= $con_gespac->QueryOne ( "SELECT corr_id FROM correspondances WHERE corr_type = '$type' AND corr_stype='$soustype' AND corr_marque='$marque' AND corr_modele='$model' " );
 					$afficher_modifier = $quadruplet <> "" ? "none" : "" ;
 									
 					
@@ -117,7 +118,7 @@
 				echo "</tr>";
 				
 				//$option_id++;
-				
+				$compteur++;
 			}
 		?>		
 
@@ -131,7 +132,7 @@
 	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
 
 // On se déconnecte de la db
-$db_gespac->disconnect();
+//$con_gespac->disconnect();
 
 
 ?>
@@ -148,7 +149,7 @@ $db_gespac->disconnect();
 	$('conteneur').style.backgroundColor = "#fff";
 	
 	// On applique l'alternance des couleurs
-	alterner_couleurs();
+	//alterner_couleurs();
 	
 	// Filtre rémanent
 	filter ( $('filt'), 'marque_table' );	

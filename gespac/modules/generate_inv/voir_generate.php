@@ -1,9 +1,18 @@
 <?PHP session_start(); ?>
 
 <!--
-	Visualisation des PC à migrer dans FOG
-	On sélectionne les PC dans la liste et on met
-	à jour dans le post les noms des machines dans FOG.
+	Visualisation des matériels SANS numéro d'inventaire
+	On génère un numéro DSIT UNIQUE avec une codification lourdingue :
+	C pour collège
+	4 derniers chiffres de l'uai
+	1 carac pour le type :
+	 * C pour les pc fixes
+	 * I pour imprimante
+	 * P pour portables
+	 * V pour les tableaux numériques
+	 * E pour écran
+	3 chiffres aléatoires de 000 à 999. En fait on va utiliser l'index du matériel pour s'assurer de son unicité et on bourrera avec des 0.
+	
 
 -->
 
@@ -21,24 +30,23 @@
 
 	
 	// gestion des droits particuliers (Migrer les pc)
-	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-08#", $_SESSION['droits']);
+	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-10#", $_SESSION['droits']);
 	
 
 
-	echo "<h3>MIGRATION des TAGS DSIT vers FOG</h3>";
-	echo "<br><small><i>On affiche uniquement les PC qui ont une correspondance dans FOG sur le serial, qui ont un numéro d'inventaire et dont le nom FOG est différent du numéro d'inventaire...</small></i>";
+	echo "<h3>CREATION DES NUMEROS d'INVENTAIRE</h3>";
+	echo "<br><small><i>On génère un numéro d'inventaire codifié pour chaque matériel sans numéro DSIT.<br> En jaune, les lignes avec un id qui dépasse 999.<br> En rouge, les matériels avec une origine DOTATION supérieure à 2010.</small></i>";
 	echo "<br><br>";
 	
 	
 	?>
 
 	<!-- Partie post de la sélection -->
-	<form name="post_form" id="post_form" action="modules/migration_fog/post_migration.php" method="post">
+	<form name="post_form" id="post_form" action="modules/generate_inv/post_generate.php" method="post">
 		<center>
 		<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
-		<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration' style='display:none;'>	<br>
-		<span id='nb_selectionnes'>[0] </span> sélectionné(s)	<br>
-		<input type=checkbox name='import_nom' id='import_nom'><label for='import_nom' title="Met à jour le champ description dans fog avec le nom du matériel. Ca simplifie la recherche dans fog...">Nom dans la description</label>
+		<input type=submit name='post_selection' id='post_selection' value='générer' style='display:none;'><br>
+		<span id='nb_selectionnes'> [0] </span> sélectionné(s)	<br>
 		</center>
 		
 	</form>
@@ -46,7 +54,7 @@
 	
 	<!-- 	bouton pour le filtrage du tableau	-->
 	<form>
-		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'migration_table', '0')" type="text"></center>
+		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'generate_table', '0')" type="text"></center>
 	</form>
 	
 
@@ -56,68 +64,109 @@
 	// cnx à gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
+	$uai = $con_gespac->QueryOne("SELECT clg_uai FROM college;");
+	
+	// On commence à générer le numéro d'inventaire
+	$inventaire = "C" . substr($uai, 3, 4);
+	
+	
 	// rq pour la liste des PC
-	$liste_materiels_gespac = $con_gespac->QueryAll ("SELECT mat_id, mat_nom, mat_dsit, mat_serial, marque_type FROM materiels, marques WHERE materiels.marque_id=marques.marque_id AND marques.marque_type='PC';");
-	
-	// cnx à fog
-	$con_fog = new Sql($host, $user, $pass, $fog);
-	
-		
+	$liste_materiels_gespac = $con_gespac->QueryAll ("SELECT mat_id, mat_nom, mat_dsit, mat_serial, marque_type, marque_stype, marque_marque, marque_model, mat_origine FROM materiels, marques WHERE materiels.marque_id=marques.marque_id AND (mat_dsit='' OR mat_dsit IS NULL);");
+			
 	/*************************************
 	*
 	*		LISTE DE SELECTION
 	*
 	**************************************/
 
-	echo "<table id='migration_table' width=100%>";
+	echo "<table id='generate_table' width=100%>";
 	
 	$compteur = 0;
 	
 	echo "
-		<th> <input type=checkbox id=checkall onclick=\"checkall('migration_table');\" > </th>
-		<th>Nom gespac</th>
+		<th> <input type=checkbox id=checkall onclick=\"checkall('generate_table');\" > </th>
+		<th>id</th>
+		<th>Nom</th>
+		<th>Serial</th>
+		<th>Famille</th>
+		<th>SFamille</th>
+		<th>Marque</th>
+		<th>Modèle</th>
+		<th>Origine</th>
 		<th>Inventaire</th>
-		<th>Serial Gespac</th>
-		<th>Serial Fog</th>
-		<th>Nom Fog</th>
 	";
 
 	foreach ($liste_materiels_gespac as $record) {
 		
-		$gespac_mat_id	= $record['mat_id'];
-		$gespac_nom 	= $record['mat_nom'];
-		$gespac_dsit 	= $record['mat_dsit'];
-		$gespac_serial	= $record['mat_serial'];
+		$mat_id	= $record['mat_id'];
+		$nom 	= $record['mat_nom'];
+		$dsit 	= $record['mat_dsit'];
+		$serial	= $record['mat_serial'];
+		$type	= $record['marque_type'];
+		$stype	= $record['marque_stype'];
+		$marque	= $record['marque_marque'];
+		$modele	= $record['marque_model'];
+		$origine= $record['mat_origine'];
 		
-		$liste_materiels_fog = $con_fog->QueryRow ("SELECT hostName, iSysserial FROM hosts, inventory WHERE hosts.hostID=inventory.ihostID AND iSysserial='$gespac_serial'");
-		$fog_nom 	= $liste_materiels_fog[0];
-		$fog_serial = $liste_materiels_fog[1];
+		// J'initialise le type à X. comme xorro ;p
+		$id_type = "X";
+		
+		if ( $type == "PC" && $stype == "DESKTOP") $id_type = "C";
+		if ( $type == "PC" && $stype == "PORTABLE") $id_type = "P";
+		if ( $type == "IMPRIMANTE") $id_type = "I";
+		if ( $type == "TBI") $id_type = "V";
+		if ( $type == "ECRAN") $id_type = "E";
+		
+		// On limite le id à 3 digits
+		if ( $mat_id > 999 ) {
+			// On change le mat_id avec le premier id libre dans la table materiels.
+			$free_mat_id = $con_gespac->QueryOne("SELECT mat_id+1 FROM materiels WHERE (mat_id + 1) NOT IN (SELECT mat_id FROM materiels) ORDER BY mat_id LIMIT 1;");
+			$tr_color = " style=background-color:yellow;";
+		
+			// bourrage de zero de l'index sur 3 digits
+			$num_unique = sprintf("%1$03d", $free_mat_id);
+		}
+		else {
+			
+			$tr_color = " style=background-color:;";
+			
+			// bourrage de zero de l'index sur 3 digits
+			$num_unique = sprintf("%1$03d", $mat_id);
+		}
+		
+		
+		$origine_annee = intval(substr($origine, -4));
+		$origine_type = substr($origine, 0, 3);
+		
+		if ($origine <> "INCONNU" && $origine_type=="DOT" && $origine_annee>2010)	
+			$tr_color = " style=background-color:red;";
+		else 
+			$tr_color = " style=background-color:none;";
+		
+		
+		$numinventaire = $inventaire . $id_type . $num_unique;
+
 				
 		// alternance des couleurs
 		$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 		
-		// On affiche la case à cocher seulement si on a un numéro d'inventaire et si on a une correspondance avec fog par le ssn
-
-		if ( $gespac_dsit == "" || $fog_nom == $gespac_dsit || $fog_serial == "") 
-			$affiche = false; 
-		else $affiche=true;	// Si la migration a déjà été faite (même num dsit et nom dans fog)
+		echo "<tr id=tr_id$mat_id class=$tr_class $tr_color>";
 		
-		if ( $affiche ) {
-			echo "<tr id=tr_id$gespac_mat_id  class=$tr_class>";
-				
-				echo "<td> <input class=chkbx type=checkbox name=chk indexed=true value='$gespac_mat_id' onclick=\"select_cette_ligne('$gespac_mat_id', $compteur); \"> </td>";
-				
-				echo "<td>$gespac_nom</td>
-				<td>$gespac_dsit</td>
-				<td>$gespac_serial</td>
+			echo "<td><input class=chkbx type=checkbox name=chk indexed=true value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $compteur); \"></td>";
+			echo "<td>$mat_id</td>";
+			echo "<td>$nom</td>";
+			echo "<td>$serial</td>";
+			echo "<td>$type</td>";
+			echo "<td>$stype</td>";
+			echo "<td>$marque</td>";
+			echo "<td>$modele</td>";
+			echo "<td>$origine</td>";
+			echo "<td>$numinventaire</td>";
 
-				<td>$fog_serial</td>
-				<td>$fog_nom</td>
-			</tr>";
-
-			$compteur++;
-
-		}
+		
+		echo "</tr>";
+	
+		$compteur++;
 		
 	}
 	
@@ -144,7 +193,7 @@
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
 					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('modules/migration_fog/voir_migration.php')", 1500);
+					window.setTimeout("$('conteneur').load('modules/generate_inv/voir_generate.php')", 1500);
 				}
 			
 			}).send(this.toQueryString());
