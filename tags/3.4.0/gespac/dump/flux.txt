@@ -1,0 +1,2 @@
+"issues";"http://code.google.com/feeds/p/gespac/issueupdates/basic"
+"gespac wiki";"http://gespac.free.fr/index.php?title=wiki_de_la_communaut%C3%A9_GESPAC:Actualit%C3%A9s&feed=rss"
