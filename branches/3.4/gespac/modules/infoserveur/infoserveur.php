@@ -32,6 +32,7 @@
 		}
 ?>
 <b>Information sur le serveur</b><br>
+		<center><img src="./img/serpac.png" WIDTH=90 HEIGHT=90></center><br>
 		<table align="center">
 			<tr><th align="center" colspan="2">Paquets GESPAC</th></tr>
 			<tr><td align="left">GESPAC</td><td align="right"><?php echo $version_gespac;?></td></tr>
@@ -49,4 +50,7 @@
 			<tr><td align="left">Version FOG</td><td align="right"><?php echo $version_fog;?></td></tr>
 			
 		</table>
-
+		
+<center>
+<object type="text/html" data="http://<?php echo $_SERVER['SERVER_ADDR'];?>/viewrx/"  width="100%" height="100%" style="overflow:auto; border: none;">
+</center>

@@ -3,20 +3,20 @@
 	
 	
 	/****************************************************************
-	*	Changer le nom du skin avec le nom du fichier CSS à utiliser
+	*	Changer le nom du skin avec le nom du fichier CSS Ã  utiliser
 	****************************************************************/
 	
 	$skin_name = $_SESSION['skin'];
 	
 	
-	// on vérifie si l'utilisateur est identifié
+	// on vÃ©rifie si l'utilisateur est identifiÃ©
 	if (!isset( $_SESSION['login'])) {
 
-		// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié
+		// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifiÃ©
 		// On redirige sur la page permettant de s'authentifier
 		header("Location: ../index.php");
 			
-		// on arrête l'exécution
+		// on arrÃªte l'exÃ©cution
 		exit();
 		
 	} else {
@@ -44,7 +44,7 @@
 		<script type="text/javascript" src="js/main.js"></script>
 
 
-		<title>GESPAC -> GEStion du PArc des Collèges</title>
+		<title>GESPAC -> GEStion du PArc des CollÃ¨ges</title>
 	
 	</head>
 
@@ -52,33 +52,33 @@
 	<BODY onload="resizeContent();" onResize="resizeContent();">
 
 		<?PHP	// Includes
-			include_once ('config/databases.php');	// fichiers de configuration des bases de données
-			include_once ('fonctions.php');			// fichier contenant les fonctions utilisées dans le reste des scripts
+			include_once ('config/databases.php');	// fichiers de configuration des bases de donnÃ©es
+			include_once ('fonctions.php');			// fichier contenant les fonctions utilisÃ©es dans le reste des scripts
 			include_once ('config/pear.php');		// fichiers de configuration des lib PEAR (setinclude + packages)
 		?>
 
 		<DIV id="principal">
 		
-			<DIV id="bandeau">		<?PHP 	include ('bandeau.php');	// fichier contenant le bandeau à afficher	?>		</DIV>
+			<DIV id="bandeau">		<?PHP 	include ('bandeau.php');	// fichier contenant le bandeau Ã  afficher	?>		</DIV>
 			
 			<DIV id="main_menu">	<?PHP	include ("menu.php");	// fichier contenant les menus du site	?>			</DIV>
 
 			<DIV id="conteneur">
 			
-				<?PHP // Vérification de l'existence d'enregistrement dans la table COLLEGE
+				<?PHP // VÃ©rification de l'existence d'enregistrement dans la table COLLEGE
 				
-					// adresse de connexion à la base de données
+					// adresse de connexion Ã  la base de donnÃ©es
 					$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
-					// cnx à la base de données OCS
+					// cnx Ã  la base de donnÃ©es OCS
 					$db_gespac 	= & MDB2::factory($dsn_gespac);
 
-					// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
+					// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© liste_des_materiels
 					$req_college = $db_gespac->queryAll ( "SELECT * FROM college;" );
 
 					$college_existe = $req_college[0][0];	// La table college n'est pas vide si on a au moins un enregistrement (sans blague)
 					
-					// On se déconnecte de la db
+					// On se dÃ©connecte de la db
 					$db_gespac->disconnect();
 
 				?>
@@ -86,10 +86,10 @@
 			
 				<?PHP	// Inclusion des pages
 				
-				if ( $college_existe <> "" ) {	// la base de donnée contient des données sur le collège
-					echo "<script>AffichePage ('conteneur', './accueil.php');</script>";		// Pas d'include car les headers sont déjà postés			
+				if ( $college_existe <> "" ) {	// la base de donnÃ©e contient des donnÃ©es sur le collÃ¨ge
+					echo "<script>AffichePage ('conteneur', './accueil.php');</script>";		// Pas d'include car les headers sont dÃ©jÃ  postÃ©s			
 				} else {
-					echo "<script>AffichePage ('conteneur', 'gestion_college/form_college.php');</script>";		// Pas d'include car les headers sont déjà postés
+					echo "<script>AffichePage ('conteneur', 'gestion_college/form_college.php');</script>";		// Pas d'include car les headers sont dÃ©jÃ  postÃ©s
 				}
 			}	
 				?>
