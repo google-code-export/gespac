@@ -78,6 +78,10 @@ foreach ($liste_export as $record) {
 	$db_ocsweb->disconnect();
 
 
+    //demande etude imprimante reseaux ou pas
+    if ($type == 'IMPRIMANTE') { 
+                                if ($modele[strlen($modele)-1] == 'N') {$stype = $stype.'_RX';}//si le modèle imprimante contient à la fin un N est bien c'est une imprimante RX normalement et on ajout _RX à la fin du sous type
+                                } 
     
 	fputcsv($fp, array($clg_uai, $clg_nom, $clg_cp, $clg_ville, $salle_nom, $mat_nom, $etat, $origine, $type, $stype, $marque, $modele, $dsit, $last, $fidele, $serial, $vlan, $etage, $batiment), ',');
 	//fputcsv( $out, array("" . $mac . "", '"' . $name . '"'), ',');
