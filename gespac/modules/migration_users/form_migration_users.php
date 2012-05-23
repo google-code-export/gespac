@@ -53,6 +53,12 @@
 		$row = 0;	// [AMELIORATION] penser à virer l'entête
 		
 		$csvfile = array();
+		
+		//array_push($csvfile, "apple", "raspberry");
+		
+		
+					
+
 
 		while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
 			
@@ -61,20 +67,14 @@
 			$line[$row][2] = $data[2];
 			$line[$row][3] = $data[3];
 
-			if ($line[$row][0] <> "NOMCOMPL" )	{
-				
-				
-				
+			if ($line[$row][0] <> "NOM" )	{
+
+				array_push($csvfile, array($line[$row][0], $line[$row][1],$line[$row][2],$line[$row][3]) );
 				
 			}
 
 			$row++;
 		}
-
-
-
-
-
 
 
 		// cnx à la base de données GESPAC
