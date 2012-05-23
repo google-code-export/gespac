@@ -331,5 +331,5 @@ INSERT IGNORE INTO `droits` (`droit_id`, `droit_index`, `droit_titre`, `droit_pa
 (32, '08-03', 'Stats camemberts', 'modules/stats/camembert.php', 0, 'Voir les stats camembert.'),
 (33, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
 (34, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.'),
-(35, '08-06', 'Info serveur', 'modules/infoserveur/infoserveur.php', 0, 'Voir les info du serveur.');
-
+(35, '08-06', 'Info serveur', 'modules/infoserveur/infoserveur.php', 0, 'Voir les info du serveur.'),
+(36, '07-12', 'Migration Utilisateurs', 'modules/migration_users/voir_migration_users.php', 1, 'permet de migrer les mots de passe et login des users dans la nouvelle archi');
