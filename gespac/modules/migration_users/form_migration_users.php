@@ -1,16 +1,4 @@
 <?PHP
-
-/*
-
-	Vérifier que le fichier existe
-	
-	si il existe, lancer la comparaison
-	
-	Sinon, mettre un message et un lien
-
-
-*/
-
 	session_start();
 	
 	/* fichier de visualisation des utilisateurs :
@@ -32,7 +20,10 @@
 
 
 <h3>Formulaire de migration des utilisateurs pour architecture AD 2008</h3><br>
-<small><i>Selectionnez dans les listes déroulantes les professeurs correspondants. Les sûrs à 100%, je les ai déjà selectionnés ;) </i></small>
+<small><i>
+	Selectionnez dans les listes déroulantes les professeurs correspondants. Les sûrs à 100%, je les ai déjà selectionnés ;) 
+	<br> En <SPAN style="background-color:green;">VERT</SPAN> : Correspondances sur nom et prénom. En <SPAN style="background-color:yellow;">JAUNE</SPAN> : Correspondances	sur le nom. En <SPAN style="background-color:red;">ROUGE</SPAN> : Aucune correspondance.
+</i></small>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
@@ -52,6 +43,7 @@
 		$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
 		// Création d'une table temporaire
+		$table_temp_drop = $con_gespac->Execute("DROP TABLE table_temp;");
 		$table_temp = $con_gespac->Execute("CREATE TABLE table_temp (nom VARCHAR( 255 ) NOT NULL ,prenom VARCHAR( 255 ) NOT NULL ,login VARCHAR( 255 ) NOT NULL ,pass VARCHAR( 255 ) NOT NULL) ENGINE = MYISAM ;");
 	
 	
@@ -96,12 +88,15 @@
 				<th>Nom</th>
 				<th>Logon</th>
 				<th>Correspondance</th>
+				<th>&nbsp;</th>
 						
 				<?PHP	
 					
 					$compteur = 0;
 					// On parcourt le tableau
 					foreach ( $liste_des_utilisateurs as $record ) {
+						
+						$indice = "red";
 						
 						// alternance des couleurs
 						$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
@@ -131,10 +126,18 @@
 											
 											if (strtoupper($nom_complet) == strtoupper($nom) ) {
 												$selected = "selected";
+												$indice = "green";
 											}
 											else {
 												$selected = "";
 											}
+											
+																						
+											if ( $indice == "red" && preg_match ("/" . $line['nom'] . "/i", $nom) ) {
+												$indice = "yellow";
+												$selected = "selected";
+											}
+											
 											
 										
 											echo "<option value='$login' $selected > $nom_complet </option>";
@@ -143,6 +146,8 @@
 
 										echo"</select>								
 									</td>";
+									
+									echo "<td bgcolor=$indice>&nbsp;</td>";
 										
 								} else {
 									echo "<td>&nbsp</td>";
