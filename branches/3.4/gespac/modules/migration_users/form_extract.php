@@ -8,7 +8,10 @@
 </script>
 
 <h3>Migration des comptes utilisateurs sur l'architecture AD 2008</h3>
-<small><i>Les logins et mots de passe iaca sont mis à jour dans l'architecture AD2008. Ce module permet de mettre à jour les comptes dans Gespac.<br>Il faut transformer le fichier d'extraction en csv, séparé par des points-virgules.</i></small>
+<small><i>Les logins et mots de passe iaca sont mis à jour dans l'architecture AD2008. Ce module permet de mettre à jour les comptes dans Gespac.
+<br>Il faut un fichier CSV comportant le nom, le prénom, le login et le mot de passe, séparés par des points-virgules et encadrés de double-quotes. Par exemple "LECHAT";"RAOUL";"rlechat";"4511932"
+<br>
+</i></small>
 	
 <br>
 <br>
