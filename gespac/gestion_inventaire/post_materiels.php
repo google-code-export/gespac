@@ -234,7 +234,7 @@ session_start();
 		$serial		= addslashes(utf8_decode(urldecode($_POST ['serial'])));
 		$etat   	= addslashes(utf8_decode(urldecode($_POST ['etat'])));
 		$gign   	= addslashes(utf8_decode(urldecode($_POST ['num_gign'])));
-		$salle  	= addslashes(utf8_decode(urldecode($_POST ['salle'])));
+		$salle  	= $_POST ['salle'];
 		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
 		$mac_input	= addslashes(utf8_decode(urldecode($_POST ['mac_input'])));
 		$mac_radio	= addslashes(utf8_decode(urldecode($_POST ['mac_radio'])));
@@ -242,9 +242,9 @@ session_start();
 
 		// En fonction du champ rempli (input ou radio) on récupère l'une ou l'autre des valeurs
 		$mac = $mac_input <> "" ? $mac_radio : $mac_input ;
-		
+				
 		// on récupére le numéro d'id de salle que l'on veut modifier dans la table materiels avec comme clause WHERE le nom de salle posté
-		$req_id_salle_par_nom = $db_gespac->queryAll ( "SELECT salle_id FROM salles WHERE salle_nom='$salle'" );
+		$req_id_salle_par_nom = $db_gespac->queryAll ( "SELECT salle_id FROM salles WHERE salle_nom='" . utf8_decode($salle) ."'" );
 		$salle_id =  $req_id_salle_par_nom[0][0];
 		
 		//fwrite($fp, print_r($_POST) ");
