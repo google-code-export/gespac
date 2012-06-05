@@ -16,7 +16,8 @@
 	include_once ('../../../class/Sql.class.php');
 
 
-
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	
 
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
@@ -79,8 +80,8 @@
 			// Si 21 -> lecture et écriture au groupe, lecture seule à tout le monde
 			// Si 22 -> lecture et écriture à tout le monde
 			// 01 et 02 impossible (le groupe est inclus dans tout le monde)
-			
-			if ( $proprio_login == $_SESSION['login'] || $_SESSION['grade'] == 'root' ) {
+						
+			if ( strtoupper($proprio_login) == strtoupper($_SESSION['login']) || $_SESSION['grade'] == 'root' ) {
 				$lecture = true; 
 				$ecriture = true;
 			}

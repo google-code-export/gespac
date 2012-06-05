@@ -244,6 +244,29 @@
 		}
 	
 	}
+	
+		
+	/**************** SUPPRESSION ********************/
+	if ( $action == 'suppr' ) {
+	
+		$id 	= $_GET['id'];
+		
+		// Suppression des pages du dossier
+		$req_suppr_pages = "DELETE FROM dossiers_textes WHERE dossier_id=$id";
+		$con_gespac->Execute ( $req_suppr_pages );
+		$log->Insert ( $req_suppr_pages );
+		
+		// Suppression du dossier
+		$req_suppr_dossier = "DELETE FROM dossiers WHERE dossier_id=$id";
+		$con_gespac->Execute ( $req_suppr_dossier );
+		$log->Insert ( $req_suppr_dossier );
+		
+		//Insertion d'un log
+		$log_texte = "Le dossier $id a été supprimé";
+		$req_log_suppr_dossier = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression dossier', '$log_texte' );";
+		$con_gespac->Execute ( $req_log_suppr_dossier );
+	
+	}
 
 
 ?>

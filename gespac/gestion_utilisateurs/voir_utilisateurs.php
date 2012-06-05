@@ -173,7 +173,8 @@
 				select_cette_ligne ( id, row, 0 );
 							
 				/*	supprimer la ligne du tableau	*/
-				document.getElementById('user_table').deleteRow(row);
+				window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1500);
+				
 				/*	poste la page en ajax	*/
 				$('target').load("gestion_utilisateurs/post_utilisateurs.php?action=suppr&id=" + id);
 			}

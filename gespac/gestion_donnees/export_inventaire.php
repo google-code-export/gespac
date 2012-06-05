@@ -3,7 +3,7 @@
 /*	CREATION DU FICHIER D'EXPORT INVENTAIRE	*/
 
 include_once ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-
+include ('../../version'); //on flag la version de gespac dans l'export
 
 // adresse de connexion à la base de données
 $dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
@@ -24,7 +24,7 @@ where
 
 
 	
-$filename = "inv_" . $liste_export[0][1] . "_" . $liste_export[0][3] . "_" . $liste_export[0][0] . ".csv";
+$filename = "inv_" . $liste_export[0][1] . "_" . $liste_export[0][3] . "_" . $liste_export[0][0] . "_gespac_".$version.".csv";
 //On formate le nom du fichier ici histoire de pas avoir de caractères zarb'
 $filename = strtr($filename, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 $filename = preg_replace('/([^.a-z0-9]+)/i', '_', $filename);
@@ -33,7 +33,7 @@ $filename = preg_replace('/([^.a-z0-9]+)/i', '_', $filename);
 $fp = fopen('../dump/' .$filename, 'w+');
 
 // ENTETES
-fputcsv($fp, array('clg_uai', 'clg_nom', 'clg_cp', 'clg_ville', 'salle_nom', 'mat_nom', 'etat', 'origine', 'type', 'stype', 'marque', 'modele', 'inventaire', 'lastcome', 'fidele',  'serial', 'vlan', 'etage', 'batiment', 'site_web', 'site_grr'), ',' );
+fputcsv($fp, array('clg_uai', 'clg_nom', 'clg_cp', 'clg_ville', 'salle_nom', 'mat_nom', 'etat', 'origine', 'type', 'stype', 'marque', 'modele', 'inventaire', 'lastcome', 'fidele',  'serial', 'vlan', 'etage', 'batiment'), ',' );
 
 foreach ($liste_export as $record) {
 	$clg_uai 	= mb_strtoupper($record[0]);
@@ -78,8 +78,12 @@ foreach ($liste_export as $record) {
 	$db_ocsweb->disconnect();
 
 
+    //demande etude imprimante reseaux ou pas
+    if ($type == 'IMPRIMANTE') { 
+                                if ($modele[strlen($modele)-1] == 'N') {$stype = $stype.'_RX';}//si le modèle imprimante contient à la fin un N est bien c'est une imprimante RX normalement et on ajout _RX à la fin du sous type
+                                } 
     
-	fputcsv($fp, array($clg_uai, $clg_nom, $clg_cp, $clg_ville, $salle_nom, $mat_nom, $etat, $origine, $type, $stype, $marque, $modele, $dsit, $last, $fidele, $serial, $vlan, $etage, $batiment, $web, $grr), ',');
+	fputcsv($fp, array($clg_uai, $clg_nom, $clg_cp, $clg_ville, $salle_nom, $mat_nom, $etat, $origine, $type, $stype, $marque, $modele, $dsit, $last, $fidele, $serial, $vlan, $etage, $batiment), ',');
 	//fputcsv( $out, array("" . $mac . "", '"' . $name . '"'), ',');
 }
 
