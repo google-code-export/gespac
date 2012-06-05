@@ -73,14 +73,21 @@
 			exit();
 		}	
 
-		
+		// on test la version de GESPAC
+		$version_gespac = EXEC('apt-cache policy gespac | grep Inst | cut -d \: -f 2'); //on prend la variable installée
+	    $version_gespacup = EXEC('apt-cache policy gespac | grep Cand | cut -d \: -f 2'); //on prend la variable candidate
+	    if (trim($version_gespac) == trim($version_gespacup)) {
+				$gespacversion='';
+				} else { 
+				$gespacversion = '<img src="gespac/img/update.gif">';
+			}
 		
 		session_start();
 		
 		// on vérifie si l'utilisateur est identifié
 		if (!isset( $_SESSION['login'])) {
 			// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié -> On redirige sur la page permettant de s'authentifier
-			echo '<img src="./gespac/img/gespac.png" height=48> '.$version;
+			echo '<img src="./gespac/img/gespac.png" height=48> '.$version.''.$gespacversion;
 			include 'login.php';
 			exit();	// on arrête l'exécution
 
@@ -167,3 +174,4 @@
 
 </body>
 </html>
+
