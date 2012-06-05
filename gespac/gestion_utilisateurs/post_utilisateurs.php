@@ -45,23 +45,38 @@
 		
 		//On récupère le nom de l'utilisateur en fonction du user_id
 	    $user_nom = $con_gespac->QueryOne ( "SELECT user_nom FROM users WHERE user_id=$id" );
+	    
+	    // On teste si un matériel est prêté à l'utilisateur
+	    $pret_existe = $con_gespac->QueryOne ( "SELECT mat_id FROM materiels WHERE user_id=$id" );
+	    
+	    if ( $pret_existe )	{
+			
+			echo "Le compte ne peut être supprimé, un matériel est prêté.";
+		
+		}
+		
+		else {
+			
+			$log_texte = "Le compte <b>$user_nom</b> a été supprimé.";
 
-	    $log_texte = "Le compte <b>$user_nom</b> a été supprimé.";
+			$req_log_suppr_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression compte', '$log_texte');";
+			$con_gespac->Execute ( $req_log_suppr_user );
+					
+			//on log la requête
+			$log->Insert( $req_log_suppr_user );
+			
+			// Suppression de l'utilisateur de la base
+			$req_suppr_user = "DELETE FROM users WHERE user_id=$id;";
+			$con_gespac->Execute ( $req_suppr_user );
+			
+			// On log la requête SQL
+			$log->Insert( $req_suppr_user );
+			
+			echo "<br><small>L'utilisateur <b>$user_nom</b> a été supprimé !</small>";				
+		}    
+	    
 
-	    $req_log_suppr_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression compte', '$log_texte');";
-	    $con_gespac->Execute ( $req_log_suppr_user );
-		
-		//on log la requête
-		$log->Insert( $req_log_suppr_user );
-		
-		// Suppression de l'utilisateur de la base
-		$req_suppr_user = "DELETE FROM users WHERE user_id=$id;";
-		$con_gespac->Execute ( $req_suppr_user );
-		
-		// On log la requête SQL
-		$log->Insert( $req_suppr_user );
-		
-		echo "<br><small>L'utilisateur <b>$user_nom</b> a été supprimé !</small>";
+
 	}
 
 	/**************** MODIFICATION ********************/	
