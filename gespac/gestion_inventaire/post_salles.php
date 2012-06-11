@@ -91,8 +91,7 @@
 			
 		} else {
 		
-			$req_recup_uai = $con_gespac->QueryAll("SELECT clg_uai FROM college; ");
-			$uai = $req_recup_uai['clg_uai'];
+			$uai = $con_gespac->QueryOne("SELECT clg_uai FROM college; ");
 			
 			$req_add_salle = "INSERT INTO salles ( salle_nom , salle_vlan , salle_etage , salle_batiment, clg_uai ) VALUES ( '$nom', '$vlan', '$etage', '$batiment', '$uai');";
 			$con_gespac->Execute ( $req_add_salle );
