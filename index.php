@@ -32,20 +32,31 @@
 </head>
 
 <body>
-
-	<script type="text/javascript" 
-		src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"> </script>
-	 
-	<div id="placeholder"></div>
-
-	<script>
-	 CFInstall.check({
-		mode: "inline",
-		node: "placeholder",
-		destination: "cf:http://localhost/GESPAC3/"
-	  });
-	</script>
 	
+	
+
+<?PHP
+	$ping_google = EXEC('ping -c 1 www.google.com'); //on ping internet si ça ne ping pas on ne charge pas chrome frame
+	
+	if ($ping_google <> "") {
+	
+?>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"> </script>
+		 
+		<div id="placeholder"></div>
+
+		<script>
+		 CFInstall.check({
+			mode: "inline",
+			node: "placeholder",
+			destination: "cf:http://localhost/GESPAC3/"
+		  });
+		</script>
+
+<?PHP
+	}
+?>
+
 	<div id=portail-menu>
 	
 	<h3>
