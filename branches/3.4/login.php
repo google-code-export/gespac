@@ -40,7 +40,7 @@
 									  UNIQUE KEY `user_logon` (`user_logon`)
 									) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
 									
-			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
 			
 			//on exécute les requêtes ci-dessus
 			$result_creation_table = $db_gespac->exec($req_creation_table_users);
@@ -69,14 +69,14 @@
 					$result_maj_id = $db_gespac->exec($req_maj_id);
 					
 					//on crée ensuite le compte ati
-					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
 					$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
 					
 					
 				} else {
 				
 					// il n'y a pas de compte avec l'id à 1 : on crée le compte ati
-					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
 					$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
 				}
 			}
