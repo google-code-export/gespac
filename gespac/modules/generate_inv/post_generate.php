@@ -20,6 +20,10 @@
 	// On commence à générer le numéro d'inventaire
 	$inventaire = "C" . substr($uai, 3, 4);
 	
+	// Liste des mat_id libres dans la base
+	$free_mat_id = $con_gespac->QueryAll("SELECT mat_id+1 FROM materiels WHERE (mat_id + 1) NOT IN (SELECT mat_id FROM materiels) ORDER BY mat_id;");
+	
+	
 	foreach ($lot_array as $record) {
 		if ( $record <> "" ) {
 			$materiel = $con_gespac->QueryRow ("SELECT mat_id, mat_nom, mat_dsit, mat_serial, marque_type, marque_stype FROM materiels, marques WHERE materiels.marque_id=marques.marque_id AND mat_id=$record");
@@ -44,11 +48,14 @@
 			// On limite le id à 3 digits
 			if ( $mat_id > 999 ) {
 				// On change le mat_id avec le premier id libre dans la table materiels.
-				$free_mat_id = $con_gespac->QueryOne("SELECT mat_id+1 FROM materiels WHERE (mat_id + 1) NOT IN (SELECT mat_id FROM materiels) ORDER BY mat_id LIMIT 1;");
-				$tr_color = " style=background-color:yellow;";
+
+				$my_id = $free_mat_id[0]["mat_id+1"];
+				
+				// Je vire un élément du tableau des free_id
+				$free_mat_id = array_slice($free_mat_id, 1);
 			
 				// bourrage de zero de l'index sur 3 digits
-				$num_unique = sprintf("%1$03d", $free_mat_id);
+				$num_unique = sprintf("%1$03d", $my_id);
 			}
 			else {
 				// bourrage de zero de l'index sur 3 digits
