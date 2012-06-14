@@ -29,6 +29,10 @@
 	echo "<br><small><i>Tout d'abord, créez vos UO sur le contrôleur de domaine puis créez les snapins avec cette interface et enfin associez ces snapins aux groupes dans fog.</small></i>";
 	echo "<br><br><br><br>";
 	
+	echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/association_uo/form_assoc.php');\" >Gérer les associations</a>";
+	
+	echo "<br><br><br><br>";
+	
 	
 	?>
 
