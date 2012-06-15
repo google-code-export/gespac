@@ -89,10 +89,13 @@ session_start();
 
 
 <select id='bassin'>
-	<option value="MRC">Bassin Centre</option>
-	<option value="MRG">Bassin gauche</option>
-	<option value="MRD">Bassin droite</option>
-	<option value="MRB">Bassin bas</option>
+	<option value="AI">Aix</option>
+	<option value="AR">Arles</option>
+	<option value="IS">Istres</option>
+	<option value="MA">Marseille Aubagne</option>
+	<option value="MC">Marseille Centre</option>
+	<option value="ME">Marseille Est</option>
+	<option value="MN">Marseille Nord</option>
 </select>
 
 
@@ -120,7 +123,6 @@ session_start();
 		<th>&nbsp</th>	
 		
 		<?PHP	
-			if ($E_chk) echo"<th>&nbsp</th>";
 
 			//$option_id = 0;
 			$compteur = 0;
@@ -146,7 +148,7 @@ session_start();
 					$change_apreter = $apreter == 1 ? 0 : 1;
 
 					
-					echo "<td width=20><input type=checkbox></td>";
+					echo "<td> <input type=checkbox id='chk$id' class='chk'> </td>";
 					echo "<td>$nom</td>";
 
 					echo "<td><input type=text id='param$id' readonly></td>";
@@ -161,7 +163,7 @@ session_start();
 							<input type=checkbox id='c$id' checked>Fenêtre Ctrl Alt Suppr<br>
 							<input type=checkbox id='s$id'>Synchronisation<br>
 							<input type=checkbox id='r$id' checked>Reboot<br>
-							<input type=checkbox id='p$id'>Poste Fixe<br>
+							<input type=checkbox id='p$id' checked>Poste Fixe<br>
 						</div>
 					</td>";	
 					
@@ -185,24 +187,32 @@ session_start();
 <script type="text/javascript">
 	
 	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
+	 
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
 	
 	
+		// Pour faire apparaitre les paramètres
 		$$(".tablehover tr").addEvent('mouseover', function(e) {
-			var id = this.id.replace("ligne", "paramdiv");
-			if (id)	
-				$(id).style.display = "";	
-
+			// juste le id
+			var id = this.id.replace("ligne", "");
+			
+			// Si l'id existe (à cause de la ligne des th qui est aussi dans un tr) et si la case en début de ligne est cochée
+			if (id && $("chk" + id).checked )	
+				$("paramdiv" + id).style.display = "";	
 		});
 	
+	
+		// Pour masquer les paramètres
 		$$(".tablehover tr").addEvent('mouseleave', function(e) {
-			var id = this.id.replace("ligne", "paramdiv");
+			// juste le id
+			var id = this.id.replace("ligne", "");
 
 			if (id)	
-				$(id).style.display = "none";	
+				$("paramdiv" + id).style.display = "none";	
 		});
 	
-		
+	
+		// fonction de création du paramètre Eumcs
 		function eumcs (id) {
 			
 			var param = "";
@@ -222,7 +232,7 @@ session_start();
 		}
 	
 	
-		
+		// Sur clic d'une checkbox dans la liste des paramètres
 		$$(".paramdiv input").addEvent('change', function(e) {
 			
 			// /OU=OU="CDI",OU="Postes Fixes",OU=Ordinateurs,OU=013XXXXY,OU='BassinXXX',OU=Colleges,DC=ordina13,DC=cg13,DC=fr /YES /CLIENT=eUmCS
@@ -231,31 +241,66 @@ session_start();
 			var itm = this.id.substring(1);
 						
 			// Pour la partie eumcs
-			var iaca = " /client=" + eumcs(itm) ;
+				var iaca = " /client=" + eumcs(itm) ;
 			
 			// Pour le reboot après intégration
-			if ( $("r" + itm).checked ) reboot = " /YES";	else reboot = "";
+				if ( $("r" + itm).checked ) reboot = " /YES";	else reboot = "";
 	
 			// Partie OU
-			var ou = "";
-			
-			// Pour la salle
-			var salle = '/OU=OU="' + $('salle' + itm).value + '" ';
-								
-			// Pour la portion postes fixe / Postes mobiles
-			if ( $("p" + itm).checked ) poste = 'OU="Postes Fixes"';	else poste = 'OU="Portables"';
-			
-			
-			ou = salle + "," + poste + ',OU=Ordinateurs,OU=' +  uai.value + ',OU=' + bassin.value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
+				var ou = "";
 				
-			
-			
+				// Pour la salle
+				var salle = '/OU=OU="' + $('salle' + itm).value + '" ';
+									
+				// Pour la portion postes fixe / Postes mobiles
+				if ( $("p" + itm).checked ) poste = 'OU="Postes Fixes"';	else poste = 'OU="Portables"';
+				
+				
+				ou = salle + "," + poste + ',OU=Ordinateurs,OU=' +  uai.value + ',OU=' + bassin.value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
+					
+			// La ligne entière
 			$("param"+itm).value = ou + reboot + iaca;
 			
 		});
+		
+		
+		// Sur clic d'une checkbox en début de ligne
+		$$(".chk").addEvent('change', function(e) {
+						
+			// juste le id
+			var id = this.id.replace("chk", "");
+			
+			if (this.checked) {
+				
+				// Pour la partie eumcs
+				var iaca = " /client=" + eumcs(id) ;
+			
+				// Pour le reboot après intégration
+				if ( $("r" + id).checked ) reboot = " /YES";	else reboot = "";
+				
+				// Partie OU
+				var ou = "";
+					
+				// Pour la salle
+				var salle = '/OU=OU="' + $('salle' + id).value + '" ';
+														
+				ou = salle + ',OU="Postes Fixes",OU=Ordinateurs,OU=' +  uai.value + ',OU=' + bassin.value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
+						
+				
+				$("param"+id).value = ou + reboot + iaca;
+			}
+			
+			else {
+				$("param"+id).value = "";
+			}
+			
+			
+		});
+		
 	
 	
 	});
-
+	
+	
 
 </script>
