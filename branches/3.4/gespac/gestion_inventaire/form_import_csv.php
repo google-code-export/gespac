@@ -2,24 +2,24 @@
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 	
-	include ('../config/databases.php');		// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	// lib
+	require_once ('../fonctions.php');
+	require_once ('../config/pear.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');		
+	include_once ('../../class/Log.class.php');		
 	
 	echo "<h2>formulaire d'ajout de matériels en masse par fichier CSV</h2><br>";
 	echo "<h3>ATTENTION : Il faut faire UN fichier CSV par modèle !</h3><br>";
 
-	
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac	= new Sql($host, $user, $pass, $gespac);
 	
 	// Requête qui va récupérer les origines des dotations ...
-	$liste_origines = $db_gespac->queryAll ( "SELECT origine FROM origines ORDER BY origine" );
+	$liste_origines = $con_gespac->QueryAll ( "SELECT origine FROM origines ORDER BY origine" );
 	
 	// Requête qui va récupérer les états des matériels ...
-	$liste_etats = $db_gespac->queryAll ( "SELECT etat FROM etats ORDER BY etat" );
+	$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
 	
 	?>
 	
@@ -139,7 +139,7 @@
 			<TD>Origine</TD> 
 			<TD>
 				<select name="origine">
-					<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine[0] ."'>" . $origine[0] ."</option>";	}	?>
+					<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
 				</select>
 			</TD>
 		</tr>
@@ -148,7 +148,7 @@
 			<TD>Etat du matériel</TD>
 			<TD>
 				<select name="etat">
-					<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat[0] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
+					<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 				</select>
 			</TD>
 		</tr>
@@ -179,7 +179,7 @@
 		<?PHP
 		// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
 		//$liste_correspondances = $db_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
-		$liste_marques = $db_gespac->queryAll ( "SELECT marque_id, marque_marque, marque_model, marque_type, marque_stype FROM marques ORDER BY marque_model" );
+		$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_marque, marque_model, marque_type, marque_stype FROM marques ORDER BY marque_model" );
 		?>
 		 	 	 	 	
 		<!-- s'affiche si il n'y a pas de résultat -->
@@ -190,11 +190,11 @@
 			<?PHP
 				foreach ( $liste_marques as $marque ) {
 				
-					$marque_id 		= $marque[0];
-					$marque_marque 	= $marque[1];
-					$marque_model 	= $marque[2];
-					$marque_type 	= $marque[3];
-					$marque_stype 	= $marque[4];
+					$marque_id 		= $marque['marque_id'];
+					$marque_marque 	= $marque['marque_marque'];
+					$marque_model 	= $marque['marque_model'];
+					$marque_type 	= $marque['marque_type'];
+					$marque_stype 	= $marque['marque_stype'];
 				
 					echo "<tr style='display:none' class='tr_filter'>";
 						echo "<td width=200>$marque_type</td>";

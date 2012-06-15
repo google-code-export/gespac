@@ -5,17 +5,19 @@
 	*		Requêtes pour Import du fichier import csv
 	*
 	********************************************************/
-		
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
-
-	// on ouvre un fichier en écriture pour les log sql
-	$fp = fopen('../dump/log_sql.sql', 'a+');
 	
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	
+	// lib
+	require_once ('../fonctions.php');
+	require_once ('../config/pear.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');		
+	include_once ('../../class/Log.class.php');		
 
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);	
+	// Cnx à la base
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	$log = new Log ("../dump/log_sql.sql");
 		
 		
 	$dossier = '../dump/'; 		// dossier où sera déplacé le fichier
@@ -59,10 +61,10 @@
 
 				if ( $line[$row][0] <> "" && $line[$row][1] <> "") {	// On ne prend le champ que si le nom et le ssn sont non nuls
 					$req_import_csv = "INSERT INTO materiels (mat_nom, mat_serial, mat_dsit, mat_etat, mat_origine, salle_id, user_id, marque_id, mat_suppr) VALUES ('" . trim($line[$row][0]) . "', '" . trim($line[$row][1]) ."', '" . trim($line[$row][2]) . "', '$etat', '$origine', 1, 1, $marque_id, 0 );";
-					$result = $db_gespac->exec ( $req_import_csv );
+					$con_gespac->Execute ( $req_import_csv );
 					
 					// On log la requête SQL
-					fwrite($fp, date("Ymd His") . " " . $req_import_csv."\n");
+					$log->Insert ( $req_import_csv );
 				}
 				$row++;
 			}
@@ -71,11 +73,11 @@
 			$log_texte = "Import fichier CSV pour la marque <b>$marque $modele</b>";
 
 			$req_log_import_csv = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Import CSV', '$log_texte' )";
-			$result = $db_gespac->exec ( $req_log_import_csv );
+			$con_gespac->Execute ( $req_log_import_csv );
 
 
 			// On se déconnecte de la db
-			$db_gespac->disconnect();	
+			$con_gespac->Close();	
 			?>
 			
 			<script>window.close();</script>
@@ -88,7 +90,4 @@
 	} else	// En cas d'erreur dans l'extension
 		 echo $erreur;
 
-		 
-	// Je ferme le fichier  de log sql
-	fclose($fp);
 ?>
