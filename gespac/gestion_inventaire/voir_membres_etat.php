@@ -14,8 +14,7 @@
 
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
-	include ('../config/databases.php');		// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	include ('../includes.php');
 	
 	
 	// id ocs du matériel à afficher
@@ -26,15 +25,11 @@
 	$etat_std = $etat_explode[0];
 	$dossier = $etat_explode[1];
 
-
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac = new Sql ($host, $user, $pass, $gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, marque_type, marque_marque, marque_model, mat_id, salle_nom FROM materiels, marques, salles WHERE materiels.salle_id=salles.salle_id AND mat_etat LIKE '$etat_std%' AND materiels.marque_id = marques.marque_id order by mat_nom" );
+	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, marque_type, marque_marque, marque_model, mat_id, salle_nom FROM materiels, marques, salles WHERE materiels.salle_id=salles.salle_id AND mat_etat LIKE '$etat_std%' AND materiels.marque_id = marques.marque_id order by mat_nom" );
 
 	echo "<p><small>" . count($liste_des_materiels) . " matériel(s) avec l'état $etat_std.</small></p>";
 	
@@ -67,14 +62,14 @@
 						
 				echo "<tr class=$tr_class>";
 					
-					$nom 		= $record[0];
-					$dsit 		= $record[1];
-					$serial 	= $record[2];
-					$famille	= $record[3];
-					$marque		= $record[4];
-					$model 		= $record[5];
-					$id 		= $record[6];
-					$salle 		= $record[7];
+					$nom 		= $record['mat_nom'];
+					$dsit 		= $record['mat_dsit'];
+					$serial 	= $record['mat_serial'];
+					$famille	= $record['marque_type'];
+					$marque		= $record['marque_marque'];
+					$model 		= $record['marque_model'];
+					$id 		= $record['mat_id'];
+					$salle 		= $record['salle_nom'];
 					
 					echo "<td> $nom </td>";
 					echo "<td> $dsit </td>";
@@ -103,7 +98,7 @@
 <?PHP
 
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close ();
 
 
 ?>
