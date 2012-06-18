@@ -105,6 +105,9 @@ session_start();
 		$modele 	= addslashes(utf8_decode(urldecode($_POST ['modele'])));
 		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
 		
+		$message_pret_ok = "";
+		$message_pret_ko = "";
+	
 		//$liste_noms   = "";
 		//$liste_serial = "";
 		
@@ -114,58 +117,70 @@ session_start();
 			
 			if ( $item <> "" ) {	// permet de virer les éléments vides
 				
-				// Si l'état est modifié on fait un update sur ce champ
-				$sql_etat = $etat == "" ? "" : " mat_etat='$etat' ";
+				// test si la machine est prêtée ou pas
+				@$mat_id = $con_gespac->QueryOne ( "SELECT mat_id FROM materiels WHERE user_id<>1 AND mat_id=$item" );
 				
-				if ( $origine <> "" ) {
-					// met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)
-					$sql_origine = $sql_etat == "" ? " mat_origine='$origine' " : ", mat_origine='$origine' " ;
-					
-				} else { $sql_origine = ""; }
-				
-				
-				if ( $salle <> "" ) {
-					// on récupére le numéro d'id de salle que l'on veut modifier dans la table materiels avec comme clause WHERE le nom de salle posté
-					$salle_id = $con_gespac->QueryOne ( "SELECT salle_id FROM salles WHERE salle_nom='$salle'" );
+				if ( !isset($mat_id) ) {	// la machine n'est pas prêtée ($mat_id n'existe pas)
+					if ( $item <> "") {
+						// Si l'état est modifié on fait un update sur ce champ
+						$sql_etat = $etat == "" ? "" : " mat_etat='$etat' ";
+						
+						if ( $origine <> "" ) {
+							// met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)
+							$sql_origine = $sql_etat == "" ? " mat_origine='$origine' " : ", mat_origine='$origine' " ;
+							
+						} else { $sql_origine = ""; }
+						
+						
+						if ( $salle <> "" ) {
+							// on récupére le numéro d'id de salle que l'on veut modifier dans la table materiels avec comme clause WHERE le nom de salle posté
+							$salle_id = $con_gespac->QueryOne ( "SELECT salle_id FROM salles WHERE salle_nom='$salle'" );
 
-					// dans la rq sql, met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)
-					
-					if ( $sql_origine == "" && $sql_etat == "" ) $sql_salle = " salle_id=$salle_id ";
-					else $sql_salle = ", salle_id=$salle_id " ;
+							// dans la rq sql, met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)
+							
+							if ( $sql_origine == "" && $sql_etat == "" ) $sql_salle = " salle_id=$salle_id ";
+							else $sql_salle = ", salle_id=$salle_id " ;
 
-				} else { $sql_salle = ""; }
+						} else { $sql_salle = ""; }
+						
+						if ( $type <> "" ) {
+							// on récupére le numéro d'id de marque que l'on veut modifier dans la table materiels avec comme clause WHERE le type, le sous type, la marque et le modele de marque
+							$marque_id = $con_gespac->QueryOne ( "SELECT marque_id FROM marques WHERE marque_type='$type' AND marque_stype='$stype' AND marque_marque='$marque' AND marque_model='$modele'" );
+							
+							if ( $sql_origine == "" && $sql_etat == "" && $sql_salle == "" ) $sql_marque = " mat_salle=$marque_id";
+							else $sql_marque = " , marque_id=$marque_id" ;
+							
+						} else { $sql_marque = ""; }
+						
+						$req_modif_materiel = "UPDATE materiels SET " . $sql_etat . $sql_origine . $sql_salle . $sql_marque . " WHERE mat_id=$item ;";
+						$con_gespac->Execute ( $req_modif_materiel );
+						
+						$message_pret_ok = "La modification des matériels sélectionnés a été effectuée.<br>";
+						
+						//on récupére le nom et le serial de chaque item
+						$req_nom_serial_materiel = $con_gespac->QueryRow ("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
+						$liste_noms_serial   .=  '<b>'.$req_nom_serial_materiel[0].' (</b>serial : <b>'.$req_nom_serial_materiel[1].')</b>, ';
+						
+						// On log la requête SQL
+						$log->Insert( $req_modif_materiel );
+					}
+				} else { // la machine est prêtée ; on récupére le nom
+					$mat_nom = $con_gespac->QueryOne ( "SELECT mat_nom FROM materiels WHERE mat_id=$item" );
+					$message_pret_ko .= "Le matériel <b>$mat_nom</b> est prêté. Merci de le rendre avant réaffectation !<br>";
+				}
 				
-				if ( $type <> "" ) {
-					// on récupére le numéro d'id de marque que l'on veut modifier dans la table materiels avec comme clause WHERE le type, le sous type, la marque et le modele de marque
-					$marque_id = $con_gespac->QueryOne ( "SELECT marque_id FROM marques WHERE marque_type='$type' AND marque_stype='$stype' AND marque_marque='$marque' AND marque_model='$modele'" );
-					
-					if ( $sql_origine == "" && $sql_etat == "" && $sql_salle == "" ) $sql_marque = " mat_salle=$marque_id";
-					else $sql_marque = " , marque_id=$marque_id" ;
-					
-				} else { $sql_marque = ""; }
-				
-				$req_modif_materiel = "UPDATE materiels SET " . $sql_etat . $sql_origine . $sql_salle . $sql_marque . " WHERE mat_id=$item ;";
-				$con_gespac->Execute ( $req_modif_materiel );
-				
-				//on récupérer le nom et le serial de chaque item
-				$req_nom_serial_materiel = $con_gespac->QueryRow ("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
-				$liste_noms_serial   .=  '<b>'.$req_nom_serial_materiel[0].' (</b>serial : <b>'.$req_nom_serial_materiel[1].')</b>, ';
-				
-				// On log la requête SQL
-				$log->Insert( $req_modif_materiel );
-			}
+			//Insertion d'un log
+			//on supprime les caractères en fin de chaine
+			$liste_noms_serial = trim ($liste_noms_serial, ", ");
+			$log_texte = "Les materiels $liste_noms_serial ont été modifiés.";
 
-		}
-	
-		//Insertion d'un log
-		//on supprime les caractères en fin de chaine
-		$liste_noms_serial = trim ($liste_noms_serial, ", ");
-		$log_texte = "Les materiels $liste_noms_serial ont été modifiés.";
+			$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
+			$con_gespac->Execute ( $req_log_modif_mat );
 
-		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
-		$con_gespac->Execute ( $req_log_modif_mat );
-
+		} 
 	}
+	echo $message_pret_ok.$message_pret_ko;
+}
 	
 	
 	/**************** RENOMMAGE D'UN LOT ********************/
@@ -236,24 +251,31 @@ session_start();
 		// Si un dossier est entré, on concatène etat et dossier, sinon on ne colle que l'état.
 		if ( $gign ) $etat = $etat . "-" . $gign;
 			
+		// test si la machine est prétée ou pas
+		@$mat_id = $con_gespac->QueryOne ( "SELECT mat_id FROM materiels WHERE user_id<>1 AND mat_id=$id" );
 		
-		if ( $marque_id ) {
-			$req_modif_materiel = "UPDATE materiels SET mat_nom='$nom', mat_dsit='$dsit', mat_serial='$serial', mat_etat='$etat', salle_id=$salle_id, marque_id=$marque_id, mat_origine = '$origine', mat_mac='$mac' WHERE mat_id=$id";
-			$con_gespac->Execute ( $req_modif_materiel );
-			
-			echo "<small>Modification du matériel <b>$nom</b> !</small>";
-			
-			// On log la requête SQL
-			$log->Insert( $req_modif_materiel );
-		} 
+		if ( !isset($mat_id) ) {// la machine n'est pas prêtée ($mat_id n'existe pas)
+			if ( $marque_id ) {
+				$req_modif_materiel = "UPDATE materiels SET mat_nom='$nom', mat_dsit='$dsit', mat_serial='$serial', mat_etat='$etat', salle_id=$salle_id, marque_id=$marque_id, mat_origine = '$origine', mat_mac='$mac' WHERE mat_id=$id";
+				$con_gespac->Execute ( $req_modif_materiel );
+				
+				echo "<small>Le matériel <b>$nom</b> a bien été modifié.</small>";
+				
+				// On log la requête SQL
+				$log->Insert( $req_modif_materiel );
+			} 
+		
+			//Insertion d'un log
+
+			$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été modifié";
+
+			$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
+			$con_gespac->Execute ( $req_log_modif_mat );
 	
-		//Insertion d'un log
-
-		$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été modifié";
-
-		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
-		$con_gespac->Execute ( $req_log_modif_mat );
-	}
+		} else {
+			echo "Le matériel <b>$nom</b> est prêté. Merci de le rendre avant de modifier sa salle.";
+		}
+	}	
 	
 	/**************** INSERTION ********************/
 	
@@ -359,8 +381,6 @@ session_start();
 						$salle_nom 	  = $con_gespac->QueryOne ( "SELECT salle_nom FROM salles WHERE salle_id = $salle_id" );
 						
 						$message_pret_ok = "Réaffectation des matériels sélectionnés dans la salle <b>$salle_nom</b>.<br>";
-						$tab_messages = array($id => $message);
-						
 						
 						// On log la requête SQL
 						$log->Insert( $req_modif_apreter );
