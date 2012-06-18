@@ -34,27 +34,6 @@
 	echo "<br><br><br><br>";
 	
 	
-	?>
-
-	<!-- Partie post de la sélection 
-	<form name="post_form" id="post_form" action="modules/association_uo/post_assoc.php" method="post">
-		<center>
-		<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
-		<input type=submit name='post_selection' id='post_selection' value='Affecter UO' style='display:none;'>	<br>
-		<span id='nb_selectionnes'>[0] </span> sélectionné(s)	<br>
-		</center>
-		
-	</form>
-	-->
-	
-	<!-- 	bouton pour le filtrage du tableau	
-	<form>
-		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'association_uo', '0')" type="text"></center>
-	</form>
-	-->
-
-	
-	<?PHP
 	
 	// cnx à fog
 	$con_fog = new Sql($host, $user, $pass, $fog);
@@ -75,8 +54,6 @@
 	
 	echo "
 		<th>Snapin</th>
-		<th>Description</th>
-		<th>Path</th>
 		<th>Arguments</th>
 	";
 
@@ -96,8 +73,6 @@
 		echo "<tr id=tr_id$hostid  class=$tr_class>";
 			
 			echo "<td>$sName</td>
-			<td>$sDesc</td>
-			<td>$sFilePath</td>
 			<td>$sArgs</td>
 		</tr>";
 
