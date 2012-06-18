@@ -34,14 +34,11 @@
 
 <?PHP
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id) ORDER BY mat_nom" );
+	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id) ORDER BY mat_nom" );
 
 ?>
 	<!-- onclick="$('filt').value = '/ecran';filter($('filt').value);"-->
@@ -72,7 +69,7 @@
 	
 <?PHP
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 ?>
 
 </body>
