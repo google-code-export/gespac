@@ -235,8 +235,8 @@
 				
 				foreach ($combo_des_salles as $combo_option ) {
 				
-					$option_id 		= $combo_option[0];
-					$option_salle 	= $combo_option[1];
+					$option_id 		= $combo_option['salle_id'];
+					$option_salle 	= $combo_option['salle_nom'];
 					
 					//On colle par défaut la salle STOCK, donc ID = 1
 					$defaut = $option_id == 1 ? "selected" : "";
