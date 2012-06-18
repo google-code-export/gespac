@@ -30,9 +30,6 @@ session_start();
 		
 ?>
 
-
-<script type="text/javascript" src="server.php?client=all"></script>
-
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
@@ -80,24 +77,29 @@ session_start();
 	
 </script>
 
-
+<center>
 
 <!-- 	bouton pour le filtrage du tableau	-->
 <form id="filterform">
-	<center><small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'salle_table');" type="text" value=<?PHP echo $_GET['filter'];?> ></center>
+	<small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'salle_table');" type="text" value=<?PHP echo $_GET['filter'];?> >
 </form>
 
-
-<select id='bassin'>
-	<option value="AI">Aix</option>
-	<option value="AR">Arles</option>
-	<option value="IS">Istres</option>
-	<option value="MA">Marseille Aubagne</option>
-	<option value="MC">Marseille Centre</option>
-	<option value="ME">Marseille Est</option>
-	<option value="MN">Marseille Nord</option>
-</select>
-
+<center>
+	
+	Sélectionnez votre bassin :
+	
+	<select id='bassin'>
+		<option value="AI" selected>Aix</option>
+		<option value="AR">Arles</option>
+		<option value="IS">Istres</option>
+		<option value="MA">Marignane Vitrolles</option>
+		<option value="MC">Marseille Centre</option>
+		<option value="ME">Marseille Aubagne La Ciotat</option>
+		<option value="MN">Marseille Nord et Etoile Sud</option>
+	</select>
+	
+	
+</center>
 
 <?PHP 
 
@@ -113,6 +115,15 @@ session_start();
 
 
 ?>
+
+
+<form action="modules/association_uo/post_assoc.php" method="post" name="post_form" id="post_form">
+	
+	<br>
+	<br>
+	
+	<input type="submit" value="Créer les Snapins dans FOG">
+	
 	
 	<center>
 	<br>
@@ -151,7 +162,7 @@ session_start();
 					echo "<td> <input type=checkbox id='chk$id' class='chk'> </td>";
 					echo "<td>$nom</td>";
 
-					echo "<td><input type=text id='param$id' readonly></td>";
+					echo "<td><textarea id='param$id' name='param$id' readonly style='height:18px;width:320px;'></textarea></td>";
 					
 					echo "<td align=left class='params'>
 
@@ -176,6 +187,8 @@ session_start();
 	</table>
 	</center>
 	
+	</form>
+	
 	<br>
 	
 
@@ -189,6 +202,22 @@ session_start();
 	window.addEvent('domready', function(){
 	 
 		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
+		
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML, filt) {
+					$('target').set('html', responseText);
+					//$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+				}
+			
+			}).send(this.toQueryString());
+		});	
 	
 	
 		// Pour faire apparaitre les paramètres
@@ -217,52 +246,54 @@ session_start();
 			
 			var param = "";
 			
-			if ( $("e" + id).checked ) param = "E";	else param = "e";
-			
+			if ( $("e" + id).checked ) param = "E";	else param = "e";		
 			if ( $("u" + id).checked ) param += "U"; else param += "u";
-			
-			if ( $("m" + id).checked ) param += "M"; else param += "m";
-			
+			if ( $("m" + id).checked ) param += "M"; else param += "m";			
 			if ( $("c" + id).checked ) param += "C"; else param += "c";
-			
 			if ( $("s" + id).checked ) param += "S"; else param += "s";
 			
-			return param;
-			
+			return param;		
 		}
-	
-	
-		// Sur clic d'une checkbox dans la liste des paramètres
-		$$(".paramdiv input").addEvent('change', function(e) {
-			
+		
+		
+		// Créé la ligne complète du paramètre
+		function MakeParamLine (id) {
+		
 			// /OU=OU="CDI",OU="Postes Fixes",OU=Ordinateurs,OU=013XXXXY,OU='BassinXXX',OU=Colleges,DC=ordina13,DC=cg13,DC=fr /YES /CLIENT=eUmCS
 			
-			
-			var itm = this.id.substring(1);
 						
 			// Pour la partie eumcs
-				var iaca = " /client=" + eumcs(itm) ;
+				var iaca = " /client=" + eumcs(id) ;
 			
 			// Pour le reboot après intégration
-				if ( $("r" + itm).checked ) reboot = " /YES";	else reboot = "";
+				if ( $("r" + id).checked ) reboot = " /YES";	else reboot = "";
 	
 			// Partie OU
 				var ou = "";
 				
 				// Pour la salle
-				var salle = '/OU=OU="' + $('salle' + itm).value + '" ';
+				var salle = '/OU=OU="' + $('salle' + id).value + '"';
 									
 				// Pour la portion postes fixe / Postes mobiles
-				if ( $("p" + itm).checked ) poste = 'OU="Postes Fixes"';	else poste = 'OU="Portables"';
+				if ( $("p" + id).checked ) poste = 'OU="Postes Fixes"';	else poste = 'OU="Portables"';
 				
 				
-				ou = salle + "," + poste + ',OU=Ordinateurs,OU=' +  uai.value + ',OU=' + bassin.value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
+				ou = salle + "," + poste + ',OU=Ordinateurs,OU=' +  uai.value + ',OU=' + $('bassin').value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
 					
 			// La ligne entière
-			$("param"+itm).value = ou + reboot + iaca;
+			return ou + reboot + iaca;	
 			
+		}
+	
+	
+	
+		// Sur clic d'une checkbox dans la liste des paramètres
+		$$(".paramdiv input").addEvent('change', function(e) {
+			var id = this.id.substring(1);
+			$("param"+id).value = MakeParamLine(id);		
 		});
 		
+	
 		
 		// Sur clic d'une checkbox en début de ligne
 		$$(".chk").addEvent('change', function(e) {
@@ -271,28 +302,31 @@ session_start();
 			var id = this.id.replace("chk", "");
 			
 			if (this.checked) {
-				
-				// Pour la partie eumcs
-				var iaca = " /client=" + eumcs(id) ;
-			
-				// Pour le reboot après intégration
-				if ( $("r" + id).checked ) reboot = " /YES";	else reboot = "";
-				
-				// Partie OU
-				var ou = "";
-					
-				// Pour la salle
-				var salle = '/OU=OU="' + $('salle' + id).value + '" ';
-														
-				ou = salle + ',OU="Postes Fixes",OU=Ordinateurs,OU=' +  uai.value + ',OU=' + bassin.value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
-						
-				
-				$("param"+id).value = ou + reboot + iaca;
+				$("param"+id).value = MakeParamLine(id);
+				$("param"+id).style.height = "70px";
 			}
-			
 			else {
 				$("param"+id).value = "";
+				$("param"+id).style.height = "18px";
 			}
+		});
+		
+		
+		
+		// Sur changement du bassin
+		$("bassin").addEvent('change', function(e) {
+						
+			$$('.chk').each(function (item) {
+				
+			
+			
+			// Si la case est cochée
+			if ( item.checked ) {
+				// juste le id
+				var id = item.id.replace("chk", "");
+				$("param"+id).value = MakeParamLine(id);
+			}
+		})	
 			
 			
 		});
