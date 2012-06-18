@@ -133,7 +133,7 @@ include_once ('fonctions.php');
 					if (checkdroit("L-07-08") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_fog/voir_migration.php');change_icon_onclick('plugins');\">Migration Fog</a></li>";
 					if (checkdroit("L-07-09") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_dossiers/migration_dossiers.php');change_icon_onclick('plugins');\">Migration Dossiers</a></li>";
 					if (checkdroit("L-07-10") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/generate_inv/voir_generate.php');change_icon_onclick('plugins');\">Générer inventaire</a></li>";
-					if (checkdroit("L-07-11") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/association_uo/voir_assoc.php');change_icon_onclick('plugins');\">Association UO</a></li>";
+					if (checkdroit("L-07-11") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/association_uo/voir_assoc.php');change_icon_onclick('plugins');\">Snapins AIC</a></li>";
 					if (checkdroit("L-07-12") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_users/form_extract.php');change_icon_onclick('plugins');\">Migration utilisateurs 2008</a></li>";
 					echo "</ul>
 				</li>";

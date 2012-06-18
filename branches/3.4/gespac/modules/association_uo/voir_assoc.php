@@ -20,16 +20,18 @@
 	include_once ('../../../class/Sql.class.php');
 
 	
-	// gestion des droits particuliers (Migrer les pc)
-	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-11#", $_SESSION['droits']);
-	
+	// gestion des droits
+	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-11#", $_SESSION['droits']);
 
 
 	echo "<h3>Création des snapins pour intégration dans le domaine via client iaca.</h3>";
-	echo "<br><small><i>Tout d'abord, créez vos UO sur le contrôleur de domaine puis créez les snapins avec cette interface et enfin associez ces snapins aux groupes dans fog.</small></i>";
 	echo "<br><br><br><br>";
 	
-	echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/association_uo/form_assoc.php');\" >Gérer les associations</a>";
+	if ($E_chk) {
+		echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/association_uo/form_assoc.php');\" >Gérer les snapins AIC</a>";
+	} else {
+		echo "vous n'avez pas les droits suffisants.";
+	}
 	
 	echo "<br><br><br><br>";
 	

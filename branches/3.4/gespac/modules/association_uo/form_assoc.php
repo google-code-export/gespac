@@ -27,6 +27,8 @@ session_start();
 	echo "<h3>Création des snapins pour intégration dans le domaine via client iaca.</h3>";
 	echo "<br><small><i>Tout d'abord, créez vos UO sur le contrôleur de domaine puis créez les snapins avec cette interface et enfin associez ces snapins aux groupes dans fog.</small></i>";
 	echo "<br><br><br><br>";
+	
+	if ( $E_chk ) {
 		
 ?>
 
@@ -195,6 +197,8 @@ session_start();
 <?PHP
 	// On se déconnecte de la db
 	$con_gespac->Close();
+	
+	} // End of E_chk
 ?>
 
 <script type="text/javascript">
