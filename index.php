@@ -6,7 +6,7 @@
 		<meta http-equiv="X-UA-Compatible" content="chrome=1" />
 		
 		<!--	CODAGE	-->
-		<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1" /> 
+		<meta http-equiv=Content-Type content="text/html; charset=utf-8" /> 
 		
 		<!--	FAVICON	-->
 		<link rel="SHORTCUT ICON" href="./gespac/img/favicon.ico"/>
