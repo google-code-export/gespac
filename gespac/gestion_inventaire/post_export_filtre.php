@@ -2,14 +2,10 @@
 
 /*	CREATION DU FICHIER D'EXPORT DU FILTRE	*/
 
-include_once ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-
-
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 	$filtre = $_GET['filtre'];
 	$filter_explode_exclusion = @explode ("/", $filtre);
@@ -125,10 +121,10 @@ include_once ('../includes.php');	// fichier contenant les fonctions, la config 
 	
 		
 	if ( $filtre <> '' ) {
-		$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND $like $jonction $notlike)" );
+		$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND $like $jonction $notlike)" );
 	}
 	else {
-		$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id)" );
+		$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id)" );
 	}
 	
 
@@ -139,17 +135,17 @@ fputcsv($fp, array('NOM', 'DSIT', 'SSN', 'ETAT', 'MARQUE', 'MODELE', 'FAMILLE', 
 
 foreach ($liste_des_materiels as $record) {
 
-	$mat_nom 		= $record[0];
-	$mat_dsit 		= $record[1];
-	$mat_serial 	= $record[2];
-	$mat_etat 		= $record[3];
-	$marque_marque 	= $record[4];
-	$marque_model 	= $record[5];
-	$marque_type 	= $record[6];
-	$marque_stype 	= $record[7];
-	$salle_nom 		= $record[9];
-	$mat_origine	= $record[11];
-	$user_nom 		= $record[12] == 'ati' ? '' : $record[12];
+	$mat_nom 		= $record['mat_nom'];
+	$mat_dsit 		= $record['mat_dsit'];
+	$mat_serial 	= $record['mat_serial'];
+	$mat_etat 		= $record['mat_etat'];
+	$marque_marque 	= $record['marque_marque'];
+	$marque_model 	= $record['marque_model'];
+	$marque_type 	= $record['marque_type'];
+	$marque_stype 	= $record['marque_stype'];
+	$salle_nom 		= $record['salle_nom'];
+	$mat_origine	= $record['mat_origine'];
+	$user_nom 		= $record['user_nom'] == 'ati' ? '' : $record['user_nom'];
 
     
 	fputcsv($fp, array($mat_nom, $mat_dsit, $mat_serial, $mat_etat, $marque_marque, $marque_model, $marque_type, $marque_stype, $salle_nom, $mat_origine, $user_nom), ';');
@@ -158,7 +154,7 @@ foreach ($liste_des_materiels as $record) {
 
 fclose($fp);
 
-$db_gespac->disconnect();
+$con_gespac->Close();
 
 ?>
 
