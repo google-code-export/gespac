@@ -3,16 +3,10 @@
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 	
 	// lib
-	require_once ('../fonctions.php');
-	require_once ('../config/pear.php');
-	include_once ('../config/databases.php');
-	
-	
-	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;	
+	include ('../includes.php');
 	
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 ?>
 
 	var mydiv = document.getElementById('<?PHP echo $_GET['div_id']; ?>');
@@ -36,13 +30,13 @@
 		
 		switch ( $select_dst ) {
 			case "stype" :
-				$req_chainage = $db_gespac->queryAll ( "SELECT DISTINCT marque_stype FROM marques WHERE marque_type = '$select_value'" );
+				$req_chainage = $con_gespac->QueryRow ( "SELECT DISTINCT marque_stype FROM marques WHERE marque_type = '$select_value'" );
 				break;
 			case "marque" :
-				$req_chainage = $db_gespac->queryAll ( "SELECT DISTINCT marque_marque FROM marques WHERE marque_type='$select_type' AND marque_stype = '$select_value'" );
+				$req_chainage = $con_gespac->QueryRow ( "SELECT DISTINCT marque_marque FROM marques WHERE marque_type='$select_type' AND marque_stype = '$select_value'" );
 				break;
 			case "modele" :
-				$req_chainage = $db_gespac->queryAll ( "SELECT DISTINCT marque_model FROM marques WHERE marque_type='$select_type' AND marque_stype = '$select_stype' AND marque_marque='$select_value' " );
+				$req_chainage = $con_gespac->QueryRow ( "SELECT DISTINCT marque_model FROM marques WHERE marque_type='$select_type' AND marque_stype = '$select_stype' AND marque_marque='$select_value' " );
 				break;
 		}
 
