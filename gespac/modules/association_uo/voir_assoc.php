@@ -25,15 +25,22 @@
 
 
 	echo "<h3>Création des snapins pour intégration dans le domaine via client iaca.</h3>";
-	echo "<br><br><br><br>";
+	echo "<br><br><br><br><center>";
 	
 	if ($E_chk) {
-		echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/association_uo/form_assoc.php');\" >Gérer les snapins AIC</a>";
+		
+		if (file_exists("/opt/fog/snapins/aic.exe")) {
+			echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/association_uo/form_assoc.php');\" >Gérer les snapins AIC</a>";
+		} else {
+			echo "Le fichier AIC.exe n'existe pas. Merci de créer un snapin avec ce fichier dans FOG.";
+		}
+		
+		
 	} else {
 		echo "vous n'avez pas les droits suffisants.";
 	}
 	
-	echo "<br><br><br><br>";
+	echo "<br><br><br><br></center>";
 	
 	
 	
