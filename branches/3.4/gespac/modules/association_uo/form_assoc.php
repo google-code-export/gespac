@@ -170,13 +170,14 @@ session_start();
 
 						<div id='paramdiv$id' class='paramdiv' style='display:none;'>		
 							<input type=hidden id='salle$id' value='$nom'>
-							<input type=checkbox id='e$id'>Messages d'erreur<br>
-							<input type=checkbox id='u$id'>Login précédent<br>
+							<input type=checkbox id='e$id'>Afficher les messages d'erreur<br>
+							<input type=checkbox id='u$id'>N'affiche pas le dernier login<br>
 							<input type=checkbox id='m$id' checked>Verrouillage MAJ<br>
-							<input type=checkbox id='c$id' checked>Fenêtre Ctrl Alt Suppr<br>
-							<input type=checkbox id='s$id'>Synchronisation<br>
+							<input type=checkbox id='c$id' checked>Supprime la fenêtre Ctrl Alt Suppr<br>
+							<input type=checkbox id='s$id'>Supprime la synchronisation<br>
 							<input type=checkbox id='r$id' checked>Reboot<br>
 							<input type=checkbox id='p$id' checked>Poste Fixe<br>
+							<input type=checkbox id='a$id' checked>Installe le client IACA<br>
 						</div>
 					</td>";	
 					
@@ -280,12 +281,15 @@ session_start();
 									
 				// Pour la portion postes fixe / Postes mobiles
 				if ( $("p" + id).checked ) poste = 'OU="Postes Fixes"';	else poste = 'OU="Portables"';
-				
-				
+								
 				ou = salle + "," + poste + ',OU=Ordinateurs,OU=' +  uai.value + ',OU=' + $('bassin').value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
+
+				// Pour la portion installation du client iaca
+				if ( $("a" + id).checked ) client = '';	else client = ' /C=N';
+
 					
 			// La ligne entière
-			return ou + reboot + iaca;	
+			return ou + reboot + iaca + client;	
 			
 		}
 	
