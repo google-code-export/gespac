@@ -58,7 +58,7 @@
 				$line[$row][2] = $data[2];
 
 				if ($line[$row][0] <> "NOMCOMPL" )	{
-					$req_import_comptes = "INSERT INTO users (user_nom, user_logon, user_password, grade_id) VALUES ('" . $line[$row][0] . "', '" . $line[$row][1] ."', '" . $line[$row][2] . "', $grade );";
+					$req_import_comptes = "INSERT INTO users (user_nom, user_logon, user_password) VALUES ('" . $line[$row][0] . "', '" . $line[$row][1] ."', '" . $line[$row][2] . "' );";
 					$con_gespac->Execute ( $req_import_comptes );
 					$log->Insert ( $req_import_comptes );
 				}
@@ -78,7 +78,7 @@
 			//$con_gespac->Close();	
 ?>
 			
-			<script>window.close();</script>
+			<script>//window.close();</script>
 			
 <?PHP
 		} else	// En cas d'échec d'upload
