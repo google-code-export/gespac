@@ -15,6 +15,8 @@
 		
 		if ($value <> "") {
 			
+			$value = utf8_encode($value);
+			
 			// On récupère l'id
 			
 			$key = preg_replace("#param#", "", $key);
