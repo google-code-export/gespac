@@ -32,7 +32,9 @@
 		if (file_exists("/opt/fog/snapins/aic.exe")) {
 			echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/snapin_aic/form_snapin_aic.php');\" >Gérer les snapins AIC</a>";
 		} else {
-			echo "Le fichier AIC.exe n'existe pas. Merci de créer un snapin avec ce fichier dans FOG.";
+			echo "Le fichier <b>aic.exe</b> (attention à la casse) n'existe pas. Merci de créer un snapin avec ce fichier dans FOG.";
+			echo "<br><br>";
+			echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/snapin_aic/form_snapin_aic.php');\" >Je posterai mon snapin aic.exe plus tard.</a>";
 		}
 		
 	} else {
