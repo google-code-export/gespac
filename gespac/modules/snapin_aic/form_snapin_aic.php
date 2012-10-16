@@ -68,7 +68,7 @@ session_start();
 	<?PHP
 	echo "<table class=paramdiv>";
 						
-					echo "<tr align=left><td>UO *</td><td><input type=text id='nom_uo' name='nom_uo' size=8 required></td>";
+					echo "<tr align=left><td>UO *</td><td><input type=text id='nom_uo' name='nom_uo' size=15 required><small>Les OU et sous-OU sont séparées par des virgules.</small></td>";
 
 					echo "<tr align=left><td>PARAMETRES</td>
 						<td>
@@ -158,12 +158,22 @@ session_start();
 				var ou = "";
 				
 				// Pour l'uo
-				var uo = '/OU=OU="' + $('nom_uo').value + '"';
+				
+				var split_ou = $('nom_uo').value.split (",");	// On commence par spliter par les ","
+				split_ou.reverse(); // On inverse le sens du tableau pour avoir les ou les plus profondes d'abord.
+				
+				var complete_ou = "";
+				
+				Array.each (split_ou, function (itm) {
+					complete_ou = complete_ou + 'OU="' + itm.trim() + '",';
+				});
+				
+				var uo = '/OU=' + complete_ou;
 									
 				// Pour la portion postes fixe / Postes mobiles
 				if ( $("p").checked ) poste = 'OU="Postes Fixes"';	else poste = 'OU="Portables"';
 								
-				ou = uo + "," + poste + ',OU=Ordinateurs,OU=' +  uai.value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
+				ou = uo + poste + ',OU=Ordinateurs,OU=' +  uai.value + ',OU=Colleges,DC=ordina13,DC=cg13,DC=fr';	
 
 				// Pour la portion installation du client iaca
 				if ( $("a").checked ) client = '';	else client = ' /C=N';
