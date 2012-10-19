@@ -120,7 +120,7 @@ include_once ('fonctions.php');
 		
 			
 			
-			if ( checkalldroits("L-07-01,L-07-02,L-07-03,L-07-04,L-07-05,L-07-06,L-07-07,L-07-08,L-07-09,L-07-10,L-07-11,L-07-12,L-07-13") ) {	
+			if ( checkalldroits("L-07-01,L-07-02,L-07-03,L-07-04,L-07-05,L-07-06,L-07-07,L-07-08,L-07-09,L-07-10,L-07-12,L-07-13") ) {	
 			echo "<li class='dir'> <a href='#'><div id='plugins' class='plugins' title='modules et extensions'></div></a>";
 				echo "<ul>";
 					if (checkdroit("L-07-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/fog/recap_fog.php');change_icon_onclick('plugins');\">Récapitulatif FOG</a></li>";
@@ -133,7 +133,6 @@ include_once ('fonctions.php');
 					if (checkdroit("L-07-08") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_fog/voir_migration.php');change_icon_onclick('plugins');\">Migration Fog</a></li>";
 					if (checkdroit("L-07-09") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_dossiers/migration_dossiers.php');change_icon_onclick('plugins');\">Migration Dossiers</a></li>";
 					if (checkdroit("L-07-10") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/generate_inv/voir_generate.php');change_icon_onclick('plugins');\">Générer inventaire</a></li>";
-					if (checkdroit("L-07-11") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/association_uo/voir_assoc.php');change_icon_onclick('plugins');\">Snapins AIC</a></li>";
 					if (checkdroit("L-07-12") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_users/form_extract.php');change_icon_onclick('plugins');\">Migration utilisateurs 2008</a></li>";
 					if (checkdroit("L-07-13") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/snapin_aic/voir_snapin_aic.php');change_icon_onclick('plugins');\">Création AIC</a></li>";
 					echo "</ul>

@@ -332,6 +332,5 @@ INSERT IGNORE INTO `droits` (`droit_id`, `droit_index`, `droit_titre`, `droit_pa
 (33, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
 (34, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.'),
 (35, '08-06', 'Info serveur', 'modules/infoserveur/infoserveur.php', 0, 'Voir les info du serveur.'),
-(36, '07-11', 'Création des snapins AIC', 'modules/association_uo/voir_assoc.php', 1, 'créer des snapins facilitant l`intégration au domaine avec un AIC paramétré.'),
 (37, '07-12', 'Migration Utilisateurs', 'modules/migration_users/voir_migration_users.php', 1, 'permet de migrer les mots de passe et login des users dans la nouvelle archi.'),
 (38, '07-13', 'Création AIC', 'modules/snapin_aic/voir_snapin_aic.php', 1, 'créer des snapins facilitant l`intégration au domaine avec un AIC paramétré.');
