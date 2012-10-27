@@ -43,7 +43,16 @@ if ( $action == 'suppr') {
 		$con_gespac->Execute($rq);
 	
 	} else {
-		echo "fichier introuvable...";
+		echo "fichier introuvable... Je supprime la ligne dans la base.";
+		
+		// Suppression du fichier dans la DB
+		$rq_suppr_fichier = "DELETE FROM fichiers WHERE fichier_id=$id";
+		$con_gespac->Execute($rq_suppr_fichier);
+		
+		// Logs
+		$log_texte = "Suppression du fichier $fichier.";
+		$rq = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression fichier', '$log_texte' );";
+		$con_gespac->Execute($rq);
 	}
 	
 } 

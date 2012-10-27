@@ -11,7 +11,7 @@ if ( $id == -1 ) {
 	<h3>Ajouter un fichier</h3>
 
 	<br>
-
+	
 	<form method="POST" action="modules/gestion_fichiers/post_fichiers.php?action=creation" target=_blank enctype="multipart/form-data">
 
 		 <!-- On limite le fichier à 10000Ko -->
@@ -156,23 +156,79 @@ if ( $id <> -1 ) {
 	
 	window.addEvent('domready', function(){
 		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
+		
+		if ( $('post_form') ) {
+			$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+				new Event(e).stop();
+				new Request({
 
-				method: this.method,
-				url: this.action,
+					method: this.method,
+					url: this.action,
 
-				onSuccess: function(responseText, responseXML, filt) {
-					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					SexyLightbox.close();
-				}
+					onSuccess: function(responseText, responseXML, filt) {
+						$('target').set('html', responseText);
+						$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+						SexyLightbox.close();
+					}
+				
+				}).send(this.toQueryString());
+			});			
+		}
+	
+		// Sur click des checkboxes pour les droits
+	
+		$('grade_ecriture').addEvent ('click', function(e) {
 			
-			}).send(this.toQueryString());
-		});			
-	});
+			if ( $('grade_ecriture').checked == true ) {
+				$('grade_lecture').checked=true;
+			}
+			else {
+				$('tous_ecriture').checked=false;
+			}
+			
+			CalcDroits();
+		});
 
+		$('grade_lecture').addEvent ('click', function(e) {
+			if ( $('grade_lecture').checked == false ) {
+				$('grade_ecriture').checked=false;
+				$('tous_ecriture').checked=false;
+				$('tous_lecture').checked=false;
+			}
+			
+			CalcDroits();
+		});
+
+		$('tous_lecture').addEvent ('click', function(e) {
+			
+			if ( $('tous_lecture').checked == false ) {
+				$('tous_ecriture').checked=false;
+				$('grade_lecture').checked=false;
+				$('grade_ecriture').checked=false;
+			}
+			else {
+				$('grade_lecture').checked=true;
+			}
+			
+			CalcDroits();
+		});		
+		
+		$('tous_ecriture').addEvent ('click', function(e) {
+			
+			if ( $('tous_ecriture').checked == true ) {
+				$('tous_lecture').checked=true;
+				$('grade_lecture').checked=true;
+				$('grade_ecriture').checked=true;
+			}
+			else {
+				$('grade_ecriture').checked=false;
+			}
+			
+			CalcDroits();
+			
+		});
+	
+	}); // EOFn on domready
 
 
 
@@ -212,63 +268,6 @@ if ( $id <> -1 ) {
 			if ( valeur == "22") {
 				$("grade_lecture").checked = true; $("grade_ecriture").checked = true; $("tous_lecture").checked = true; $("tous_ecriture").checked = true; }
 	}
-	
-	window.addEvent('domready', function(){
-		
-		$('grade_ecriture').addEvent ('click', function(e) {
-			
-			if ( $('grade_ecriture').checked == true ) {
-				$('grade_lecture').checked=true;
-			}
-			else {
-				$('tous_ecriture').checked=false;
-			}
-			
-			CalcDroits();
-		});
-
-		$('grade_lecture').addEvent ('click', function(e) {
-			
-			if ( $('grade_lecture').checked == false ) {
-				$('grade_ecriture').checked=false;
-				$('tous_ecriture').checked=false;
-				$('tous_lecture').checked=false;
-			}
-			
-			CalcDroits();
-		});
-
-		$('tous_lecture').addEvent ('click', function(e) {
-			
-			if ( $('tous_lecture').checked == false ) {
-				$('tous_ecriture').checked=false;
-				$('grade_lecture').checked=false;
-				$('grade_ecriture').checked=false;
-			}
-			else {
-				$('grade_lecture').checked=true;
-			}
-			
-			CalcDroits();
-		});		
-		
-		$('tous_ecriture').addEvent ('click', function(e) {
-			
-			if ( $('tous_ecriture').checked == true ) {
-				$('tous_lecture').checked=true;
-				$('grade_lecture').checked=true;
-				$('grade_ecriture').checked=true;
-			}
-			else {
-				$('grade_ecriture').checked=false;
-			}
-			
-			CalcDroits();
-			
-		});
-		
-		
-	});
 	
 	
 </script>

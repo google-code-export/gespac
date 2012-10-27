@@ -91,8 +91,7 @@
 			
 		} else {
 		
-			$req_recup_uai = $con_gespac->QueryAll("SELECT clg_uai FROM college; ");
-			$uai = $req_recup_uai['clg_uai'];
+			$uai = $con_gespac->QueryOne("SELECT clg_uai FROM college; ");
 			
 			$req_add_salle = "INSERT INTO salles ( salle_nom , salle_vlan , salle_etage , salle_batiment, clg_uai ) VALUES ( '$nom', '$vlan', '$etage', '$batiment', '$uai');";
 			$con_gespac->Execute ( $req_add_salle );
@@ -124,19 +123,25 @@
 		$etage 		= addslashes(utf8_decode($_POST['etage']));
 		$batiment 	= addslashes(utf8_decode($_POST['batiment'])); 
 	
-		$req_verifie_existence_salle = $con_gespac->QueryRow("SELECT * FROM salles WHERE salle_nom='$nom'; ");
+		$verifie_existence_salle = $con_gespac->QueryOne("SELECT salle_id FROM salles WHERE salle_nom='$nom'; ");
 		
-		if ( $req_verifie_existence_salle[0] ) { // alors la salle existe
+		if ( $verifie_existence_salle ) { // alors le nom de la salle existe et on met à jour tout sauf le nom de la salle
+			
+			$req_modif_salle = "UPDATE salles SET salle_vlan = '$vlan', salle_etage = '$etage', salle_batiment='$batiment' WHERE salle_id=$id";
+			$con_gespac->Execute ( $req_modif_salle );
+			
+			//On log la requête
+			$log->Insert ( $req_modif_salle );
 			
 			//Insertion d'un log
-			$log_texte = "La salle $nom existe déjà !"; //pareil qu'au dessus... Intêrét de loguer ça ?
-			$req_log_modif_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création salle', '$log_texte' );";
+			$log_texte = "Les infos de la salle $nom ont été modifiés mais pas le nom de la salle car il doit être unique.";
+			$req_log_modif_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification salle', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_modif_salle );
 			
 			//On log la requête
 			$log->Insert ( $req_log_modif_salle );
-			
-			echo "La salle <b>$nom</b> n'a pas été modifiée.";
+	
+			echo "Les infos de la salle $nom ont été modifiés mais pas le nom de la salle car il doit être unique.";
 			
 		} else {
 			

@@ -324,10 +324,13 @@ INSERT IGNORE INTO `droits` (`droit_id`, `droit_index`, `droit_titre`, `droit_pa
 (25, '07-06', 'Menu portail', 'modules/menu_portail/voir_menu_portail.php', 1, 'Voir, créer ou modifier le menu du portail.'),
 (26, '07-07', 'Gestionnaire de fichiers', 'modules/gestion_fichiers/voir_fichiers.php', 1, 'Voir, créer ou modifier des fichiers.'),
 (27, '07-08', 'Migration Fog','modules/migration_fog/voir_migration.php', 1, 'Permet de migrer les noms de machine de Gespac à Fog.'),
-(27, '07-09', 'Migration dossiers','modules/migration_dossiers/migration_dossiers.php', 0, 'Permet de migrer les dossiers vers le nouveau système.'),
-(28, '08-01', 'Fiche collège', 'gestion_college/voir_college.php', 1, 'Voir ou modifier la fiche du collège.'),
-(29, '08-02', 'Flux RSS', 'modules/rss/rss.php', 1, 'Voir, ajouter ou modifier un flux RSS.'),
-(30, '08-03', 'Stats camemberts', 'modules/stats/camembert.php', 0, 'Voir les stats camembert.'),
-(31, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
-(32, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.');
-
+(28, '07-09', 'Migration dossiers','modules/migration_dossiers/migration_dossiers.php', 0, 'Permet de migrer les dossiers vers le nouveau système.'),
+(29, '07-10', 'Générer Inventaire','modules/generate_inv/voir_generate.php', 1, 'Permet de générer des numéros inventaire pour les matériels sans plaque.'),
+(30, '08-01', 'Fiche collège', 'gestion_college/voir_college.php', 1, 'Voir ou modifier la fiche du collège.'),
+(31, '08-02', 'Flux RSS', 'modules/rss/rss.php', 1, 'Voir, ajouter ou modifier un flux RSS.'),
+(32, '08-03', 'Stats camemberts', 'modules/stats/camembert.php', 0, 'Voir les stats camembert.'),
+(33, '08-04', 'Stats bâtons', 'modules/stats/csschart.php', 0, 'Voir les stats bâtons.'),
+(34, '08-05', 'Stats utilisation du parc', 'modules/stats/utilisation_parc.php', 0, 'Voir les stats du parc.'),
+(35, '08-06', 'Info serveur', 'modules/infoserveur/infoserveur.php', 0, 'Voir les info du serveur.'),
+(37, '07-12', 'Migration Utilisateurs', 'modules/migration_users/voir_migration_users.php', 1, 'permet de migrer les mots de passe et login des users dans la nouvelle archi.'),
+(38, '07-13', 'Création AIC', 'modules/snapin_aic/voir_snapin_aic.php', 1, 'créer des snapins facilitant l`intégration au domaine avec un AIC paramétré.');

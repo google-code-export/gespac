@@ -87,12 +87,9 @@
 		$orderby = "ORDER BY mat_nom asc";
 	}
 	
-	
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 	$filtre = $_GET['filter'];
 	$filter_explode_exclusion = @explode ("/", $filtre);
@@ -208,11 +205,11 @@
 	
 		
 	if ( $_GET['filter'] <> '' ) {
-		$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND $like $jonction $notlike) $orderby" );
+		$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND $like $jonction $notlike) $orderby" );
 		echo "<script>$('nb_filtre').innerHTML = '<small>[" . count($liste_des_materiels) . "]</small>';</script>";
 	}
 	else {
-		$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id) $orderby" );
+		$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id) $orderby" );
 		echo "<script>$('nb_filtre').innerHTML = ''</script>";
 	}
 	
@@ -234,12 +231,12 @@
 				// Pour le remplissage de la combobox des salles pour l'affectation
 					
 				// stockage des lignes retournées par sql dans un tableau nommé combo_des_salles
-				$combo_des_salles = $db_gespac->queryAll ( "SELECT salle_id, salle_nom FROM salles ORDER BY salle_nom;" );
+				$combo_des_salles = $con_gespac->QueryAll ( "SELECT salle_id, salle_nom FROM salles ORDER BY salle_nom;" );
 				
 				foreach ($combo_des_salles as $combo_option ) {
 				
-					$option_id 		= $combo_option[0];
-					$option_salle 	= $combo_option[1];
+					$option_id 		= $combo_option['salle_id'];
+					$option_salle 	= $combo_option['salle_nom'];
 					
 					//On colle par défaut la salle STOCK, donc ID = 1
 					$defaut = $option_id == 1 ? "selected" : "";
@@ -355,24 +352,24 @@
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 
-				$nom 		= $record[0];
-				$dsit 		= $record[1];
-				$serial 	= $record[2];
-				$etat 		= $record[3];
-				$marque		= $record[4];
-				$model 		= $record[5];
-				$type 		= $record[6];
-				$stype		= $record[7];
-				$id 		= $record[8];
-				$salle 		= $record[9];
-				$salle_id 	= $record[10];
-				$origine 	= $record[11];
-				$user	 	= $record[12];
+				$nom 		= $record['mat_nom'];
+				$dsit 		= $record['mat_dsit'];
+				$serial 	= $record['mat_serial'];
+				$etat 		= $record['mat_etat'];
+				$marque		= $record['marque_marque'];
+				$model 		= $record['marque_model'];
+				$type 		= $record['marque_type'];
+				$stype		= $record['marque_stype'];
+				$id 		= $record['mat_id'];
+				$salle 		= $record['salle_nom'];
+				$salle_id 	= $record['salle_id'];
+				$origine 	= $record['mat_origine'];
+				$user	 	= $record['user_nom'];
 			
 				
 				// test si la machine est prétée ou pas
-				$rq_machine_pretee = $db_gespac->queryAll ( "SELECT mat_id FROM materiels WHERE user_id<>1 AND mat_id=$id" );
-				$mat_id = @$rq_machine_pretee[0][0];	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, évidement
+				$rq_machine_pretee = $con_gespac->QueryOne ( "SELECT mat_id FROM materiels WHERE user_id<>1 AND mat_id=$id" );
+				$mat_id = @$rq_machine_pretee;	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, évidement
 						
 				if ( !isset($mat_id) ) {	// la machine n'est pas prêtée ($mat_id n'existe pas)
 						$id_pret = 0;
@@ -428,7 +425,7 @@
 	
 <?PHP
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 ?>
 
 

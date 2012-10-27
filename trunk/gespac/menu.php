@@ -73,11 +73,11 @@ include_once ('fonctions.php');
 
 			
 			if ( checkalldroits("L-03-01,L-03-02, L-03-03") ) {
-				echo "<li class='dir'>"; if (checkdroit("L-03-01") ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='demandes et interventions'></div></a>"; else echo "<div id='demandes' class='demandes' title='demandes et interventions'></div>";
+				echo "<li class='dir'>"; if (checkdroit("L-03-03") ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='demandes et interventions'></div></a>"; else echo "<div id='demandes' class='demandes' title='demandes et interventions'></div>";
 					echo "<ul>";
-						if (checkdroit("L-03-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');\">		Voir les dossiers	</a></li>";
-						if (checkdroit("L-03-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_interventions.php');change_icon_onclick('demandes');\">	Voir les interventions	</a></li>";
-						if (checkdroit("L-03-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\">	Dossiers beta	</a></li>";
+						if (checkdroit("L-03-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\">	Dossiers</a></li>";
+						if (checkdroit("L-03-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');\">		OLD dossiers	</a></li>";
+						if (checkdroit("L-03-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_interventions.php');change_icon_onclick('demandes');\">	OLD interventions	</a></li>";
 					echo "</ul>
 				</li>";
 			}
@@ -120,7 +120,7 @@ include_once ('fonctions.php');
 		
 			
 			
-			if ( checkalldroits("L-07-01,L-07-02,L-07-03,L-07-04,L-07-05,L-07-06,L-07-07,L-07-08,L-07-09") ) {	
+			if ( checkalldroits("L-07-01,L-07-02,L-07-03,L-07-04,L-07-05,L-07-06,L-07-07,L-07-08,L-07-09,L-07-10,L-07-12,L-07-13") ) {	
 			echo "<li class='dir'> <a href='#'><div id='plugins' class='plugins' title='modules et extensions'></div></a>";
 				echo "<ul>";
 					if (checkdroit("L-07-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/fog/recap_fog.php');change_icon_onclick('plugins');\">Récapitulatif FOG</a></li>";
@@ -132,13 +132,16 @@ include_once ('fonctions.php');
 					if (checkdroit("L-07-07") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/gestion_fichiers/voir_fichiers.php');change_icon_onclick('plugins');\">Gestion des fichiers</a></li>";
 					if (checkdroit("L-07-08") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_fog/voir_migration.php');change_icon_onclick('plugins');\">Migration Fog</a></li>";
 					if (checkdroit("L-07-09") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_dossiers/migration_dossiers.php');change_icon_onclick('plugins');\">Migration Dossiers</a></li>";
+					if (checkdroit("L-07-10") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/generate_inv/voir_generate.php');change_icon_onclick('plugins');\">Générer inventaire</a></li>";
+					if (checkdroit("L-07-12") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_users/form_extract.php');change_icon_onclick('plugins');\">Migration utilisateurs 2008</a></li>";
+					if (checkdroit("L-07-13") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/snapin_aic/voir_snapin_aic.php');change_icon_onclick('plugins');\">Création AIC</a></li>";
 					echo "</ul>
 				</li>";
 			}
 			
 			
 			
-			if ( checkalldroits("L-08-01,L-08-02,L-08-03,L-08-04,L-08-05") ) {	
+			if ( checkalldroits("L-08-01,L-08-02,L-08-03,L-08-04,L-08-05,L-08-06") ) {	
 			echo "<li class='dir'><a href='#' onclick=\"AffichePage('conteneur', 'info.php');change_icon_onclick('info');\"><div id='info' class='info' title='info'></div></a>";
 				echo "<ul>";
 					if (checkdroit("L-08-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_college/voir_college.php'); change_icon_onclick('info');\">Fiche collège</a></li>";
@@ -146,6 +149,7 @@ include_once ('fonctions.php');
 					if (checkdroit("L-08-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/graph.php');change_icon_onclick('info');\">Stats camemberts</a></li>";
 					if (checkdroit("L-08-04") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/csschart.php');change_icon_onclick('info');\">Stats bâtons</a></li>";
 					if (checkdroit("L-08-05") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/utilisation_parc.php');change_icon_onclick('info');\">Stats utilisation du parc</a></li>";	
+					if (checkdroit("L-08-06") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/infoserveur/infoserveur.php');change_icon_onclick('info');\">Infos serveur</a></li>";
 					echo "</ul>
 				</li>";
 			}

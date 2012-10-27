@@ -1,22 +1,22 @@
 <?php
         
-        include ('./gespac/config/databases.php');      // fichiers de configuration des bases de données
-        include ('./gespac/fonctions.php');				// fichier contenant les fonctions utilisées dans le reste des scripts
+        include ('./gespac/config/databases.php');      // fichiers de configuration des bases de donnÃ©es
+        include ('./gespac/fonctions.php');				// fichier contenant les fonctions utilisÃ©es dans le reste des scripts
         include ('./gespac/config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
 
         session_start();
 
-        // adresse de connexion à la base de données
+        // adresse de connexion Ã  la base de donnÃ©es
         $dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
 
-        // cnx à la base de données GESPAC
+        // cnx Ã  la base de donnÃ©es GESPAC
         $db_gespac      = & MDB2::factory($dsn_gespac);
         
         $message = 'En attente de connexion...';
 		
 		#*************************************************************************************
 		#
-		# 				Vérification de l'existence de la table 'users'	et du compte ati 
+		# 				VÃ©rification de l'existence de la table 'users'	et du compte ati 
 		#
 		#*************************************************************************************
 		
@@ -25,7 +25,7 @@
 		
 		if (!$result) { //dans ce cas, la table 'users' n'existe pas
 		
-			//on crée la table user avec le compte 'ati'
+			//on crÃ©e la table user avec le compte 'ati'
 			$req_creation_table_users = "CREATE TABLE IF NOT EXISTS `users` (
 									  `user_id` int(11) NOT NULL AUTO_INCREMENT,
 									  `user_nom` varchar(255) DEFAULT NULL,
@@ -40,26 +40,26 @@
 									  UNIQUE KEY `user_logon` (`user_logon`)
 									) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
 									
-			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
 			
-			//on exécute les requêtes ci-dessus
+			//on exÃ©cute les requÃªtes ci-dessus
 			$result_creation_table = $db_gespac->exec($req_creation_table_users);
 			$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
 			
 			
 		} else { //la table 'users' existe
 		
-			//on vérifie si le compte ati existe et si il a bien l'identifiant 1
+			//on vÃ©rifie si le compte ati existe et si il a bien l'identifiant 1
 			$req_ati_existe = $db_gespac->queryAll("SELECT user_logon FROM users WHERE user_id=1");
 			
-			if ($req_ati_existe[0][0] == 'ati') { // si l'user_id (qui est égal à 1) a pour nom ati, on peut sortir (le compte existe et a le bon id) 
+			if ($req_ati_existe[0][0] == 'ati') { // si l'user_id (qui est Ã©gal Ã  1) a pour nom ati, on peut sortir (le compte existe et a le bon id) 
 				
 			} else { 
-				//requête pour mettre à jour le compte avec un id différent de 1
+				//requÃªte pour mettre Ã  jour le compte avec un id diffÃ©rent de 1
 				$user_logon = $req_ati_existe[0][0];
 				
 				if ($user_logon != '') {
-					//on génére aléatoirement un numéro d'id qu'on affectera au compte
+					//on gÃ©nÃ©re alÃ©atoirement un numÃ©ro d'id qu'on affectera au compte
 					$id = rand(800, 1000);
 					
 					$maxuserid = $db_gespac->queryOne("SELECT max( user_id ) as maxuserid FROM users"); 
@@ -68,15 +68,15 @@
 					$req_maj_id = "UPDATE users SET user_id = $maxuserid WHERE user_logon = '$user_logon';";
 					$result_maj_id = $db_gespac->exec($req_maj_id);
 					
-					//on crée ensuite le compte ati
-					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+					//on crÃ©e ensuite le compte ati
+					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
 					$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
 					
 					
 				} else {
 				
-					// il n'y a pas de compte avec l'id à 1 : on crée le compte ati
-					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'G5sP1c', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
+					// il n'y a pas de compte avec l'id Ã  1 : on crÃ©e le compte ati
+					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
 					$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
 				}
 			}
@@ -109,7 +109,7 @@
 				$message = 'Nom d`utilisateur et/ou mot de passe incorrect !';
 			} else {
 					
-				// extraction de données pour les mettre en variables de sessions
+				// extraction de donnÃ©es pour les mettre en variables de sessions
 				$user = $_SESSION ['login'];
 				$rq_session_user = $db_gespac->queryRow ( "SELECT user_skin, grade_menu, grade_nom, grade_menu_portail FROM users, grades WHERE users.grade_id=grades.grade_id AND user_logon='$user' " );
 				$_SESSION ['skin'] 			= $rq_session_user[0];             
@@ -127,7 +127,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" >
    <head>
-        <title>GESPAC -> GEStion du PArc des Collèges</title>
+        <title>GESPAC -> GEStion du PArc des CollÃ¨ges</title>
    </head>
                         
 	<body>
