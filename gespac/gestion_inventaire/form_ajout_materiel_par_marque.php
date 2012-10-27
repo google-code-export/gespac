@@ -10,8 +10,7 @@
 	
 	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
-	include ('../config/databases.php');		// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 
 ?>
 
@@ -83,11 +82,8 @@
 
 <?PHP
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 	
 	$id = $_GET['id'];
@@ -102,21 +98,21 @@
 		
 		
 		// Requête qui va récupérer les champs à partir de la marque
-		$ajout_materiel_de_marque = $db_gespac->queryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques WHERE marque_id=$id" );
+		$ajout_materiel_de_marque = $con_gespac->QueryRow ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques WHERE marque_id=$id" );
 	
 		
 		// valeurs à affecter aux champs
-		$materiel_id 			= $ajout_materiel_de_marque[0][0];
-		$materiel_type 			= $ajout_materiel_de_marque[0][1];
-		$materiel_stype			= $ajout_materiel_de_marque[0][2];
-		$materiel_marque		= $ajout_materiel_de_marque[0][3];
-		$materiel_modele		= $ajout_materiel_de_marque[0][4];		
+		$materiel_id 			= $ajout_materiel_de_marque[0];
+		$materiel_type 			= $ajout_materiel_de_marque[1];
+		$materiel_stype			= $ajout_materiel_de_marque[2];
+		$materiel_marque		= $ajout_materiel_de_marque[3];
+		$materiel_modele		= $ajout_materiel_de_marque[4];		
 		
 		// Requête qui va récupérer les origines des dotations ...
-		$liste_origines = $db_gespac->queryAll ( "SELECT origine FROM origines ORDER BY origine" );
+		$liste_origines = $con_gespac->QueryAll ( "SELECT origine FROM origines ORDER BY origine" );
 	
 		// Requête qui va récupérer les états des matériels ...
-		$liste_etats = $db_gespac->queryAll ( "SELECT etat FROM etats ORDER BY etat" );
+		$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
 		
 		echo "<h2><center>Formulaire d'ajout d'un nouveau matériel de marque $materiel_marque et de modèle $materiel_modele</center></h2><br>";
 		
@@ -158,7 +154,7 @@
 					<TD>	
 						<select name="origine">
 							<option value=<?PHP echo $materiel_origine; ?>><?PHP echo $materiel_origine; ?></option>
-							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine[0] ."'>" . $origine[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
 						</select>
 
 					</TD>
@@ -168,7 +164,7 @@
 					<TD>Etat du matériel</TD> 
 					<TD>
 						<select name="etat">
-							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat[0] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
@@ -180,9 +176,9 @@
 						<select name="salle" >
 							<?PHP
 								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT DISTINCT salle_nom FROM salles" );
+								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT salle_nom FROM salles" );
 								foreach ( $req_salles_disponibles as $record) { 
-									$salle_nom = $record[0];
+									$salle_nom = $record['salle_nom'];
 									$selected = $salle_nom == "STOCK" ? " selected" : "";
 									
 									echo "<option $selected value='$salle_nom'>$salle_nom</option>";

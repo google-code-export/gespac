@@ -26,8 +26,8 @@
 		
 		$dem_id		= $demande ["dem_id"];
 		$dem_date	= $demande ["dem_date"];
-		$dem_text	= addslashes($demande ["dem_text"]);
-		$dem_etat	= $demande ["dem_etat"];
+		$dem_text	= utf8_encode(addslashes($demande ["dem_text"]));
+		$dem_etat	= utf8_encode($demande ["dem_etat"]);
 		$dem_type	= $demande ["dem_type"];
 		$dem_user	= $demande ["user_demandeur_id"];
 		$mat_id		= $demande ["mat_id"];
@@ -56,7 +56,7 @@
 			$con_gespac->Execute("INSERT INTO dossiers_textes (dossier_id, txt_user, txt_date, txt_etat, txt_texte) VALUES ($dossier_id, $dem_user, '$dem_date', 'ouverture', '$dem_text')");
 
 			// blabla
-			echo "<li>$dem_date : " . stripcslashes($dem_text);
+			echo "<li>$dem_date : " . utf8_decode(stripcslashes($dem_text));
 			
 			// Si le mat_id <> 0 c'est qu'on a qu'un seul matériel affecté par 
 			if ( $mat_id <> 0 ) {
@@ -94,14 +94,14 @@
 			
 				$txt_id 	= $texte['txt_id'];
 				$txt_date 	= $texte['txt_date']; 	
-				$txt_etat 	= $texte['txt_etat']; 	
-				$txt_texte 	= addslashes($texte['txt_texte']); 	
+				$txt_etat 	= utf8_encode($texte['txt_etat']); 	
+				$txt_texte 	= utf8_encode(addslashes($texte['txt_texte'])); 	
 				$user_id 	= $texte['user_id'];
 					
 				$con_gespac->Execute("INSERT INTO dossiers_textes (dossier_id, txt_user, txt_date, txt_etat, txt_texte) VALUES ($dossier_id, $user_id, '$txt_date', '$txt_etat', '$txt_texte')");
 				
 				// blabla
-				echo "<li>$txt_date : " . stripcslashes($txt_texte);
+				echo "<li>$txt_date : " . utf8_decode(stripcslashes($txt_texte));
 			}
 			
 		}

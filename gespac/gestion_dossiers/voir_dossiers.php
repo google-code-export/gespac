@@ -56,6 +56,7 @@
 		echo "<th>commentaire</th>";
 		echo "<th>&nbsp;</th>";
 		if ( $E_chk ) echo "<th>&nbsp;</th>";	
+		if ( $E_chk ) echo "<th>&nbsp;</th>";	
 		
 		$compteur = 0;
 		
@@ -84,6 +85,8 @@
 				echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?height=480&width=500&dossier=$dossier_id' rel='slb_dossiers' title='Liste des matériels du dossier $dossier_id'><img src='img/outils.png'></a></td>";
 				if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=$dossier_id');\"> <img src='img/write.png'> </a></td>";
 				else echo "<td>&nbsp;</td>";
+				if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"validation_suppr_dossier('$dossier_id');\"> <img src='img/delete.png'> </a></td>";
+				else echo "<td>&nbsp;</td>";
 			
 			echo "</tr>";
 			
@@ -94,14 +97,14 @@
 
 			echo "<tr id='dossiers$dossier_id' style='display:none' class='inner_tr'>";
 			
-			echo "<td colspan=8 class='inner_td'>";
+			echo "<td colspan=9 class='inner_td'>";
 				echo "<table class='innertable'>";
 
 					foreach ( $page_dossier as $page) {
 						
 						$txt_id 	= $page['txt_id'];
 						$txt_date 	= date ("d-m-Y H:i", strtotime($page['txt_date']));
-						$txt_texte 	= $page['txt_texte'];
+						$txt_texte 	= stripcslashes($page['txt_texte']);
 						$txt_etat 	= $page['txt_etat'];
 						if (strtoupper($_SESSION['grade']) == 'ATI' || strtoupper($_SESSION['grade']) == 'ROOT') {
 							$user_nom 	= $page['user_nom'];
@@ -144,6 +147,21 @@
 	  
 		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_dossiers'});	  
 	});
+	
+		// Fonction de validation de la suppression d'une marque
+	function validation_suppr_dossier (id) {
+	
+		var valida = confirm('Voulez-vous vraiment supprimer le dossier ' + id + ' ?\n ATTENTION, toutes les pages du dossier seront détruites !');
+		
+		// si la réponse est TRUE ==> on lance la page post_marques.php
+		if (valida) {
+			/*	poste la page en ajax	*/
+			$('target').load("gestion_dossiers/post_dossiers.php?action=suppr&id=" + id);
+			/*	on recharge la page au bout de 1000ms	*/
+			window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php');", 1000);
+		}
+	
+	}
 	
 	// Montre / cache les pages d'un dossier
 	function toggleDossier(dossier) {
