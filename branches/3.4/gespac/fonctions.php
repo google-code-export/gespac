@@ -1,5 +1,17 @@
 <?PHP
 
+
+/*************************************************************************/
+
+
+// Permet de nettoyer une chaine de caractère afin d'éviter une injection sql
+function escapeSql($str) {
+	$search=array("\\","\0","\n","\r","\x1a","'",'"');
+	$replace=array("\\\\","\\0","\\n","\\r","\Z","\'",'\"');
+	return str_replace($search,$replace,$str);
+}
+
+
 /*************************************************************************/
 
 
