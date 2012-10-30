@@ -11,8 +11,8 @@
 	$log = new Log ("../../dump/log_sql.sql");
 
 
-	$nom_uo = mysql_real_escape_string($_POST['nom_uo']);
-	$param = mysql_real_escape_string($_POST['param']);
+	$nom_uo = escapeSql($_POST['nom_uo']);
+	$param = escapeSql($_POST['param']);
 
 
 	$snapin_nom = "AIC " . strtoupper($nom_uo);
