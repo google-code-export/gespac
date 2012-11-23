@@ -11,6 +11,23 @@
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
+<script>
+	// Fonction de validation de la suppression d'une marque
+	function validation_suppr(id, nom) {
+
+		var valida = confirm('Voulez-vous vraiment supprimer le snapin ' + nom + ' ?');
+		
+		// si la réponse est TRUE ==> on lance la page post_marques.php
+		if (valida) {
+			/*	poste la page en ajax	*/
+			$('target').load("modules/snapin_aic/post_snapin_aic.php?action=suppr&id=" + id);
+			/*	on recharge la page au bout de 1000ms	*/
+			window.setTimeout("$('conteneur').load('modules/snapin_aic/voir_snapin_aic.php');", 1000);
+		}
+	}
+
+</script>
+
 
 <?PHP
 
@@ -65,6 +82,7 @@
 	echo "
 		<th>Snapin</th>
 		<th>Arguments</th>
+		<th>&nbsp;</th>
 	";
 
 	foreach ($liste_snapins_fog as $record) {
@@ -84,6 +102,7 @@
 			
 			echo "<td>$sName</td>
 			<td>$sArgs</td>
+			<td> <a href='#' onclick=\"javascript:validation_suppr($sID, '$sName');\">	<img src='img/delete.png'>	</a> </td>
 		</tr>";
 
 		$compteur++;
