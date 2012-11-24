@@ -9,8 +9,8 @@
 	
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 
 	
 	// On cherche l'adresse mac dans la liste mat_id / mat_mac
@@ -29,23 +29,19 @@
 	$lot = $_POST ['materiel_a_poster'];
 	$lot_array = explode(";", $lot);
 	
-	// adresse de connexion à la base de données
-	$dsn_gespac = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// cnx à gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
-	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_id, mat_mac FROM materiels WHERE mat_mac <> '' " );	
+	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_id, mat_mac FROM materiels WHERE mat_mac <> '' " );	
 	
 	
 	foreach ($lot_array as $machine) {
 		if ( $machine <> "" ) {
 			$mac = find_mac_by_id("$machine", $liste_des_materiels);
-			//echo "essai de réveil de $machine : $mac<br>";
 			exec ("sudo wakeonlan $mac" );
 		}
 	}
 	
 	
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 ?>

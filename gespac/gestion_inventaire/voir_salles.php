@@ -29,8 +29,6 @@ session_start();
 <h3>Visualisation des salles</h3>
 <br>
 
-<script type="text/javascript" src="server.php?client=all"></script>
-
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 
