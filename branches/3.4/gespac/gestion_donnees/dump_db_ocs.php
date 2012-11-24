@@ -1,37 +1,36 @@
-<script type="text/javascript">	
+ï»¿<script type="text/javascript">	
 	// init de la couleur de fond
 	document.getElementById('conteneur').style.backgroundColor = "#fff";
 </script>
 
 <?php
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-	
-	// adresse de connexion à la base de données
-	$dsn_gespac 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
+	// lib
+	require_once ('../config/databases.php');
+	require_once ('../fonctions.php');
+	include_once ('../../class/Sql.class.php');	
 
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// Connexion Ã  la base de donnÃ©es GESPAC
+	$con_ocs = new Sql ( $host, $user, $pass, $ocsweb );
 
-	
 	
 	$base = "ocsweb";
 
 	// nom du fichier dump
 	$dumpfile = $base. "-sqldump-".date("Ymd-His").".sql"; 
 	
-	// création du fichier dump dans le dossier dump
+	// crÃ©ation du fichier dump dans le dossier dump
 	file_put_contents( "../dump/" . $dumpfile, dump_base($host, $user, $pass, $base) );
 	
-	// On écrit des choses interessantes ici ...
-	echo "<center><h2>Création du fichier dump de la base OCS dans le dossier dump du site ...";
+	// On Ã©crit des choses interessantes ici ...
+	echo "<center><h2>CrÃ©ation du fichier dump de la base OCS dans le dossier dump du site ...";
 	echo "<br>";
 	echo "Pour le voir cliquez >> <a href='../gespac/dump/$dumpfile' target=_blank> $dumpfile </a> << </H2></center>";
 	
 	//Insertion d'un log
-	$log_texte = "Le fichier $dumpfile a été créé";
+	$log_texte = "Le fichier $dumpfile a Ã©tÃ© crÃ©Ã©";
 	
 	$req_log_dump_ocs = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Dump OCS', '$log_texte' );";
-	$result = $db_gespac->exec ( $req_log_dump_ocs );
+	$result = $con_ocs->Execute ( $req_log_dump_ocs );
 
 ?>

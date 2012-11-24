@@ -1,16 +1,14 @@
 <?php
-        
-        include ('./gespac/config/databases.php');      // fichiers de configuration des bases de données
-        include ('./gespac/fonctions.php');				// fichier contenant les fonctions utilisées dans le reste des scripts
-        include ('./gespac/config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-
         session_start();
 
-        // adresse de connexion à la base de données
-        $dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+      	// lib
+		require_once ('gespac/fonctions.php');
+		include_once ('gespac/config/databases.php');
+		include_once ('class/Sql.class.php');
 
-        // cnx à la base de données GESPAC
-        $db_gespac      = & MDB2::factory($dsn_gespac);
+        
+        // Connexion à la base de données GESPAC
+		$con_gespac = new Sql ( $host, $user, $pass, $gespac );
         
         $message = 'En attente de connexion...';
 		
@@ -21,7 +19,7 @@
 		#*************************************************************************************
 		
 		$req_users_existe = "SHOW TABLES FROM gespac LIKE 'users'";
-		$result 		 = $db_gespac->queryAll($req_users_existe);
+		$result = $con_gespac->QueryAll($req_users_existe);
 		
 		if (!$result) { //dans ce cas, la table 'users' n'existe pas
 		
@@ -43,14 +41,14 @@
 			$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
 			
 			//on exécute les requêtes ci-dessus
-			$result_creation_table = $db_gespac->exec($req_creation_table_users);
-			$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
+			$result_creation_table = $con_gespac->Execute($req_creation_table_users);
+			$result_creation_compte_ati = $con_gespac->Execute($req_creation_compte_ati);
 			
 			
 		} else { //la table 'users' existe
 		
 			//on vérifie si le compte ati existe et si il a bien l'identifiant 1
-			$req_ati_existe = $db_gespac->queryAll("SELECT user_logon FROM users WHERE user_id=1");
+			$req_ati_existe = $con_gespac->QueryAll("SELECT user_logon FROM users WHERE user_id=1");
 			
 			if ($req_ati_existe[0][0] == 'ati') { // si l'user_id (qui est égal à 1) a pour nom ati, on peut sortir (le compte existe et a le bon id) 
 				
@@ -62,22 +60,22 @@
 					//on génére aléatoirement un numéro d'id qu'on affectera au compte
 					$id = rand(800, 1000);
 					
-					$maxuserid = $db_gespac->queryOne("SELECT max( user_id ) as maxuserid FROM users"); 
+					$maxuserid = $con_gespac->QueryOne("SELECT max( user_id ) as maxuserid FROM users"); 
 					$maxuserid ++;
 				
 					$req_maj_id = "UPDATE users SET user_id = $maxuserid WHERE user_logon = '$user_logon';";
-					$result_maj_id = $db_gespac->exec($req_maj_id);
+					$result_maj_id = $con_gespac->Execute($req_maj_id);
 					
 					//on crée ensuite le compte ati
 					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
-					$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
+					$result_creation_compte_ati = $con_gespac->Execute($req_creation_compte_ati);
 					
 					
 				} else {
 				
 					// il n'y a pas de compte avec l'id à 1 : on crée le compte ati
 					$req_creation_compte_ati = "INSERT INTO users VALUES('1', 'ati', 'ati', 'azerty', 'cg13', 'modules/stats/csschart.php', '1', 'gespac13@free.fr','1','0');";
-					$result_creation_compte_ati = $db_gespac->exec($req_creation_compte_ati);
+					$result_creation_compte_ati = $con_gespac->Execute($req_creation_compte_ati);
 				}
 			}
 			
@@ -96,7 +94,7 @@
 	   
 	   
 			$req_select_comptes  = "SELECT * FROM users WHERE user_logon='$log_session' AND user_password='$pass_session'";
-			$result = $db_gespac->queryAll($req_select_comptes);
+			$result = $con_gespac->QueryAll($req_select_comptes);
 	  
 			if (!$result) {
 			
@@ -111,7 +109,7 @@
 					
 				// extraction de données pour les mettre en variables de sessions
 				$user = $_SESSION ['login'];
-				$rq_session_user = $db_gespac->queryRow ( "SELECT user_skin, grade_menu, grade_nom, grade_menu_portail FROM users, grades WHERE users.grade_id=grades.grade_id AND user_logon='$user' " );
+				$rq_session_user = $con_gespac->QueryRow ( "SELECT user_skin, grade_menu, grade_nom, grade_menu_portail FROM users, grades WHERE users.grade_id=grades.grade_id AND user_logon='$user' " );
 				$_SESSION ['skin'] 			= $rq_session_user[0];             
 				$_SESSION ['droits'] 		= $rq_session_user[1];
 				$_SESSION ['grade']  		= $rq_session_user[2];
@@ -150,7 +148,7 @@
 		</form>
 			
 		<?php
-			$db_gespac->disconnect();
+			$con_gespac->Close();
 		?>
 			
 	</body>
