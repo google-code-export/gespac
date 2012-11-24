@@ -36,23 +36,20 @@
 	
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 		
-	// adresse de connexion à la base de données
-	$dsn_fog     = 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
-
-	// cnx à la base de données FOG
-	$db_fog 	= & MDB2::factory($dsn_fog);
+	// cnx à fog
+	$con_fog = new Sql($host, $user, $pass, $fog);
 	
 	$pc = $_GET['pc'];
 	$datedebut = $_GET['datedebut'];
 	$datefin = $_GET['datefin'];
 	
 	if ( !isset($pc) && !isset($datedebut) && !isset($datefin) ) {
-		$sql = "select hostName, count(*) from userTracking, hosts WHERE utHostID=hostID group by utHostID order by hostName";
+		$sql = "select hostName, count(*) as compte from userTracking, hosts WHERE utHostID=hostID group by utHostID order by hostName";
 	} else {
-		$sql = "select hostName, count(*) from userTracking, hosts WHERE utHostID=hostID AND utDate>'$datedebut' AND utDate<'$datefin' AND hostName LIKE '%$pc%' group by utHostID order by hostName";
+		$sql = "select hostName, count(*) as compte from userTracking, hosts WHERE utHostID=hostID AND utDate>'$datedebut' AND utDate<'$datefin' AND hostName LIKE '%$pc%' group by utHostID order by hostName";
 	}
 	
 ?>
@@ -94,18 +91,16 @@
 
 	<?PHP
 
-		$liste_max = $db_fog->queryAll ( "select count(*) from userTracking, hosts WHERE utHostID=hostID group by utHostID order by hostName" );
+		$liste_max = $con_fog->QueryAll ( "select count(*) as maxi from userTracking, hosts WHERE utHostID=hostID group by utHostID order by hostName" );
 		$maxi = max($liste_max);
-		$maxi = $maxi[0];
-		
-		
-		//$liste = $db_fog->queryAll ( "select hostName, count(*) from userTracking, hosts WHERE utHostID=hostID group by utHostID order by hostName" );
-		$liste = $db_fog->queryAll ( $sql );
+		$maxi = $maxi['maxi'];
+
+		$liste = $con_fog->QueryAll ( $sql );
 				
 		foreach ($liste as $record) {
 		
-			$mat	= $record[0];
-			$val	= $record[1];
+			$mat	= $record['hostName'];
+			$val	= $record['compte'];
 			$pc 	= ceil(($val / $maxi) * 90);
 		
 			echo "<li>";
