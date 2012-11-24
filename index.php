@@ -149,7 +149,7 @@
 
 			}	
 			
-			echo "<div style='float:right;' class=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
+			echo "<div style='float:right;' class=portail-menu-item><a href='logout.php'> 
 				<img src='./gespac/img/cancel.png' height=48><br>Déconnexion </a></div>";
 
 			echo "<div class='spacer'> </div>";
