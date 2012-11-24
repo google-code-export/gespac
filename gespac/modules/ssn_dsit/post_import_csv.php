@@ -8,19 +8,15 @@
 		
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 
 	// on ouvre un fichier en écriture pour les log sql
 	$fp = fopen('../../dump/log_sql.sql', 'a+');
 	
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);	
-		
-		
+	// cnx à gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
+				
 	$dossier = '../../dump/'; 		// dossier où sera déplacé le fichier
 
 	$fichier 	= basename($_FILES['myfile']['name']);
@@ -56,7 +52,7 @@
 				$line[$row][1] = $data[1];					
 
 				$req_MAJ_csv =  "UPDATE materiels SET mat_dsit='" . $line[$row][1] . "' WHERE mat_serial= '" . $line[$row][0] . "';";
-				$result = $db_gespac->exec ( $req_MAJ_csv );
+				$result = $con_gespac->Execute ( $req_MAJ_csv );
 				
 				// On log la requête SQL
 				fwrite($fp, date("Ymd His") . " " . $req_MAJ_csv."\n");
@@ -68,11 +64,11 @@
 			$log_texte = "Mise à jour des tags DSIT par fichier CSV.";
 
 			$req_log_import_csv = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Import CSV', '$log_texte' )";
-			$result = $db_gespac->exec ( $req_log_import_csv );
+			$result = $con_gespac->Execute ( $req_log_import_csv );
 
 
 			// On se déconnecte de la db
-			$db_gespac->disconnect();	
+			$con_gespac->Close();	
 			?>
 			
 			<script>window.close();</script>

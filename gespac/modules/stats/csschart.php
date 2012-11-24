@@ -15,18 +15,15 @@
 	
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 		
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// cnx à gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 	// nb de matériels
-	$rq_nb_mat = $db_gespac->queryAll ( "SELECT count( mat_nom ) FROM materiels" );
-	$nb_mat = $rq_nb_mat[0][0];
+	$nb_mat = $con_gespac->QueryOne ( "SELECT count(mat_nom) FROM materiels" );
+
 ?>
 
 <!--
@@ -43,15 +40,17 @@
 
 	<?PHP
 		// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-		$liste = $db_gespac->queryAll ( "select CONCAT(marque_marque, ' ', marque_model) as mat, COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id = marques.marque_id GROUP BY mat" );
+		$liste = $con_gespac->QueryAll ("SELECT CONCAT(marque_marque, ' ', marque_model) as mat, COUNT(mat_nom) as compte FROM marques, materiels WHERE materiels.marque_id = marques.marque_id GROUP BY mat");
 						
 		foreach ($liste as $record) {
 		
-			$marque	= $record[0];
-			$val	= $record[1];
+			$marque	= $record['mat'];
+			$val	= $record['compte'];
 			$pc 	= ceil(($val / $nb_mat) * 90);
 		
-			$marque = $marque == " " ? "NC" : $record[0];
+
+		
+			$marque = $marque == " " ? "NC" : $record['mat'];
 				
 			echo "<li>";
 				// label
@@ -84,12 +83,12 @@
 
 	<?PHP
 		// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-		$liste = $db_gespac->queryAll ( "SELECT salle_nom, count( mat_nom ) FROM materiels, salles WHERE materiels.salle_id = salles.salle_id GROUP BY salle_nom" );
+		$liste = $con_gespac->QueryAll ( "SELECT salle_nom, count( mat_nom ) as compte FROM materiels, salles WHERE materiels.salle_id = salles.salle_id GROUP BY salle_nom" );
 		
 		foreach ($liste as $record) {
 		
-			$salle	= $record[0];
-			$val	= $record[1];
+			$salle	= $record['salle_nom'];
+			$val	= $record['compte'];
 			$pc 	= ceil(($val / $nb_mat) * 90);
 			
 			
@@ -124,12 +123,12 @@
 
 	<?PHP
 		// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-		$liste = $db_gespac->queryAll ( "SELECT mat_etat, count( mat_etat ) FROM materiels GROUP BY mat_etat" );
+		$liste = $con_gespac->QueryAll ( "SELECT mat_etat, count( mat_etat ) as compte FROM materiels GROUP BY mat_etat" );
 
 		foreach ($liste as $record) {
 		
-			$etat	= $record[0];
-			$val	= $record[1];
+			$etat	= $record['mat_etat'];
+			$val	= $record['compte'];
 			$pc 	= ceil(($val / $nb_mat) * 90);
 			
 			

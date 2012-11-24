@@ -9,12 +9,10 @@
 	
 	*/
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-06#", $_SESSION['droits']);
@@ -97,14 +95,12 @@
 
 <?PHP 
 
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données OCS
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	
+	// cnx à gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
-	$liste_des_icones = $db_gespac->queryAll ( "SELECT mp_id, mp_icone, mp_nom, mp_url, est_modifiable FROM menu_portail ORDER BY mp_nom" );
+	$liste_des_icones = $con_gespac->QueryAll ( "SELECT mp_id, mp_icone, mp_nom, mp_url, est_modifiable FROM menu_portail ORDER BY mp_nom" );
 
 
 	if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'> <img src='img/add.png'>Ajouter un item</a>";
@@ -131,11 +127,11 @@
 						
 				echo "<tr class=$tr_class>";
 					
-					$mp_id		 		= $record[0];	
-					$mp_icone	 		= "./img/" . $record[1];
-					$mp_nom 			= $record[2];
-					$mp_lien			= $record[3];
-					$est_modifiable		= $record[4];
+					$mp_id		 		= $record['mp_id'];	
+					$mp_icone	 		= "./img/" . $record['mp_icone'];
+					$mp_nom 			= $record['mp_nom'];
+					$mp_lien			= $record['mp_url'];
+					$est_modifiable		= $record['est_modifiable'];
 					
 					
 					echo "<td width=40><img height=30 src=$mp_icone></td>";
@@ -166,7 +162,7 @@
 	if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'> <img src='img/add.png'>Ajouter un item</a>";
 
 	// On se déconnecte de la db
-	$db_gespac->disconnect();
+	$con_gespac->Close();
 ?>
 
 <script type="text/javascript">
