@@ -2,11 +2,15 @@
 	
 	/* fichier de visualisation des logs des prets :
 	
-		view de la db gespac avec tous le matos prêté et rendu
-		avec possibilité de rééditer une convention
+		view de la db gespac avec tous le matos prÃªtÃ© et rendu
+		avec possibilitÃ© de rÃ©Ã©diter une convention
 	*/
 	
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
 ?>
 
@@ -31,9 +35,9 @@
 	
 	function validation_suppr_logs () {
 
-		var valida = confirm ("La suppression des logs va exécuter un dump automatique dans le fichier DUMP_LOGS.CSV. MERCI DE VÉRIFIER QUE VOTRE FICHIER DUMP_LOGS.CSV N'EST PAS OUVERT !");
+		var valida = confirm ("La suppression des logs va exÃ©cuter un dump automatique dans le fichier DUMP_LOGS.CSV. MERCI DE VÃ‰RIFIER QUE VOTRE FICHIER DUMP_LOGS.CSV N'EST PAS OUVERT !");
 		
-		// si la réponse est TRUE ==> on lance la page post_logs.php
+		// si la rÃ©ponse est TRUE ==> on lance la page post_logs.php
 		if (valida) {
 			//	poste la page en ajax	
 			$("target").load("gestion_donnees/post_logs.php");
@@ -81,15 +85,12 @@
 
 <?PHP
 	
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+	// cnx gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
-
-	// stockage des lignes retournées par sql dans un tableau nommé liste_des_prets 
-	// SAlle_id = 3 (à la fin de la rq) parce que 3 correspond à la salle "PRETS"
-	$liste_des_prets = $db_gespac->queryAll ( "SELECT log_date, log_type, log_texte FROM logs ORDER BY log_date DESC" );	
+	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© liste_des_prets 
+	// SAlle_id = 3 (Ã  la fin de la rq) parce que 3 correspond Ã  la salle "PRETS"
+	$liste_des_prets = $con_gespac->QueryAll ( "SELECT log_date, log_type, log_texte FROM logs ORDER BY log_date DESC" );	
 
 ?>
 	
@@ -114,29 +115,29 @@
 			// On parcourt le tableau
 			foreach ( $liste_des_prets as $record ) {
 	
-				$date 		= $record[0];
-				$type 		= $record[1];
-				$texte		= urldecode($record[2]);
+				$date 		= $record['log_date'];
+				$type 		= $record['log_type'];
+				$texte		= urldecode(utf8_encode($record['log_texte']));
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
 						
 				// couleur operation
 				switch ($type) {
-					case "Suppression matériel"		: 	$td_color = "#ff7b7b";	break;
+					case "Suppression matÃ©riel"		: 	$td_color = "#ff7b7b";	break;
 					case "Suppression marque"  		: 	$td_color = "#ff7b7c";	break;
 					case "Suppression salle"   		: 	$td_color = "#ff7b7d";	break;
 					case "Suppression compte"  		: 	$td_color = "#ff7b7e";	break;
-					case "Création compte"	   		: 	$td_color = "#b3fffe";	break;
-					case "Création salle"	   		: 	$td_color = "#b3ffff";	break;
-					case "Création marque"	   		: 	$td_color = "#b3fffd";	break;
-					case "Création matériel"   		: 	$td_color = "#b3fffc";	break;
-					case "Création collège"		   	: 	$td_color = "#b3fffb";	break;
-					case "Création demande"		   	: 	$td_color = "#b3fffa";	break;
+					case "CrÃ©ation compte"	   		: 	$td_color = "#b3fffe";	break;
+					case "CrÃ©ation salle"	   		: 	$td_color = "#b3ffff";	break;
+					case "CrÃ©ation marque"	   		: 	$td_color = "#b3fffd";	break;
+					case "CrÃ©ation matÃ©riel"   		: 	$td_color = "#b3fffc";	break;
+					case "CrÃ©ation collÃ¨ge"		   	: 	$td_color = "#b3fffb";	break;
+					case "CrÃ©ation demande"		   	: 	$td_color = "#b3fffa";	break;
 					case "Modification compte"	   	: 	$td_color = "#9aff9f";	break;
-					case "Modification collège"	   	: 	$td_color = "#9aff9e";	break;
+					case "Modification collÃ¨ge"	   	: 	$td_color = "#9aff9e";	break;
 					case "Modification salle"	   	: 	$td_color = "#9aff9d";	break;
-					case "Modification matériel"   	: 	$td_color = "#9aff9c";	break;
+					case "Modification matÃ©riel"   	: 	$td_color = "#9aff9c";	break;
 					case "Modification marque"	   	: 	$td_color = "#9aff9b";	break;
 					case "Affectation salle"	   	: 	$td_color = "#ffd20f";	break;
 					case "Dump GESPAC"			   	: 	$td_color = "#c6baff";	break;
@@ -146,7 +147,7 @@
 					case "Import IACA"			   	: 	$td_color = "#c6bafc";	break;
 					case "Import CSV"			   	: 	$td_color = "#f1ff73";	break;
 					case "Etat demande"			   	: 	$td_color = "#c6bafb";	break;
-					case "Prêté"				   	: 	$td_color = "#f1ff73";	break;
+					case "PrÃªtÃ©"				   	: 	$td_color = "#f1ff73";	break;
 					case "Rendu"				   	: 	$td_color = "#2f7bff";	break;
 				}
 				

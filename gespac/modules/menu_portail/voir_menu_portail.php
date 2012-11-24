@@ -94,7 +94,6 @@
 
 
 <?PHP 
-
 	
 	// cnx à gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
