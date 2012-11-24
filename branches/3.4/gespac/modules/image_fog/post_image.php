@@ -5,12 +5,11 @@
 		Permet le clonage des machines
 	*/
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
+
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 
 	$action = $_GET ['action'];
 	
@@ -19,40 +18,34 @@
 		
 		$id = $_GET ['id']; 		
 		
-		// cnx à gespac
-		$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-		$db_gespac 	= & MDB2::factory($dsn_gespac);
+		// cnx Ã  gespac
+		$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 		$materiel = $db_gespac->queryRow ( "SELECT mat_nom, mat_mac FROM materiels WHERE mat_id = $id" );
 		$mat_nom = $materiel[0];
 		$mat_mac = $materiel[1];
 		$mat_mac_with_dash = "01-" . preg_replace("[:]", "-", $mat_mac);
 		
-		$db_gespac->disconnect();
-		
-		
+			
 
-		// cnx à fog
-		$dsn_fog     = 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
-		$db_fog 	= & MDB2::factory($dsn_fog);
+		// cnx Ã  fog
+		$con_fog = new Sql($host, $user, $pass, $fog);
 		
-		// On récupère les infos serveur	
-		$FOG_TFTP_FTP_USERNAME 		= $db_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_TFTP_FTP_USERNAME';");
-		$FOG_TFTP_PXE_KERNEL 		= $db_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_TFTP_PXE_KERNEL';");
-		$FOG_PXE_BOOT_IMAGE 		= $db_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_PXE_BOOT_IMAGE';");
-		$FOG_KERNEL_RAMDISK_SIZE 	= $db_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_KERNEL_RAMDISK_SIZE';");
-		$FOG_PXE_IMAGE_DNSADDRESS 	= $db_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_PXE_IMAGE_DNSADDRESS';");
-		$FOG_TFTP_HOST 				= $db_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_TFTP_HOST';");
-		$FOG_WEB_HOST 				= $db_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_WEB_HOST';");
-		$FOG_WEB_ROOT 				= $db_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_WEB_ROOT';");
-		$hostOS 					= $db_fog->queryOne ("SELECT hostOS FROM hosts WHERE hostName='$mat_nom';");
-		$imagePath 					= $db_fog->queryOne ("SELECT imagePath FROM images, hosts WHERE imageID=hostImage AND hosts.hostName = '$mat_nom'");
-	
-		$db_fog->disconnect();
+		// On rÃ©cupÃ¨re les infos serveur	
+		$FOG_TFTP_FTP_USERNAME 		= $con_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_TFTP_FTP_USERNAME';");
+		$FOG_TFTP_PXE_KERNEL 		= $con_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_TFTP_PXE_KERNEL';");
+		$FOG_PXE_BOOT_IMAGE 		= $con_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_PXE_BOOT_IMAGE';");
+		$FOG_KERNEL_RAMDISK_SIZE 	= $con_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_KERNEL_RAMDISK_SIZE';");
+		$FOG_PXE_IMAGE_DNSADDRESS 	= $con_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_PXE_IMAGE_DNSADDRESS';");
+		$FOG_TFTP_HOST 				= $con_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_TFTP_HOST';");
+		$FOG_WEB_HOST 				= $con_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_WEB_HOST';");
+		$FOG_WEB_ROOT 				= $con_fog->queryOne ("SELECT settingValue FROM globalSettings WHERE settingKey='FOG_WEB_ROOT';");
+		$hostOS 					= $con_fog->queryOne ("SELECT hostOS FROM hosts WHERE hostName='$mat_nom';");
+		$imagePath 					= $con_fog->queryOne ("SELECT imagePath FROM images, hosts WHERE imageID=hostImage AND hosts.hostName = '$mat_nom'");
 	
 	
-		// création du fichier
-		$fichier = "	# Généré par GESPAC WEB  
+		// crÃ©ation du fichier
+		$fichier = "	# GÃ©nÃ©rÃ© par GESPAC WEB  
 		
 						DEFAULT $FOG_TFTP_FTP_USERNAME
 							
@@ -63,11 +56,11 @@
 						append initrd=$FOG_PXE_BOOT_IMAGE  root=/dev/ram0 rw ramdisk_size=$FOG_KERNEL_RAMDISK_SIZE ip=dhcp dns=$FOG_PXE_IMAGE_DNSADDRESS type=down img=$imagePath mac=$mat_mac ftp=$FOG_TFTP_HOST storage=$FOG_TFTP_HOST:/images/ web=$FOG_WEB_HOST$FOG_WEB_ROOT osid=$hostOS  imgType=mps keymap=azerty shutdown= loglevel=4   fdrive=";
 		
 		
-		// On créé le fichier au bon endroit (/tftboot/pxelinux.cfg/)
+		// On crÃ©Ã© le fichier au bon endroit (/tftboot/pxelinux.cfg/)
 		$path = "/var/www/";
 		exec ("echo -n \"" . $fichier . "\" >> " . $path . $mat_mac_with_dash );
 		
-		// et on réveille la machine ...
+		// et on rÃ©veille la machine ...
 		//exec ("sudo wakeonlan $mat_mac");
 		
 	}

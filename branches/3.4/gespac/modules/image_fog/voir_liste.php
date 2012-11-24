@@ -1,16 +1,15 @@
 <?PHP
 	
 	/* 
-		Fichier pour sélection des machines à cloner
+		Fichier pour sÃ©lection des machines Ã  cloner
 	
 	*/
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
+
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 ?>
 
 <script type="text/javascript">
@@ -31,7 +30,7 @@
 
 				onSuccess: function(responseText, responseXML, filt) {
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET Ã  POST (en effet, avec GET il rÃ©cupÃ¨re la totalitÃ© du tableau get en paramÃ¨tres et lorsqu'on poste la page formation on dÃ©passe la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('modules/image_fog/voir_liste.php');", 1500);
 				}
 			
@@ -47,17 +46,15 @@
 
 
 <?PHP
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
 	
-	$liste_des_materiels = $db_gespac->queryAll ( "SELECT mat_nom, marque_marque, marque_model, salle_nom, mat_mac, salles.salle_id, mat_id FROM materiels, marques, salles WHERE (materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND mat_mac <> '' ) ORDER BY mat_nom" );
+	// cnx Ã  gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
+	
+	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, marque_marque, marque_model, salle_nom, mat_mac, salles.salle_id as salleid, mat_id FROM materiels, marques, salles WHERE (materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND mat_mac <> '' ) ORDER BY mat_nom" );
 ?>
 	<h3>Cloner des PC par Fog</h3><br>
 	
-	<span id="nb_selectionnes">[0]</span> machines sélectionnées.
+	<span id="nb_selectionnes">[0]</span> machines sÃ©lectionnÃ©es.
 	
 	
 	<center>
@@ -85,7 +82,7 @@
 		<th>Nom</th>
 		<th>Mac</th>
 		<th>Marque</th>
-		<th>Modèle</th>
+		<th>ModÃ¨le</th>
 		<th>Image</th>
 		<th>Groupe</th>
 		<th>Salle</th>
@@ -93,39 +90,35 @@
 
 		
 		<?PHP	
-			
-	
 		
 			$compteur = 0;
-			// On parcourt le tableau
+			
+			
 			foreach ( $liste_des_materiels as $record ) {
-				// On écrit les lignes en brut dans la page html
+				// On Ã©crit les lignes en brut dans la page html
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 
-				$nom 		= $record[0];
-				$marque		= $record[1];
-				$model 		= $record[2];
-				$salle 		= $record[3];
-				$mac 		= $record[4];
-				$salle_id 	= $record[5];
-				$id 		= $record[6];
+				$nom 		= $record['mat_nom'];
+				$marque		= $record['marque_marque'];
+				$model 		= $record['marque_model'];
+				$salle 		= $record['salle_nom'];
+				$mac 		= $record['mat_mac'];
+				$salle_id 	= $record['salleid'];
+				$id 		= $record['mat_id'];
 				
 				
-				$dsn_fog 		= 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
-				$db_fog 	= & MDB2::factory($dsn_fog);
+				// cnx Ã  fog
+				$con_fog = new Sql($host, $user, $pass, $fog);
 				
-				$image_associee = $db_fog->queryOne ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostName = '$nom'");
-				$groupe_associe = $db_fog->queryOne ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostName = '$nom'");
-
-				$db_fog->disconnect();
-				
+				$image_associee = $con_fog->QueryOne ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostName = '$nom'");
+				$groupe_associe = $con_fog->QueryOne ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostName = '$nom'");
 			
 				
 				echo "<tr id=tr_id$id class=$tr_class>";
 					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' rel='slb_wol' title='Caractéristiques de $nom'>$nom</a> </td>";
+					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' rel='slb_wol' title='CaractÃ©ristiques de $nom'>$nom</a> </td>";
 					/*	macaddr	*/	echo "<td> $mac </td>";
 					/*	marque	*/	echo "<td> $marque </td>";
 					/*	modele	*/	echo "<td> $model </td>";
@@ -145,12 +138,6 @@
 	
 	<br>
 	
-	
-<?PHP
-	// On se déconnecte de la db
-	$db_gespac->disconnect();
-?>
-
 
 <script type="text/javascript">
 	
@@ -170,9 +157,9 @@
 			
 	function validation_clone_materiel(id, nom, imagefog) {
 	
-		var valida = confirm('Voulez vous imager le matériel ' + nom + ' avec l\'image fog ' + imagefog + " ?");
+		var valida = confirm('Voulez vous imager le matÃ©riel ' + nom + ' avec l\'image fog ' + imagefog + " ?");
 		
-		// si la réponse est TRUE ==> on lance la page post_image.php
+		// si la rÃ©ponse est TRUE ==> on lance la page post_image.php
 		if (valida) {	
 			/*	poste la page en ajax	*/
 			$('target').load("modules/image_fog/post_image.php?action=unicast&id=" + id);
@@ -181,12 +168,12 @@
 			
 	// *********************************************************************************
 	//
-	//				Selection/déselection de toutes les rows
+	//				Selection/dÃ©selection de toutes les rows
 	//
 	// *********************************************************************************	
 	
 	function checkall(_table) {
-		var table = document.getElementById(_table);	// le tableau du matériel
+		var table = document.getElementById(_table);	// le tableau du matÃ©riel
 		var checkall_box = document.getElementById('checkall');	// la checkbox "checkall"
 		
 		for ( var i = 1 ; i < table.rows.length ; i++ ) {
@@ -197,8 +184,8 @@
 				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
 				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
 			} else {
-				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
+				document.getElementsByName("chk")[i - 1].checked = false;	// on dÃ©coche toutes les checkbox
+				select_cette_ligne( lg.substring(5), i, 0 )					//on dÃ©selectionne la ligne et on la retire de l'index
 			}
 		}
 	}
@@ -217,46 +204,46 @@
 		
 		var nb_selectionnes = document.getElementById('nb_selectionnes');
 		
-		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
+		var ligne = "tr_id" + tr_id;	//on rÃ©cupÃ¨re l'tr_id de la row
 		var li = document.getElementById(ligne);	
 		
-		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
+		if ( li.style.display == "" ) {	// si une ligne est masquÃ©e on ne la selectionne pas (pratique pour le filtre)
 		
 			switch (check) {
-				case 1: // On force la selection si la ligne n'est pas déjà cochée
+				case 1: // On force la selection si la ligne n'est pas dÃ©jÃ  cochÃ©e
 					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
 						table_id.push(tr_id);
 						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sÃ©lectionnÃ©es	
 					}
 				break;
 				
-				case 0: // On force la déselection
+				case 0: // On force la dÃ©selection
 					table_id.erase(tr_id);
-					nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-					// alternance des couleurs calculée avec la parité
+					nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sÃ©lectionnÃ©es			
+					// alternance des couleurs calculÃ©e avec la paritÃ©
 					if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
 				break;
 				
 				
-				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
+				default:	// le check n'est pas prÃ©cisÃ©, la fonction dÃ©termine si la ligne est selectionnÃ©e ou pas
 					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
 						table_id.erase(tr_id);
 						
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sÃ©lectionnÃ©es			
 
-						// alternance des couleurs calculée avec la parité
+						// alternance des couleurs calculÃ©e avec la paritÃ©
 						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
 					
-					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
+					} else {	// le tr_id n'est pas trouvÃ© dans la liste, on crÃ©Ã© un nouvel tr_id Ã  la fin du tableau
 						table_id.push(tr_id);
 						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sÃ©lectionnÃ©es	
 					}
 				break;			
 			}
 	
-			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
+			// on concatÃ¨ne tout le tableau dans une chaine de valeurs sÃ©parÃ©es par des ;
 			document.getElementById('materiel_a_poster').value = table_id.join(";");
 			
 

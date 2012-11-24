@@ -1,16 +1,12 @@
 <?PHP
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
+	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 	
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// cnx à gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 ?>
 
@@ -81,7 +77,7 @@
 	if ($id <> '-1' ) {
 
 		// Requete pour récupérer les données des champs pour le user à modifier
-		$item_a_modifier = $db_gespac->queryRow ( "SELECT mp_id, mp_nom, mp_url FROM menu_portail WHERE mp_id=$id" );		
+		$item_a_modifier = $con_gespac->queryRow ( "SELECT mp_id, mp_nom, mp_url FROM menu_portail WHERE mp_id=$id" );		
 		
 		// valeurs à affecter aux champs
 		$mp_id 		= $item_a_modifier[0];
