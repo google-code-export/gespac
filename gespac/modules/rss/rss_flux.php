@@ -1,7 +1,7 @@
 <?PHP
 	require_once("commonlib.php");
 	
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// rÃ¨gle le problÃ¨me d'encodage des caractÃ¨res
 	
 	
 	$ligne = $_GET['page'];
@@ -21,17 +21,8 @@
 	
 		fclose ($handle);
 
-	
-	$aContext = array(
-		'http' => array(
-			'proxy' => 'gespac:5865', // This needs to be the server and the port of the NTLM Authentication Proxy Server.
-			'request_fulluri' => True,
-			),
-		);
 		
-	$cxContext = stream_context_create($aContext);
-
-	$page = file_get_contents($url, false, $cxContext);
+	$page = file_get_contents($url, false);
 
 	
 	if ($page == true) {
