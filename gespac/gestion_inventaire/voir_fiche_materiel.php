@@ -1,11 +1,11 @@
 <!--
 
 
-Cette page est chargée lorsqu'on clique sur le nom d'un materiel dans la page voir_materiels.php
+Cette page est chargÃ©e lorsqu'on clique sur le nom d'un materiel dans la page voir_materiels.php
 
-les données sont récupérées dans la base OCS.
+les donnÃ©es sont rÃ©cupÃ©rÃ©es dans la base OCS.
 
-Attention pour les adresses MAC : le code ne sort que la première valeur ! A MODIIIIIIFFFFIIIIER !
+Attention pour les adresses MAC : le code ne sort que la premiÃ¨re valeur ! A MODIIIIIIFFFFIIIIER !
 Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 
 
@@ -15,15 +15,14 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 
 <?PHP
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-	//include ('../../include/config.php'); 	//on récupère les variables pour le test des bases OCS et FOG
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
-	// le ssn est le champ charnière pour récupérer les informations des différentes bases
+	// le ssn est le champ charniÃ¨re pour rÃ©cupÃ©rer les informations des diffÃ©rentes bases
 	$mat_ssn = $_GET ['mat_ssn'];
-	// le nom va servir pour la fiche fog ; en effet, la machine peut exister si elle n'a pas de numéro de série
+	// le nom va servir pour la fiche fog ; en effet, la machine peut exister si elle n'a pas de numÃ©ro de sÃ©rie
 	$mat_nom = $_GET ['mat_nom'];
 	
 	
@@ -42,28 +41,23 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	********************************************/
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
-	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion à la base de donnée	
+	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion Ã  la base de donnÃ©e	
 	if(!mysql_select_db($ocsweb, $link_bases)) { echo "BASE OCS introuvable";}
 	else {
-		// adresse de connexion à la base de données	
-		$dsn_ocs	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
-		
-		// cnx à la base de données GESPAC
-		$db_ocs 	= & MDB2::factory($dsn_ocs);
+		// cnx ocs
+		$con_ocs = new Sql($host, $user, $pass, $ocsweb);
 		
 		// RQ POUR INFO OCS
-		$materiel_ocs    = $db_ocs->queryAll ( "SELECT NAME, USERDOMAIN, OSNAME, OSCOMMENTS, PROCESSORT, MEMORY, FIDELITY, USERID, SMANUFACTURER, SMODEL, SSN, networks.HARDWARE_ID, hardware.ID FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
-		$materiel_ocs_id = $materiel_ocs[0][12];
+		$materiel_ocs    = $con_ocs->QueryRow ( "SELECT NAME, USERDOMAIN, OSNAME, OSCOMMENTS, PROCESSORT, MEMORY, FIDELITY, USERID, SMANUFACTURER, SMODEL, SSN, networks.HARDWARE_ID as hid, hardware.ID as id FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
+		$materiel_ocs_id = $materiel_ocs[12];
 		
-		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
+		if ( $materiel_ocs_id ) {	// si le matÃ©riel existe dans ocs
 			// RQ POUR INFO cartes rzo
-			$rq_cartes_reseaux = $db_ocs->queryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[0][11] );
+			$rq_cartes_reseaux = $con_ocs->QueryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[11] );
 			// RQ POUR liste logiciels
-			$rq_liste_logiciels = $db_ocs->queryAll ( "SELECT softwares.Name FROM softwares , hardware WHERE softwares.hardware_id = " . $materiel_ocs[0][12] . " AND hardware.id = " . $materiel_ocs[0][12] . " AND NOT softwares.Name LIKE '% Windows XP %' ");
+			$rq_liste_logiciels = $con_ocs->QueryAll ( "SELECT softwares.Name as name FROM softwares , hardware WHERE softwares.hardware_id = " . $materiel_ocs_id . " AND hardware.id = " . $materiel_ocs_id . " AND NOT softwares.Name LIKE '% Windows XP %' ");
 		}
-		
-		// On se déconnecte de la db ocs
-		$db_ocs->disconnect();
+
 	}
 	
 	/*******************************************
@@ -72,15 +66,11 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	*
 	********************************************/
 	
-	// adresse de connexion à la base de données	
-	$dsn_gespac     = 'mysql://'. $user . ':' . $pass . '@localhost/' . $gespac;
+	// cnx gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
-	$materiel_gespac = $db_gespac->queryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, mat_mac, user_logon FROM materiels, marques, salles, users WHERE (materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND users.user_id = materiels.user_id AND mat_serial='$mat_ssn') ORDER BY mat_nom" );
-	
-	// On se déconnecte de la db gespac
-	$db_gespac->disconnect();
+	$materiel_gespac = $con_gespac->QueryRow ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id as salleid, mat_origine, mat_mac, user_logon FROM materiels, marques, salles, users WHERE (materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND users.user_id = materiels.user_id AND mat_serial='$mat_ssn') ORDER BY mat_nom" );
+
 	
 	
 	/*******************************************
@@ -89,105 +79,88 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 	*
 	********************************************/
 	
-	//On vérifie l'existance de la base FOG même souci que OCS plantage de la page.
-	if(!mysql_select_db($fog, $link_bases)) {$message_fog = "Base FOG non présente";}
+	//On vÃ©rifie l'existance de la base FOG mÃªme souci que OCS plantage de la page.
+	if(!mysql_select_db($fog, $link_bases)) {$message_fog = "Base FOG non prÃ©sente";}
 	else {
 	
-		// adresse de connexion à la base de données
-		$dsn_fog	= 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
+		// cnx fog
+		$con_fog = new Sql($host, $user, $pass, $fog);
 	
-		// cnx à la base de données FOG
-		$db_fog 	= & MDB2::factory($dsn_fog);
-	
-		$rq_hotes_fog = $db_fog->queryAll ( "SELECT hostID FROM hosts, inventory WHERE hosts.hostID = inventory.iHostID AND inventory.iSysserial='$mat_ssn';" );
-		$host_id = $rq_hotes_fog[0][0];
-	
-		$rq_nom_hotes_fog = $db_fog->queryAll ( "SELECT hostID FROM hosts WHERE hosts.hostName='$mat_nom';" );
-		$host_nom_id = $rq_nom_hotes_fog[0][0];
-	
+		$host_id = $con_fog->QueryOne ( "SELECT hostID FROM hosts, inventory WHERE hosts.hostID = inventory.iHostID AND inventory.iSysserial='$mat_ssn';" );	
+		$host_nom_id = $con_fog->QueryOne ( "SELECT hostID FROM hosts WHERE hosts.hostName='$mat_nom';" );
+			
 
 		if ( $host_id ) { 
 			
 			$message_fog = "";
 			
-			$rq_image_associee = $db_fog->queryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $host_id");
-			$image_associee = $rq_image_associee[0][0];
+			$image_associee = $con_fog->QueryOne ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $host_id");
+			$rq_groupe_associe = $con_fog->QueryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $host_id");
+			$rq_liste_snapins = $con_fog->queryAll ( "SELECT sName FROM snapinAssoc, snapins WHERE sID=saSnapinID AND saHostID='$host_id';" );
 			
-			$rq_groupe_associe = $db_fog->queryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $host_id");
-			$groupe_associe = $rq_groupe_associe[0][0];
-			
-			$rq_liste_snapins = $db_fog->queryAll ( "SELECT sName FROM snapinAssoc, snapins WHERE sID=saSnapinID AND saHostID='$host_id';" );
-			
-			$image_fog  = (!empty($image_associee)) ? $image_associee : "Pas d'image associée";
-			$groupe_fog = (!empty($groupe_associe)) ? $groupe_associe : "Pas de groupe associé";
+			$image_fog  = $image_associee ? $image_associee : "Pas d'image associÃ©e";
+			$groupe_fog = $rq_groupe_associe ? $rq_groupe_associe : "Pas de groupe associÃ©";
+			$snapin_fog = $rq_liste_snapins ? $rq_liste_snapins : "Pas de snapin associÃ©";
 
-		} else if ($host_nom_id) { // on vérifie en passant par le nom de la machine qu'il y ait au moins un résultat
+		} else if ($host_nom_id) { // on vÃ©rifie en passant par le nom de la machine qu'il y ait au moins un rÃ©sultat
 			
 			// on avertit qu'il peut y avoir des erreurs dans les informations
-			$message_fog = "Attention ! La recherche étant basée sur le nom, il peut y avoir des erreurs sur les données suivantes !";
+			$message_fog = "Attention ! La recherche Ã©tant basÃ©e sur le nom, il peut y avoir des erreurs sur les donnÃ©es suivantes !";
 			
-			$rq_image_associee = $db_fog->queryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $host_nom_id");
-			$image_associee = $rq_image_associee[0][0];
+			$image_associee = $con_fog->QueryOne ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $host_nom_id");
+			$rq_groupe_associe = $con_fog->QueryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $host_nom_id");		
+			$rq_liste_snapins = $con_fog->QueryAll ( "SELECT sName FROM snapinAssoc, snapins WHERE sID=saSnapinID AND saHostID='$host_nom_id';" );
 			
-			
-			$rq_groupe_associe = $db_fog->queryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $host_nom_id");
-			$groupe_associe = $rq_groupe_associe[0][0];
-			
-			
-			$rq_liste_snapins = $db_fog->queryAll ( "SELECT sName FROM snapinAssoc, snapins WHERE sID=saSnapinID AND saHostID='$host_nom_id';" );
-			
-			$image_fog  = (!empty($image_associee)) ? $image_associee : "Pas d'image associée";
-			$groupe_fog = (!empty($groupe_associe)) ? $groupe_associe : "Pas de groupe associé";
+			$image_fog  = $image_associee ? $image_associee : "Pas d'image associÃ©e";
+			$groupe_fog = $rq_groupe_associe ? $rq_groupe_associe : "Pas de groupe associÃ©";
+			$snapin_fog = $rq_liste_snapins ? $rq_liste_snapins : "Pas de snapin associÃ©";
 
 		} else {
-			
-			$message_fog = "Ce matériel n'existe pas dans FOG.";
-			$image_associee  = "Pas d'image associée";
-			$groupe_associee = "Pas de groupe associé";
+			$message_fog = "Ce matÃ©riel n'existe pas dans FOG.";
 		}
-		
-		// On se déconnecte de la db fog
-		$db_fog->disconnect();
 	}
 	
-	
+
 	// OCS
-	if(!mysql_select_db('ocsweb', $link_bases)) {$message_ocs = "Base OCS non présente";}//Base OCS absente on affiche ce message dans la liste
+	if(!mysql_select_db('ocsweb', $link_bases)) {$message_ocs = "Base OCS non prÃ©sente";}//Base OCS absente on affiche ce message dans la liste
 	else {
-		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
-			$NAME 			= $materiel_ocs[0][0]; 
-			$USERDOMAIN 	= $materiel_ocs[0][1];  
-			$OSNAME 		= $materiel_ocs[0][2];  
-			$OSCOMMENTS 	= $materiel_ocs[0][3];
-			$PROCESSORT 	= $materiel_ocs[0][4]; 
-			$MEMORY 		= $materiel_ocs[0][5]; 
-			$FIDELITY 		= $materiel_ocs[0][6]; 
-			$USERID 		= $materiel_ocs[0][7];
-			$SMANUFACTURER 	= $materiel_ocs[0][8];
-			$SMODEL 		= $materiel_ocs[0][9];
-			$SSN 			= $materiel_ocs[0][10]; 
-			$HARDWARE_ID	= $materiel_ocs[0][11];
+		if ( $materiel_ocs_id ) {	// si le matÃ©riel existe dans ocs
+			$NAME 			= $materiel_ocs[0]; 
+			$USERDOMAIN 	= $materiel_ocs[1];  
+			$OSNAME 		= $materiel_ocs[2];  
+			$OSCOMMENTS 	= $materiel_ocs[3];
+			$PROCESSORT 	= $materiel_ocs[4]; 
+			$MEMORY 		= $materiel_ocs[5]; 
+			$FIDELITY 		= $materiel_ocs[6]; 
+			$USERID 		= $materiel_ocs[7];
+			$SMANUFACTURER 	= $materiel_ocs[8];
+			$SMODEL 		= $materiel_ocs[9];
+			$SSN 			= $materiel_ocs[10]; 
+			$HARDWARE_ID	= $materiel_ocs[11];
 		} else {
-			$message_ocs = "Ce matériel n'existe pas dans OCS.";//Base OCS existe mais materiel non
+			$message_ocs = "Ce matÃ©riel n'existe pas dans OCS.";//Base OCS existe mais materiel non
 		}
 	}
 
 
-	// GESPAC
-	$mat_nom	= $materiel_gespac[0][0];
-	$dsit		= $materiel_gespac[0][1];
-	$serial		= $materiel_gespac[0][2];
-	$etat		= $materiel_gespac[0][3];
-	$marque		= $materiel_gespac[0][4];
-	$model		= $materiel_gespac[0][5];
-	$type		= $materiel_gespac[0][6];
-	$stype		= $materiel_gespac[0][7];
-	$mat_id		= $materiel_gespac[0][8];
-	$salle_nom	= $materiel_gespac[0][9];
-	$salle_id	= $materiel_gespac[0][10];
-	$origine	= $materiel_gespac[0][11]; 
-	$mat_mac	= $materiel_gespac[0][12];
-	$user		= $materiel_gespac[0][13];
+	////////////////////////////////////
+	//			PARTIE GESPAC
+	////////////////////////////////////
+	
+	$mat_nom	= $materiel_gespac[0];
+	$dsit		= $materiel_gespac[1];
+	$serial		= $materiel_gespac[2];
+	$etat		= $materiel_gespac[3];
+	$marque		= $materiel_gespac[4];
+	$model		= $materiel_gespac[5];
+	$type		= $materiel_gespac[6];
+	$stype		= $materiel_gespac[7];
+	$mat_id		= $materiel_gespac[8];
+	$salle_nom	= $materiel_gespac[9];
+	$salle_id	= $materiel_gespac[10];
+	$origine	= $materiel_gespac[11]; 
+	$mat_mac	= $materiel_gespac[12];
+	$user		= $materiel_gespac[13];
 	
 	if ($salle_nom == 'PRETS') {
 		if ($user == 'ati') {
@@ -202,14 +175,14 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 		$pret = "INDISPONIBLE";
 	}
 	
-	echo "<form method='GET' name='frmTest' id='frmTest'>";
+echo "<form method='GET' name='frmTest' id='frmTest'>";
 	
 	echo "<CENTER>";
 	echo "<H1> $NAME </H1>";
 	
 		echo "<TABLE width=550>";
 		echo "<TR>";
-		echo "<TD COLSPAN=8><b>GESPAC</b><HR></TD>";
+		echo "<TD COLSPAN=2><b>GESPAC</b><HR></TD>";
 		echo "</TR>";
 		echo "<TR>";
 			echo "<TD>DSIT</TD>";
@@ -249,66 +222,52 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 		echo "</TR>";
 	echo "</TABLE>";
 	
+	
 	echo "<br>";
 	echo "<br>";
 	
-		echo "<TABLE width=550>";
+	////////////////////////////////////
+	//			PARTIE FOG
+	////////////////////////////////////
+	
+	echo "<TABLE width=550>";
 		echo "<TR>";
-		echo "<TD COLSPAN=10><b>FOG</b><HR></TD>";
+		echo "<TD COLSPAN=2><b>FOG</b><HR></TD>";
 		echo "</TR>";
 		
 		echo "<TR>";
-			echo "<TD COLSPAN=10><font color=red><b>$message_fog</b></font></TD>";
+			echo "<TD COLSPAN=2><font color=red><b>$message_fog</b></font></TD>";
 		echo "</TR>";
 		
-		
-		
-		if ($host_id) {
-			echo "<TR>";
-				echo "<TD>Image associée</TD>";
+		if ($image_fog) {
+			echo "<TR class='tr1'>";
+				echo "<TD>Image associÃ©e</TD>";
 				echo "<TD>$image_fog</TD>";
 			echo "</TR>";
-			
-			echo "<TR>";
-				echo "<TD>Groupe associé</TD>";
-				echo "<TD>$groupe_fog</TD>";
-			echo "</TR>";
-		
-			foreach ($rq_liste_snapins as $record) {
-				$nom_snapin = $record[0];
-				
-				echo "<TR>";
-					echo "<TD>Snapin associé</TD>";
-					echo "<TD>$nom_snapin</TD>";
-				echo "</TR>";
-			}
-		} elseif ($host_nom_id) {
-		
-				echo "<TR>";
-				echo "<TD>Image associée</TD>";
-				echo "<TD>$image_fog</TD>";
-			echo "</TR>";
-			
-			echo "<TR>";
-				echo "<TD>Groupe associé</TD>";
-				echo "<TD>$groupe_fog</TD>";
-			echo "</TR>";
-		
-			foreach ($rq_liste_snapins as $record) {
-				$nom_snapin = $record[0];
-				
-				echo "<TR>";
-					echo "<TD>Snapin associé</TD>";
-					echo "<TD>$nom_snapin</TD>";
-				echo "</TR>";
-			}
 		}
 		
-			
+		if ($groupe_fog) {
+			echo "<TR class='tr2'>";
+				echo "<TD>Groupe associÃ©</TD>";
+				echo "<TD>";
+				foreach ($groupe_fog as $gp) echo $gp['groupName'] . "<br>";
+				echo "</TD>";
+			echo "</TR>";
+		}
+		
+		if ($snapin_fog) {
+			echo "<TR class='tr1'>";
+				echo "<TD>Snapin associÃ©</TD>";
+				echo "<TD>";
+				 foreach ($snapin_fog as $sn) echo $sn['sName'] . "<br>";
+			echo "</TR>";
+		}
 	echo "</TABLE>";
+
 	
 	echo "<br>";
 	echo "<br>";
+
 	
 	echo "<TABLE width=550>";
 		echo "<TR>";
@@ -319,7 +278,7 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 			echo "<TD COLSPAN=10><font color=red><b>$message_ocs</b></font></TD>";
 		echo "</TR>";
 		
-		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
+		if ( $materiel_ocs_id ) {	// si le matÃ©riel existe dans ocs
 			echo "<TR>";
 				echo "<TD>DOMAINE</TD>";
 				echo "<TD>$USERDOMAIN</TD>";
@@ -359,8 +318,8 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 			
 			
 			foreach ($rq_cartes_reseaux as $record) {
-				$SPEED   = $record[1];
-				$MACADDR = $record[0];
+				$SPEED   = $record['SPEED'];
+				$MACADDR = $record['MACADDR'];
 				
 				$select = ($mat_mac == $MACADDR) ? "checked" : "";
 				
@@ -369,25 +328,25 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 					echo "<TD>
 							<input type='radio' name='mac' id='chk_$MACADDR' value=$MACADDR $select onclick=\"choix_mac($mat_id, '$MACADDR');\"> $MACADDR
 						</TD>
-						"; //création d'un bouton radio à côté de chaque adresse mac
+						"; //crÃ©ation d'un bouton radio Ã  cÃ´tÃ© de chaque adresse mac
 				echo "</TR>";
 			
 			}
-			echo "</form>";
 			
-			$count_logiciels = count($rq_liste_logiciels);
+
+			$count_logiciels = count($rq_liste_logiciels) +1;
 			
 			$bg_color_logiciel = "#e1ffd3";
 			echo "<TR>";
-				echo "<TD rowspan=$count_logiciels bgcolor=$bg_color_logiciel><b>Logiciels installés</b></TD>";
+				echo "<TD rowspan=$count_logiciels bgcolor=$bg_color_logiciel><b>Logiciels installÃ©s</b></TD>";
 			$i = 0;
 			foreach ($rq_liste_logiciels as $record) {
-				$NAME = stripcslashes(urldecode(utf8_decode($record[0])));
+				$NAME = stripcslashes($record['name']);
 				$bg_color_image = $bg_color_image == "#e1ffd3" ? "#ffffff" : "#e1ffd3";
 				if ( $i == 0 ) {
-					echo "<td bgcolor=$bg_color_image>$NAME</td></tr>";
+					echo "<tr bgcolor='$bg_color_image'><td bgcolor='$bg_color_image' align='left'>$NAME</td></tr>";
 				} else {
-					echo "<tr bgcolor=$bg_color_image><td bgcolor=$bg_color_image>$NAME</td></tr>";
+					echo "<tr bgcolor='$bg_color_image'><td bgcolor='$bg_color_image' align='left'>$NAME</td></tr>";
 				}
 
 				$i++;		
@@ -397,7 +356,8 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 		}
 		
 	echo "</TABLE>";
-
+	
+echo "</form>";
 
 	echo "</CENTER>";
 	
@@ -407,7 +367,7 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 <script type="text/javascript">	
 	
 	function choix_mac(mat_id, mac) {
-		// Submit le formulaire après clic du bouton radio
+		// Submit le formulaire aprÃ¨s clic du bouton radio
 		$('target').load("gestion_inventaire/post_materiels.php?action=mod_mac&mat_id=" + mat_id + "&mac=" + mac);
 
 	}
