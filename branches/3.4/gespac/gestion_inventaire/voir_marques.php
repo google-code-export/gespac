@@ -1,4 +1,5 @@
 <?PHP
+	session_start();
 
 	/*
 	 

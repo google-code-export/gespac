@@ -1,5 +1,7 @@
 
-<h3>Importation de la base OCS</h3>
+<h2>Importation de la base OCS</h2>
+
+<h3><center>Attention ! Si votre base gespac est plut√¥t √† jour, merci d'utiliser l'import CSV.</center></h3>
 
 <hr>
 
@@ -16,7 +18,7 @@
 	
 		var valida = confirm('Voulez-vous vraiment importer la base OCS dans la base GESPAC ?');
 		
-		// si la rÈponse est TRUE ==> on lance la page import_ocs_db.php
+		// si la r√©ponse est TRUE ==> on lance la page import_ocs_db.php
 		if (valida) {
 			$('conteneur').load('gestion_donnees/import_ocs_db.php');
 		}
@@ -27,64 +29,55 @@
 
 
 <?PHP
-
-	header("Content-Type:text/html; charset=iso-8859-15" ); 	// rËgle le problËme d'encodage des caractËres
- 
-	include_once ('../config/databases.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-	include_once ('../config/pear.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
-	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion ‡ la base de donnÈe
+	$link_bases = mysql_pconnect('localhost', 'root', $pass);	//connexion √† la base de donn√©e
 	
 	if(!mysql_select_db('ocsweb', $link_bases)) { //si la base OCS n'existe pas on arrete la page
-		echo "Base OCS non prÈsente, il est impossible de continuer l'import."; 
+		echo "Base OCS non pr√©sente, il est impossible de continuer l'import."; 
 	}
 	else {
-		// cnx ‡ la base de donnÈes
-		$dsn_gespac		= 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-		$db_gespac 		= & MDB2::factory($dsn_gespac);
-		$liste_ssn		= $db_gespac->queryAll ( "select mat_serial FROM materiels" );
+		// cnx gespac
+		$con_gespac = new Sql($host, $user, $pass, $gespac);
+		
+		$liste_ssn	= $con_gespac->QueryAll ( "select mat_serial FROM materiels" );
 		
 		$liste_ssn_gespac = array();	// on initialise la variable comme un tableau
-		foreach ($liste_ssn as $row) { array_push ($liste_ssn_gespac, $row[0]);	} // On remplit le nouveau tableau avec un seul array et pas 2.
-		array_unique ($liste_ssn_gespac); // je rends unique le tableau de ssn, inutile de multiplier les clÈs pour la recherche
+		foreach ($liste_ssn as $row) { array_push ($liste_ssn_gespac, $row['mat_serial']);	} // On remplit le nouveau tableau avec un seul array et pas 2.
+		array_unique ($liste_ssn_gespac); // je rends unique le tableau de ssn, inutile de multiplier les cl√©s pour la recherche
 		
-		$db_gespac->disconnect();	// dÈcnx
-
 		
-		// adresse de connexion ‡ la base de donnÈes
-		$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
+		// cnx ocs
+		$con_ocs = new Sql($host, $user, $pass, $ocsweb);
 
-		// cnx ‡ la base de donnÈes
-		$db_ocs 	= & MDB2::factory($dsn_ocs);
-
-		// stockage des lignes retournÈes par sql dans un tableau (je ne rÈcupËre que le matos associÈ ‡ une marque)
-		//$liste_hardware = $db_ocs->queryAll ( "select hardware.id, name, smanufacturer, smodel, ssn, macaddr, speed from hardware, bios, networks where hardware.id=bios.hardware_id AND hardware.id=networks.hardware_id AND (networks.speed='100 Mb/s' OR networks.speed='1 Gb/s') ORDER BY name" );
-		$liste_hardware = $db_ocs->queryAll ( "select hardware.id, name, smanufacturer, smodel, ssn, macaddr, speed from hardware, bios, networks where hardware.id=bios.hardware_id AND hardware.id=networks.hardware_id ORDER BY name" );
-		$liste_serial = $db_ocs->queryAll ( "select ssn from bios" );
+		// stockage des lignes retourn√©es par sql dans un tableau (je ne r√©cup√®re que le matos associ√© √† une marque)
+		$liste_hardware = $con_ocs->QueryAll ( "select hardware.id as id, name, smanufacturer, smodel, ssn, macaddr, speed from hardware, bios, networks where hardware.id=bios.hardware_id AND hardware.id=networks.hardware_id ORDER BY name" );
+		$liste_serial = $con_ocs->QueryAll ( "select ssn from bios" );
 
 
-		// stockage des lignes retournÈes par sql dans un tableau (je ne rÈcupËre que les Ècrans avec un serial non vide)
-		$liste_monitors = $db_ocs->queryAll ( "SELECT DISTINCT serial, hardware_id, manufacturer, caption, name from hardware, monitors WHERE serial <> '' AND hardware.id = hardware_id;" );
+		// stockage des lignes retourn√©es par sql dans un tableau (je ne r√©cup√®re que les √©crans avec un serial non vide)
+		$liste_monitors = $con_ocs->QueryAll ( "SELECT DISTINCT serial, hardware_id, manufacturer, caption, name from hardware, monitors WHERE serial <> '' AND hardware.id = hardware_id;" );
 		
 		$nb_materiels = count($liste_hardware) + count($liste_monitors);
 		$nb_materiels_dans_gespac = 0;
 		
-		// On se dÈconnecte de la db
-		$db_ocs->disconnect();
-		
 
 		$liste_hardware_array = array();	// on initialise la variable comme un tableau
-		foreach ($liste_hardware as $row) { array_push ($liste_hardware_array, $row[4]);	} // On remplit le nouveau tableau avec un seul array et pas 2. $row[4] correspond au ssn ocs
+		foreach ($liste_hardware as $row) { array_push ($liste_hardware_array, $row['ssn']);	} // On remplit le nouveau tableau avec un seul array et pas 2. $row[4] correspond au ssn ocs
 			
 		$liste_doublons = array_unique(array_diff_assoc($liste_hardware_array, array_unique($liste_hardware_array))); // on extrait la liste des doublons dans un tableau
 		
 	?>
 		<!--	C'est le lien permettant de lancer l'import de la base	-->
-		<p><center><a href="#" onclick="validation();">Lancer la procÈdure d'importation</a></center></p>
+		<p><center><a href="#" onclick="validation();">Lancer la proc√©dure d'importation</a></center></p>
 
 		<?PHP		
-			echo "<b>$nb_materiels</b> ÈlÈments dans la base OCS";
+			echo "<b>$nb_materiels</b> √©l√©ments dans la base OCS";
 			echo "<span id='nb_materiels'></span>";	
 		?>
 		
@@ -102,27 +95,27 @@
 
 			$compteur = 0;
 			
-			// On parcourt le tableau pour les matÈriels
+			// On parcourt le tableau pour les mat√©riels
 			foreach ($liste_hardware as $record ) {
 						
-				$id 			= $record[0];
-				$name 			= $record[1];
-				$manufacturer 	= $record[2];
-				$model 			= $record[3];
-				$ssn 			= $record[4];
-				$mac 			= $record[5];
-				$speed 			= $record[6];
+				$id 			= $record['id'];
+				$name 			= $record['name'];
+				$manufacturer 	= $record['smanufacturer'];
+				$model 			= $record['smodel'];
+				$ssn 			= $record['ssn'];
+				$mac 			= $record['macaddr'];
+				$speed 			= $record['speed'];
 				
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
 							
-				// si le num de sÈrie est dÈj‡ dans gespac, on met le ssn en vert
+				// si le num de s√©rie est d√©j√† dans gespac, on met le ssn en vert
 				if ( in_array($ssn, $liste_ssn_gespac) ) {
 						$tr_class = "tr_doublon";
 						$nb_materiels_dans_gespac++;					
 				}
 				
-				// si le num de sÈrie est dans la liste des doublons on le passe en jaune
+				// si le num de s√©rie est dans la liste des doublons on le passe en jaune
 				if ( in_array($ssn, $liste_doublons) ) {
 						$tr_class = "tr_doublon_ocs";
 				}
@@ -130,10 +123,10 @@
 				
 				echo "<tr class=$tr_class>";
 						
-					switch ($record[3]) {
+					switch ($record['smodel']) {
 						case "8189M7G" 	: $model = "Think Centre"; 	break;
 						case "8307LG9" 	: $model = "NetVista"; 		break;
-						default 		: $model = $record[3];		break;
+						default 		: $model = $record['smodel'];		break;
 					}
 
 					echo "<td>" . $id . "</td>";
@@ -147,18 +140,18 @@
 				
 				$compteur++;
 			}
-			
+
 			$compteur = 0;
 			// On parcourt le tableau pour les moniteurs
 			foreach ($liste_monitors as $record ) {
 				
-				$ssn = $record[0];
-				$id   = $record[1];
-				$manufacturer = $record[2];
-				$model = $record[3];
-				$name = "Ecran_de_" . $record[4]; 
+				$ssn = $record['serial'];
+				$id   = $record['hardware_id'];
+				$manufacturer = $record['manufacturer'];
+				$model = $record['caption'];
+				$name = "Ecran_de_" . $record['name']; 
 				
-				// si le num de sÈrie est dÈj‡ dans gespac, on met le ssn en vert
+				// si le num de s√©rie est d√©j√† dans gespac, on met le ssn en vert
 				if ( in_array($ssn, $liste_ssn_gespac) ) {
 						$tr_class = "tr_doublon";
 						$nb_materiels_dans_gespac++;
@@ -190,7 +183,7 @@
 		}
 		?>
 	
-	<script>$("nb_materiels").innerHTML = "<?PHP echo ' (<span style=\"background-color:yellow\"><b>' . count($liste_doublons). "</b></span> doublons).  <b><span style='background-color:#29C920'>" .$nb_materiels_dans_gespac . "</b> dÈj‡ prÈsents dans GESPAC.</span>"; ?>";</script>
+	<script>$("nb_materiels").innerHTML = "<?PHP echo ' (<span style=\"background-color:yellow\"><b>' . count($liste_doublons). "</b></span> doublons).  <b><span style='background-color:#29C920'>" .$nb_materiels_dans_gespac . "</b> d√©j√† pr√©sents dans GESPAC.</span>"; ?>";</script>
 	
 <br>
 

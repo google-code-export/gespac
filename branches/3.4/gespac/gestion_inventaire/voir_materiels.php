@@ -8,21 +8,24 @@
 		combobox filtre ajax pour n'avoir que les imprimantes, que les pc ... 
 		Pour chaque matos :
 		
-			boutons visualisation pour avoir la fiche détaillée (éventuellement avec liste des demandes et des inters, liste des prets ...)
+			boutons visualisation pour avoir la fiche dÃ©taillÃ©e (Ã©ventuellement avec liste des demandes et des inters, liste des prets ...)
 			bouton modification
 			bouton suppression avec de belles confirmations
-			bouton ajout, avec demande du type, du model et si on peux le préter
+			bouton ajout, avec demande du type, du model et si on peux le prÃ©ter
 			mais checker si le materiel est unique ou pas !!!!!
 	
-		lors de l'ajout d'un nouveau matériel, penser à permettre l'affectation directe à une salle !
+		lors de l'ajout d'un nouveau matÃ©riel, penser Ã  permettre l'affectation directe Ã  une salle !
 	
 	*/
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 			
 ?>
 
-<h3>Visualisation des matériels</h3><br>
+<h3>Visualisation des matÃ©riels</h3><br>
 
 <!--	Ancre haut de page	-->
 <a name="hautdepage"></a>
@@ -34,10 +37,10 @@
 
 <?PHP
 
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
-	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
+	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© liste_des_materiels
 	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id) ORDER BY mat_nom" );
 
 ?>
@@ -46,14 +49,14 @@
 	<form>
 		<center>
 		<div id="ligne-filtre">
-			<small>Filtrer <a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:1 / ecran:1` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:1+fonctionnel:5/ecran:1+d3e:10`.');">[?]</a>:</small> 
+			<small>Filtrer <a href="#" title="Cherchez dans une colonne prÃ©cise avec le sÃ©parateur deux points (CDI:1 pour la premiÃ¨re colonne, CDI:0 pour tout le tableau) " onclick="alert('Cherchez dans une colonne prÃ©cise avec le sÃ©parateur deux points (CDI:1 pour la premiÃ¨re colonne, CDI:0 pour tout le tableau) \n Le filtre d`exclusion permet de ne pas sÃ©lectionner une valeur particuliÃ¨re.\n Ainsi `CDI:1 / ecran:1` permet de selectionner tout le matÃ©riel appelÃ© CDI mais pas les Ã©crans CDI. \n On peut aussi ajouter des champs avec l`opÃ©rateur +. par exemple `cdi:1+fonctionnel:5/ecran:1+d3e:10`.');">[?]</a>:</small> 
 			<input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
 			<span id="nb_filtre"></span>
 			
 			<span id="liste_filtres" style=''><small>filtres perso</small>
 				<span id="filtres_perso">
-					<a href="#" id="filter_ecrans" title="ecran">Seulement les écrans</a><br>
-					<a href="#" id="filter_noecrans" title="/ecran">Pas les écrans</a><br>
+					<a href="#" id="filter_ecrans" title="ecran">Seulement les Ã©crans</a><br>
+					<a href="#" id="filter_noecrans" title="/ecran">Pas les Ã©crans</a><br>
 					<a href="#" id="filter_ssnnc" title="NC:4">Serial NC</a><br>
 					<a href="#" id="filter_ssnrand" title="RAND:4">Serial RAND</a><br>
 				</span>
@@ -63,12 +66,12 @@
 		</center>
 	</form>
 
-	<div id='tableau'>Chargement des données ...</div>
+	<div id='tableau'>Chargement des donnÃ©es ...</div>
 
 	<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
 	
 <?PHP
-	// On se déconnecte de la db
+	// On se dÃ©connecte de la db
 	$con_gespac->Close();
 ?>
 
@@ -97,7 +100,7 @@
 		});
 		
 			
-		// Menu des filtres préprogrammés
+		// Menu des filtres prÃ©programmÃ©s
 		$('liste_filtres').addEvent('mouseenter', function(el)  {
 			el.stop();
 			$('filtres_perso').style.display = "block";
@@ -134,7 +137,7 @@
 		});
 		
 	
-		// oncharge par défaut TOUS les enregistrements
+		// oncharge par dÃ©faut TOUS les enregistrements
 		filter("<?PHP echo $_GET['filter'];?>");
 		
 	});

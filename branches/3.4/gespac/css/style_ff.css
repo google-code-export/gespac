@@ -4,6 +4,14 @@ body {
 	background-color	: #336967;
 	background-repeat	: no-repeat;
 	font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-family: ubuntu, Verdana, Arial, Helvetica, sans-serif;
+}
+
+@font-face {
+	font-family: ubuntu;
+	src: url('UbuntuMono-R.ttf');
+	/*src: url('SourceSansPro-Regular.ttf');*/
+	text-decoration : none;
 }
 
 h3 {
