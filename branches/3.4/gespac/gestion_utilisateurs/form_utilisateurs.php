@@ -1,26 +1,18 @@
 <?PHP
 	#formulaire d'ajout et de modification
 	#des users !
-
-
-
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 	
 	// lib
-	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
+	include ('../config/databases.php');	// fichiers de configuration des bases de donnÃ©es
 	require_once ('../fonctions.php');
 	include_once ('../../class/Sql.class.php');
 	
 ?>
 
-<!--  SERVEUR AJAX -->
-<script type="text/javascript" src="server.php?client=all"></script>
-
 
 <script type="text/javascript"> 
 	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	// vÃ©rouille l'accÃ¨s au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
 		var bt_submit = $("post_user");
@@ -52,7 +44,7 @@
 
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET Ã  POST (en effet, avec GET il rÃ©cupÃ¨re la totalitÃ© du tableau get en paramÃ¨tres et lorsqu'on poste la page formation on dÃ©passe la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1500);
 					SexyLightbox.close();
 				}
@@ -65,7 +57,7 @@
 
 <?PHP
 
-	// connexion à la base de données GESPAC
+	// connexion Ã  la base de donnÃ©es GESPAC
 	$con_gespac 	= new Sql ($host, $user,$pass, $gespac);
 	
 	$id 	= $_GET['id'];
@@ -77,9 +69,9 @@
 	#***************************************************************************
 	
 	
-	if ( $id == '-1' ) {	// Formulaire vierge de création
+	if ( $id == '-1' ) {	// Formulaire vierge de crÃ©ation
 	
-		echo "<h2>Formulaire de création d'un nouvel utilisateur</h2><br>";
+		echo "<h2>Formulaire de crÃ©ation d'un nouvel utilisateur</h2><br>";
 		
 		?>
 		
@@ -121,7 +113,7 @@
 					<TD>Grade</TD>
 					<TD><select name="grade">
 						<?PHP
-							// Requete pour récupérer la liste des grades
+							// Requete pour rÃ©cupÃ©rer la liste des grades
 							$liste_grades = $con_gespac->QueryAll ( "SELECT grade_id, grade_nom FROM grades" );		
 							
 							foreach ( $liste_grades as $record ) {
@@ -159,13 +151,13 @@
 							$selected = $accueil == $user_accueil ? "selected" : "" ;
 						?>
 					
-						<TD>Page de Démarrage</TD>
+						<TD>Page de DÃ©marrage</TD>
 						<TD><select name="page" size="1">
 					
 					<?PHP
 						$lines = file('../menu.txt');
 
-						echo "<option value='bienvenue.php'>Bienvenue</option>";	// Page par défaut
+						echo "<option value='bienvenue.php'>Bienvenue</option>";	// Page par dÃ©faut
 
 						foreach ($lines as $line) {
 
@@ -175,11 +167,11 @@
 							$value = $explode_line[1];
 							$path_page = $explode_line[2];	
 												
-							$selected = $path_page == $user_accueil ? "selected" : "" ; //pour une raison étrange, ça ne marche pas ...
+							$selected = $path_page == $user_accueil ? "selected" : "" ; //pour une raison Ã©trange, Ã§a ne marche pas ...
 							
 							$L_chk = preg_match ("#$id#", $droits) ;
 	
-							if ($L_chk && $value <> "Retour au portail")	// Oui parce que si on met en page de démarrage la page de retour au menu, ça sert à rien !
+							if ($L_chk && $value <> "Retour au portail")	// Oui parce que si on met en page de dÃ©marrage la page de retour au menu, Ã§a sert Ã  rien !
 								echo "<option $selected value='$path_page'>$value</option>";
 						}
 					?>
@@ -209,14 +201,14 @@
 		
 		
 		
-		// formulaire de modification prérempli
+		// formulaire de modification prÃ©rempli
 	
 		echo "<h2>formulaire de modification d'un utilisateur</h2><br>";
 		
-		// Requete pour récupérer les données des champs pour le user à modifier
+		// Requete pour rÃ©cupÃ©rer les donnÃ©es des champs pour le user Ã  modifier
 		$user_a_modifier = $con_gespac->QueryRow ( "SELECT user_id, user_nom, user_logon, user_password, users.grade_id, user_mail, user_skin, user_accueil, grade_nom, user_mailing FROM users, grades WHERE users.grade_id=grades.grade_id AND user_id=$id" );		
 		
-		// valeurs à affecter aux champs
+		// valeurs Ã  affecter aux champs
 		$user_id 			= $user_a_modifier[0];
 		$user_nom	 		= $user_a_modifier[1];
 		$user_logon	 		= $user_a_modifier[2];
@@ -272,7 +264,7 @@
 					<TD>Grade</TD>
 					<TD><select name="grade">
 						<?PHP
-							// Requete pour récupérer la liste des grades
+							// Requete pour rÃ©cupÃ©rer la liste des grades
 							$liste_grades = $con_gespac->QueryAll ( "SELECT grade_id, grade_nom FROM grades" );		
 							
 							foreach ( $liste_grades as $record ) {
@@ -323,7 +315,7 @@
 	
 	// *********************************************************************************
 	//
-	//			Formulaire modification par lot non prérempli
+	//			Formulaire modification par lot non prÃ©rempli
 	//
 	// *********************************************************************************		
 		
@@ -344,7 +336,7 @@
 			
 			<input type=hidden name='lot_users' id='lot_users'>
 			
-			<!-- Ici on récupère la valeur du champ users_a_poster de la page voir_utilisateurs.php -->
+			<!-- Ici on rÃ©cupÃ¨re la valeur du champ users_a_poster de la page voir_utilisateurs.php -->
 			<script>$("lot_users").value = $('users_a_poster').value;</script>
 			
 
@@ -354,7 +346,7 @@
 						<TD><select name="mailing" id="mailing">
 							<option value=2>Ne pas modifier</option>
 							<option value=1>Activer</option>
-							<option value=0>Désactiver</option>
+							<option value=0>DÃ©sactiver</option>
 							</select>
 						</TD>
 				</tr>
@@ -365,7 +357,7 @@
 					<TD><select name="grade">
 						<option value="">Ne pas modifier</option>
 						<?PHP
-							// Requete pour récupérer la liste des grades
+							// Requete pour rÃ©cupÃ©rer la liste des grades
 							$liste_grades = $con_gespac->queryAll ( "SELECT grade_id, grade_nom FROM grades" );		
 							
 							foreach ( $liste_grades as $record ) {
