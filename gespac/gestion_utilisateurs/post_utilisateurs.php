@@ -9,14 +9,12 @@
 	
 	*/
 	
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
 	// lib
 	require_once ('../fonctions.php');
-	require_once ('../config/pear.php');
 	include_once ('../config/databases.php');
+	include_once ('../../class/Log.class.php');	
 	include_once ('../../class/Sql.class.php');		
-	include_once ('../../class/Log.class.php');		
+	
 	
 	
 	// Cnx à la base
