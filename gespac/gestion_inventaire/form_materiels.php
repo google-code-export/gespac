@@ -467,7 +467,7 @@
 					<TD>Origine</TD> 
 					<TD>
 						<select name="origine">
-							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine[0] ."'>" . $origine[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
@@ -476,7 +476,7 @@
 					<TD>Etat du matériel</TD>
 					<TD>
 						<select name="etat">
-							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat[0] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
@@ -555,7 +555,7 @@
 					<TD>
 						<select name="origine" id="origine">
 							<option value="">Ne pas modifier</option>
-							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine[0] ."'>" . $origine[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
@@ -565,7 +565,7 @@
 					<TD>
 						<select name="etat">
 							<option value="">Ne pas modifier</option>
-							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
@@ -833,7 +833,7 @@
 					<TD>	
 						<select name="origine">
 							<option value=<?PHP echo $materiel_origine; ?>><?PHP echo $materiel_origine; ?></option>
-							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine[0] ."'>" . $origine[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
 						</select>
 
 					</TD>
@@ -844,7 +844,7 @@
 					<TD>
 						<select name="etat" id="CB_etat">
 							<option selected><?PHP echo $materiel_etat; ?></option>
-							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
