@@ -2,9 +2,6 @@
 	session_start();
 ?>
 
-<!--	CODAGE	-->
-<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1" /> 
-
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
 	
@@ -12,16 +9,12 @@
 
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
 	
 
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-08-02#", $_SESSION['droits']);
 	
-	
-
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 	
 	if ( !$handle = fopen("../../dump/flux.txt", "r") ) {
 		echo "Le fichier flux.txt ne peut pas être ouvert (peut être qu'il n'existe pas ?)<br><br>";
