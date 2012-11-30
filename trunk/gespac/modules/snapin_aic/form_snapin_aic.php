@@ -57,7 +57,7 @@ session_start();
 
 <center>
 
-<form action="modules/snapin_aic/post_snapin_aic.php" method="post" name="post_form" id="post_form">
+<form action="modules/snapin_aic/post_snapin_aic.php?action=add" method="post" name="post_form" id="post_form">
 	
 	<input type="submit" value="Créer le Snapin dans FOG">
 	

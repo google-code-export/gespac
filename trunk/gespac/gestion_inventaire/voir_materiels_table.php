@@ -1,5 +1,5 @@
 <?PHP
-	
+	session_start();
 	/* 
 	 
 	 Page 02-01
@@ -11,24 +11,27 @@
 		combobox filtre ajax pour n'avoir que les imprimantes, que les pc ... 
 		Pour chaque matos :
 		
-			boutons visualisation pour avoir la fiche détaillée (éventuellement avec liste des demandes et des inters, liste des prets ...)
+			boutons visualisation pour avoir la fiche dÃ©taillÃ©e (Ã©ventuellement avec liste des demandes et des inters, liste des prets ...)
 			bouton modification
 			bouton suppression avec de belles confirmations
-			bouton ajout, avec demande du type, du model et si on peux le préter
+			bouton ajout, avec demande du type, du model et si on peux le prÃ©ter
 			mais checker si le materiel est unique ou pas !!!!!
 	
-		lors de l'ajout d'un nouveau matériel, penser à permettre l'affectation directe à une salle !
+		lors de l'ajout d'un nouveau matÃ©riel, penser Ã  permettre l'affectation directe Ã  une salle !
 	
 	*/
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
-	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
+	
+	// si le grade du compte est root, on donne automatiquement les droits d'accÃ¨s en Ã©criture. Sinon, on teste si le compte a accÃ¨s Ã  la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-02-01#", $_SESSION['droits']);
+
+	if ( !isset($_SESSION['entetes']) ) $_SESSION['entetes'] = "0111001111";	// Cases Ã  cocher par dÃ©faut
 	
-	
-	if ( !isset($_SESSION['entetes']) ) $_SESSION['entetes'] = "0111001111";	// Cases à cocher par défaut
-			
 ?>
 
 
@@ -88,7 +91,7 @@
 	}
 	
 
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 	$filtre = $_GET['filter'];
@@ -107,7 +110,7 @@
 	
 	foreach ( $filter_explode_like as $value_like) {
 	
-		// Si la valeur du champ est renseignée on l'intègre à la requête
+		// Si la valeur du champ est renseignÃ©e on l'intÃ¨gre Ã  la requÃªte
 		if ( $value_like <> "" ) {
 			
 			$value_like_explode = @explode (":", $value_like);
@@ -115,7 +118,7 @@
 			$champ_inc 			= trim($value_like_explode[1]);
 			
 			
-			// Si le champ numérique n'est pas renseigné, on lui affecte une valeur bidon pour tomber dans le cas "default"
+			// Si le champ numÃ©rique n'est pas renseignÃ©, on lui affecte une valeur bidon pour tomber dans le cas "default"
 			if ( !isset($champ_inc)  || $champ_inc == "") $champ_inc = -1;
 			
 			switch ($champ_inc) {
@@ -134,7 +137,7 @@
 				default :	$like .= "mat_nom LIKE '%$value_inc%'";			break;
 			}
 			
-			// Si ce n'est pas le dernier élément du tableau on rajoute " AND " sinon on ne rajoute rien			
+			// Si ce n'est pas le dernier Ã©lÃ©ment du tableau on rajoute " AND " sinon on ne rajoute rien			
 			if ( $curseur_like <> count($filter_explode_like) ) {
 				$like .= " AND ";
 			}
@@ -155,7 +158,7 @@
 		
 	foreach ( $filter_explode_notlike as $value_notlike) {
 	
-		// Si la valeur du champ est renseignée on l'intègre à la requête
+		// Si la valeur du champ est renseignÃ©e on l'intÃ¨gre Ã  la requÃªte
 		if ( $value_notlike <> "" ) {
 			
 			$value_notlike_explode = @explode (":", $value_notlike);
@@ -163,7 +166,7 @@
 			$champ_exc 			= trim($value_notlike_explode[1]);
 			
 			
-			// Si le champ numérique n'est pas renseigné, on lui affecte une valeur bidon pour tomber dans le cas "default"
+			// Si le champ numÃ©rique n'est pas renseignÃ©, on lui affecte une valeur bidon pour tomber dans le cas "default"
 			if ( !isset($champ_exc)  || $champ_exc == "") $champ_exc = -1;
 			
 			switch ($champ_exc) {
@@ -183,7 +186,7 @@
 			}
 		}
 		
-		// Si ce n'est pas le dernier élément du tableau on rajoute " AND " sinon on ne rajoute rien			
+		// Si ce n'est pas le dernier Ã©lÃ©ment du tableau on rajoute " AND " sinon on ne rajoute rien			
 		if ( $curseur_notlike <> count($filter_explode_notlike) ) {
 			$notlike .= " AND ";
 		}
@@ -224,13 +227,13 @@
 		<span>
 		
 		<?PHP 
-			if ( $E_chk ) {	// test de droit en écriture sur l'affectation de matériel, l'ajout de matériel et la modification par lot
+			if ( $E_chk ) {	// test de droit en Ã©criture sur l'affectation de matÃ©riel, l'ajout de matÃ©riel et la modification par lot
 		
 				echo "<select name=salle_select id=salle_select>";
 		
 				// Pour le remplissage de la combobox des salles pour l'affectation
 					
-				// stockage des lignes retournées par sql dans un tableau nommé combo_des_salles
+				// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© combo_des_salles
 				$combo_des_salles = $con_gespac->QueryAll ( "SELECT salle_id, salle_nom FROM salles ORDER BY salle_nom;" );
 				
 				foreach ($combo_des_salles as $combo_option ) {
@@ -238,7 +241,7 @@
 					$option_id 		= $combo_option['salle_id'];
 					$option_salle 	= $combo_option['salle_nom'];
 					
-					//On colle par défaut la salle STOCK, donc ID = 1
+					//On colle par dÃ©faut la salle STOCK, donc ID = 1
 					$defaut = $option_id == 1 ? "selected" : "";
 					
 					echo "<option value=$option_id $defaut> $option_salle </option>";
@@ -253,13 +256,13 @@
 		</span>
 		
 		
-		<!-- Ajout d'un matériel et Modification par lot-->
+		<!-- Ajout d'un matÃ©riel et Modification par lot-->
 		<?PHP
 			
-			echo "<span style='float:right; margin-right:20px'><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='img/csv.png'></a></span>";
+			echo "<span style='float:right; margin-right:20px'><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='gÃ©nÃ©rer CSV'> <img src='img/csv.png'></a></span>";
 			
 			if ( $E_chk ) {
-				echo "<span style='float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='img/add.png'>Ajouter un matériel </a></span>";
+				echo "<span style='float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matÃ©riel'> <img src='img/add.png'>Ajouter un matÃ©riel </a></span>";
 				echo "<span id='modif_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/write.png'>Modifier lot</a> <span id='nb_selectionnes'></span> </span>";
 				echo "<span id='rename_selection' style='display:none; float:right; margin-right:20px'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/write.png'>Renommer lot</a> </span>";
 			}
@@ -272,13 +275,13 @@
 		<a href='#' onclick='showhide_options();'><span id="options_label" style="font-size:small;">+ options</span></a>
 		<a href="#basdepage"><img src="./img/down.png" title="Aller en bas de page"></a>
 		<div id="options_colonnes">
-			<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();" 		 	> Prêt &nbsp
+			<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();" 		 	> PrÃªt &nbsp
 			<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();" 		 	> DSIT &nbsp
 			<input type="checkbox" class="opt_entete" id="chk_serial" onclick="hidethem('.td_serial', this.checked);post_modif_entete();" 	 	> Serial &nbsp
 			<input type="checkbox" class="opt_entete" id="chk_etat" onclick="hidethem('.td_etat', this.checked);post_modif_entete();" 		 	> Etat &nbsp
 			<input type="checkbox" class="opt_entete" id="chk_type" onclick="hidethem('.td_type', this.checked);post_modif_entete();" 			> Famille &nbsp
 			<input type="checkbox" class="opt_entete" id="chk_stype" onclick="hidethem('.td_stype', this.checked);post_modif_entete();" 		> Sous Famille &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_modele" onclick="hidethem('.td_modele', this.checked);post_modif_entete();" 	 	> Modèle &nbsp
+			<input type="checkbox" class="opt_entete" id="chk_modele" onclick="hidethem('.td_modele', this.checked);post_modif_entete();" 	 	> ModÃ¨le &nbsp
 			<input type="checkbox" class="opt_entete" id="chk_marque" onclick="hidethem('.td_marque', this.checked);post_modif_entete();" 	 	> Marque &nbsp
 			<input type="checkbox" class="opt_entete" id="chk_salle" onclick="hidethem('.td_salle', this.checked);post_modif_entete();"			> Salle &nbsp
 			<input type="checkbox" class="opt_entete" id="chk_origine" onclick="hidethem('.td_origine', this.checked);post_modif_entete();"		> Origine &nbsp
@@ -290,48 +293,48 @@
 	<center>
 	
 	<table class="tablehover" id="mat_table" width=870>
-		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
+		<!-- EntÃªtes du tableau des matÃ©riels. On gÃ¨re ici le tri.-->
 		<?PHP if ( $E_chk ) echo "<th> <input type=checkbox id=checkall onclick=\"checkall('mat_table');\" > </th>"; ?>
 		
 		<th title="1 : le nom de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_nom; ?>', $('filt').value);">
 			Nom<sup>1</sup> <?PHP echo $img_nom; ?></a></th>
 			
-		<th class="td_pret" style='display:none' title="2 : le nom du professeur à qui le matériel est prêté">Prêté à<sup>2</sup></th>
+		<th class="td_pret" style='display:none' title="2 : le nom du professeur Ã  qui le matÃ©riel est prÃªtÃ©">PrÃªtÃ© Ã <sup>2</sup></th>
 		
-		<th class="td_dsit" title="3 : le numéro de série de la DSIT">
+		<th class="td_dsit" title="3 : le numÃ©ro de sÃ©rie de la DSIT">
 			<a href="#" onclick="order_by('<?PHP echo $tri_dsit; ?>', $('filt').value);">
 			DSIT<sup>3</sup><?PHP echo $img_dsit; ?></a></th>
 			
-		<th class="td_serial" title="4 : le numéro de série de la machine">
+		<th class="td_serial" title="4 : le numÃ©ro de sÃ©rie de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_serial; ?>', $('filt').value);">
 			Serial<sup>4</sup><?PHP echo $img_serial; ?></a></th>
 			
-		<th class="td_etat" title="5 : L'état général de la machine">
+		<th class="td_etat" title="5 : L'Ã©tat gÃ©nÃ©ral de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_etat; ?>', $('filt').value);">
 			Etat<sup>5</sup><?PHP echo $img_etat; ?></a></th>
 			
-		<th class="td_type" style='display:none' title="6 : Famille du matériel">
+		<th class="td_type" style='display:none' title="6 : Famille du matÃ©riel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_type; ?>', $('filt').value);">
 			Famille<sup>6</sup><?PHP echo $img_type; ?></a></th>
 			
-		<th class="td_stype" style='display:none' title="7 : Sous Famille du matériel">
+		<th class="td_stype" style='display:none' title="7 : Sous Famille du matÃ©riel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_stype; ?>', $('filt').value);">
 			Sous-famille<sup>7</sup> <?PHP echo $img_stype; ?></a></th>
 			
-		<th class="td_marque" title="8 : Marque du matériel">
+		<th class="td_marque" title="8 : Marque du matÃ©riel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_marque; ?>', $('filt').value);">
 			Marque<sup>8</sup> <?PHP echo $img_marque; ?></a></th>
 			
-		<th class="td_modele" title="9 : Modèle du matériel">
+		<th class="td_modele" title="9 : ModÃ¨le du matÃ©riel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_modele; ?>', $('filt').value);">
-			Modèle<sup>9</sup> <?PHP echo $img_modele; ?></a></th>
+			ModÃ¨le<sup>9</sup> <?PHP echo $img_modele; ?></a></th>
 			
-		<th class="td_salle"  title="10 : Salle où est affecté le matériel">
+		<th class="td_salle"  title="10 : Salle oÃ¹ est affectÃ© le matÃ©riel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_salle; ?>', $('filt').value);">
 			Salle<sup>10</sup> <?PHP echo $img_salle; ?></a></th>
 			
-		<th class='td_origine' title="11 : Propriétaire et année d'achat du matériel">
+		<th class='td_origine' title="11 : PropriÃ©taire et annÃ©e d'achat du matÃ©riel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_origine; ?>', $('filt').value);">
 			Origine<sup>11</sup> <?PHP echo $img_origine; ?></a></th>
 	
@@ -347,7 +350,7 @@
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ( $liste_des_materiels as $record ) {
-				// On écrit les lignes en brut dans la page html
+				// On Ã©crit les lignes en brut dans la page html
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
@@ -367,13 +370,13 @@
 				$user	 	= $record['user_nom'];
 			
 				
-				// test si la machine est prétée ou pas
+				// test si la machine est prÃ©tÃ©e ou pas
 				$rq_machine_pretee = $con_gespac->QueryOne ( "SELECT mat_id FROM materiels WHERE user_id<>1 AND mat_id=$id" );
-				$mat_id = @$rq_machine_pretee;	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, évidement
+				$mat_id = @$rq_machine_pretee;	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, Ã©videment
 						
-				if ( !isset($mat_id) ) {	// la machine n'est pas prêtée ($mat_id n'existe pas)
+				if ( !isset($mat_id) ) {	// la machine n'est pas prÃªtÃ©e ($mat_id n'existe pas)
 						$id_pret = 0;
-					} else {	// la machine est prêtée ($mat_id existe)
+					} else {	// la machine est prÃªtÃ©e ($mat_id existe)
 						$id_pret = 1;
 					}
 				
@@ -393,7 +396,7 @@
 				echo "<tr id=tr_id$id class=$tr_class>";
 				
 					/*	chckbox	*/	if ( $E_chk ) echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='slb_mat' title='Nom du matériel : $nom'>$nom</a> </td>";
+					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='slb_mat' title='Nom du matÃ©riel : $nom'>$nom</a> </td>";
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
 					/*	serial	*/	echo "<td class='td_serial'> $serial </td>";
@@ -401,12 +404,12 @@
 					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_mat' title='Liste de la famille $type'>$type</a></td>";
 					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' rel='slb_mat' title='Liste de la sous famille $stype'>$stype</a></td>";
 					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_mat' title='Liste de la marque $marque'>$marque</a></td>";
-					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_mat' title='Liste du modèle $model'>$model</a></td>";
-					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_mat' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
-					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='slb_mat' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
+					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_mat' title='Liste du modÃ¨le $model'>$model</a></td>";
+					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_mat' title='Liste du matÃ©riel dans la salle $salle'>$salle</a> </td>";
+					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='slb_mat' title='Liste du matÃ©riel ayant pour origine $origine'>$origine</a> </td>";
 					
 					if ( $E_chk ) {
-						/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
+						/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matÃ©riel $nom'><img src='img/write.png'> </a></td>";
 						/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 					}
 					
@@ -424,7 +427,7 @@
 	
 	
 <?PHP
-	// On se déconnecte de la db
+	// On se dÃ©connecte de la db
 	$con_gespac->Close();
 ?>
 
@@ -450,7 +453,7 @@
 
 				onSuccess: function(responseText, responseXML, filt) {
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET Ã  POST (en effet, avec GET il rÃ©cupÃ¨re la totalitÃ© du tableau get en paramÃ¨tres et lorsqu'on poste la page formation on dÃ©passe la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php?filter=" +  $('filt').value + "');", 1500);
 				}
 			
@@ -462,19 +465,19 @@
 	
 	// *********************************************************************************
 	//
-	//			Fonction de validation de la suppression d'un matériel
+	//			Fonction de validation de la suppression d'un matÃ©riel
 	//
 	// *********************************************************************************
 		function validation_suppr_materiel (id, model, nom, row, id_pret) {
 		
 		if (id_pret == 0) {
 		
-			var valida = confirm('Voulez vous supprimer le matériel ' + nom + ' de modèle ' + model + " ?");
+			var valida = confirm('Voulez vous supprimer le matÃ©riel ' + nom + ' de modÃ¨le ' + model + " ?");
 			
-			// si la réponse est TRUE ==> on lance la page post_materiels.php
+			// si la rÃ©ponse est TRUE ==> on lance la page post_materiels.php
 			if (valida) {
 				
-				/* On déselectionne toutes les coches */
+				/* On dÃ©selectionne toutes les coches */
 				select_cette_ligne ( id, row, 0 );
 
 				/*	poste la page en ajax	*/
@@ -487,7 +490,7 @@
 			
 		} else {
 			
-			alert('Cette machine est déjà prêtée ! Rendez-la avant la suppression !');
+			alert('Cette machine est dÃ©jÃ  prÃªtÃ©e ! Rendez-la avant la suppression !');
 		}
 	}
 
@@ -495,12 +498,12 @@
 			
 	// *********************************************************************************
 	//
-	//				Selection/déselection de toutes les rows
+	//				Selection/dÃ©selection de toutes les rows
 	//
 	// *********************************************************************************	
 	
 	function checkall(_table) {
-		var table = document.getElementById(_table);	// le tableau du matériel
+		var table = document.getElementById(_table);	// le tableau du matÃ©riel
 		var checkall_box = document.getElementById('checkall');	// la checkbox "checkall"
 		
 		for ( var i = 1 ; i < table.rows.length ; i++ ) {
@@ -511,8 +514,8 @@
 				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
 				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
 			} else {
-				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
+				document.getElementsByName("chk")[i - 1].checked = false;	// on dÃ©coche toutes les checkbox
+				select_cette_ligne( lg.substring(5), i, 0 )					//on dÃ©selectionne la ligne et on la retire de l'index
 			}
 		}
 	}
@@ -533,48 +536,48 @@
 				
 		var nb_selectionnes = $('nb_selectionnes');
 		
-		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
+		var ligne = "tr_id" + tr_id;	//on rÃ©cupÃ¨re l'tr_id de la row
 		var li = document.getElementById(ligne);	
 		
-		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
+		if ( li.style.display == "" ) {	// si une ligne est masquÃ©e on ne la selectionne pas (pratique pour le filtre)
 		
 			switch (check) {
-				case 1: // On force la selection si la ligne n'est pas déjà cochée
+				case 1: // On force la selection si la ligne n'est pas dÃ©jÃ  cochÃ©e
 					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
 						table_id.push(tr_id);
 						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sÃ©lectionnÃ©es	
 					}
 				break;
 				
-				case 0: // On force la déselection
+				case 0: // On force la dÃ©selection
 					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
 						table_id.erase(tr_id);
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-						// alternance des couleurs calculée avec la parité
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sÃ©lectionnÃ©es			
+						// alternance des couleurs calculÃ©e avec la paritÃ©
 						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
 					}
 				break;
 				
 				
-				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
+				default:	// le check n'est pas prÃ©cisÃ©, la fonction dÃ©termine si la ligne est selectionnÃ©e ou pas
 					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
 						table_id.erase(tr_id);
 						
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sÃ©lectionnÃ©es			
 
-						// alternance des couleurs calculée avec la parité
+						// alternance des couleurs calculÃ©e avec la paritÃ©
 						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
 					
-					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
+					} else {	// le tr_id n'est pas trouvÃ© dans la liste, on crÃ©Ã© un nouvel tr_id Ã  la fin du tableau
 						table_id.push(tr_id);
 						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sÃ©lectionnÃ©es	
 					}
 				break;			
 			}
 	
-			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
+			// on concatÃ¨ne tout le tableau dans une chaine de valeurs sÃ©parÃ©es par des ;
 			$('materiel_a_poster').value = table_id.join(";");
 			
 
@@ -591,7 +594,7 @@
 		
 	// *********************************************************************************
 	//
-	//			Modifie à la volée l'affectation dans la salle
+	//			Modifie Ã  la volÃ©e l'affectation dans la salle
 	//
 	// *********************************************************************************	
 	 	
@@ -667,7 +670,7 @@
 	
 	// *********************************************************************************
 	//
-	//		On retourne la liste des états des entêtes (colonne montrée ou masquée)
+	//		On retourne la liste des Ã©tats des entÃªtes (colonne montrÃ©e ou masquÃ©e)
 	//
 	// *********************************************************************************	
 	
@@ -687,7 +690,7 @@
 	
 	// *********************************************************************************
 	//
-	//		initialisation des cases à cocher et de l'état des colonnes (hide/show)
+	//		initialisation des cases Ã  cocher et de l'Ã©tat des colonnes (hide/show)
 	//
 	// *********************************************************************************	
 	
@@ -724,7 +727,7 @@
 		else {$('chk_origine').checked = false; hidethem('.td_origine', false);}
 	}
 	
-	// On initialise tout le bazar d'entête en cochant les checkbox et en cachant/montrant les colonnes
+	// On initialise tout le bazar d'entÃªte en cochant les checkbox et en cachant/montrant les colonnes
 	init_entetes ('<?PHP echo $_SESSION['entetes'];?>');
 				
 </script>

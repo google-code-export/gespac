@@ -183,7 +183,7 @@ function Common_Display($url, $size = 25, $chanopt = false, $descopt = false, $d
 		}
 		$title = $article["title"];
 		$link = $article["link"];
-		$page .= "<div id='rss_news'><span id='rss_title'><a href=\"$link\" target=_blank>$title</a></span>";
+		$page .= "<div class='rss_news'><span class='rss_title'><a href=\"$link\" target=_blank>$title</a></span>";
 		
 		if($descopt != false)
 		{

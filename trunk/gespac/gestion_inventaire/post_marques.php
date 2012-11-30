@@ -4,28 +4,26 @@
 	/* fichier de creation / modif / suppr des marques
 	
 	Si j'ai un ID c'est une modification
-	Si j'en ai pas c'est une crÈation
+	Si j'en ai pas c'est une cr√©ation
 	
-	reste ‡ coder pour la suppression
+	reste √† coder pour la suppression
 	
 
 	*/
-	
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// rËgle le problËme d'encodage des caractËres
-	
+		
 	// lib
 	require_once ('../fonctions.php');
-	require_once ('../config/pear.php');
 	include_once ('../config/databases.php');
-	include_once ('../../class/Sql.class.php');		
 	include_once ('../../class/Log.class.php');		
+	include_once ('../../class/Sql.class.php');		
+
 	
 	
-	// Cnx ‡ la base
+	// Cnx √† la base
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	$log = new Log ("../dump/log_sql.sql");
 		
-	// on rÈcupËre les paramËtres de l'url	
+	// on r√©cup√®re les param√®tres de l'url	
 	$action 	= $_GET['action'];
 	$id 		= $_GET['id'];
 	
@@ -53,26 +51,26 @@
 		$test_existence_dans_table_marques = $con_gespac->QueryRow("SELECT * FROM marques WHERE marque_model='$modele' AND marque_type='$famille' AND marque_stype='$sfamille' AND marque_marque='$marque'");
 		
 		if ( $test_existence_dans_table_marques[0] ) {
-			echo "La marque <b>$marque $modele</b> existe dÈj‡.";
-			echo "<script>alert('La marque $marque $modele existe dÈj‡.');</script>";
+			echo "La marque <b>$marque $modele</b> existe d√©j√†.";
+			echo "<script>alert('La marque $marque $modele existe d√©j√†.');</script>";
 		}
 		else {
 		
-			echo "Insertion de <b>$marque $modele</b> ‡ partir de la table des correspondances";
+			echo "Insertion de <b>$marque $modele</b> √† partir de la table des correspondances";
 		
 			//Insertion d'un log
-			$log_texte = "$marque $modele ajoutÈ ‡ partir de la table des correspondances.";
-			$req_log_ajout_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'CrÈation marque', '$log_texte' );";
+			$log_texte = "$marque $modele ajout√© √† partir de la table des correspondances.";
+			$req_log_ajout_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Cr√©ation marque', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_ajout_marque );
 			
-			//On log la requÍte SQL
+			//On log la requ√™te SQL
 			$log->Insert ( $req_log_ajout_marque );
 			
-			// ajout de la marque ‡ partir de la corrspondance
+			// ajout de la marque √† partir de la corrspondance
 			$req_add_marque = "INSERT INTO marques ( marque_type, marque_stype, marque_marque, marque_model) VALUES ( '$famille', '$sfamille', '$marque', '$modele' )";
 			$con_gespac->Execute ( $req_add_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_add_marque );
 		}
 	}
@@ -83,15 +81,15 @@
 	if ( $action == 'suppr' ) {
 	
 		//Insertion d'un log
-		//On rÈcupËre le nom de la marque en fonction du marque_id avant sa suppression
+		//On r√©cup√®re le nom de la marque en fonction du marque_id avant sa suppression
 		$marque_model = $con_gespac->QueryOne ( "SELECT marque_model FROM marques WHERE marque_id = $id" );
 
-		$log_texte = "Le modËle $marque_model a ÈtÈ supprimÈ";
+		$log_texte = "Le mod√®le $marque_model a √©t√© supprim√©";
 
 		$req_log_suppr_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression marque', '$log_texte' );";
 		$con_gespac->Execute ( $req_log_suppr_marque );
 		
-		// On log la requÍte SQL
+		// On log la requ√™te SQL
 		$log->Insert ( $req_log_suppr_marque );
 		
 		/**************** SUPPRESSION ********************/
@@ -99,7 +97,7 @@
 		$req_suppr_marque = "DELETE FROM marques WHERE marque_id=$id;";
 		$con_gespac->Execute ( $req_suppr_marque );
 		
-		// On log la requÍte SQL
+		// On log la requ√™te SQL
 		$log->Insert ( $req_suppr_marque );
 	}
 		
@@ -125,7 +123,7 @@
 		$marque = $text_marque == "" ? $marque = $select_marque : $marque = $text_marque;
 		$modele = $text_modele == "" ? $modele = $select_modele : $modele = $text_modele;
 		
-		//On rÈcupËre le nom de la marque avant modification en fonction du marque_id
+		//On r√©cup√®re le nom de la marque avant modification en fonction du marque_id
 		$liste_marques = $con_gespac->QueryRow ( "SELECT marque_model, marque_type, marque_stype, marque_marque FROM marques WHERE marque_id = $id" );
 		$marque_modele_old 	= $liste_marques [0];
 		$marque_type_old   	= $liste_marques [1];
@@ -137,14 +135,14 @@
 		$req_verifie_existence_marque = $con_gespac->QueryRow("SELECT * FROM marques WHERE marque_type = '$type' AND marque_stype = '$stype' AND marque_marque = '$marque' AND marque_model = '$modele'; ");
 		
 		if ( $req_verifie_existence_marque[0] ) { // alors la marque existe
-			echo "<script>alert('La marque existe dÈj‡ !');</script>";
+			echo "<script>alert('La marque existe d√©j√† !');</script>";
 			
 			//Insertion d'un log
-			$log_texte = "La marque $marque $modele de type $type $stype existe dÈj‡ !";
+			$log_texte = "La marque $marque $modele de type $type $stype existe d√©j√† !";
 			$req_log_non_modif_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification marque', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_non_modif_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_log_non_modif_marque );
 		}
 		else {	
@@ -152,18 +150,18 @@
 			$req_modif_marque = "UPDATE marques SET marque_type='$type', marque_stype='$stype', marque_marque='$marque', marque_model='$modele' WHERE marque_id='$id'";
 			$con_gespac->Execute ( $req_modif_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_log_creation_salle );
 			
 			//Insertion d'un log
-			$log_texte = "La marque <b>$marque_marque_old $marque_modele_old</b> de type <b>$marque_type_old $marque_stype_old</b> a ÈtÈ modifiÈe en <b>$marque $modele</b> de type <b>$type $stype</b>";
+			$log_texte = "La marque <b>$marque_marque_old $marque_modele_old</b> de type <b>$marque_type_old $marque_stype_old</b> a √©t√© modifi√©e en <b>$marque $modele</b> de type <b>$type $stype</b>";
 			$req_log_modif_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification marque', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_modif_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_log_modif_marque );
 			
-			echo "<small>Modification du modËle <b>$modele</b>.</small>";
+			echo "<small>Modification du mod√®le <b>$modele</b>.</small>";
 		}
 	}
 	
@@ -191,15 +189,15 @@
 			$marque_dep 	= $marque_de_depart[0];
 			$modele_dep 	= $marque_de_depart[1];
 			
-			echo "Le matÈriel est transfÈrÈ de la marque $marque_dep $modele_dep vers $marque $modele";
-			echo "<script>alert('La marque $marque $modele existe dÈj‡. RÈaffectation du matÈriel de $marque_dep $modele_dep vers $marque $modele');</script>";
+			echo "Le mat√©riel est transf√©r√© de la marque $marque_dep $modele_dep vers $marque $modele";
+			echo "<script>alert('La marque $marque $modele existe d√©j√†. R√©affectation du mat√©riel de $marque_dep $modele_dep vers $marque $modele');</script>";
 			
 			// On transvase les mat de l'ancienne marque vers la marque avec correspondance.
 
 			$req_reaffectation_marque = "UPDATE materiels SET marque_id = $test_existence_dans_table_marques WHERE marque_id = $marque_id;";	
 			$con_gespac->Execute ( $req_reaffectation_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_reaffectation_marque );
 			
 			
@@ -208,7 +206,7 @@
 			$req_suppr_ancienne_marque = "DELETE FROM marques WHERE marque_id = $marque_id;";	
 			$con_gespac->Execute ( $req_suppr_ancienne_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_suppr_ancienne_marque );
 
 			
@@ -217,18 +215,18 @@
 		}
 		else {
 		
-			echo "Modification de <b>$marque $modele</b> ‡ partir de la table des correspondances";
+			echo "Modification de <b>$marque $modele</b> √† partir de la table des correspondances";
 		
 			//Insertion d'un log
-			$log_texte = "$marque $modele modifiÈ ‡ partir de la table des correspondances.";
+			$log_texte = "$marque $modele modifi√© √† partir de la table des correspondances.";
 			$req_log_ajout_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification marque', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_ajout_marque );
 			
-			// ajout de la marque ‡ partir de la corrspondance
+			// ajout de la marque √† partir de la corrspondance
 			$req_modif_marque = "UPDATE marques SET marque_type='$famille', marque_stype='$sfamille', marque_marque='$marque', marque_model='$modele' WHERE marque_id=$marque_id";
 			$con_gespac->Execute ( $req_modif_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_modif_marque );
 
 		}
@@ -259,14 +257,14 @@
 		$req_verifie_existence_marque = $con_gespac->QueryRow("SELECT * FROM marques WHERE marque_type = '$type' AND marque_stype = '$stype' AND marque_marque = '$marque' AND marque_model = '$modele'; ");
 		
 		if ( $req_verifie_existence_marque[0] ) { // alors la marque existe
-			echo "<script>alert('La marque existe dÈj‡ !');</script>";
+			echo "<script>alert('La marque existe d√©j√† !');</script>";
 			
 			//Insertion d'un log
-			$log_texte = "La marque $marque $modele de type $type $stype existe dÈj‡ !";
-			$req_log_non_add_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'CrÈation marque', '$log_texte' );";
+			$log_texte = "La marque $marque $modele de type $type $stype existe d√©j√† !";
+			$req_log_non_add_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Cr√©ation marque', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_non_add_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_log_non_add_marque );
 
 			
@@ -275,18 +273,18 @@
 			$req_add_marque = "INSERT INTO marques ( marque_type, marque_stype, marque_marque, marque_model) VALUES ( '$type', '$stype', '$marque', '$modele' )";
 			$con_gespac->Execute ( $req_add_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_add_marque );
 
 				
 			echo "<small>Ajout de la marque <b>$marque $modele</b> de type <b>$stype / $stype</b>.</small>";
 				
 			//Insertion d'un log
-			$log_texte = "La marque $marque $modele de type $type $stype a ÈtÈ crÈÈe";
-			$req_log_insert_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'CrÈation marque', '$log_texte' );";
+			$log_texte = "La marque $marque $modele de type $type $stype a √©t√© cr√©√©e";
+			$req_log_insert_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Cr√©ation marque', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_insert_marque );
 			
-			// On log la requÍte SQL
+			// On log la requ√™te SQL
 			$log->Insert ( $req_log_insert_marque );
 
 		}

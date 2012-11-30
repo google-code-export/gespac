@@ -28,35 +28,29 @@
 	$marques_creees = array();	// Permet de comptabiliser les marques nouvellement créées (je sais c'est pas super propre, mais il est 21h30 et c'est vendredi soir)
 	
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
-	// adresse de connexion à la base de données
-	$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
+
 
 	// cnx à la base de données OCS
-	$db_ocs 	= & MDB2::factory($dsn_ocs);
+	$con_ocs = new Sql($host, $user, $pass, $ocsweb);
 	
 	// stockage des lignes retournées par sql dans un tableau
-	$liste_marques_ocs  		= $db_ocs->queryAll ( "SELECT DISTINCT smanufacturer, smodel FROM bios;" );
-	$liste_marques_ecrans_ocs   = $db_ocs->queryAll ( "SELECT DISTINCT manufacturer, caption FROM monitors WHERE serial <> '';" );
-	$liste_hardware_ocs 		= $db_ocs->queryAll ( "SELECT hardware.id, name, smanufacturer, smodel, ssn, macaddr, speed FROM hardware, bios, networks where hardware.id=bios.hardware_id AND hardware.id=networks.hardware_id ORDER BY name;" );
+	$liste_marques_ocs  		= $con_ocs->QueryAll ( "SELECT DISTINCT smanufacturer, smodel FROM bios;" );
+	$liste_marques_ecrans_ocs   = $con_ocs->QueryAll ( "SELECT DISTINCT manufacturer, caption FROM monitors WHERE serial <> '';" );
+	$liste_hardware_ocs 		= $con_ocs->QueryAll ( "SELECT hardware.id as id, name, smanufacturer, smodel, ssn, macaddr, speed FROM hardware, bios, networks where hardware.id=bios.hardware_id AND hardware.id=networks.hardware_id ORDER BY name;" );
 	
-	$liste_monitors_ocs 		= $db_ocs->queryAll ( "SELECT DISTINCT serial, manufacturer, caption, name from hardware, monitors WHERE serial <> '' AND hardware.id = monitors.hardware_id;" );
+	$liste_monitors_ocs 		= $con_ocs->QueryAll ( "SELECT DISTINCT serial, manufacturer, caption, name from hardware, monitors WHERE serial <> '' AND hardware.id = monitors.hardware_id;" );
 
 	
 	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
-	$liste_marques_gespac		= $db_gespac->queryAll ( "SELECT marque_id, CONCAT(TRIM(marque_marque), ' ', TRIM(marque_model)) FROM marques;" );
-	$liste_hardware_gespac  	= $db_gespac->queryAll ( "SELECT mat_id, mat_nom, mat_serial, mat_mac, marque_id FROM materiels;" );
-	
-	//$liste_correspondances 		= $db_gespac->queryAll ( "SELECT corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances;" );
-
-		
-	// On se déconnecte de la db
-	$db_ocs->disconnect();
-	$db_gespac->disconnect();
+	$liste_marques_gespac		= $con_gespac->QueryAll ( "SELECT marque_id, CONCAT(TRIM(marque_marque), ' ', TRIM(marque_model)) FROM marques;" );
+	$liste_hardware_gespac  	= $con_gespac->QueryAll ( "SELECT mat_id, mat_nom, mat_serial, mat_mac, marque_id FROM materiels;" );
 	
 	
 	// on trouve une valeur dans une table à partir de son ssn et du numéro du champ à extraire
@@ -78,13 +72,13 @@
 	***********************************************/
 	foreach ($liste_hardware_ocs as $hardware_ocs) {
 		
-		$id_ocs 	= $hardware_ocs[0];
-		$nom_ocs 	= $hardware_ocs[1];
-		$marque_ocs = $hardware_ocs[2];
-		$modele_ocs = $hardware_ocs[3];
-		$ssn_ocs 	= $hardware_ocs[4];
-		$mac_ocs	= $hardware_ocs[5];
-		$speed_ocs 	= $hardware_ocs[6];
+		$id_ocs 	= $hardware_ocs['id'];
+		$nom_ocs 	= $hardware_ocs['name'];
+		$marque_ocs = $hardware_ocs['smanufacturer'];
+		$modele_ocs = $hardware_ocs['smodel'];
+		$ssn_ocs 	= $hardware_ocs['ssn'];
+		$mac_ocs	= $hardware_ocs['macaddr'];
+		$speed_ocs 	= $hardware_ocs['speed'];
 		
 		$marque_et_model_ocs = $marque_ocs . " " . $modele_ocs;
 		
@@ -102,16 +96,16 @@
 			*/
 			
 			// cnx à la base de données GESPAC
-			$db_gespac 	= & MDB2::factory($dsn_gespac);
+			$con_gespac = new Sql($host, $user, $pass, $gespac);
 			
 			// La liste des correspondances
-			$liste_correspondances 		= $db_gespac->queryAll ( "SELECT corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances WHERE corr_marque_ocs = '$marque_ocs" . " " . "$modele_ocs';" );
+			$liste_correspondances 		= $con_gespac->QueryRow ( "SELECT corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances WHERE corr_marque_ocs = '$marque_ocs" . " " . "$modele_ocs';" );
 			// Si la correspondance existe on teste avec les champs corr_marque et corr_modele
 			if ( $liste_correspondances ) {
-				$marque = $liste_correspondances[0][3];
-				$modele = $liste_correspondances[0][4];
-				$famille = $liste_correspondances[0][1];
-				$sfamille = $liste_correspondances[0][2];
+				$marque = $liste_correspondances[3];
+				$modele = $liste_correspondances[4];
+				$famille = $liste_correspondances[1];
+				$sfamille = $liste_correspondances[2];
 			}
 			// sinon on utilise les valeurs de OCS
 			else {
@@ -148,7 +142,7 @@
 				
 				if ( !in_array ($quadruplet, $marques_creees) ) {
 					$req_insert_marque = "INSERT INTO marques ( marque_type, marque_stype, marque_marque, marque_model ) VALUES ('$famille', '$sfamille', '$marque', '$modele' )";
-					$result = $db_gespac->exec ( $req_insert_marque );
+					$result = $con_gespac->Execute ( $req_insert_marque );
 				
 					// Pas très propre => A recoder :
 					// La marque une fois créée n'est pas comptabilisé dans la liste [gespac_marqueid_from_ocs_marque_modele]
@@ -168,22 +162,21 @@
 				}
 				
 				$biglog .= "On récupère le marque_id de la marque nouvellement créée.<br>";
-				$id_marque_gespac = $db_gespac->queryAll ( "SELECT marque_id FROM marques WHERE marque_type='$famille' AND marque_stype='$sfamille' AND marque_marque='$marque' AND marque_model='$modele';" );
-				$id_nouvelle_marque = $id_marque_gespac[0][0];
-								
+				$id_nouvelle_marque = $con_gespac->QueryOne ( "SELECT marque_id FROM marques WHERE marque_type='$famille' AND marque_stype='$sfamille' AND marque_marque='$marque' AND marque_model='$modele';" );
+												
 				// Si le matériel OCS n'a pas de ssn
 				if ( $ssn_ocs == "") {
 					$rand_ssn_ocs = "RAND" . rand(0, 99999);
 					$biglog .= "On met à jour le matériel ocs ($id_ocs) avec le SSN aléatoire $rand_ssn_ocs ";
 					$req_update_ssn_ocs = "UPDATE ocsweb.bios SET SSN='$rand_ssn_ocs' WHERE HARDWARE_ID=$id_ocs";
-					$result = $db_ocs->exec ( $req_update_ssn_ocs );
+					$result = $con_ocs->Execute ( $req_update_ssn_ocs );
 					
 					// On log la requête SQL
 					fwrite($fp, date("Ymd His") . " " . $req_insert_materiel_gespac."\n");
 					
 					$biglog .= "Création du matériel $nom_ocs de ssn $rand_ssn_ocs avec pour marque_id le résultat de la ligne [SQL2] <br>";
 					$req_insert_materiel_gespac = "INSERT INTO materiels (mat_nom, mat_serial, marque_id, mat_mac) VALUES ('$nom_ocs', '$rand_ssn_ocs', $id_nouvelle_marque, '$mac_ocs')";
-					$result = $db_gespac->exec ( $req_insert_materiel_gespac );
+					$result = $con_gespac->Execute ( $req_insert_materiel_gespac );
 					
 					$materiels_ajoutes .= "Création du matériel <b>$nom_ocs</b> de ssn <b>$rand_ssn_ocs</b> avec pour marque et modèle <b>$marque &nbsp $modele</b><br>";
 					
@@ -194,7 +187,7 @@
 				else {
 					$biglog .= "Création du matériel $nom_ocs de ssn $ssn_ocs avec pour marque_id le résultat de la ligne [SQL2] <br>";
 					$req_insert_materiel_gespac = "INSERT INTO materiels (mat_nom, mat_serial, marque_id, mat_mac) VALUES ('$nom_ocs', '$ssn_ocs', $id_nouvelle_marque, '$mac_ocs')";
-					$result = $db_gespac->exec ( $req_insert_materiel_gespac );
+					$result = $con_gespac->Execute ( $req_insert_materiel_gespac );
 					
 					$materiels_ajoutes .= "Création du matériel <b>$nom_ocs</b> de ssn <b>$ssn_ocs</b> avec pour marque et modèle <b>$marque &nbsp $modele</b><br>";
 					
@@ -214,14 +207,14 @@
 					$rand_ssn_ocs = "RAND" . rand(0, 99999);
 					$biglog .= "On met à jour le matériel ocs ($id_ocs) avec le SSN aléatoire $rand_ssn_ocs ";
 					$req_update_ssn_ocs = "UPDATE ocsweb.bios SET SSN='$rand_ssn_ocs' WHERE HARDWARE_ID=$id_ocs";
-					$result = $db_ocs->exec ( $req_update_ssn_ocs );
+					$result = $con_ocs->Execute ( $req_update_ssn_ocs );
 					
 					// On log la requête SQL
 					fwrite($fp, date("Ymd His") . " " . $rq_MAJ_nom_materiel_gespac."\n");
 					
 					$biglog .= "Création du matériel $nom_ocs de ssn $rand_ssn_ocs avec pour marque_id $gespac_marqueid_from_ocs_marque_modele <br>";
 					$req_insert_materiel_gespac = "INSERT INTO materiels (mat_nom, mat_serial, marque_id, mat_mac) VALUES ('$nom_ocs', '$rand_ssn_ocs', $gespac_marqueid_from_ocs_marque_modele, '$mac_ocs')";
-					$result = $db_gespac->exec ( $req_insert_materiel_gespac );
+					$result = $con_gespac->Execute ( $req_insert_materiel_gespac );
 					
 					$materiels_ajoutes .= "Création du matériel <b>$nom_ocs</b> de ssn <b>$rand_ssn_ocs</b> avec pour marque et modèle <b>$marque &nbsp $modele</b><br>";
 					
@@ -231,7 +224,7 @@
 				else { //Le matériel OCS a un ssn
 					$biglog .= "Création du matériel $nom_ocs de ssn $ssn_ocs avec pour marque_id $gespac_marqueid_from_ocs_marque_modele <br>";
 					$req_insert_materiel_gespac = "INSERT INTO materiels (mat_nom, mat_serial, marque_id, mat_mac) VALUES ('$nom_ocs', '$ssn_ocs', $gespac_marqueid_from_ocs_marque_modele, '$mac_ocs')";
-					$result = $db_gespac->exec ( $req_insert_materiel_gespac );
+					$result = $con_gespac->Execute ( $req_insert_materiel_gespac );
 					
 					$materiels_ajoutes .= "Création du matériel <b>$nom_ocs</b> de ssn <b>$ssn_ocs</b> avec pour marque et modèle <b>$marque &nbsp $modele</b><br>";
 					
@@ -262,16 +255,16 @@
 			
 			if ( $dernier_inventaire_ocs[0][0] <>  $nom_hardware_gespac) {
 				$biglog .= "On met à jour le matériel GESPAC numéro $gespac_matid_from_ocs_ssn avec le nouveau nom OCS : " . $dernier_inventaire_ocs[0][0] . "<br>";
-					$db_gespac 	= & MDB2::factory($dsn_gespac);
-					$rq_MAJ_nom_materiel_gespac	= "UPDATE materiels SET mat_nom='" . $dernier_inventaire_ocs[0][0] . "' WHERE mat_id=$gespac_matid_from_ocs_ssn" ;
-					$result = $db_gespac->exec ( $rq_MAJ_nom_materiel_gespac );
-					
-					$materiels_maj .= "Mise à jour du matériel GESPAC <b>$nom_hardware_gespac</b> avec le nouveau nom OCS : <b>" . $dernier_inventaire_ocs[0][0] . "</b><br>";"";
-					
-					$db_gespac->disconnect();	
-					
-					// On log la requête SQL
-					fwrite($fp, date("Ymd His") . " " . $rq_MAJ_nom_materiel_gespac."\n");
+				// cnx gespac
+				$con_gespac = new Sql($host, $user, $pass, $gespac);
+
+				$rq_MAJ_nom_materiel_gespac	= "UPDATE materiels SET mat_nom='" . $dernier_inventaire_ocs[0][0] . "' WHERE mat_id=$gespac_matid_from_ocs_ssn" ;
+				$result = $con_gespac->Execute ( $rq_MAJ_nom_materiel_gespac );
+				
+				$materiels_maj .= "Mise à jour du matériel GESPAC <b>$nom_hardware_gespac</b> avec le nouveau nom OCS : <b>" . $dernier_inventaire_ocs[0][0] . "</b><br>";"";
+				
+				// On log la requête SQL
+				fwrite($fp, date("Ymd His") . " " . $rq_MAJ_nom_materiel_gespac."\n");
 			}
 			else {
 				$biglog .= "Le nom du matériel dans gespac et du dernier inventaire ocs est identique <br>";
@@ -287,16 +280,14 @@
 	
 	
 	
-	
-	
 	/***********************************************
 	*	 Pour chaque écran de la base OCS
 	***********************************************/
 	foreach ($liste_monitors_ocs as $monitors_ocs) {
-		$monitor_ssn 		= $monitors_ocs[0];
-		$monitor_marque 	= $monitors_ocs[1];
-		$monitor_modele 	= $monitors_ocs[2];
-		$monitor_pc_name	= $monitors_ocs[3];
+		$monitor_ssn 		= $monitors_ocs['serial'];
+		$monitor_marque 	= $monitors_ocs['manufacturer'];
+		$monitor_modele 	= $monitors_ocs['caption'];
+		$monitor_pc_name	= $monitors_ocs['name'];
 		
 	
 		// Nom du matériel associé au ssn de l'écran (ca permet de tester l'existence du matériel dans gespac)
@@ -312,16 +303,16 @@
 				sinon c'est que la correspondance n'existe pas et qu'on a dû insérer dans la table des marques le couple marque/modele de ocs.
 			*/
 			
-			// cnx à la base de données GESPAC
-			$db_gespac 	= & MDB2::factory($dsn_gespac);
+			// cnx gespac
+			$con_gespac = new Sql($host, $user, $pass, $gespac);
 			
 			// La liste des correspondances
-			$liste_correspondances 		= $db_gespac->queryAll ( "SELECT corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances WHERE corr_marque_ocs = '$monitor_marque" . " " . "$monitor_modele';" );
+			$liste_correspondances = $con_gespac->QueryRow ( "SELECT corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances WHERE corr_marque_ocs = '$monitor_marque" . " " . "$monitor_modele';" );
 
 			// Si la correspondance existe on teste avec les champs corr_marque et corr_modele
 			if ( $liste_correspondances  ) {
-				$marque = $liste_correspondances[0][3];
-				$modele = $liste_correspondances[0][4];
+				$marque = $liste_correspondances['corr_marque'];
+				$modele = $liste_correspondances['corr_modele'];
 			}
 			// sinon on utilise les valeurs de OCS
 			else {
@@ -346,10 +337,10 @@
 
 				// Si la correspondance existe on insère les champs issus de la table de correspondance sinon on utilise les champs de la base OCS
 				if ( $liste_correspondances ) {
-					$type = $liste_correspondances[0][1];
-					$stype = $liste_correspondances[0][2];
-					$marque = $liste_correspondances[0][3];
-					$modele = $liste_correspondances[0][4];
+					$type = $liste_correspondances['corr_type'];
+					$stype = $liste_correspondances['corr_stype'];
+					$marque = $liste_correspondances['corr_marque'];
+					$modele = $liste_correspondances['corr_modele'];
 				}
 				else {
 					$type = 'ECRAN';
@@ -365,7 +356,7 @@
 					// On créé la marque
 					$biglog .= "Création de la marque : <b>$marque $modele</b> de type $type.<br>";
 					$req_insert_marque = "INSERT INTO marques ( marque_type, marque_stype, marque_marque, marque_model ) VALUES ('$type', '$stype', '$marque', '$modele' )";
-					$result = $db_gespac->exec ( $req_insert_marque );
+					$result = $con_gespac->Execute ( $req_insert_marque );
 					
 					
 					// Pas très propre => A recoder :
@@ -388,13 +379,12 @@
 				
 				// On récupère le id de la marque créée
 				$biglog .= "On récupère le marque_id de la marque nouvellement créée.<br>";
-				$id_marque_gespac = $db_gespac->queryAll ( "SELECT marque_id FROM marques WHERE marque_marque='$marque' AND marque_model='$modele';" );
-				$id_nouvelle_marque = $id_marque_gespac[0][0];
+				$id_nouvelle_marque = $con_gespac->QueryOne ( "SELECT marque_id FROM marques WHERE marque_marque='$marque' AND marque_model='$modele';" );
 				
 				// On insère l'écran
 				$biglog .= "Création du matériel Ecran_de_$monitor_pc_name de ssn $monitor_ssn avec pour marque_id $id_nouvelle_marque <br>";
 				$req_insert_materiel_gespac = "INSERT INTO materiels (mat_nom, mat_serial, marque_id, mat_mac) VALUES ('Ecran_de_$monitor_pc_name', '$monitor_ssn', $id_nouvelle_marque, 'NA')";
-				$result = $db_gespac->exec ( $req_insert_materiel_gespac );
+				$result = $con_gespac->Execute ( $req_insert_materiel_gespac );
 				
 				// On log la requête SQL
 				fwrite($fp, date("Ymd His") . " " . $req_insert_materiel_gespac."\n");
@@ -408,13 +398,12 @@
 			
 				// On récupère le id de la marque trouvée
 				$biglog .= "On récupère le marque_id de la marque nouvellement créée.<br>";
-				$id_marque_gespac = $db_gespac->queryAll ( "SELECT marque_id FROM marques WHERE marque_marque='$marque' AND marque_model='$modele';" );
-				$id_nouvelle_marque = $id_marque_gespac[0][0];
-				
+				$id_nouvelle_marque = $con_gespac->QueryOne ( "SELECT marque_id FROM marques WHERE marque_marque='$marque' AND marque_model='$modele';" );
+								
 				// On insère l'écran
 				$biglog .= "Création du matériel Ecran_de_$monitor_pc_name de ssn $monitor_ssn avec pour marque_id $id_nouvelle_marque <br>";
 				$req_insert_materiel_gespac = "INSERT INTO materiels (mat_nom, mat_serial, marque_id, mat_mac) VALUES ('Ecran_de_$monitor_pc_name', '$monitor_ssn', $id_nouvelle_marque, 'NA')";
-				$result = $db_gespac->exec ( $req_insert_materiel_gespac );
+				$result = $con_gespac->Execute ( $req_insert_materiel_gespac );
 				
 				// On log la requête SQL
 				fwrite($fp, date("Ymd His") . " " . $req_insert_materiel_gespac."\n");
@@ -518,7 +507,7 @@
 		"<br>Nombre d`écrans ajoutés : " . (count($unique_ecrans_ajoutes)-1);
 
 	$req_log_import_ocs = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Import OCS', '$log_texte' );";
-	$result = $db_gespac->exec ( $req_log_import_ocs );
+	$result = $con_gespac->Execute ( $req_log_import_ocs );
 	
 	
 ?>

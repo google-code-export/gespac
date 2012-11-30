@@ -8,28 +8,27 @@ session_start();
 		
 		bouton ajouter une salle
 		
-		sur chaque salle possibilité de la modifier
+		sur chaque salle possibilitÃ© de la modifier
 		
-		de la supprimer en faisant gaffe à bien rebalancer TOUTES les machines dans la salle de stockage
+		de la supprimer en faisant gaffe Ã  bien rebalancer TOUTES les machines dans la salle de stockage
 	
 	
 	*/
 
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
-	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
+	
+	// si le grade du compte est root, on donne automatiquement les droits d'accÃ¨s en Ã©criture. Sinon, on teste si le compte a accÃ¨s Ã  la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-02-03#", $_SESSION['droits']);
 
-	
 ?>
-
-
 
 <h3>Visualisation des salles</h3>
 <br>
-
-<script type="text/javascript" src="server.php?client=all"></script>
 
 <!--	DIV target pour Ajax	-->
 <div id="target"></div>
@@ -46,9 +45,9 @@ session_start();
 			alert('IMPOSSIBLE de supprimer la salle ' + salle + ' !');
 		} else {
 		
-			var valida = confirm('Voulez-vous vraiment supprimer la salle ' + salle + ' ?\n ATTENTION, tout le matériel de cette salle sera rebasculé en salle STOCK !');
+			var valida = confirm('Voulez-vous vraiment supprimer la salle ' + salle + ' ?\n ATTENTION, tout le matÃ©riel de cette salle sera rebasculÃ© en salle STOCK !');
 			
-			// si la réponse est TRUE ==> on lance la page post_marques.php
+			// si la rÃ©ponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
 				/*	poste la page en ajax	*/
 				$('target').load("gestion_inventaire/post_salles.php?action=suppr&id=" + id);
@@ -106,10 +105,10 @@ session_start();
 
 <?PHP 
 
-	// Connexion à la base de données GESPAC
+	// Connexion Ã  la base de donnÃ©es GESPAC
 	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
-	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
+	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© avec originalitÃ© "array" (mais "tableau" peut aussi marcher)
 	$liste_des_salles = $con_gespac->QueryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment, est_modifiable FROM salles ORDER BY salle_nom" );
 
 	if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
@@ -121,7 +120,7 @@ session_start();
 		<th>Nom</th>
 		<th>VLAN</th>
 		<th>Etage</th>
-		<th>Bâtiment</th>
+		<th>BÃ¢timent</th>
 				
 		
 		<?PHP	
@@ -147,7 +146,7 @@ session_start();
 					// valeur nominale pour la checkbox
 					$chkbox_state = $apreter == 1 ? "checked" : "unchecked";
 					
-					// On récupère la valeur inverse pour la poster
+					// On rÃ©cupÃ¨re la valeur inverse pour la poster
 					$change_apreter = $apreter == 1 ? 0 : 1;
 					
 					//faire un queryOne
@@ -182,7 +181,7 @@ session_start();
 <?PHP
 if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
 
-	// On se déconnecte de la db
+	// On se dÃ©connecte de la db
 	$con_gespac->Close();
 ?>
 
@@ -193,7 +192,7 @@ if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width
 	});
 
 
-	// Filtre rémanent
+	// Filtre rÃ©manent
 	filter ( $('filt'), 'salle_table' );	
 
 </script>

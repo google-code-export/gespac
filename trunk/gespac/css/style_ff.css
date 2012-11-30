@@ -4,6 +4,14 @@ body {
 	background-color	: #336967;
 	background-repeat	: no-repeat;
 	font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font-family: ubuntu, Verdana, Arial, Helvetica, sans-serif;
+}
+
+@font-face {
+	font-family: ubuntu;
+	src: url('UbuntuMono-R.ttf');
+	/*src: url('SourceSansPro-Regular.ttf');*/
+	text-decoration : none;
 }
 
 h3 {
@@ -379,19 +387,20 @@ img {
 
 /*************************************** 	RSS / ATOM  *******************************************/
 
-#rss_title {
-	font: 14px Arial, Helvetica, sans-serif;}
+.rss_title {
+	font-size: 14px;}
 
-#rss_title a{
-	font: 14px Arial, Helvetica, sans-serif;}
+.rss_title a{
+	font-size: 14px;}
 
 #rss_content {
-	font: 12px Arial, Helvetica, sans-serif;}
+	font-size: 12px;}
 
-#rss_news {
+.rss_news {
 	border : 1px solid black;
 	padding : 10px;
 	margin : 10px;
 	background-color : #C0FF96;
-	border-radius		: 5px;
+	border-radius : 5px;
+	white-space : pre-wrap;
 }

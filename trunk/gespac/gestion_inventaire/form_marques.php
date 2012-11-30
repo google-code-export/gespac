@@ -3,39 +3,29 @@
 	#formulaire d'ajout et de modification
 	#des marques
 
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Log.class.php');	
+	include_once ('../../class/Sql.class.php');		
 
-
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../config/databases.php');		// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 	
-?>
-
-<!--  SERVEUR AJAX 
-<script type="text/javascript" src="server.php?client=all"></script>-->
-
-
-
-<?PHP
-
 	$id = $_GET['id'];
 	
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$con_gespac 	= new Sql ($host, $user, $pass, $gespac);
 
 	
 	// *********************************************************************************
 	//
-	//			Formulaire vierge de création
+	//			Formulaire vierge de crÃ©ation
 	//
 	// *********************************************************************************
 	
 	
 	if ( $id == '-1' ) {
 	
-		echo "<h2>Formulaire de création d'une marque</h2><br>";
+		echo "<h2>Formulaire de crÃ©ation d'une marque</h2><br>";
 			
 		
 		?>
@@ -57,11 +47,11 @@
 			<form>
 				<center>
 			
-				<p>Choisir un modèle : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"></p>
+				<p>Choisir un modÃ¨le : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"></p>
 				
 				
 				<?PHP
-				// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
+				// ici il faut rÃ©cupÃ©rer les lignes DISTINCTES histoire de ne pas surcharger le tableau
 				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
 				?>
 				
@@ -92,7 +82,7 @@
 				</table>
 
 				<br>
-				<a href='#' onclick="affiche_creer_modele();">Créer un nouveau modèle</a>
+				<a href='#' onclick="affiche_creer_modele();">CrÃ©er un nouveau modÃ¨le</a>
 				</center>
 
 			</FORM>
@@ -176,7 +166,7 @@
 					</tr>
 					
 					<tr>
-						<TD>Modèle</TD>
+						<TD>ModÃ¨le</TD>
 						<TD>
 							<div id="combo_modele">
 								<div id="listbox_modele" style='display:inline;'>
@@ -203,7 +193,7 @@
 				<input type=submit value='Ajouter une marque' onclick="refresh_quit( $('filt').value );" >
 				
 				<br><br>
-				<a href='#' onclick="affiche_liste_modele();">Liste des modèles</a>
+				<a href='#' onclick="affiche_liste_modele();">Liste des modÃ¨les</a>
 
 				</center>
 
@@ -217,7 +207,7 @@
 	
 	// *********************************************************************************
 	//
-	//			formulaire de modification prérempli
+	//			formulaire de modification prÃ©rempli
 	//
 	// *********************************************************************************
 	
@@ -227,13 +217,13 @@
 		echo "<h2>Formulaire de modification d'une marque</h2><br>";
 		
 
-		// Requete pour récupérer les données des champs pour la marque à modifier
+		// Requete pour rÃ©cupÃ©rer les donnÃ©es des champs pour la marque Ã  modifier
 
 
-		// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
+		// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© avec originalitÃ© "array" (mais "tableau" peut aussi marcher)
 		$marque_a_modifier = $con_gespac->queryRow ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques WHERE marque_id=$id" );
 
-		// valeur à affecter aux champs
+		// valeur Ã  affecter aux champs
 		$marque_id 		= $marque_a_modifier[0];
 		$marque_type 	= $marque_a_modifier[1];
 		$marque_stype 	= $marque_a_modifier[2];
@@ -257,11 +247,11 @@
 			<form>
 				<center>
 			
-				<p>Choisir un modèle : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"></p>
+				<p>Choisir un modÃ¨le : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"></p>
 				
 				
 				<?PHP
-				// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
+				// ici il faut rÃ©cupÃ©rer les lignes DISTINCTES histoire de ne pas surcharger le tableau
 				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
 				?>
 				
@@ -292,7 +282,7 @@
 				</table>
 
 				<br>
-				<a href='#' onclick="affiche_modif_modele();">Modification manuelle du modèle</a>
+				<a href='#' onclick="affiche_modif_modele();">Modification manuelle du modÃ¨le</a>
 				</center>
 
 			</FORM>
@@ -381,7 +371,7 @@
 					</tr>
 					
 					<tr>
-						<TD>Modèle</TD>
+						<TD>ModÃ¨le</TD>
 						<TD>
 							<div id="combo_modele">
 								<div id="listbox_modele" style='display:inline;'>
@@ -422,7 +412,7 @@
 	
 	// ferme la smoothbox et rafraichit la page
 	function refresh_quit (filt) {
-		// lance la fonction avec un délais de 1500ms
+		// lance la fonction avec un dÃ©lais de 1500ms
 		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1500);
 	}
 	
@@ -498,7 +488,7 @@
 			
 		var valida = confirm('Voulez-vous vraiment ajouter la marque ' + marque + ' ?');
 		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
+		// si la rÃ©ponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 			//	poste la page en ajax
 			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
@@ -523,7 +513,7 @@
 	
 	// *********************************************************************************
 	//
-	//		PERMET DE PASSER A LA LISTE des MODèLES
+	//		PERMET DE PASSER A LA LISTE des MODÃ¨LES
 	//
 	// *********************************************************************************
 	
@@ -547,7 +537,7 @@
 			
 		var valida = confirm('Voulez-vous vraiment modifier la marque ' + oldmarque + ' par la marque ' + marque + ' ?');
 		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
+		// si la rÃ©ponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 			//	poste la page en ajax
 			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
@@ -586,7 +576,7 @@
 
 				onSuccess: function(responseText, responseXML, filt) {
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET Ã  POST (en effet, avec GET il rÃ©cupÃ¨re la totalitÃ© du tableau get en paramÃ¨tres et lorsqu'on poste la page formation on dÃ©passe la taille maxi d'une url)
 					SexyLightbox.close();
 				}
 			

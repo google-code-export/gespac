@@ -1,21 +1,20 @@
 <?PHP
 	
-	/* fichier récapitulatif du matériel FOG
+	/* fichier rÃ©capitulatif du matÃ©riel FOG
 	
-		vue de la db fog (association image, @MAC... à un matériel)
+		vue de la db fog (association image, @MAC... Ã  un matÃ©riel)
 		
 	*/
 	
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
+
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 	
 	// On regarde si la base FOG existe car dans le cas de sa non existance la page ne s'affiche pas correctement
-	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion à la base de donnée
-	if(!mysql_select_db('fog', $link_bases)) {echo "Base FOG non présente, il est impossible de continuer l'affichage.";}//si la base FOG n'existe pas on arrete la page
+	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion Ã  la base de donnÃ©e
+	if(!mysql_select_db('fog', $link_bases)) {echo "Base FOG non prÃ©sente, il est impossible de continuer l'affichage.";}//si la base FOG n'existe pas on arrete la page
 	else {
 
 ?>
@@ -24,7 +23,7 @@
 <div id="target"></div>
 
 
-<h3>Récapitulatif FOG</h3>
+<h3>RÃ©capitulatif FOG</h3>
 
 <script type="text/javascript">	
 	
@@ -68,17 +67,11 @@
 
 <?PHP
 
+	// cnx Ã  fog
+	$con_fog = new Sql($host, $user, $pass, $fog);
 	
-	// adresse de connexion à la base de données
-	$dsn_fog     = 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
-
-	// cnx à la base de données FOG
-	$db_fog 	= & MDB2::factory($dsn_fog);
-	
-	$liste_materiel_fog	= $db_fog->queryAll ( "SELECT DISTINCT hostName, hostMAC, hostID FROM hosts	ORDER BY hostName" );
-	$db_fog->disconnect();
-
-	
+	$liste_materiel_fog	= $con_fog->QueryAll ( "SELECT DISTINCT hostName, hostMAC, hostID FROM hosts ORDER BY hostName" );
+		
 ?>
 	
 	
@@ -92,60 +85,52 @@
 	
 	<table class="tablehover" id="table_recap_fog" width=800>
 	
-		<th>Nom matériel FOG</th>
+		<th>Nom matÃ©riel FOG</th>
 		<th>Adresse MAC</th>
-		<th>Image associée</th>
-		<th>Groupe associé</th>
-		<th>Snapins associé(s)</th>
+		<th>Image associÃ©e</th>
+		<th>Groupe associÃ©</th>
+		<th>Snapins associÃ©(s)</th>
 		
 	
 		<?PHP
 			
 			$compteur = 0;
-			// On parcourt le tableau comparé
+			// On parcourt le tableau comparÃ©
 			foreach ( $liste_materiel_fog as $record_fog ) {
 				
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 										
-				$nom_fog 		= $record_fog[0];
-				$MAC_fog		= $record_fog[1];
-				$id				= $record_fog[2];
+				$nom_fog 		= $record_fog['hostName'];
+				$MAC_fog		= $record_fog['hostMAC'];
+				$id				= $record_fog['hostID'];
+// ?
+				$liste_snapins = $con_fog->QueryAll ("SELECT sName FROM hosts, snapins, snapinAssoc WHERE hosts.hostID = snapinAssoc.saHostID AND snapins.sID = snapinAssoc.saSnapinID AND hosts.hostID = '$id'");
 				
-				// adresse de connexion à la base de données
-				$dsn_fog 		= 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
-
-				// cnx aux bases de données FOG et GESPAC
-				$db_fog 	= & MDB2::factory($dsn_fog);
-				
-				$liste_snapins = $db_fog->queryAll ("SELECT sName FROM hosts, snapins, snapinAssoc WHERE hosts.hostID = snapinAssoc.saHostID AND snapins.sID = snapinAssoc.saSnapinID AND hosts.hostID = '$id'");
-				
-				$image_associee = $db_fog->queryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $id");
-				$groupe_associe = $db_fog->queryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $id");
-
-				$db_fog->disconnect();
-				
+				$image_associee = $con_fog->QueryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $id");
+				$groupe_associe = $con_fog->QueryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $id");
+	
 				$compteur_snapins = count($liste_snapins);
 				
-				// test si une image est bien associée à un hôte
-				//$image_fog = (!empty($image_associee[0][0])) ? $image_associee[0][0] : "Pas d'image associée";
+				// test si une image est bien associÃ©e Ã  un hÃ´te
+				//$image_fog = (!empty($image_associee[0][0])) ? $image_associee[0][0] : "Pas d'image associÃ©e";
 				
-				if (!empty($image_associee[0][0])) {
-					$image_fog = $image_associee[0][0];
+				if (!empty($image_associee[0]['imageName'])) {
+					$image_fog = $image_associee[0]['imageName'];
 					
 				} else {
-					$image_fog = "Pas d'image associée";
+					$image_fog = "Pas d'image associÃ©e";
 					
 				}
 				
-				// test si un groupe est bien associé à un hôte
-				//$groupe_fog = (!empty($groupe_associe[0][0])) ? $groupe_associe[0][0] : "Pas de groupe associé";
+				// test si un groupe est bien associÃ© Ã  un hÃ´te
+				//$groupe_fog = (!empty($groupe_associe[0][0])) ? $groupe_associe[0][0] : "Pas de groupe associÃ©";
 				
-				if (!empty($groupe_associe[0][0])) {
-					$groupe_fog = $groupe_associe[0][0];
+				if (!empty($groupe_associe[0]['groupName'])) {
+					$groupe_fog = $groupe_associe[0]['groupName'];
 					
 				} else {
-					$groupe_fog = "Pas de groupe associé";
+					$groupe_fog = "Pas de groupe associÃ©";
 				}
 
 				echo "<tr class=$tr_class>";
@@ -162,7 +147,7 @@
 						
 						foreach ( $liste_snapins as $record_snapins ) {
 					
-							$nom_snapin = $record_snapins[0];
+							$nom_snapin = $record_snapins['sName'];
 							
 							if ( $i == 0 ) {
 									echo "<td>$nom_snapin</td></tr>";
@@ -173,9 +158,9 @@
 							$i++;
 						}
 						
-					//sinon on dit qu'il n'y a pas de snapin associé
+					//sinon on dit qu'il n'y a pas de snapin associÃ©
 					} else {
-						$nom_snapin = "Pas de snapin associé";
+						$nom_snapin = "Pas de snapin associÃ©";
 						echo "<td>$nom_snapin</td></tr>";
 					}
 					$compteur++;
