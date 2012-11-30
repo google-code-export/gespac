@@ -1,33 +1,27 @@
 <?PHP
 
-include_once ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../config/databases.php');
+	require_once ('../fonctions.php');
+	include_once ('../../class/Sql.class.php');	
 
-
-	// adresse de connexion à la base de données
-	$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
-
-	// cnx à la base de données OCS
-	$db_ocs 	= & MDB2::factory($dsn_ocs);
+	// Connexion à la base de données GESPAC
+	$con_ocs = new Sql ( $host, $user, $pass, $ocsweb );
 
 	// stockage des lignes retournées par sql dans un tableau (je ne récupère que le matos associé à une marque)
-	$liste_hardware = $db_ocs->queryAll ( "SELECT macaddr, name FROM hardware, networks WHERE hardware.id = networks.hardware_id;" );
+	$liste_hardware = $con_ocs->queryAll ( "SELECT macaddr, name FROM hardware, networks WHERE hardware.id = networks.hardware_id;" );
 
+	$fp = fopen('../dump/ocs_vers_fog.csv', 'w+');
 
-
-$fp = fopen('../dump/ocs_vers_fog.csv', 'w+');
-//$out = fopen('php://output', 'w');
-foreach ($liste_hardware as $record) {
-	$mac 	= $record[0];
-	$name 	= $record[1];
-    
-	fputcsv($fp, array($mac, $name), ',' );	// les delimiters et "encloseurs" par defaut ne marchent pas ? tant pis
-	//fputcsv( $out, array("" . $mac . "", '"' . $name . '"'), ',');
+	foreach ($liste_hardware as $record) {
+		$mac 	= $record['macaddr'];
+		$name 	= $record['name'];
+		
+		fputcsv($fp, array($mac, $name), ',' );	// les delimiters et "encloseurs" par defaut ne marchent pas ? tant pis
 	}
 
-fclose($fp);
-//fclose($out);
-
-$db_ocs->disconnect();
+	fclose($fp);
+	$con_ocs->Close();
 
 
 ?>

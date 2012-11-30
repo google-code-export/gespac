@@ -1,5 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
+<?PHP session_start(); ?>
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 <head>
 		<!--	CHROME FRAME	-->
@@ -64,10 +66,10 @@
 	
 	<?php
 
-		//installation de la base GESPAC
-		
+		// lib
 		require_once ('gespac/config/databases.php');
-		include ('gespac/config/pear.php');
+		require_once ('gespac/fonctions.php');
+		include_once ('class/Sql.class.php');	
 		include ('version');
 		
 	
@@ -93,7 +95,7 @@
 				$gespacversion = '<img src="gespac/img/update.gif">';
 			}
 		
-		session_start();
+		
 		
 		// on vérifie si l'utilisateur est identifié
 		if (!isset( $_SESSION['login'])) {
@@ -116,22 +118,19 @@
 			$adresse = $_SERVER['SERVER_ADDR'];
 
 	
-			// adresse de connexion Ã  la base de donnÃ©es
-			$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-			// cnx Ã  la base de données GESPAC
-			$db_gespac 	= & MDB2::factory($dsn_gespac);
+			// Connexion à la base de données GESPAC
+			$con_gespac = new Sql ( $host, $user, $pass, $gespac );
 
 			// stockage des lignes retournées par sql dans un tableau nommÃ© liste_des_materiels
-			$liste_des_icones = $db_gespac->queryAll ( "SELECT mp_id, mp_nom, mp_url, mp_icone FROM menu_portail ORDER BY mp_nom" );	
+			$liste_des_icones = $con_gespac->QueryAll ( "SELECT mp_id, mp_nom, mp_url, mp_icone FROM menu_portail ORDER BY mp_nom" );	
 			
 				
 			foreach ( $liste_des_icones as $record ) {
 			
-				$mp_id 		= $record[0];
-				$mp_nom 	= utf8_decode($record[1]);
-				$mp_url 	= $record[2];
-				$mp_icone 	= $record[3];
+				$mp_id 		= $record['mp_id'];
+				$mp_nom 	= $record['mp_nom'];
+				$mp_url 	= $record['mp_url'];
+				$mp_icone 	= $record['mp_icone'];
 				
 				$affiche_item = ($_SESSION['grade'] == 'root') ? true : preg_match ("#item$mp_id#", $_SESSION['menu_portail']);
 				
@@ -149,7 +148,7 @@
 
 			}	
 			
-			echo "<div style='float:right;' class=portail-menu-item><a href='./gespac/gestion_authentification/logout.php'> 
+			echo "<div style='float:right;' class=portail-menu-item><a href='logout.php'> 
 				<img src='./gespac/img/cancel.png' height=48><br>Déconnexion </a></div>";
 
 			echo "<div class='spacer'> </div>";

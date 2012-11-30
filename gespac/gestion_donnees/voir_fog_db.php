@@ -31,17 +31,16 @@
 
 <?PHP
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 
-	// adresse de connexion à la base de données
-	$dsn_fog     = 'mysql://'. $user .':' . $pass . '@localhost/' . $fog;
-
-	// cnx à la base de données OCS
-	$db_fog 	= & MDB2::factory($dsn_fog);
+	// cnx gespac
+	$con_fog = new Sql($host, $user, $pass, $fog);
 
 	// stockage des lignes retournées par sql dans un tableau (je ne récupère que le matos associé à une marque)
-	//$liste_hardware = $db_fog->queryAll ( "	SELECT hostID, hostName, iSysman, iSysproduct, iSysserial, iSystype FROM hosts, inventory WHERE hostID = iHostID;" );
-	$liste_hardware = $db_fog->queryAll ( "	SELECT Distinct hostName FROM hosts;" );
+	$liste_hardware = $con_fog->QueryAll ( "SELECT Distinct hostName FROM hosts;" );
 
 
 ?>
@@ -65,11 +64,9 @@
 		// On parcourt le tableau
 		foreach ($liste_hardware as $record ) {
 			
-			$name = $record[0];	
+			$name = $record['hostName'];	
 			
-			$hostID = $db_fog->queryAll ( "	SELECT hostID FROM hosts WHERE hostName='$name' ;" );
-			$id	= $hostID[0][0];
-			
+			$id = $con_fog->QueryOne ( "SELECT hostID FROM hosts WHERE hostName='$name' ;" );
 			
 			// alternance des couleurs
 			$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
@@ -77,20 +74,20 @@
 			
 			echo "<tr class=$tr_class>";
 
-			$inventory = $db_fog->queryAll ( "SELECT iSysman, iSysproduct, iSysserial, iSystype FROM inventory WHERE iHostID=$id;" );
+			$inventory = $con_fog->QueryAll ( "SELECT iSysman, iSysproduct, iSysserial, iSystype FROM inventory WHERE iHostID=$id;" );
 			
-			$manufacturer 	= $inventory[0][0];
-			$model 			= $inventory[0][1];
-			$ssn 			= $inventory[0][2];
-			$type 			= $inventory[0][3];
+			$manufacturer 	= $inventory[0]['iSysman'];
+			$model 			= $inventory[0]['iSysproduct'];
+			$ssn 			= $inventory[0]['iSysserial'];
+			$type 			= $inventory[0]['iSystype'];
 				
 				
-				switch ($inventory[0][1]) {
+				switch ($inventory[0]['iSysproduct']) {
 					case "8189M7G" 	: $model = "Think Centre"; 		break;
 					case "8307LG9" 	: $model = "NetVista"; 			break;
 					case "HP Compaq 6715b (GU475EC#ABF)" 	: $model = "Compaq 6715b"; 			break;
 					
-					default 		: $model = $inventory[0][1];	break;
+					default 		: $model = $inventory[0]['iSysproduct'];	break;
 				}
 
 				echo "<td>" . $id . "</td>";
@@ -115,8 +112,6 @@
 
 
 <?PHP
-
-// On se déconnecte de la db
-$db_fog->disconnect();
-
+	// On se déconnecte de la db
+	$con_fog->Close();
 ?>

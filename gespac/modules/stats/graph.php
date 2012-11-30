@@ -15,20 +15,15 @@
 	header("Cache-Control: no-cache, must-revalidate");
 	header("Pragma: no-cache"); 
   
-	//header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 	
 	require("camembert.php"); 		// on charge la classe camembert
 		
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// cnx à gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	
 	
@@ -40,15 +35,15 @@
 	
 	
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_etats = $db_gespac->queryAll ( "SELECT mat_etat, count( mat_etat ) FROM materiels GROUP BY mat_etat" );
+	$liste_des_etats = $con_gespac->QueryAll ( "SELECT mat_etat, count( mat_etat ) as compte FROM materiels GROUP BY mat_etat" );
 
 	// instantiation
 	$camembert = new camembert(); 
 	
 	foreach ($liste_des_etats as $record) {
 	
-		$etat	= $record[0];
-		$val	= $record[1];
+		$etat	= $record['mat_etat'];
+		$val	= $record['compte'];
 	
 		$camembert->add_tab( $val, $etat );
 	}
@@ -69,15 +64,15 @@
 	*********************************/
 	
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_salles = $db_gespac->queryAll ( "SELECT salle_nom, count( mat_nom ) FROM materiels, salles WHERE materiels.salle_id = salles.salle_id GROUP BY salle_nom" );
+	$liste_des_salles = $con_gespac->QueryAll ( "SELECT salle_nom, count( mat_nom ) as compte FROM materiels, salles WHERE materiels.salle_id = salles.salle_id GROUP BY salle_nom" );
 
 	// instantiation
 	$camembert = new camembert(); 
 	
 	foreach ($liste_des_salles as $record) {
 	
-		$salle	= $record[0];
-		$val	= $record[1];
+		$salle	= $record['salle_nom'];
+		$val	= $record['compte'];
 	
 		$camembert->add_tab( $val, $salle );
 	}
@@ -93,15 +88,15 @@
 	*********************************/
 	
 	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-	$liste_des_salles = $db_gespac->queryAll ( "select CONCAT(marque_type, ' ',marque_stype, ' ', marque_marque, ' ', marque_model) as mat, COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id = marques.marque_id GROUP BY mat" );
+	$liste_des_salles = $con_gespac->QueryAll ( "select CONCAT(marque_type, ' ',marque_stype, ' ', marque_marque, ' ', marque_model) as mat, COUNT(mat_nom) as compte FROM marques, materiels WHERE materiels.marque_id = marques.marque_id GROUP BY mat" );
 
 	// instantiation
 	$camembert = new camembert(); 
 	
 	foreach ($liste_des_salles as $record) {
 	
-		$marque	= $record[0];
-		$val	= $record[1];
+		$marque	= $record['mat'];
+		$val	= $record['compte'];
 	
 		$camembert->add_tab( $val, $marque );
 	}

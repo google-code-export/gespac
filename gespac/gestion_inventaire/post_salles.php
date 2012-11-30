@@ -4,21 +4,21 @@
 	/* fichier de creation / modif / suppr des salles
 	
 	Si j'ai un ID c'est une modification
-	Si j'en ai pas c'est une création
+	Si j'en ai pas c'est une crÃ©ation
 	
-	reste à coder pour la suppression
+	reste Ã  coder pour la suppression
 	
 	*/
 	
 	include ('../includes.php');
 	
-	// Connexion à la base GESPAC
+	// Connexion Ã  la base GESPAC
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
-	// Log des requêtes SQL
+	// Log des requÃªtes SQL
 	$log = new Log ("../dump/log_sql.sql");
 		
-	// on récupère les paramètres de l'url	
+	// on rÃ©cupÃ¨re les paramÃ¨tres de l'url	
 	$action 	= $_GET['action'];
 	
 	
@@ -38,29 +38,29 @@
 		$id 	= $_GET['id'];
 		
 		//Insertion d'un log (avant la suppression!)
-		//On récupère le nom de la salle en fonction du $salle_id
+		//On rÃ©cupÃ¨re le nom de la salle en fonction du $salle_id
 		$salle_nom = $con_gespac->QueryOne ( "SELECT salle_nom FROM salles WHERE salle_id = $id" );
 
-		$log_texte = "La salle $salle_nom a été supprimée";
+		$log_texte = "La salle $salle_nom a Ã©tÃ© supprimÃ©e";
 
 		$req_log_suppr_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression salle', '$log_texte' );";
 		$con_gespac->Execute ( $req_log_suppr_salle );
 		
-		//On log la requête
+		//On log la requÃªte
 		$log->Insert ( $req_log_suppr_salle );
 				
-		// déplace le matériel de la salle à supprimer dans la table STOCK (à priori la salle_id = 1)
-		$req_deplace_materiel_dans_stock = "UPDATE materiels SET salle_id = 1 WHERE salle_id=$id";				// En cas, ici faire une sous requête pour obtenir le salle_id de la salle STOCK (mais bon, on créra la salle automatiquement avec cet id normalement)
+		// dÃ©place le matÃ©riel de la salle Ã  supprimer dans la table STOCK (Ã  priori la salle_id = 1)
+		$req_deplace_materiel_dans_stock = "UPDATE materiels SET salle_id = 1 WHERE salle_id=$id";				// En cas, ici faire une sous requÃªte pour obtenir le salle_id de la salle STOCK (mais bon, on crÃ©ra la salle automatiquement avec cet id normalement)
 		$con_gespac->Execute ( $req_deplace_materiel_dans_stock );
 		
-		//On log la requête
+		//On log la requÃªte
 		$log->Insert ( $req_deplace_materiel_dans_stock );
 		
 		// Suppression de la salle
 		$req_suppr_salle = "DELETE FROM salles WHERE salle_id=$id";
 		$con_gespac->Execute ( $req_suppr_salle );
 	
-		//On log la requête
+		//On log la requÃªte
 		$log->Insert ( $req_suppr_salle );
 	}
 	
@@ -70,23 +70,23 @@
 	
 	if ( $action == 'add' ) {
 	
-		$nom 		= addslashes(utf8_decode($_POST['nom']));
-		$vlan 		= addslashes(utf8_decode($_POST['vlan']));
-		$etage 		= addslashes(utf8_decode($_POST['etage']));
-		$batiment 	= addslashes(utf8_decode($_POST['batiment'])); 
+		$nom 		= addslashes($_POST['nom']);
+		$vlan 		= addslashes($_POST['vlan']);
+		$etage 		= addslashes($_POST['etage']);
+		$batiment 	= addslashes($_POST['batiment']); 
 	
 	
 		$req_verifie_existence_salle = $con_gespac->QueryRow("SELECT * FROM salles WHERE salle_nom='$nom'; ");
 		
 		if ( $req_verifie_existence_salle[0] ) { // alors la salle existe
-			echo "La salle <b>$nom</b> existe déjà !";
+			echo "La salle <b>$nom</b> existe dÃ©jÃ  !";
 			
 			//Insertion d'un log
-			$log_texte = "La salle $nom existe déjà !"; //intêrét de loguer ça ??
-			$req_log_creation_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création salle', '$log_texte' );";
+			$log_texte = "La salle $nom existe dÃ©jÃ  !"; //intÃªrÃ©t de loguer Ã§a ??
+			$req_log_creation_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'CrÃ©ation salle', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_creation_salle );
 			
-			//On log la requête
+			//On log la requÃªte
 			$log->Insert ( $req_log_creation_salle );
 			
 		} else {
@@ -96,15 +96,15 @@
 			$req_add_salle = "INSERT INTO salles ( salle_nom , salle_vlan , salle_etage , salle_batiment, clg_uai ) VALUES ( '$nom', '$vlan', '$etage', '$batiment', '$uai');";
 			$con_gespac->Execute ( $req_add_salle );
 			
-			//On log la requête
+			//On log la requÃªte
 			$log->Insert ( $req_add_salle );
 			
 			//Insertion d'un log
-			$log_texte = "La salle $nom a été créée";
-			$req_log_creation_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création salle', '$log_texte' );";
+			$log_texte = "La salle $nom a Ã©tÃ© crÃ©Ã©e";
+			$req_log_creation_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'CrÃ©ation salle', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_creation_salle );
 			
-			//On log la requête
+			//On log la requÃªte
 			$log->Insert ( $req_log_creation_salle );
 	
 			echo "<small>Ajout de la salle <b>$nom</b> !</small>";
@@ -118,45 +118,45 @@
 	if ( $action == 'mod' ) {
 		
 		$id 		= $_POST['salleid'];
-		$nom 		= addslashes(utf8_decode($_POST['nom']));
-		$vlan 		= addslashes(utf8_decode($_POST['vlan']));
-		$etage 		= addslashes(utf8_decode($_POST['etage']));
-		$batiment 	= addslashes(utf8_decode($_POST['batiment'])); 
+		$nom 		= addslashes($_POST['nom']);
+		$vlan 		= addslashes($_POST['vlan']);
+		$etage 		= addslashes($_POST['etage']);
+		$batiment 	= addslashes($_POST['batiment']); 
 	
 		$verifie_existence_salle = $con_gespac->QueryOne("SELECT salle_id FROM salles WHERE salle_nom='$nom'; ");
 		
-		if ( $verifie_existence_salle ) { // alors le nom de la salle existe et on met à jour tout sauf le nom de la salle
+		if ( $verifie_existence_salle ) { // alors le nom de la salle existe et on met Ã  jour tout sauf le nom de la salle
 			
 			$req_modif_salle = "UPDATE salles SET salle_vlan = '$vlan', salle_etage = '$etage', salle_batiment='$batiment' WHERE salle_id=$id";
 			$con_gespac->Execute ( $req_modif_salle );
 			
-			//On log la requête
+			//On log la requÃªte
 			$log->Insert ( $req_modif_salle );
 			
 			//Insertion d'un log
-			$log_texte = "Les infos de la salle $nom ont été modifiés mais pas le nom de la salle car il doit être unique.";
+			$log_texte = "Les infos de la salle $nom ont Ã©tÃ© modifiÃ©s mais pas le nom de la salle car il doit Ãªtre unique.";
 			$req_log_modif_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification salle', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_modif_salle );
 			
-			//On log la requête
+			//On log la requÃªte
 			$log->Insert ( $req_log_modif_salle );
 	
-			echo "Les infos de la salle $nom ont été modifiés mais pas le nom de la salle car il doit être unique.";
+			echo "Les infos de la salle $nom ont Ã©tÃ© modifiÃ©s mais pas le nom de la salle car il doit Ãªtre unique.";
 			
 		} else {
 			
 			$req_modif_salle = "UPDATE salles SET salle_nom = '$nom', salle_vlan = '$vlan', salle_etage = '$etage', salle_batiment='$batiment' WHERE salle_id=$id";
 			$con_gespac->Execute ( $req_modif_salle );
 			
-			//On log la requête
+			//On log la requÃªte
 			$log->Insert ( $req_modif_salle );
 			
 			//Insertion d'un log
-			$log_texte = "La salle $nom a été modifiée";
+			$log_texte = "La salle $nom a Ã©tÃ© modifiÃ©e";
 			$req_log_modif_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification salle', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_modif_salle );
 			
-			//On log la requête
+			//On log la requÃªte
 			$log->Insert ( $req_log_modif_salle );
 			
 			echo "<small>Modification de la salle <b>$nom</b> !</small>";

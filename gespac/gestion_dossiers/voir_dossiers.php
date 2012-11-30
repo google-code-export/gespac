@@ -16,8 +16,6 @@
 	include_once ('../../class/Sql.class.php');
 
 
-
-
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.

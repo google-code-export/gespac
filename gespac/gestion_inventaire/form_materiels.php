@@ -2,17 +2,16 @@
 
 	/*
 		formulaire d'ajout et de modification des materiels !
-		permet de créer un nouveau matos,
+		permet de crÃ©er un nouveau matos,
 		de modifier un matos particulier
-		de modifier par lot des matériels
+		de modifier par lot des matÃ©riels
 	*/
 	
 	
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../config/databases.php');		// fichiers de configuration des bases de données
-	include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 
 ?>
 
@@ -60,7 +59,7 @@
 				table.rows[r].style.display = displayStyle;	
 			}
 			
-			// Affiche le div "pasderesultat", si jamais il n'y a ... pas de résultat !
+			// Affiche le div "pasderesultat", si jamais il n'y a ... pas de rÃ©sultat !
 			if ( nb_resultats == 0 )
 				$('pasderesultat').style.display = "";
 			else
@@ -80,7 +79,7 @@
 			
 		var valida = confirm('Voulez-vous vraiment choisir la marque ' + marque + ' ?');
 		
-		// si la réponse est TRUE ==> on colle dans un input la valeur corr_id
+		// si la rÃ©ponse est TRUE ==> on colle dans un input la valeur corr_id
 		if (valida) {
 			$('marque_id').value = marque_id;
 			
@@ -149,7 +148,7 @@
 				e.style.display = "";	
 			})
 			
-			// On change l'intitulé du message à côté du +
+			// On change l'intitulÃ© du message Ã  cÃ´tÃ© du +
 			$('change_mac').innerHTML = "Adresse MAC manuelle";
 				
 		} else {
@@ -167,7 +166,7 @@
 				e.checked = false;	
 			})
 			
-			// On change l'intitulé du message à côté du +
+			// On change l'intitulÃ© du message Ã  cÃ´tÃ© du +
 			$('change_mac').innerHTML = "Choix des adresses MAC";
 		}
 		
@@ -176,7 +175,7 @@
 	
 	// *********************************************************************************
 	//
-	// 		vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	// 		vÃ©rouille l'accÃ¨s au bouton submit si les conditions ne sont pas remplies
 	//
 	// *********************************************************************************
 	
@@ -197,13 +196,13 @@
 	
 
 	// serveur AJAX mootools pour le chainage des combobox type et sous type
-	// Beaucoup de redondances dans les paramètres. Je corrige ça un de ces jours
+	// Beaucoup de redondances dans les paramÃ¨tres. Je corrige Ã§a un de ces jours
 	
 	function chainage( select_src, select_type, select_stype, select_dst, div_id ) {
 	
 		// select_src : c'est le select contenant le trigger et la valeur qui fait le lien
-		// select_dst : select à remplir
-		// div_id : div à afficher
+		// select_dst : select Ã  remplir
+		// div_id : div Ã  afficher
 
 		
 		if (div_id == "tr_stype" ) {
@@ -250,7 +249,7 @@
 	
 	/******************************************
 	*
-	*		Générateur de ssn aléatoire
+	*		GÃ©nÃ©rateur de ssn alÃ©atoire
 	*
 	*******************************************/
 	
@@ -297,7 +296,7 @@
 
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
-					//$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste un champ trop grand on dépasse la taille maxi d'une url)
+					//$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET Ã  POST (en effet, avec GET il rÃ©cupÃ¨re la totalitÃ© du tableau get en paramÃ¨tres et lorsqu'on poste un champ trop grand on dÃ©passe la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php?filter=" + encodeURIComponent($('filt').value) + "');", 1500);
 					SexyLightbox.close();
 				}
@@ -307,7 +306,7 @@
 		
 		
 
-		// Fait apparaitre le numéro GIGN dans le cas d'un ETAT particulier
+		// Fait apparaitre le numÃ©ro GIGN dans le cas d'un ETAT particulier
 		if ($('CB_etat')) {
 			$('CB_etat').addEvent('change', function(e) {
 				new Event(e).stop();
@@ -326,60 +325,50 @@
 
 <?PHP
 	
-	// action à executer
+	// action Ã  executer
 	$action	 = $_GET['action'];
-	$mat_ssn = $_GET['mat_ssn'];		//le SSN va nous servir pour récupérer les adresses MAC d'OCS
+	$mat_ssn = $_GET['mat_ssn'];		//le SSN va nous servir pour rÃ©cupÃ©rer les adresses MAC d'OCS
 	
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
-	$link_bases = mysql_pconnect('localhost', $user, $pass);//connexion à la base de donnée
+	$link_bases = mysql_pconnect('localhost', $user, $pass);//connexion Ã  la base de donnÃ©e
 	if(!mysql_select_db('ocsweb', $link_bases)) {}
 	else {
 	
-		// adresse de connexion à la base de données
-		$dsn_ocs 	= 'mysql://'. $user .':' . $pass . '@localhost/' . $ocsweb;
-
-		// cnx à la base de données OCS
-		$db_ocs 	= & MDB2::factory($dsn_ocs);
+		// Connexion Ã  la base de donnÃ©es ocsweb
+		$con_ocs 	= new Sql ( $host, $user, $pass, $ocsweb );
 		
 		// RQ POUR INFO OCS
-		$materiel_ocs    = $db_ocs->queryAll ( "SELECT  networks.HARDWARE_ID, hardware.ID FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
-		$materiel_ocs_id = $materiel_ocs[0][1];
+		$materiel_ocs    = $con_ocs->QueryRow ( "SELECT networks.HARDWARE_ID as hid, hardware.ID as id FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
+		$materiel_ocs_id = $materiel_ocs[1];
 		
-		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
+		if ( $materiel_ocs_id ) {	// si le matÃ©riel existe dans ocs
 			// RQ POUR INFO cartes rzo
-			$rq_cartes_reseaux = $db_ocs->queryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[0][0] );
+			$rq_cartes_reseaux = $con_ocs->QueryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[0] );
 		}
-		
-		// On se déconnecte de la db ocs
-		$db_ocs->disconnect();
-	
 	}
 	
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données GESPAC
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// Connexion Ã  la base de donnÃ©es GESPAC
+	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 	
-	// Requête qui va récupérer les origines des dotations ...
-	$liste_origines = $db_gespac->queryAll ( "SELECT origine FROM origines ORDER BY origine" );
+	// RequÃªte qui va rÃ©cupÃ©rer les origines des dotations ...
+	$liste_origines = $con_gespac->QueryAll ( "SELECT origine FROM origines ORDER BY origine" );
 	
-	// Requête qui va récupérer les états des matériels ...
-	$liste_etats = $db_gespac->queryAll ( "SELECT etat FROM etats ORDER BY etat" );
+	// RequÃªte qui va rÃ©cupÃ©rer les Ã©tats des matÃ©riels ...
+	$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
 	
 
 	
 	// *********************************************************************************
 	//
-	//			Formulaire vierge de création
+	//			Formulaire vierge de crÃ©ation
 	//
 	// *********************************************************************************	
 	
 
 	if ( $action == 'add' ) {
 	
-		echo "<h2>formulaire de création d'un nouveau matériel</h2><br>";
+		echo "<h2>formulaire de crÃ©ation d'un nouveau matÃ©riel</h2><br>";
 		
 		?>
 		
@@ -402,7 +391,7 @@
 				
 					<table width="500" align="center" cellpadding="10">
 						<tr>
-							<td>Choisir un modèle * :</td>
+							<td>Choisir un modÃ¨le * :</td>
 							<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"> </input></td>
 						</tr>
 					</table>
@@ -410,30 +399,30 @@
 					<br>
 					
 					<?PHP
-					// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-					$liste_marques = $db_gespac->queryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques GROUP BY marque_model ORDER BY marque_model" );
+					// ici il faut rÃ©cupÃ©rer les lignes DISTINCTES histoire de ne pas surcharger le tableau
+					$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques GROUP BY marque_model ORDER BY marque_model" );
 					?>
 					
-					<!-- s'affiche si il n'y a pas de résultat -->
-					<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez d'abord créer le modèle manuellement.</div>
+					<!-- s'affiche si il n'y a pas de rÃ©sultat -->
+					<div id="pasderesultat" style='display:none'>Pas de rÃ©sultat, vous devez d'abord crÃ©er le modÃ¨le manuellement.</div>
 					
 					<table id="corr_table" class='tablehover'>
 
 						<?PHP
 							foreach ( $liste_marques as $marque) {
 							
-								$marque_id 			= $marque[0];
-								$marque_type 		= $marque[1];
-								$marque_stype 		= $marque[2];
-								$marque_marque 		= $marque[3];
-								$marque_modele 		= $marque[4];
+								$marque_id 			= $marque['marque_id'];
+								$marque_type 		= $marque['marque_type'];
+								$marque_stype 		= $marque['marque_stype'];
+								$marque_marque 		= $marque['marque_marque'];
+								$marque_modele 		= $marque['marque_model'];
 							
 								echo "<tr style='display:none' class='tr_filter'>";
 									echo "<td width=200>$marque_type</td>";
 									echo "<td width=200>$marque_stype</td>";
 									echo "<td width=200>$marque_marque</td>";
 									echo "<td width=200>$marque_modele</td>";
-									echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_modele');\"><img src='./img/arrow-right.png' width=16 height=16 title='Choisir ce modèle'> </a></td>";
+									echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_modele');\"><img src='./img/arrow-right.png' width=16 height=16 title='Choisir ce modÃ¨le'> </a></td>";
 								echo "</tr>";
 							
 							}
@@ -445,7 +434,7 @@
 				
 				<table width="500" align="center" cellpadding="10" style='display:none' id="table_modele_selectionne">
 					<tr>
-						<td>Modèle sélectionné *</td>
+						<td>ModÃ¨le sÃ©lectionnÃ© *</td>
 						<td><input type=hidden name=marque_id id=marque_id> <input type="text" id="modele_selectionne"> </td>
 						<td><a href='#' onclick="choisir_modele();">changer</a></td>
 					</tr>
@@ -460,13 +449,13 @@
 				</tr>
 				
 				<tr>
-					<TD>Référence DSIT</TD>
+					<TD>RÃ©fÃ©rence DSIT</TD>
 					<TD><input type=text id=dsit name=dsit 	/></TD>
 				</tr>
 				
 				<tr>
-					<TD>Numéro de série *</TD> 
-					<TD><input type=text id=serial name=serial onkeyup="validation();"/> <input type=button value="générer" onclick="SSNgenerator(); validation();"><input type=button value="activer" onclick=""></TD>
+					<TD>NumÃ©ro de sÃ©rie *</TD> 
+					<TD><input type=text id=serial name=serial onkeyup="validation();"/> <input type=button value="gÃ©nÃ©rer" onclick="SSNgenerator(); validation();"><input type=button value="activer" onclick=""></TD>
 				</tr>
 				
 				<tr>
@@ -478,33 +467,33 @@
 					<TD>Origine</TD> 
 					<TD>
 						<select name="origine">
-							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine[0] ."'>" . $origine[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
 				
 				<tr>
-					<TD>Etat du matériel</TD>
+					<TD>Etat du matÃ©riel</TD>
 					<TD>
 						<select name="etat">
-							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat[0] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
 				
 			
 				<tr>
-					<TD>Salle où se trouve le matériel</TD>
+					<TD>Salle oÃ¹ se trouve le matÃ©riel</TD>
 					<TD>
 						<select name="salle" >
 							<?PHP
-								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT DISTINCT salle_nom FROM salles" );	// [AMELIORATION] DISTINCT ? PK DISTINCT ?
+								// requÃªte qui va afficher dans le menu dÃ©roulant les salles saisies dans la table 'salles'
+								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT salle_nom FROM salles" );	// [AMELIORATION] DISTINCT ? PK DISTINCT ?
 								foreach ( $req_salles_disponibles as $record) { 
 								
-									$salle_nom = $record[0];
+									$salle_nom = $record['salle_nom'];
 									
-									// Salle par défaut : STOCK
+									// Salle par dÃ©faut : STOCK
 									$selected = $salle_nom == "STOCK" ? " selected" : "";
 									
 								?>
@@ -535,7 +524,7 @@
 
 	// *********************************************************************************
 	//
-	//			Formulaire modification par lot non prérempli
+	//			Formulaire modification par lot non prÃ©rempli
 	//
 	// *********************************************************************************		
 		
@@ -556,7 +545,7 @@
 			<center>
 			
 			<input type=hidden name=lot id=lot>
-			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
+			<!-- Ici on rÃ©cupÃ¨re la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
 			<script>$("lot").value = $('materiel_a_poster').value;</script>
 
 			<table width=500>
@@ -566,33 +555,33 @@
 					<TD>
 						<select name="origine" id="origine">
 							<option value="">Ne pas modifier</option>
-							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine[0] ."'>" . $origine[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
 				
 				<tr>
-					<TD>Etat du matériel</TD>
+					<TD>Etat du matÃ©riel</TD>
 					<TD>
 						<select name="etat">
 							<option value="">Ne pas modifier</option>
-							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
 				
 			
 				<tr>
-					<TD>Salle où se trouve le matériel</TD>
+					<TD>Salle oÃ¹ se trouve le matÃ©riel</TD>
 					<TD>
 						<select name="salle" >
 							<option value="">Ne pas modifier</option>
 							<?PHP
-								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT DISTINCT salle_nom FROM salles" );	// [AMELIORATION] DISTINCT ? PK DISTINCT ?
+								// requÃªte qui va afficher dans le menu dÃ©roulant les salles saisies dans la table 'salles'
+								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT salle_nom FROM salles" );	// [AMELIORATION] DISTINCT ? PK DISTINCT ?
 								foreach ( $req_salles_disponibles as $record) { 
 								
-									$salle_nom = $record[0];
+									$salle_nom = $record['salle_nom'];
 									
 								?>
 									<option value="<?PHP echo $salle_nom ?>"><?PHP echo $salle_nom ?></option>
@@ -604,16 +593,16 @@
 				</tr>
 
 		<!--------------------------------------------	TYPES	------------------------------------------------------------->
-				<tr style="display:none<?PHP echo $show_type;?>">	<!-- J'ai masqué cette ligne histoire de ne pas utiliser le chainage pour la modif par lot pour le moment -->			
+				<tr style="display:none<?PHP echo $show_type;?>">	<!-- J'ai masquÃ© cette ligne histoire de ne pas utiliser le chainage pour la modif par lot pour le moment -->			
 					<TD>Famille</TD>
 					<TD>
 						<select id="type" name="type" onChange="chainage(this, 'type','', 'stype', 'tr_stype'); " >
 							<option value=""> >>> Choisir une valeur <<< </option>
 							<?PHP
-								// requête qui va afficher dans le menu déroulant les types saisies dans la table 'marques'
-								$req_types_disponibles = $db_gespac->queryAll ( "SELECT DISTINCT marque_type FROM marques" );
+								// requÃªte qui va afficher dans le menu dÃ©roulant les types saisies dans la table 'marques'
+								$req_types_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT marque_type FROM marques" );
 								foreach ( $req_types_disponibles as $record) { 
-									$marque_type = $record[0]; 
+									$marque_type = $record['marque_type']; 
 									echo "<option value='$marque_type'>$marque_type</option>";								
 								}
 							?>
@@ -641,7 +630,7 @@
 				
 		<!--------------------------------------------	MODELES	------------------------------------------------------------->		
 				<tr id="tr_modele" style="display:none">
-					<TD>Modèle</TD>
+					<TD>ModÃ¨le</TD>
 					<TD>
 						<select id="modele" name="modele" >
 						</select>
@@ -671,35 +660,35 @@
 		
 	// *********************************************************************************
 	//
-	//			Formulaire modification unique prérempli
+	//			Formulaire modification unique prÃ©rempli
 	//
 	// *********************************************************************************	
 	
 	
 	if ($action == 'mod') {
 	
-		$id = $_GET['id'];	// Id du matériel à modifier
+		$id = $_GET['id'];	// Id du matÃ©riel Ã  modifier
 	
-		echo "<h2>formulaire de modification d'un matériel</h2><br>";
+		echo "<h2>formulaire de modification d'un matÃ©riel</h2><br>";
 		
 		
-		// Requete pour récupérer les données des champs pour le matériel à modifier
-		$materiel_a_modifier = $db_gespac->queryAll ( "SELECT mat_id, mat_nom, mat_dsit, mat_serial, mat_etat, salle_nom, marque_type, marque_model, mat_origine, marque_stype, marque_marque, mat_mac, materiels.marque_id FROM materiels, marques, salles WHERE mat_id=$id AND materiels.marque_id = marques.marque_id AND materiels.salle_id = salles.salle_id" );		
+		// Requete pour rÃ©cupÃ©rer les donnÃ©es des champs pour le matÃ©riel Ã  modifier
+		$materiel_a_modifier = $con_gespac->QueryRow ( "SELECT mat_id, mat_nom, mat_dsit, mat_serial, mat_etat, salle_nom, marque_type, marque_model, mat_origine, marque_stype, marque_marque, mat_mac, materiels.marque_id FROM materiels, marques, salles WHERE mat_id=$id AND materiels.marque_id = marques.marque_id AND materiels.salle_id = salles.salle_id" );		
 		
-		// valeurs à affecter aux champs
-		$materiel_id 			= $materiel_a_modifier[0][0];
-		$materiel_nom	 		= $materiel_a_modifier[0][1];
-		$materiel_dsit	 		= $materiel_a_modifier[0][2];
-		$materiel_serial 		= $materiel_a_modifier[0][3];
-		$materiel_etat	 		= $materiel_a_modifier[0][4];
-		$materiel_salle			= $materiel_a_modifier[0][5];
-		$materiel_type 			= $materiel_a_modifier[0][6];
-		$materiel_modele		= $materiel_a_modifier[0][7];
-		$materiel_origine		= $materiel_a_modifier[0][8];
-		$materiel_stype			= $materiel_a_modifier[0][9];
-		$materiel_marque		= $materiel_a_modifier[0][10];
-		$materiel_mac			= $materiel_a_modifier[0][11];
-		$marque_id				= $materiel_a_modifier[0][12];
+		// valeurs Ã  affecter aux champs
+		$materiel_id 			= $materiel_a_modifier[0];
+		$materiel_nom	 		= $materiel_a_modifier[1];
+		$materiel_dsit	 		= $materiel_a_modifier[2];
+		$materiel_serial 		= $materiel_a_modifier[3];
+		$materiel_etat	 		= $materiel_a_modifier[4];
+		$materiel_salle			= $materiel_a_modifier[5];
+		$materiel_type 			= $materiel_a_modifier[6];
+		$materiel_modele		= $materiel_a_modifier[7];
+		$materiel_origine		= $materiel_a_modifier[8];
+		$materiel_stype			= $materiel_a_modifier[9];
+		$materiel_marque		= $materiel_a_modifier[10];
+		$materiel_mac			= $materiel_a_modifier[11];
+		$marque_id				= $materiel_a_modifier[12];
 
 		
 		?>
@@ -720,7 +709,7 @@
 				
 				<table width="500" align="center" cellpadding="10" id="table_modele_selectionne">
 					<tr>
-						<td>Modèle sélectionné *</td>
+						<td>ModÃ¨le sÃ©lectionnÃ© *</td>
 						<td><input type="hidden" name="marque_id" id="marque_id" value=<?PHP echo $marque_id;?> > <input type="text" id="modele_selectionne" value="<?PHP echo $materiel_marque.' '.$materiel_modele; ?>" > </td>
 						<td><a href='#' onclick="choisir_modele();">changer</a></td>
 					</tr>
@@ -733,7 +722,7 @@
 				
 					<table width="500" align="center" cellpadding="10">
 						<tr>
-							<td>Choisir un modèle * :</td>
+							<td>Choisir un modÃ¨le * :</td>
 							<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"> </input></td>
 							<td><a href='#' onclick="annuler_choix_modele(<?PHP echo $marque_id;?>, '<?PHP echo $materiel_marque.' '.$materiel_modele; ?>');">annuler</a></td>
 						</tr>
@@ -742,30 +731,30 @@
 					<br>
 					
 					<?PHP
-					// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-					$liste_marques = $db_gespac->queryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques GROUP BY marque_model ORDER BY marque_model" );
+					// ici il faut rÃ©cupÃ©rer les lignes DISTINCTES histoire de ne pas surcharger le tableau
+					$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques GROUP BY marque_model ORDER BY marque_model" );
 					?>
 					
-					<!-- s'affiche si il n'y a pas de résultat -->
-					<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez d'abord créer le modèle manuellement.</div>
+					<!-- s'affiche si il n'y a pas de rÃ©sultat -->
+					<div id="pasderesultat" style='display:none'>Pas de rÃ©sultat, vous devez d'abord crÃ©er le modÃ¨le manuellement.</div>
 					
 					<table id="corr_table" class='tablehover'>
 
 						<?PHP
 							foreach ( $liste_marques as $marque) {
 							
-								$marque_id 			= $marque[0];
-								$marque_type 		= $marque[1];
-								$marque_stype 		= $marque[2];
-								$marque_marque 		= $marque[3];
-								$marque_modele 		= $marque[4];
+								$marque_id 			= $marque['marque_id'];
+								$marque_type 		= $marque['marque_type'];
+								$marque_stype 		= $marque['marque_stype'];
+								$marque_marque 		= $marque['marque_marque'];
+								$marque_modele 		= $marque['marque_model'];
 							
 								echo "<tr style='display:none' class='tr_filter'>";
 									echo "<td width=200>&nbsp $marque_type</td>";
 									echo "<td width=200>&nbsp $marque_stype</td>";
 									echo "<td width=200>&nbsp $marque_marque</td>";
 									echo "<td width=200>&nbsp $marque_modele</td>";
-									echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_modele');\"><img src='./img/arrow-right.png' width=16 height=16 title='Choisir ce modèle'> </a></td>";
+									echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_modele');\"><img src='./img/arrow-right.png' width=16 height=16 title='Choisir ce modÃ¨le'> </a></td>";
 								echo "</tr>";
 							
 							}
@@ -784,17 +773,17 @@
 				</tr>
 				
 				<tr>
-					<TD>Référence DSIT</TD>
+					<TD>RÃ©fÃ©rence DSIT</TD>
 					<TD><input type=text name=dsit value= "<?PHP echo $materiel_dsit; ?>"	/></TD>
 				</tr>
 				
 				<tr>
-					<TD>Numéro de série</TD>
+					<TD>NumÃ©ro de sÃ©rie</TD>
 					<TD><input type="text" name="serial" id="serial" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
 						<a href='#' onclick='SSN_modifier();' onkeyup='validation();'>
-							<img src='./img/cadenas_ferme.png' id="img_cadenas_ouvert" style="display" title="Passer en écriture">
+							<img src='./img/cadenas_ferme.png' id="img_cadenas_ouvert" style="display" title="Passer en Ã©criture">
 							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ferme" style="display:none" title="Passer en Read only">
-						</a><!--<input type=button value="Passer en écriture" id="activer_ssn" onclick="SSN_modifier ();">-->
+						</a><!--<input type=button value="Passer en Ã©criture" id="activer_ssn" onclick="SSN_modifier ();">-->
 					</TD>
 				</tr>
 				
@@ -802,9 +791,9 @@
 				
 				
 				
-				if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
+				if ( $materiel_ocs_id ) {	// si le matÃ©riel existe dans ocs
 				
-					// Liste des boutons radion à remplacer
+					// Liste des boutons radion Ã  remplacer
 					foreach ($rq_cartes_reseaux as $record) {
 						$SPEED   = $record[1];
 						$MACADDR = $record[0];
@@ -813,7 +802,7 @@
 						
 						echo "<TR class='combo_type'>";
 							echo "<TD>Adresse MAC $SPEED</TD>";
-							echo "<TD><input type='radio' name='mac_radio' class='mac_radio' value='$MACADDR' $select > $MACADDR </TD>"; 	//création d'un bouton radio à côté de chaque adresse mac
+							echo "<TD><input type='radio' name='mac_radio' class='mac_radio' value='$MACADDR' $select > $MACADDR </TD>"; 	//crÃ©ation d'un bouton radio Ã  cÃ´tÃ© de chaque adresse mac
 						echo "</TR>";
 					}
 					
@@ -830,7 +819,7 @@
 					
 						
 				} 
-				else {	// Le matériel n'existe pas, on ne propose qu'un input
+				else {	// Le matÃ©riel n'existe pas, on ne propose qu'un input
 					echo "<TR id='textbox_type'>
 							<TD>Adresse MAC</TD>
 							<TD><input name='mac_input' id='mac_input' size=17 maxlength=17 type='text' value='$materiel_mac'></TD>
@@ -844,18 +833,18 @@
 					<TD>	
 						<select name="origine">
 							<option value=<?PHP echo $materiel_origine; ?>><?PHP echo $materiel_origine; ?></option>
-							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine[0] ."'>" . $origine[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
 						</select>
 
 					</TD>
 				</tr>
 				
 				<tr>
-					<TD>Etat du matériel</TD> 
+					<TD>Etat du matÃ©riel</TD> 
 					<TD>
 						<select name="etat" id="CB_etat">
 							<option selected><?PHP echo $materiel_etat; ?></option>
-							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat[0] ."'>" . $etat[0] ."</option>";	}	?>
+							<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 						</select>
 					</TD>
 				</tr>
@@ -867,14 +856,14 @@
 				
 			
 				<tr>
-					<TD>Salle où se trouve le matériel</TD> 
+					<TD>Salle oÃ¹ se trouve le matÃ©riel</TD> 
 					<TD>
 						<select name="salle" >
 							<?PHP
-								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $db_gespac->queryAll ( "SELECT DISTINCT salle_nom FROM salles" );
+								// requÃªte qui va afficher dans le menu dÃ©roulant les salles saisies dans la table 'salles'
+								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT salle_nom FROM salles" );
 								foreach ( $req_salles_disponibles as $record) { 
-									$salle_nom = $record[0];
+									$salle_nom = $record['salle_nom'];
 									$selected = $salle_nom == $materiel_salle ? "selected" : "";
 									
 									echo "<option $selected value='$salle_nom'>$salle_nom</option>";
@@ -889,7 +878,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Modifier ce matériel' >
+			<input type=submit value='Modifier ce matÃ©riel' >
 
 			</center>
 
@@ -916,20 +905,20 @@
 			<center>
 			
 			<input type=hidden name=lot id=lot>
-			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
+			<!-- Ici on rÃ©cupÃ¨re la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
 			<script>$("lot").value = $('materiel_a_poster').value;</script>
 
 			<table width=500>
 				
 				<tr>
-					<TD>Préfixe du lot</TD> 
+					<TD>PrÃ©fixe du lot</TD> 
 					<TD>
 						<input type=text name=prefixe id=prefixe />
 					</TD>
 				</tr>
 				
 				<tr>
-					<TD>Suffixe séquentiel</TD> 
+					<TD>Suffixe sÃ©quentiel</TD> 
 					<TD>
 						<input type=checkbox name=suffixe id=suffixe checked />
 					</TD>

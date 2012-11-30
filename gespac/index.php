@@ -51,10 +51,11 @@
 	
 	<BODY onload="resizeContent();" onResize="resizeContent();">
 
-		<?PHP	// Includes
-			include_once ('config/databases.php');	// fichiers de configuration des bases de données
-			include_once ('fonctions.php');			// fichier contenant les fonctions utilisées dans le reste des scripts
-			include_once ('config/pear.php');		// fichiers de configuration des lib PEAR (setinclude + packages)
+		<?PHP
+			// lib
+			require_once ('fonctions.php');
+			include_once ('config/databases.php');
+			include_once ('../class/Sql.class.php');
 		?>
 
 		<DIV id="principal">
@@ -65,28 +66,22 @@
 
 			<DIV id="conteneur">
 			
-				<?PHP // Vérification de l'existence d'enregistrement dans la table COLLEGE
+				<?PHP 
 				
-					// adresse de connexion à la base de données
-					$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-					// cnx à la base de données OCS
-					$db_gespac 	= & MDB2::factory($dsn_gespac);
+					// Vérification de l'existence d'enregistrement dans la table COLLEGE
+				
+					// Connexion à la base de données GESPAC
+					$con_gespac = new Sql ( $host, $user, $pass, $gespac );
 
 					// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
-					$req_college = $db_gespac->queryAll ( "SELECT * FROM college;" );
-
-					$college_existe = $req_college[0][0];	// La table college n'est pas vide si on a au moins un enregistrement (sans blague)
+					$college_existe = $con_gespac->QueryOne ( "SELECT clg_uai FROM college;" );
 					
-					// On se déconnecte de la db
-					$db_gespac->disconnect();
-
 				?>
 				
 			
 				<?PHP	// Inclusion des pages
 				
-				if ( $college_existe <> "" ) {	// la base de donnée contient des données sur le collège
+				if ( $college_existe ) {	// la base de donnée contient des données sur le collège
 					echo "<script>AffichePage ('conteneur', './accueil.php');</script>";		// Pas d'include car les headers sont déjà postés			
 				} else {
 					echo "<script>AffichePage ('conteneur', 'gestion_college/form_college.php');</script>";		// Pas d'include car les headers sont déjà postés

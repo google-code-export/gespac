@@ -7,18 +7,14 @@
 
 	// lib
 	require_once ('../../fonctions.php');
-	require_once ('../../config/pear.php');
 	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
 
-
-	// adresse de connexion à la base de données
-	$dsn_gespac     = 'mysql://'. $user .':' . $pass . '@localhost/' . $gespac;
-
-	// cnx à la base de données OCS
-	$db_gespac 	= & MDB2::factory($dsn_gespac);
+	// cnx à gespac
+	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 	// stockage des lignes retournées par sql dans un tableau
-	$liste_export = $db_gespac->queryAll ( $rq_export );
+	$liste_export = $con_gespac->QueryAll ( $rq_export );
 
 	$filename = "export_perso.csv";
 
@@ -35,9 +31,6 @@
 	}
 
 	fclose($fp);
-
-	$db_gespac->disconnect();
-
 
 	echo "<center><h1><a href='./dump/$filename'>Fichier CSV Export Perso</a></h1></center>";
 
