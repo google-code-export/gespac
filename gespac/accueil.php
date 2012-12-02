@@ -1,16 +1,5 @@
 <?PHP	
 	session_start();
-	header("Content-Type:text/html; charset=iso-8859-15" ); 	// règle le problème d'encodage des caractères	
-?>
-
-<div id="target"></div>
-
-<?PHP
-
-	// lib
-	require_once ('fonctions.php');
-	include_once ('config/databases.php');
-	include_once ('../class/Sql.class.php');
 	
 	// Connexion à la base de données GESPAC
 	$con_gespac = new Sql ( $host, $user, $pass, $gespac );

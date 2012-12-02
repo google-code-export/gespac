@@ -36,18 +36,6 @@ input, textarea, select {
 	float:right;
 }
 
-#filtres_perso {
-	height	: 160px;
-	width	: 140px;
-	border	: black solid 1px;
-	background-color : #E8E8E8;
-	display	: none;
-	overflow : auto;
-	font: 11px Arial, Helvetica, sans-serif;
-	position:absolute;
-	padding : 5px;
-
-}
 
 #portail-menu {
 	background		: orange; 
@@ -72,10 +60,7 @@ input, textarea, select {
 }
 
 
-.spacer {
-  clear: both;
-  height:50px;
-}
+
 
 #portail-conteneur {
 	background		: orange; 
@@ -96,14 +81,11 @@ input, textarea, select {
 
 
 
-
+.spacer { clear:both ; height:50px ;}
 
 #page {
 	background-color : white;
-	width:auto;
 	margin-left	: auto; margin-right : auto;
-	overflow:hidden;
-	left:50%;
 }
 
 /*	menu de gauche	*/
@@ -123,7 +105,7 @@ input, textarea, select {
 	width:auto;
 	overflow:auto;
 	margin-left:230px;
-	max-width:950px;
+	/*max-width:950px;*/
 }
 
 .entetes {
@@ -147,107 +129,18 @@ input, textarea, select {
 #entete-salles {background-color : #fff;color:black;}
 
 /*	bandeau pour la partie login, grade et déconnexion	*/
-#bandeau{font-size : 12px; color : black;}
-#bandeau a{font-size : 12px; color : grey;}
-#bandeau a:hover{text-decoration:underline;}
-#bandeau img{width:24px;}
+#bandeau{font-size:12px ; color:black ; padding:6px 15px ; margin-bottom:15px ;}
+#bandeau a{font-size:12px ; color:grey ;}
+#bandeau a:hover{text-decoration:underline ;}
+#bandeau img{width:24px ; }
+
+
+/*	La boite de case à cocher pour les colonnes dans matériels	*/
+#options_colonnes {	display:none ; font-size:small ; border:1px grey solid ; padding:5px ; margin-top:6px ; margin-left:25px ; position:absolute ; background-color:#E8E8E8 ; overflow:auto ; width:120px;}
 
 
 
-
-
-
-
-
-
-
-
-
-#principal {
-	background-color 	: #1E3F3E;
-	width 				: 950px;
-	height 				: 97%;
-	left 				: 20px;
-	margin-left 		: auto;
-	margin-right 		: auto;
-	text-align			: left; 
-	padding 			: 10px;
-	float				: top;
-	border-radius		: 10px;
-	display:none;
-}
-
-#main_menu{
-	width 			: 96%;
-	margin			: auto;
-	text-align		: center; 
-	vertical-align	: middle;
-	padding			: 0px 10px 0px 10px;
-	background-color: #158A86;
-	border-top-left-radius : 10px;
-	border-top-right-radius : 10px;
-}
-
-#bandeau {
-	width 	: 98%;
-	height 	: 100px;
-	margin 	: auto;
-	padding : 10px;
-	overflow: hidden;
-}
-
-#bandeau-logo {
-	float	: left;
-	width	: 650px;
-	height : 100px;
-	background-image:url('../img/bandeau.png');
-	background-repeat:no-repeat; 
-	border-bottom-left-radius : 10px;
-	border-top-left-radius : 10px;
-}
-
-#bandeau-identity {
-	float			: left;
-	background-color: #158A86;
-	width			: 30%;
-	height			: 100%;
-	text-align		: center;
-	color			: #D7D7D7;
-	border-top-right-radius : 10px;
-	border-bottom-right-radius : 10px;
-}
-
-#bandeau-identity a{
-	color			: white;
-	text-decoration	: underline;
-	font-size		: 12px;
-}
-
-
-#conteneur {
-	background-color 	: #FFFFFF;
-	width 				: 96%;
-	height 				: 620px;
-	text-align			: left; 
-	margin				: auto;
-	padding 			: 10px;
-	overflow			: auto;
-	z-index				: 1;
-	border-bottom-left-radius : 10px;
-	border-bottom-right-radius : 10px;
-}
-
-#options_colonnes {
-	display : none;
-	font-size : small;
-	border : 1px grey solid;
-	padding : 5px;
-	margin-top : 5px;
-}
-
-a {
-	text-decoration : none;
-}
+a { text-decoration:none;}
 
 
 table {
