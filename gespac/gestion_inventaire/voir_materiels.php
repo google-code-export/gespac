@@ -450,10 +450,9 @@
 
 	window.addEvent('domready', function(){
 	
-			
-		window.addEvent('domready', function(){
-		  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_mat'});
-		});
+		// activation des slb
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_mat'});
+	
 	
 		// fonction de filtrage
 		function filter (phrase) {
@@ -469,43 +468,6 @@
 			 this.timer = (function() { filter($('filt').value); }).delay(1000);
 		});
 		
-			
-		// Menu des filtres préprogrammés
-		$('liste_filtres').addEvent('mouseenter', function(el)  {
-			el.stop();
-			$('filtres_perso').style.display = "block";
-		});
-		
-		$('liste_filtres').addEvent('mouseleave', function(el)  {
-			el.stop();
-			$('filtres_perso').style.display = "none";
-		});
-		
-		
-		//**********************************************
-		//			Filtres Perso
-		//**********************************************
-		
-		$('filter_ecrans').addEvent('click', function(el)  {
-			$('filt').value = "ecran";
-			filter ("ecran");
-		});
-		
-		$('filter_noecrans').addEvent('click', function(el)  {
-			$('filt').value = "/ecran";
-			filter ("/ecran");
-		});
-		
-		$('filter_ssnnc').addEvent('click', function(el)  {
-			$('filt').value = "nc:4";
-			filter ("nc:4");
-		});
-		
-		$('filter_ssnrand').addEvent('click', function(el)  {
-			$('filt').value = "rand:4";
-			filter ("rand:4");
-		});
-	
 
 		// AJAX		
 		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire

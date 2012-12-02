@@ -15,6 +15,66 @@
 */
 
 ?>
+	
+	<div id="menu-global">
+		
+		<div class="menu-block" id="menu-accueil">
+			<div class="menu-titre"><img src="img/icons/accueil.png">ACCUEIL</div>
+			<div class="menu-items">
+				<div class="menu-item">retour au portail</div>
+			</div>
+		</div>
+
+		
+		<div class="menu-block" id="menu-inventaire">
+			<div class="menu-titre"><img src="img/icons/inventaire.png">INVENTAIRE</div>
+			<div class="menu-items">
+				<a href="index.php?page=materiels"><div class="menu-item">matériels</div></a>
+				<div class="menu-item">marques</div>
+				<a href="index.php?page=salles"><div class="menu-item">salles</div></a>
+			</div>
+		</div>
+		
+		
+		<div class="menu-block" id="menu-dossiers">
+			<div class="menu-titre"><img src="img/icons/dossiers.png">DOSSIERS</div>
+		</div>
+	
+	
+		<div class="menu-block" id="menu-prets">
+			<div class="menu-titre"><img src="img/icons/pret.png">PRETS</div>
+		</div>
+		
+		
+		<div class="menu-block" id="menu-users">
+			<div class="menu-titre"><img src="img/icons/users.png">UTILISATEURS</div>
+			<div class="menu-items">
+				<div class="menu-item">utilisateurs</div>
+				<div class="menu-item">grades</div>
+			</div>
+		</div>
+		
+		
+		<div class="menu-block" id="menu-modules">
+			<div class="menu-titre"><img src="img/icons/modules.png">MODULES</div>
+			<div class="menu-items">
+				<div class="menu-item">snapins aic</div>
+				<div class="menu-item">wake on lan</div>
+			</div>
+		</div>
+	
+		
+		<div class="menu-block" id="menu-info">
+			<div class="menu-titre"><img src="img/icons/info.png">INFO</div>
+			<div class="menu-items">
+				<div class="menu-item">stats batons</div>
+				<div class="menu-item">serveur</div>
+			</div>
+		</div>
+	
+	</div>
+
+	
 
 	<script type="text/javascript">
 		
@@ -34,30 +94,21 @@
 			// On active le bon bouton
 			$(div).className = div + "-clicked";
 		}
+		
+
+
+		window.addEvent('domready', function(){
+		
+			$$('.menu-block img').addEvent('click', function(el)  {
 				
+				//var parent = $(el).getParents("");
+				
+				//$(this).getNext().style.display = "";
+				console.log ($(this).id);
+			
+			});
+		
+		
+		});
+		
 	</script>
-
-
-	
-	<div id="menu-global">
-		
-		<div class="menu-block" id="menu-accueil">
-			<div class="menu-titre"><img src="img/icons/accueil.png">ACCUEIL</div>
-			<div class="menu-items">
-				<div class="menu-item">retour au portail</div>
-			</div>
-		</div>
-		
-		<div class="menu-block" id="menu-inventaire">
-			<div class="menu-titre">INVENTAIRE</div>
-			<div class="menu-items">
-				<a href="index.php?page=materiels"><div class="menu-item">matériels</div></a>
-				<div class="menu-item">marques</div>
-				<a href="index.php?page=salles"><div class="menu-item">salles</div></a>
-			</div>
-		</div>
-	
-	
-	</div>
-
-	
