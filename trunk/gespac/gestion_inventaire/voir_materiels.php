@@ -450,6 +450,11 @@
 
 	window.addEvent('domready', function(){
 	
+			
+		window.addEvent('domready', function(){
+		  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_mat'});
+		});
+	
 		// fonction de filtrage
 		function filter (phrase) {
 			document.location.href='index.php?page=materiels&filter=' + encodeURIComponent(phrase);
@@ -790,7 +795,5 @@
 	
 	// On initialise tout le bazar d'entête en cochant les checkbox et en cachant/montrant les colonnes
 	init_entetes ('<?PHP echo $_SESSION['entetes'];?>');
-	
-
-	
+		
 </script>
