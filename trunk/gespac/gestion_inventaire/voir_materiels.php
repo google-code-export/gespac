@@ -15,10 +15,6 @@
 	if ( !isset($_SESSION['entetes']) ) $_SESSION['entetes'] = "0111001111";	// Cases à cocher par défaut			
 ?>
 
-<!--	Ancre haut de page	-->
-<a name="hautdepage"></a>
-
-
 <div class="entetes" id="entete-materiels">	
 
 	<span class="entetes-titre">LES MATERIELS<span id='nb_selectionnes'></span></span>
@@ -44,6 +40,24 @@
 					echo "<span><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/icons/pen.png'></a> </span>";
 				}
 			?>
+			
+				<!-- Gestion de l'affichage des colonnes ici. -->	
+						
+				<a href='#' onclick='showhide_options();'><img src="img/icons/eye.png" title="colonnes à montrer ou à cacher"></a>
+				<div id="options_colonnes">
+					<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();" 		 	> Prêt<br>
+					<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();" 		 	> DSIT<br>
+					<input type="checkbox" class="opt_entete" id="chk_serial" onclick="hidethem('.td_serial', this.checked);post_modif_entete();" 	 	> Serial<br>
+					<input type="checkbox" class="opt_entete" id="chk_etat" onclick="hidethem('.td_etat', this.checked);post_modif_entete();" 		 	> Etat<br>
+					<input type="checkbox" class="opt_entete" id="chk_type" onclick="hidethem('.td_type', this.checked);post_modif_entete();" 			> Famille<br>
+					<input type="checkbox" class="opt_entete" id="chk_stype" onclick="hidethem('.td_stype', this.checked);post_modif_entete();" 		> Sous Famille<br>
+					<input type="checkbox" class="opt_entete" id="chk_modele" onclick="hidethem('.td_modele', this.checked);post_modif_entete();" 	 	> Modèle<br>
+					<input type="checkbox" class="opt_entete" id="chk_marque" onclick="hidethem('.td_marque', this.checked);post_modif_entete();" 	 	> Marque<br>
+					<input type="checkbox" class="opt_entete" id="chk_salle" onclick="hidethem('.td_salle', this.checked);post_modif_entete();"			> Salle<br>
+					<input type="checkbox" class="opt_entete" id="chk_origine" onclick="hidethem('.td_origine', this.checked);post_modif_entete();"		> Origine
+			</div>
+				
+			
 		</span>
 		
 		
@@ -142,18 +156,18 @@
 			if ( !isset($champ_inc)  || $champ_inc == "") $champ_inc = -1;
 			
 			switch ($champ_inc) {
-				case 0 :	$like .= "(mat_nom LIKE '%$value_inc%' OR user_nom LIKE '%$value_inc%' OR mat_dsit LIKE '%$value_inc%' OR mat_serial LIKE '%$value_inc%' OR mat_origine LIKE '%$value_inc%' OR mat_etat LIKE '%$value_inc%' OR marque_type LIKE '%$value_inc%' OR marque_stype LIKE '%$value_inc%' OR marque_marque LIKE '%$value_inc%' OR marque_model LIKE '%$value_inc%' OR salle_nom LIKE '%$value_inc%')";	break;
-				case 1 :	$like .= "mat_nom LIKE '%$value_inc%'";			break;
-				case 2 :	$like .= "user_nom LIKE '%$value_inc%'";		break;
-				case 3 :	$like .= "mat_dsit LIKE '%$value_inc%'";		break;
-				case 4 :	$like .= "mat_serial LIKE '%$value_inc%'";		break;
-				case 5 :	$like .= "mat_etat LIKE '%$value_inc%'";		break;
-				case 6 :	$like .= "marque_type LIKE '%$value_inc%'";		break;
-				case 7 :	$like .= "marque_stype LIKE '%$value_inc%'";	break;
-				case 8 :	$like .= "marque_marque LIKE '%$value_inc%'";	break;
-				case 9 :	$like .= "marque_model LIKE '%$value_inc%'";	break;
-				case 10 :	$like .= "salle_nom LIKE '%$value_inc%'";		break;
-				case 11 :	$like .= "mat_origine LIKE '%$value_inc%'";		break;
+				case "t" :	$like .= "(mat_nom LIKE '%$value_inc%' OR user_nom LIKE '%$value_inc%' OR mat_dsit LIKE '%$value_inc%' OR mat_serial LIKE '%$value_inc%' OR mat_origine LIKE '%$value_inc%' OR mat_etat LIKE '%$value_inc%' OR marque_type LIKE '%$value_inc%' OR marque_stype LIKE '%$value_inc%' OR marque_marque LIKE '%$value_inc%' OR marque_model LIKE '%$value_inc%' OR salle_nom LIKE '%$value_inc%')";	break;
+				case "n" :	$like .= "mat_nom LIKE '%$value_inc%'";			break;
+				case "p" :	$like .= "user_nom LIKE '%$value_inc%'";		break;
+				case "d" :	$like .= "mat_dsit LIKE '%$value_inc%'";		break;
+				case "s" :	$like .= "mat_serial LIKE '%$value_inc%'";		break;
+				case "e" :	$like .= "mat_etat LIKE '%$value_inc%'";		break;
+				case "f" :	$like .= "marque_type LIKE '%$value_inc%'";		break;
+				case "sf" :	$like .= "marque_stype LIKE '%$value_inc%'";	break;
+				case "m" :	$like .= "marque_marque LIKE '%$value_inc%'";	break;
+				case "mo" :	$like .= "marque_model LIKE '%$value_inc%'";	break;
+				case "sa" :	$like .= "salle_nom LIKE '%$value_inc%'";		break;
+				case "o" :	$like .= "mat_origine LIKE '%$value_inc%'";		break;
 				default :	$like .= "mat_nom LIKE '%$value_inc%'";			break;
 			}
 			
@@ -190,18 +204,18 @@
 			if ( !isset($champ_exc)  || $champ_exc == "") $champ_exc = -1;
 			
 			switch ($champ_exc) {
-				case 0 :	$notlike .= "(mat_nom NOT LIKE '%$value_exc%' OR user_nom NOT LIKE '%$value_exc%' OR mat_dsit NOT LIKE '%$value_exc%' OR mat_serial NOT LIKE '%$value_exc%' OR mat_origine NOT LIKE '%$value_exc%' OR mat_etat NOT LIKE '%$value_exc%' OR marque_type NOT LIKE '%$value_exc%' OR marque_stype NOT LIKE '%$value_exc%' OR marque_marque NOT LIKE '%$value_exc%' OR marque_model NOT LIKE '%$value_exc%' OR salle_nom NOT LIKE '%$value_exc%')";	break;
-				case 1 :	$notlike .= "mat_nom NOT LIKE '%$value_exc%'";			break;
-				case 2 :	$notlike .= "user_nom NOT LIKE '%$value_exc%'";			break;
-				case 3 :	$notlike .= "mat_dsit NOT LIKE '%$value_exc%'";			break;
-				case 4 :	$notlike .= "mat_serial NOT LIKE '%$value_exc%'";		break;
-				case 5 :	$notlike .= "mat_etat NOT LIKE '%$value_exc%'";			break;
-				case 6 :	$notlike .= "marque_type NOT LIKE '%$value_exc%'";		break;
-				case 7 :	$notlike .= "marque_stype NOT LIKE '%$value_exc%'";		break;
-				case 8 :	$notlike .= "marque_marque NOT LIKE '%$value_exc%'";	break;
-				case 9 :	$notlike .= "marque_model NOT LIKE '%$value_exc%'";		break;
-				case 10 :	$notlike .= "salle_nom NOT LIKE '%$value_exc%'";		break;
-				case 11 :	$notlike .= "mat_origine NOT LIKE '%$value_exc%'";		break;
+				case "t" :	$notlike .= "(mat_nom NOT LIKE '%$value_exc%' OR user_nom NOT LIKE '%$value_exc%' OR mat_dsit NOT LIKE '%$value_exc%' OR mat_serial NOT LIKE '%$value_exc%' OR mat_origine NOT LIKE '%$value_exc%' OR mat_etat NOT LIKE '%$value_exc%' OR marque_type NOT LIKE '%$value_exc%' OR marque_stype NOT LIKE '%$value_exc%' OR marque_marque NOT LIKE '%$value_exc%' OR marque_model NOT LIKE '%$value_exc%' OR salle_nom NOT LIKE '%$value_exc%')";	break;
+				case "n" :	$notlike .= "mat_nom NOT LIKE '%$value_exc%'";			break;
+				case "p" :	$notlike .= "user_nom NOT LIKE '%$value_exc%'";			break;
+				case "d" :	$notlike .= "mat_dsit NOT LIKE '%$value_exc%'";			break;
+				case "s" :	$notlike .= "mat_serial NOT LIKE '%$value_exc%'";		break;
+				case "e" :	$notlike .= "mat_etat NOT LIKE '%$value_exc%'";			break;
+				case "f" :	$notlike .= "marque_type NOT LIKE '%$value_exc%'";		break;
+				case "sf" :	$notlike .= "marque_stype NOT LIKE '%$value_exc%'";		break;
+				case "m" :	$notlike .= "marque_marque NOT LIKE '%$value_exc%'";	break;
+				case "mo" :	$notlike .= "marque_model NOT LIKE '%$value_exc%'";		break;
+				case "sa" :	$notlike .= "salle_nom NOT LIKE '%$value_exc%'";		break;
+				case "o" :	$notlike .= "mat_origine NOT LIKE '%$value_exc%'";		break;
 				default :	$notlike .= "mat_nom NOT LIKE '%$value_exc%'";			break;
 			}
 		}
@@ -280,22 +294,7 @@
 		
 		
 		
-		<!-- Gestion de l'affichage des colonnes ici. -->	
-						
-		<a href='#' onclick='showhide_options();'><span id="options_label" style="font-size:small;">+ options</span></a>
-		<a href="#basdepage"><img src="./img/down.png" title="Aller en bas de page"></a>
-		<div id="options_colonnes">
-			<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();" 		 	> Prêt &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();" 		 	> DSIT &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_serial" onclick="hidethem('.td_serial', this.checked);post_modif_entete();" 	 	> Serial &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_etat" onclick="hidethem('.td_etat', this.checked);post_modif_entete();" 		 	> Etat &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_type" onclick="hidethem('.td_type', this.checked);post_modif_entete();" 			> Famille &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_stype" onclick="hidethem('.td_stype', this.checked);post_modif_entete();" 		> Sous Famille &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_modele" onclick="hidethem('.td_modele', this.checked);post_modif_entete();" 	 	> Modèle &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_marque" onclick="hidethem('.td_marque', this.checked);post_modif_entete();" 	 	> Marque &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_salle" onclick="hidethem('.td_salle', this.checked);post_modif_entete();"			> Salle &nbsp
-			<input type="checkbox" class="opt_entete" id="chk_origine" onclick="hidethem('.td_origine', this.checked);post_modif_entete();"		> Origine &nbsp
-		</div>
+
 				
 	</form>
 	
@@ -306,47 +305,47 @@
 		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
 		<?PHP if ( $E_chk ) echo "<th> <input type=checkbox id=checkall onclick=\"checkall('mat_table');\" > </th>"; ?>
 		
-		<th title="1 : le nom de la machine">
+		<th title="n : le nom de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_nom; ?>', $('filt').value);">
-			Nom<sup>1</sup> <?PHP echo $img_nom; ?></a></th>
+			Nom<sup>n</sup> <?PHP echo $img_nom; ?></a></th>
 			
-		<th class="td_pret" style='display:none' title="2 : le nom du professeur à qui le matériel est prêté">Prêté à<sup>2</sup></th>
+		<th class="td_pret" style='display:none' title="p : le nom du professeur à qui le matériel est prêté">Prêté à<sup>p</sup></th>
 		
-		<th class="td_dsit" title="3 : le numéro de série de la DSIT">
+		<th class="td_dsit" title="d : le numéro de série de la DSIT">
 			<a href="#" onclick="order_by('<?PHP echo $tri_dsit; ?>', $('filt').value);">
-			DSIT<sup>3</sup><?PHP echo $img_dsit; ?></a></th>
+			DSIT<sup>d</sup><?PHP echo $img_dsit; ?></a></th>
 			
-		<th class="td_serial" title="4 : le numéro de série de la machine">
+		<th class="td_serial" title="s : le numéro de série de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_serial; ?>', $('filt').value);">
-			Serial<sup>4</sup><?PHP echo $img_serial; ?></a></th>
+			Serial<sup>s</sup><?PHP echo $img_serial; ?></a></th>
 			
-		<th class="td_etat" title="5 : L'état général de la machine">
+		<th class="td_etat" title="e : L'état général de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_etat; ?>', $('filt').value);">
-			Etat<sup>5</sup><?PHP echo $img_etat; ?></a></th>
+			Etat<sup>e</sup><?PHP echo $img_etat; ?></a></th>
 			
-		<th class="td_type" style='display:none' title="6 : Famille du matériel">
+		<th class="td_type" style='display:none' title="f : Famille du matériel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_type; ?>', $('filt').value);">
-			Famille<sup>6</sup><?PHP echo $img_type; ?></a></th>
+			Famille<sup>f</sup><?PHP echo $img_type; ?></a></th>
 			
-		<th class="td_stype" style='display:none' title="7 : Sous Famille du matériel">
+		<th class="td_stype" style='display:none' title="sf : Sous Famille du matériel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_stype; ?>', $('filt').value);">
-			Sous-famille<sup>7</sup> <?PHP echo $img_stype; ?></a></th>
+			Sous-famille<sup>sf</sup> <?PHP echo $img_stype; ?></a></th>
 			
-		<th class="td_marque" title="8 : Marque du matériel">
+		<th class="td_marque" title="m : Marque du matériel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_marque; ?>', $('filt').value);">
-			Marque<sup>8</sup> <?PHP echo $img_marque; ?></a></th>
+			Marque<sup>m</sup> <?PHP echo $img_marque; ?></a></th>
 			
-		<th class="td_modele" title="9 : Modèle du matériel">
+		<th class="td_modele" title="mo : Modèle du matériel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_modele; ?>', $('filt').value);">
-			Modèle<sup>9</sup> <?PHP echo $img_modele; ?></a></th>
+			Modèle<sup>mo</sup> <?PHP echo $img_modele; ?></a></th>
 			
-		<th class="td_salle"  title="10 : Salle où est affecté le matériel">
+		<th class="td_salle"  title="sa : Salle où est affecté le matériel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_salle; ?>', $('filt').value);">
-			Salle<sup>10</sup> <?PHP echo $img_salle; ?></a></th>
+			Salle<sup>sa</sup> <?PHP echo $img_salle; ?></a></th>
 			
-		<th class='td_origine' title="11 : Propriétaire et année d'achat du matériel">
+		<th class='td_origine' title="o : Propriétaire et année d'achat du matériel">
 			<a href="#" onclick="order_by('<?PHP echo $tri_origine; ?>', $('filt').value);">
-			Origine<sup>11</sup> <?PHP echo $img_origine; ?></a></th>
+			Origine<sup>o</sup> <?PHP echo $img_origine; ?></a></th>
 	
 	<?PHP 
 	
@@ -453,8 +452,6 @@
 	
 		// fonction de filtrage
 		function filter (phrase) {
-			//$(body).load("index.php?page=materiels&filter=" + encodeURIComponent(phrase) );
-			//var myHTMLRequest = new Request.HTML().get('index.php?page=materiels&filter=' + encodeURIComponent(phrase));
 			document.location.href='index.php?page=materiels&filter=' + encodeURIComponent(phrase);
 		};
 			
@@ -522,12 +519,6 @@
 			}).send(this.toQueryString());
 		}); 
 
-
-
-	
-	
-		// oncharge par défaut TOUS les enregistrements
-		//filter("<?PHP echo $_GET['filter'];?>");
 		
 	});
 	
@@ -701,6 +692,9 @@
 		$$(col_name).each(function(item) {
 			item.style.display = state;
 		})
+		
+		// On ajuste la taille de la barre d'entête
+		$("entete-materiels").style.width = $("contenu").getStyle('width');
 	}
 	
 	
@@ -717,10 +711,8 @@
 	function showhide_options() {
 		if ( $('options_colonnes').style.display == 'block' ) {
 			$('options_colonnes').style.display = 'none'; 
-			$('options_label').innerHTML = "+ options";
 		} else {
 			$('options_colonnes').style.display = 'block';
-			$('options_label').innerHTML = "- options";
 		}
 	}
 	
@@ -753,7 +745,7 @@
 			else 
 				liste += "0";
 		});	
-		
+				
 		return liste;
 	}
 	
