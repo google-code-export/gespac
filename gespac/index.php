@@ -24,7 +24,7 @@
 <HTML>
 	<head>
 		<!--	CODAGE	-->
-		<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1" /> 
+		<meta http-equiv=Content-Type content="text/html; charset=utf-8" /> 
 		
 		<!--	FAVICON	-->
 		<link rel="SHORTCUT ICON" href="img/favicon.ico"/>
@@ -34,7 +34,7 @@
 		<link rel="stylesheet" href="css/chart.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/dropdown/dropdown.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/dropdown/default.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="css/style_ff.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />
 		
 		<!--	JS	-->
@@ -50,6 +50,9 @@
 
 	
 	<BODY onload="resizeContent();" onResize="resizeContent();">
+	
+	<!--	DIV target pour Ajax	-->
+	<div id="target"></div>
 
 		<?PHP
 			// lib
@@ -57,6 +60,31 @@
 			include_once ('config/databases.php');
 			include_once ('../class/Sql.class.php');
 		?>
+	
+		<DIV id="page">
+			<DIV id="menu">
+				<?PHP	
+					include ("bandeau.php");
+					include ("menu.php");	
+				?>
+			</DIV>
+			
+			<DIV id="contenu">
+			<?PHP 
+				$page=@$_GET["page"];
+				
+				switch ($page) {
+				
+					case "materiels" :	include ("gestion_inventaire/voir_materiels.php");	break;
+					case "salles" :	include ("gestion_inventaire/voir_salles.php");	break;
+				
+				}
+			
+			?>
+			</DIV>
+		</DIV>
+		
+		
 
 		<DIV id="principal">
 		

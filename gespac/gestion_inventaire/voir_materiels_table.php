@@ -4,20 +4,7 @@
 	 
 	 Page 02-01
 	  
-	 fichier de visualisation de l'inventaire :
-	
-		view de la db gespac avec tous le matos du parc
-
-		combobox filtre ajax pour n'avoir que les imprimantes, que les pc ... 
-		Pour chaque matos :
-		
-			boutons visualisation pour avoir la fiche détaillée (éventuellement avec liste des demandes et des inters, liste des prets ...)
-			bouton modification
-			bouton suppression avec de belles confirmations
-			bouton ajout, avec demande du type, du model et si on peux le préter
-			mais checker si le materiel est unique ou pas !!!!!
-	
-		lors de l'ajout d'un nouveau matériel, penser à permettre l'affectation directe à une salle !
+	 fichier de visualisation de l'inventaire
 	
 	*/
 
@@ -292,7 +279,7 @@
 	
 	<center>
 	
-	<table class="tablehover" id="mat_table" width=870>
+	<table class="tablehover" id="mat_table">
 		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
 		<?PHP if ( $E_chk ) echo "<th> <input type=checkbox id=checkall onclick=\"checkall('mat_table');\" > </th>"; ?>
 		

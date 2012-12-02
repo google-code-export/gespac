@@ -1,13 +1,19 @@
 <?PHP  
  
-	// fichier contenant le bandeau du site, du cg ...
+ ///////////////////////////////////////////////////////
+ //
+ //		affichage du login, grade et propose la
+ //		dÃ©connexion
+ //
+ //
+ ///////////////////////////////////////////////////////
+ 
+ 
+ 
+ 
 
-	// lib
-	require_once ('fonctions.php');
-	include_once ('config/databases.php');
-	include_once ('../class/Sql.class.php');
 	
-	// Connexion à la base de données GESPAC
+	// Connexion Ã  la base de donnÃ©es GESPAC
 	$con_gespac = new Sql ( $host, $user, $pass, $gespac );
 
 	$login = $_SESSION ['login'];
@@ -17,14 +23,10 @@
 
 ?>
 
-<div id=bandeau-logo></div>
 
-<div id=bandeau-identity>
-	<p>
-		Bienvenue, <b><?PHP echo $login; ?></b>
-		<br>
-		<small>Grade : <b><?PHP echo $grade; ?></b></small>
-		<p>
-		<a href="../logout.php" title="Cliquer ici pour se déconnecter"><b>Se déconnecter</b></a>
-	</p>
+
+<div id="bandeau">
+		<img src="img/user.png">
+		<b><?PHP echo "$login ($grade)"; ?></b><br>
+		<a href="../logout.php" title="Cliquer ici pour se dÃ©connecter"><b>quitter</b></a>
 </div>
