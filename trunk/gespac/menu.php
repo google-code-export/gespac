@@ -42,7 +42,7 @@
 	<div id="menu-global">
 		
 		<div class="menu-block" id="menu-accueil">
-			<div class="menu-titre"><img src="img/accueil.png">ACCUEIL</div>
+			<div class="menu-titre"><img src="img/icons/accueil.png">ACCUEIL</div>
 			<div class="menu-items">
 				<div class="menu-item">retour au portail</div>
 			</div>

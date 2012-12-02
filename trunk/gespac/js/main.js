@@ -14,8 +14,8 @@
 
 	//	Pour afficher une page	dans un div particulier
 	function AffichePage(div_dest, page) {
-		$(div_dest).set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres pour ne pas dépasser la taille maxi d'une url)
-		$(div_dest).load(page);
+		//$(div_dest).set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres pour ne pas dépasser la taille maxi d'une url)
+		//$(div_dest).load(page);
 	};
 	
 	
@@ -28,5 +28,5 @@
 */
 
 function resizeContent() {
-	$('conteneur').style.height = window.getSize().y -240 + 'px';
+	//$('conteneur').style.height = window.getSize().y -240 + 'px';
 }
