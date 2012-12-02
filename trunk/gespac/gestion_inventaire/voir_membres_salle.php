@@ -85,13 +85,3 @@
 	</table>
 	
 	</center>
-	
-	<br>
-	
-<?PHP
-
-	// On se déconnecte de la db
-	$con_gespac->Close();
-
-
-?>
