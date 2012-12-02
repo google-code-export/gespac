@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
 <?PHP
 	
 	/* fichier de visualisation de l'inventaire :
@@ -18,22 +19,51 @@
 	
 	*/
 
-	// lib
-	require_once ('../fonctions.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Sql.class.php');
 			
 ?>
-
-<h3>Visualisation des matériels</h3><br>
 
 <!--	Ancre haut de page	-->
 <a name="hautdepage"></a>
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
 
+<div class="entetes" id="entete-materiels">	
 
+	<span class="entetes-titre">LES MATERIELS</span>
+
+	<span class="entetes-options">
+		
+		<span class="option">
+		
+		</span>
+		
+		
+		<span class="option">
+		<!-- 	bouton pour le filtrage du tableau	-->
+		<form>
+			<center>
+			<div id="ligne-filtre">
+				<small><a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:1 / ecran:1` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:1+fonctionnel:5/ecran:1+d3e:10`.');">[?]</a></small> 
+				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
+				<span id="nb_filtre"></span>
+				
+				<span id="liste_filtres" style=''><small>filtres perso</small>
+					<span id="filtres_perso">
+						<a href="#" id="filter_ecrans" title="ecran">Seulement les écrans</a><br>
+						<a href="#" id="filter_noecrans" title="/ecran">Pas les écrans</a><br>
+						<a href="#" id="filter_ssnnc" title="NC:4">Serial NC</a><br>
+						<a href="#" id="filter_ssnrand" title="RAND:4">Serial RAND</a><br>
+					</span>
+				</span>
+			</div>
+				
+			</center>
+		</form>
+		</span>
+	</span>
+
+</div>
+
+<div class=spacer></div>
 
 <?PHP
 
@@ -44,27 +74,6 @@
 	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id) ORDER BY mat_nom" );
 
 ?>
-	<!-- onclick="$('filt').value = '/ecran';filter($('filt').value);"-->
-	<!-- 	bouton pour le filtrage du tableau	-->
-	<form>
-		<center>
-		<div id="ligne-filtre">
-			<small>Filtrer <a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:1 / ecran:1` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:1+fonctionnel:5/ecran:1+d3e:10`.');">[?]</a>:</small> 
-			<input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
-			<span id="nb_filtre"></span>
-			
-			<span id="liste_filtres" style=''><small>filtres perso</small>
-				<span id="filtres_perso">
-					<a href="#" id="filter_ecrans" title="ecran">Seulement les écrans</a><br>
-					<a href="#" id="filter_noecrans" title="/ecran">Pas les écrans</a><br>
-					<a href="#" id="filter_ssnnc" title="NC:4">Serial NC</a><br>
-					<a href="#" id="filter_ssnrand" title="RAND:4">Serial RAND</a><br>
-				</span>
-			</span>
-		</div>
-			
-		</center>
-	</form>
 
 	<div id='tableau'>Chargement des données ...</div>
 
@@ -79,9 +88,6 @@
 
 
 <script type="text/javascript">	
-
-	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
 
 	window.addEvent('domready', function(){
 	
