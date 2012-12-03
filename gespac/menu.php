@@ -98,14 +98,15 @@
 
 
 		window.addEvent('domready', function(){
-		
-			$$('.menu-block img').addEvent('click', function(el)  {
-				
-				//var parent = $(el).getParents("");
-				
-				//$(this).getNext().style.display = "";
-				console.log ($(this).id);
 			
+			// On masque tout par défaut
+			$$('.menu-items').setStyle("display", "none");
+		
+		
+			// Quand on clique sur une image
+			$$('.menu-block img').addEvent('click', function(el)  {
+				$$('.menu-items').setStyle("display", "none");	// On masque tout
+				$(this).getParent().getParent().getChildren(".menu-items").setStyle("display", "");	// On affiche le set d'items
 			});
 		
 		

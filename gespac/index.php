@@ -35,7 +35,7 @@
 		<link rel="stylesheet" href="css/dropdown/dropdown.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/dropdown/default.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />
+		<!--<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />-->
 		
 		<!--	JS	-->
 		<script type="text/javascript" src="js/mootools-1.2.3-core-yc.js"></script>	

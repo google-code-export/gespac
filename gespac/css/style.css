@@ -94,7 +94,7 @@ input, textarea, select {
 #menu-global {}
 .menu-block {margin-bottom:15px;}
 .menu-titre {font-size:14px ; padding:10px ; padding-bottom:3px ; font-weight:700;}
-.menu-items {display: ; }
+.menu-items { }
 .menu-item {padding:2px 10px;font-size:11px; }
 .menu-item:hover {background-color:#E3E3E3;}
 
