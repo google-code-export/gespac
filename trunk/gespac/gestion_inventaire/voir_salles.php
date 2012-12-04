@@ -79,7 +79,8 @@ session_start();
 
 <div class="entetes" id="entete-salles">	
 
-	<span class="entetes-titre">LES SALLES</span>
+	<span class="entetes-titre">LES SALLES<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des salles du parc.<br>Certaines salles, comme PRETS ou STOCK sont bloquées car elles ont un rôle particulier.</div>
 
 	<span class="entetes-options">
 		
@@ -179,7 +180,9 @@ session_start();
 <script type="text/javascript">
 	
 	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
+	
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
+	
 	});
 
 

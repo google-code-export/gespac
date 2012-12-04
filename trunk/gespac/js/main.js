@@ -11,3 +11,19 @@
 		if(key == 13) return false;
 		else return true;
 	};
+
+
+window.addEvent('domready', function(){
+	
+	
+				$$(".helpbox").setStyle("display", "none");
+	
+	$$('.help-button').addEvent('click', function(e)  {
+		
+		if ($$(".helpbox").getStyle("display") == "none")
+			$$(".helpbox").setStyle("display", "");
+		else
+			$$(".helpbox").setStyle("display", "none");
+	});
+	
+});
