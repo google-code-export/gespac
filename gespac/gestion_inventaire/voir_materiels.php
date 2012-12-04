@@ -17,7 +17,8 @@
 
 <div class="entetes" id="entete-materiels">	
 
-	<span class="entetes-titre">LES MATERIELS<span id='nb_selectionnes'></span></span>
+	<span class="entetes-titre">LES MATERIELS<span id='nb_selectionnes'></span><img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des matériels du parc.<br>On peut aussi modifier ou renommer un lot de matériels.</div>
 
 	<span class="entetes-options">
 				

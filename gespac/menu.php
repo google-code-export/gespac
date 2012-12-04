@@ -104,9 +104,9 @@
 		
 		
 			// Quand on clique sur une image
-			$$('.menu-block img').addEvent('click', function(el)  {
+			$$('.menu-titre').addEvent('click', function(el)  {
 				$$('.menu-items').setStyle("display", "none");	// On masque tout
-				$(this).getParent().getParent().getChildren(".menu-items").setStyle("display", "");	// On affiche le set d'items
+				$(this).getParent().getChildren(".menu-items").setStyle("display", "");	// On affiche le set d'items
 			});
 		
 		
