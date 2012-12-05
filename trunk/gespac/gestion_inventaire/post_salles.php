@@ -1,13 +1,8 @@
 ﻿<?PHP
 
 
-	/* fichier de creation / modif / suppr des salles
-	
-	Si j'ai un ID c'est une modification
-	Si j'en ai pas c'est une création
-	
-	reste à coder pour la suppression
-	
+	/* 
+		fichier de creation / modif / suppr des salles
 	*/
 	
 	include ('../includes.php');
