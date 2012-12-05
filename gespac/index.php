@@ -12,8 +12,7 @@
 	// on vérifie si l'utilisateur est identifié
 	if (!isset( $_SESSION['login'])) {
 
-		// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié
-		// On redirige sur la page permettant de s'authentifier
+		// la variable de session n'existe pas, donc l'utilisateur n'est pas authentifié -> On redirige sur la page permettant de s'authentifier
 		header("Location: ../index.php");
 			
 		// on arrête l'exécution
@@ -72,13 +71,18 @@
 			<DIV id="contenu">
 		
 				<?PHP 
+					
+					$con_gespac = new Sql ( $host, $user, $pass, $gespac );
+					
 					$page=@$_GET["page"];
 					
 				
 					// Vérification de l'existence d'enregistrement dans la table COLLEGE
-				
-					$con_gespac = new Sql ( $host, $user, $pass, $gespac );
 					$college_existe = $con_gespac->QueryOne ( "SELECT clg_uai FROM college;" );
+					
+					// on charge la bonne page d'accueil
+					$page_accueil = $con_gespac->QueryOne ( "SELECT user_accueil FROM users WHERE user_logon='" . $_SESSION ['login'] . "' " );
+					if ($page_accueil == "") $page_accueil = "bienvenue.php";
 					
 					if ( !$college_existe ) $page='form_college';	// si pas de college, on charge la page du formulaire de creation d'un college
 
@@ -86,7 +90,8 @@
 						case "materiels" :	include ("gestion_inventaire/voir_materiels.php");	break;
 						case "salles" :	include ("gestion_inventaire/voir_salles.php");	break;
 						case "form_college" :	include ("gestion_college/form_college.php");	break;
-						default : include ("accueil.php"); break;
+						case "accueil" :	include ($page_accueil);	break;
+						default : include ($page_accueil); break;
 					}
 				
 				?>

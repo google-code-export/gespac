@@ -15,8 +15,11 @@
 
 window.addEvent('domready', function(){
 	
+	///////////////////////////////////////////
+	//		AFFICHE L'AIDE EN LIGNE
+	///////////////////////////////////////////
 	
-				$$(".helpbox").setStyle("display", "none");
+	$$(".helpbox").setStyle("display", "none");
 	
 	$$('.help-button').addEvent('click', function(e)  {
 		
