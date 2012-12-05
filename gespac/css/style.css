@@ -125,6 +125,9 @@ table {
 	border-collapse : separate;
 }
 
+/*	Les cases contenant les boutons supprimé, modifié, ...	*/
+.buttons {width:20px;}
+
 
 th {
 	background-color : orange;

@@ -419,8 +419,8 @@
 					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='slb_mat' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
 					
 					if ( $E_chk ) {
-						/*	modif	*/	echo "<td><a href='gestion_inventaire/form_materiels.php?height=400&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
-						/*	suppr	*/	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
+						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?height=400&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
+						/*	suppr	*/	echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 					}
 					
 				echo "</tr>";
