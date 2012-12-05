@@ -46,16 +46,16 @@
 						
 				<a href='#' onclick='showhide_options();'><img src="img/icons/eye.png" title="colonnes à montrer ou à cacher"></a>
 				<div id="options_colonnes">
-					<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();" 		 	> Prêt<br>
-					<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();" 		 	> DSIT<br>
-					<input type="checkbox" class="opt_entete" id="chk_serial" onclick="hidethem('.td_serial', this.checked);post_modif_entete();" 	 	> Serial<br>
-					<input type="checkbox" class="opt_entete" id="chk_etat" onclick="hidethem('.td_etat', this.checked);post_modif_entete();" 		 	> Etat<br>
-					<input type="checkbox" class="opt_entete" id="chk_type" onclick="hidethem('.td_type', this.checked);post_modif_entete();" 			> Famille<br>
-					<input type="checkbox" class="opt_entete" id="chk_stype" onclick="hidethem('.td_stype', this.checked);post_modif_entete();" 		> Sous Famille<br>
-					<input type="checkbox" class="opt_entete" id="chk_modele" onclick="hidethem('.td_modele', this.checked);post_modif_entete();" 	 	> Modèle<br>
-					<input type="checkbox" class="opt_entete" id="chk_marque" onclick="hidethem('.td_marque', this.checked);post_modif_entete();" 	 	> Marque<br>
-					<input type="checkbox" class="opt_entete" id="chk_salle" onclick="hidethem('.td_salle', this.checked);post_modif_entete();"			> Salle<br>
-					<input type="checkbox" class="opt_entete" id="chk_origine" onclick="hidethem('.td_origine', this.checked);post_modif_entete();"		> Origine
+					<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();"><label for="chk_pret">Prêt</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();"><label for="chk_dsit">DSIT</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_serial" onclick="hidethem('.td_serial', this.checked);post_modif_entete();"><label for="chk_serial">Serial</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_etat" onclick="hidethem('.td_etat', this.checked);post_modif_entete();"><label for="chk_etat">Etat</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_type" onclick="hidethem('.td_type', this.checked);post_modif_entete();"><label for="chk_type">Famille</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_stype" onclick="hidethem('.td_stype', this.checked);post_modif_entete();"><label for="chk_stype">Sous Famille</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_modele" onclick="hidethem('.td_modele', this.checked);post_modif_entete();"><label for="chk_modele">Modèle</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_marque" onclick="hidethem('.td_marque', this.checked);post_modif_entete();"><label for="chk_marque">Marque</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_salle" onclick="hidethem('.td_salle', this.checked);post_modif_entete();"><label for="chk_salle">Salle</label><br>
+					<input type="checkbox" class="opt_entete" id="chk_origine" onclick="hidethem('.td_origine', this.checked);post_modif_entete();"><label for="chk_origine">Origine</label>
 			</div>
 				
 			
