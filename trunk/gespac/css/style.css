@@ -1,7 +1,7 @@
 
 @font-face {
 	font-family: ubuntu;
-	src: url('UbuntuMono-R.ttf');
+	src: url('Ubuntu-R.ttf');
 	/*src: url('SourceSansPro-Regular.ttf');*/
 	text-decoration : none;
 }
@@ -116,6 +116,9 @@ input, textarea, select {
 	float:top;
 	position:fixed;
 	width:950px;
+	z-index:10;
+	background-color:#fff;
+
 }
 
 .entetes-titre {	float:left ;}
