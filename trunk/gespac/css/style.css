@@ -1,40 +1,12 @@
-
 @font-face {
 	font-family: ubuntu;
 	src: url('Ubuntu-R.ttf');
 	/*src: url('SourceSansPro-Regular.ttf');*/
-	text-decoration : none;
-}
+	text-decoration : none;}
 
-body {
-	background-color	: #fff;
-	font-family: ubuntu, Verdana, Arial, Helvetica, sans-serif;
-	margin:0;
-}
-
-
-h3 {
-	margin : 0px;
-}
-
-input, textarea, select {
-	border: 1px solid #6E6F6A;
-}
-
-
-#numero_col {
-	font: 8px Arial, Helvetica, sans-serif;
-}
-
-#ligne-filtre {
-	width : 350px;
-}
-
-#liste_filtres {
-	text-align:left;
-	margin-top : 5px;
-	float:right;
-}
+body {background-color:#fff; font-family:ubuntu, Verdana, Arial, Helvetica, sans-serif; margin:0;}
+h3 {	margin : 0px;}
+input, textarea, select {border:1px solid #6E6F6A;}
 
 
 #portail-menu {
@@ -76,36 +48,27 @@ input, textarea, select {
 
 
 
+/*	On execute tous les post dans ce div	*/
+#target {width:100%; position:fixed;	bottom:0px;	left:0px; background-color:red;	color:white; padding:5px; display:none;}
 
+.spacer { clear:both; height:50px ;}
 
+/*	Le conteneur principal où on dessine le contenu et les menus	*/
+#page {background-color:white; margin-left:auto; margin-right:auto;}
 
-
-
-.spacer { clear:both ; height:50px ;}
-
-#page {
-	background-color : white;
-	margin-left	: auto; margin-right : auto;
-}
+/*	Conteneur où on dessine les matériels, salles, ...	*/
+#contenu {background-color : white;	float:left;	width:auto;	overflow:auto; margin-left:230px;}
 
 /*	menu de gauche	*/
 #menu { width : 225px; margin-top : 80px; position : fixed;}
-#menu  img{ width:24px ; margin-right:4px;}
+#menu  img{ width:24px; margin-right:4px;}
 #menu-global {}
 .menu-block {margin-bottom:15px;}
-.menu-titre {font-size:14px ; padding:10px ; padding-bottom:3px ; font-weight:700 ; cursor:pointer;}
+.menu-titre {font-size:14px; padding:10px; padding-bottom:3px; font-weight:700; cursor:pointer;}
 .menu-items { }
 .menu-item {padding:2px 10px;font-size:11px; }
 .menu-item:hover {background-color:#E3E3E3;}
 
-
-#contenu {
-	background-color : white;
-	float:left;
-	width:auto;
-	overflow:auto;
-	margin-left:230px;
-}
 
 /*	Entetes des pages (avec les options dedans)	*/
 .entetes {
@@ -121,24 +84,24 @@ input, textarea, select {
 	box-shadow: 1px 5px 10px #888;
 }
 
-.entetes-titre {	float:left ;}
-.entetes-titre img {height:24px ; margin-left:10px;}
-.entetes-options { float:right; font-size : 12px;}
-.entetes-options .option {float:left ; padding:0 3px ;}
-.entetes-options img {height:24px ; }
-.entetes-options form {	margin :0; }
+.entetes-titre 		{float:left;}
+.entetes-titre img 	{height:24px; margin-left:10px;}
+.entetes-options 	{float:right; font-size:12px;}
+.entetes-options .option {float:left; padding:0 3px;}
+.entetes-options img {height:24px; }
+.entetes-options form {margin:0; }
 
 /*	bandeau pour la partie login, grade et déconnexion	*/
-#bandeau{font-size:12px ; color:black ; padding:6px 15px ; margin-bottom:15px ;}
-#bandeau a{font-size:12px ; color:grey ;}
-#bandeau a:hover{text-decoration:underline ;}
-#bandeau img{width:24px ; }
+#bandeau		{font-size:12px; color:black; padding:6px 15px; margin-bottom:15px;}
+#bandeau a		{font-size:12px; color:grey;}
+#bandeau a:hover	{text-decoration:underline;}
+#bandeau img		{width:24px; }
 
 /*	La boite de case à cocher pour les colonnes dans matériels	*/
-#options_colonnes { display:none ; font-size:small ; border:1px grey solid ; padding:5px ; margin-top:6px ; margin-left:25px ; position:absolute ; background-color:#E8E8E8 ; overflow:auto ; width:120px; box-shadow:1px 5px 10px #888;}
+#options_colonnes {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:25px; position:absolute; background-color:#E8E8E8; overflow:auto; width:120px; box-shadow:1px 5px 10px #888;}
 
 /* la boite d'aide */
-.helpbox { font-size:10px ; border:1px grey solid ; padding:5px ; position:absolute ; margin-top:30px ; background-color:#E8E8E8 ; box-shadow:1px 5px 10px #888;}
+.helpbox {font-size:10px; border:1px grey solid; padding:5px; position:absolute; margin-top:30px; background-color:#E8E8E8; box-shadow:1px 5px 10px #888;}
 
 
 
@@ -174,54 +137,17 @@ img {
 	vertical-align:middle;
 }
 
-.tablehover {
-	width:950px;
-}
-
-.tablehover tr:hover {
-	background-color 	: #FFD769;
-	padding 			: 2px 0px;
-}
-
-.tablehover td {
-	padding		: 2px 4px;
-	font-size	: 11px;
-}
-
-.tablehover th {
-	font-size : 12px;
-}
+.tablehover {min-width:950px;}
+.tablehover tr:hover {background-color:#FFD769; padding:2px 0px;}
+.tablehover td {padding:2px 4px; font-size:11px ;}
+.tablehover th {font-size:12px ;}
 
 /*	pour les dossiers	*/
-
-.innertable {
-	float:right;
-	width:850px;
-	background-color : #D9DBDC;
-	border : none;
-}
-
-.innertable td{
-	padding		: 2px 4px;
-	font-size	: 9px;
-	border 		: 1px grey solid;
-}
-
-.innertable th{
-	font-size	: 10px;
-	background-color : green;
-	padding : 0px;
-}
-
-.inner_tr {
-	background-color : white;
-	border : 3px solid blue;
-	border-top : none;
-}
-
-.inner_td {
-	padding : 10px;
-}
+.innertable {float:right; width:850px; background-color:#D9DBDC; border:none ;}
+.innertable td{padding:2px 4px; font-size:9px; border:1px grey solid ;}
+.innertable th{font-size:10px; background-color:green; padding:0px ;}
+.inner_tr {background-color:white; border:3px solid blue; border-top:none;}
+.inner_td {padding:10px;}
 
 .dossier_section {
 	float : top;

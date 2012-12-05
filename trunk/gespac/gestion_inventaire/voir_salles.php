@@ -30,10 +30,9 @@ session_start();
 			
 			// si la réponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
-				/*	poste la page en ajax	*/
+				$('target').setStyle("display","block");
 				$('target').load("gestion_inventaire/post_salles.php?action=suppr&id=" + id);
-				/*	on recharge la page au bout de 1000ms	*/
-				window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php');", 1000);
+				window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('filt').value + "'", 1500);			
 			}
 		}
 	}
