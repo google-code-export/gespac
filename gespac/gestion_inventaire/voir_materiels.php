@@ -3,12 +3,10 @@
 <?PHP
 	
 	/* 
-	
 		fichier de visualisation de l'inventaire :
-
-	
 	*/
 
+	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-02-01#", $_SESSION['droits']);
 
@@ -30,15 +28,14 @@
 			</form>
 		</span>
 		
-		
 		<span class="option">		<!-- Ajout d'un matériel et Modification par lot-->
 			
 			<?PHP
 				echo "<span><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='img/icons/csv.png'></a></span>";
 				if ( $E_chk ) {
 					echo "<span><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='img/icons/add.png'></a></span>";
-					echo "<span><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/icons/modif1.png'></a></span>";
-					echo "<span><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/icons/pen.png'></a> </span>";
+					echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/icons/modif1.png'></a></span>";
+					echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/icons/pen.png'></a> </span>";
 				}
 			?>
 			
@@ -289,13 +286,6 @@
 			?>
 			
 		</span>
-		
-
-		
-		
-		
-		
-
 				
 	</form>
 	
@@ -610,11 +600,13 @@
 			
 
 			if ( $('materiel_a_poster').value != "" ) {
-				$('modif_selection').style.display = "";
-				$('rename_selection').style.display = "";
+				$('modif_selection').setStyle("display","inline");
+				$('rename_selection').setStyle("display","inline");
+				nb_selectionnes.setStyle("display","inline");
 			} else { 
-				$('modif_selection').style.display = "none";
-				$('rename_selection').style.display = "none";
+				$('modif_selection').setStyle("display","none");
+				$('rename_selection').setStyle("display","none");
+				nb_selectionnes.setStyle("display","none");
 			}
 		}
 	}

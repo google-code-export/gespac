@@ -99,16 +99,11 @@
 
 		window.addEvent('domready', function(){
 			
-			// On masque tout par défaut
-			$$('.menu-items').setStyle("display", "none");
-		
-		
 			// Quand on clique sur une image
 			$$('.menu-titre').addEvent('click', function(el)  {
 				$$('.menu-items').setStyle("display", "none");	// On masque tout
-				$(this).getParent().getChildren(".menu-items").setStyle("display", "");	// On affiche le set d'items
+				$(this).getParent().getChildren(".menu-items").setStyle("display", "block");	// On affiche le set d'items
 			});
-		
 		
 		});
 		
