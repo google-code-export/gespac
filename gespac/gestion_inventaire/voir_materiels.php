@@ -17,7 +17,7 @@
 
 <div class="entetes" id="entete-materiels">	
 
-	<span class="entetes-titre">LES MATERIELS<span id='nb_selectionnes'></span><img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">LES MATERIELS<img class="help-button" src="img/icons/info.png"></span><span id='nb_selectionnes'></span>
 	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des matériels du parc.<br>On peut aussi modifier ou renommer un lot de matériels.</div>
 
 	<span class="entetes-options">
@@ -574,14 +574,14 @@
 					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
 						table_id.push(tr_id);
 						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+						nb_selectionnes.innerHTML = "[" + (table_id.length-1) + "] sélectionné(s)";	// On entre le nombre de machines sélectionnées	
 					}
 				break;
 				
 				case 0: // On force la déselection
 					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
 						table_id.erase(tr_id);
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+						nb_selectionnes.innerHTML = " [" + (table_id.length-1) + "] sélectionné(s)";	 // On entre le nombre de machines sélectionnées			
 						// alternance des couleurs calculée avec la parité
 						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
 					}
@@ -592,7 +592,7 @@
 					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
 						table_id.erase(tr_id);
 						
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
+						nb_selectionnes.innerHTML = " [" + (table_id.length-1) + "] sélectionné(s)";	 // On entre le nombre de machines sélectionnées			
 
 						// alternance des couleurs calculée avec la parité
 						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
@@ -600,7 +600,7 @@
 					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
 						table_id.push(tr_id);
 						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
+						nb_selectionnes.innerHTML = " [" + (table_id.length-1) + "] sélectionné(s)";	// On entre le nombre de machines sélectionnées	
 					}
 				break;			
 			}
