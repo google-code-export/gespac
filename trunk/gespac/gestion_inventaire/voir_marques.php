@@ -6,26 +6,17 @@
 		Page 02-02
 	
 		Visualisation des marques
-		
-		bouton ajouter une marque
-		
-		sur chaque marque possibilitÈ de la modifier ou de la supprimer
-		en prÈcisant bien que cela va virer le matÈriel associÈ ‡ cette marque
-		
-		On groupera les marques par type dans un premier temps, puis par marques
-	
+
 	*/
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
-	
-	// si le grade du compte est root, on donne automatiquement les droits d'accËs en Ècriture. Sinon, on teste si le compte a accËs ‡ la page.
+	// si le grade du compte est root, on donne automatiquement les droits d'acc√®s en √©criture. Sinon, on teste si le compte a acc√®s √† la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-02-02#", $_SESSION['droits']);
 	
 		
 ?>
 
 
-<h3>Visualisation des marques et modËles</h3>
+<h3>Visualisation des marques et mod√®les</h3>
 <br>
 
 <!--	DIV target pour Ajax	-->
@@ -38,17 +29,17 @@
 
 <?PHP 
 
-	// cnx ‡ la base de donnÈes GESPAC
+	// cnx √† la base de donn√©es GESPAC
 	$con_gespac 	= new Sql ($host, $user, $pass, $gespac);
 	
-	// stockage des lignes retournÈes par sql dans un tableau nommÈ avec originalitÈ "array" (mais "tableau" peut aussi marcher)
+	// stockage des lignes retourn√©es par sql dans un tableau nomm√© avec originalit√© "array" (mais "tableau" peut aussi marcher)
 	$liste_des_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_model, marque_marque FROM marques WHERE marque_suppr = 0 ORDER BY marque_type, marque_stype, marque_marque, marque_model" );
 
 	
-	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modËle</a>";
+	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un mod√®le</a>";
 ?>
-	<!-- Gestion de l'affichage des modËles vides ici	
-		<span style="float:right;"><input type="checkbox" id="case_cochee" onclick="cacher_modele(); alterner_couleurs ();" checked> Cacher les modËles vides </span>
+	<!-- Gestion de l'affichage des mod√®les vides ici	
+		<span style="float:right;"><input type="checkbox" id="case_cochee" onclick="cacher_modele(); alterner_couleurs ();" checked> Cacher les mod√®les vides </span>
 	-->			
 	
 	<p>
@@ -59,7 +50,7 @@
 		<th>Famille</th>
 		<th>Sous-famille</th>
 		<th>Marque</th>
-		<th>ModËle</th>
+		<th>Mod√®le</th>
 		
 		<?PHP	
 		
@@ -75,7 +66,7 @@
 			
 			// On parcourt le tableau
 			foreach ($liste_des_marques as $record ) {
-				// On Ècrit les lignes en brut dans la page html
+				// On √©crit les lignes en brut dans la page html
 				
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
@@ -92,7 +83,7 @@
 					// valeur nominale pour la checkbox
 					$chkbox_state = $apreter == 1 ? "checked" : "unchecked";
 					
-					// On rÈcupËre la valeur inverse pour la poster
+					// On r√©cup√®re la valeur inverse pour la poster
 					$change_apreter = $apreter == 1 ? 0 : 1;
 										
 					$nb_matos_de_ce_type 		= $con_gespac->QueryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_type = '$type'" );
@@ -105,10 +96,10 @@
 					$afficher_modifier = $quadruplet <> "" ? "none" : "" ;
 									
 					
-					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_marques' title='Liste des matÈriels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$soustype' rel='slb_marques' title='Liste des matÈriels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_marques' title='Liste des matÈriels de marque $marque'>" . $marque . "</a> [" . $nb_matos_de_cette_marque . "] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_marques' title='Liste des matÈriels de modËle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
+					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_marques' title='Liste des mat√©riels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$soustype' rel='slb_marques' title='Liste des mat√©riels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_marques' title='Liste des mat√©riels de marque $marque'>" . $marque . "</a> [" . $nb_matos_de_cette_marque . "] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_marques' title='Liste des mat√©riels de mod√®le $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
 					
 					if ($E_chk) {
 						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=280&width=640&id=$id' rel='slb_marques' title='Formulaire d`ajout d`un materiel'><img src='img/add.png'> </a></td>";
@@ -130,9 +121,9 @@
 	
 
 <?PHP
-	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modËle</a>";
+	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un mod√®le</a>";
 
-// On se dÈconnecte de la db
+// On se d√©connecte de la db
 //$con_gespac->disconnect();
 
 
@@ -152,7 +143,7 @@
 	// On applique l'alternance des couleurs
 	//alterner_couleurs();
 	
-	// Filtre rÈmanent
+	// Filtre r√©manent
 	filter ( $('filt'), 'marque_table' );	
 	
 
@@ -165,9 +156,9 @@
 
 	function validation_suppr_marque (id, modele, marque, row, nb_de_suppr) {
 		if (nb_de_suppr == 0) {
-			var valida = confirm('Voulez-vous vraiment supprimer le modËle "' + modele + '" de marque "' + marque + '" ?');
+			var valida = confirm('Voulez-vous vraiment supprimer le mod√®le "' + modele + '" de marque "' + marque + '" ?');
 		
-			// si la rÈponse est TRUE ==> on lance la page post_marques.php
+			// si la r√©ponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
 			/*	supprimer la ligne du tableau	*/
 				document.getElementById('marque_table').deleteRow(row);
@@ -175,7 +166,7 @@
 				$('target').load("gestion_inventaire/post_marques.php?action=suppr&id=" + id);
 			}
 		} else {
-			alert('IMPOSSIBLE de supprimer cette marque car des machines y sont associÈes !');
+			alert('IMPOSSIBLE de supprimer cette marque car des machines y sont associ√©es !');
 		}
 	}
 	
@@ -197,7 +188,7 @@
 				
 		for (var r = 1; r < table.rows.length; r++){ // pour chaque ligne du tableau
 		
-		// if (table.rows[r].style.display == '') { // et si le nb de car du filtre est > ‡ la taille de la phrase courante si on efface des caractËres, le filtre marche tjs
+		// if (table.rows[r].style.display == '') { // et si le nb de car du filtre est > √† la taille de la phrase courante si on efface des caract√®res, le filtre marche tjs
 
 				ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
 				var displayStyle = 'none';
@@ -225,7 +216,7 @@
 	
 	// *********************************************************************************
 	//
-	//			Cacher les modËles vides
+	//			Cacher les mod√®les vides
 	//
 	// *********************************************************************************	
 	
@@ -246,7 +237,7 @@
 	
 	// *********************************************************************************
 	//
-	//			Alternance couleur aprËs masquage des modËles vides
+	//			Alternance couleur apr√®s masquage des mod√®les vides
 	//
 	// *********************************************************************************	
 	

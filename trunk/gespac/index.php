@@ -87,10 +87,51 @@
 					if ( !$college_existe ) $page='form_college';	// si pas de college, on charge la page du formulaire de creation d'un college
 
 					switch ($page) {
+						case "accueil" :	include ($page_accueil);	break;					
+						
 						case "materiels" :	include ("gestion_inventaire/voir_materiels.php");	break;
-						case "salles" :	include ("gestion_inventaire/voir_salles.php");	break;
+						case "marques" :	include ("gestion_inventaire/voir_marques.php");	break;
+						case "salles" :		include ("gestion_inventaire/voir_salles.php");	break;
+						
+						case "dossiers" :	include ("gestion_dossiers/voir_dossiers.php");	break;
+						
+						case "prets" :	include ("gestion_prets/voir_prets.php");	break;
+						
+						case "utilisateurs" :	include ("gestion_utilisateurs/voir_utilisateurs.php");	break;
+						case "grades" :	include ("gestion_utilisateurs/voir_grades.php");	break;
+						case "importiaca" :	include ("gestion_utilisateurs/form_comptes_iaca.php");	break;
+						case "moncompte" :	include ("gestion_utilisateurs/form_utilisateur_personnel.php");	break;
+						
+						case "recapfog" :	include ("modules/fog/recap_fog.php");	break;
+						case "wol" :	include ("modules/wol/voir_liste_wol.php");	break;
+						case "exportsperso" :	include ("modules/export/export_perso.php");	break;
+						case "taginventaire" :	include ("modules/ssn_dsit/form_import_csv.php");	break;
+						case "imagefog" :	include ("modules/image_fog/voir_liste.php");	break;
+						case "modportail" :	include ("modules/menu_portail/voir_menu_portail.php");	break;
+						case "gestfichiers" :	include ("modules/gestion_fichiers/voir_fichiers.php");	break;
+						case "migfog" :	include ("modules/migration_fog/voir_migration.php");	break;
+						case "migdossiers" :	include ("modules/migration_dossiers/migration_dossiers.php");	break;
+						case "geninventaire" :	include ("modules/generate_inv/voir_generate.php");	break;
+						case "migusers" :	include ("modules/migration_users/voir_migration_users.php");	break;
+						case "aic" :	include ("modules/snapin_aic/voir_snapin_aic.php");	break;
+						
+						case "college" :	include ("gestion_college/voir_college.php");	break;
+						case "rss" :	include ("modules/rss/rss.php");	break;
+						case "statcam" :	include ("modules/stats/camembert.php");	break;
+						case "statbat" :	include ("modules/stats/csschart.php");	break;
+						case "statparc" :	include ("modules/stats/utilisation_parc.php");	break;
+						case "infoserveur" :	include ("modules/infoserveur/infoserveur.php");	break;
+						
+						case "importocs" :	include ("gestion_donnees/voir_ocs_db.php");	break;
+						case "exports" :	include ("gestion_donnees/exports.php");	break;
+						case "dumpgespac" :	include ("gestion_donnees/dump_db_gespac.php");	break;
+						case "dumpocs" :	include ("gestion_donnees/dump_db_ocs.php");	break;
+						case "logs" :	include ("gestion_donnees/voir_logs.php");	break;
+						case "importcsv" :	include ("gestion_inventaire/form_import_csv.php");	break;
+						
+						
 						case "form_college" :	include ("gestion_college/form_college.php");	break;
-						case "accueil" :	include ($page_accueil);	break;
+						
 						default : include ($page_accueil); break;
 					}
 				
