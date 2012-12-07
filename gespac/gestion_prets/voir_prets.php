@@ -3,13 +3,11 @@
 	
 	/* fichier de visualisation des prets :
 	
-		view de la db gespac avec tous le matos du parc qui peut être prêté UNIQUEMENT
+		view de la db gespac avec tous le matos du parc qui peut Ãªtre prÃªtÃ© UNIQUEMENT
 	*/
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
-	
-	
-	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
+
+	// si le grade du compte est root, on donne automatiquement les droits d'accÃ¨s en Ã©criture. Sinon, on teste si le compte a accÃ¨s Ã  la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-05-01#", $_SESSION['droits']);
 	
 ?>
@@ -17,7 +15,7 @@
 <!--	Ancre haut de page	-->
 <a name="hautdepage"></a>
 
-<h3>Visualisation des matériels disponibles au prêt</h3><br>
+<h3>Visualisation des matÃ©riels disponibles au prÃªt</h3><br>
 
 
 <!--	DIV target pour Ajax	-->
@@ -26,11 +24,11 @@
 
 <?PHP
 
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac ) ;
 
-	// stockage des lignes retournées par sql dans un tableau nommé liste_des_prets 
-	// SAlle_id = 3 (à la fin de la rq) parce que 3 correspond à la salle "PRETS"
+	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© liste_des_prets 
+	// SAlle_id = 3 (Ã  la fin de la rq) parce que 3 correspond Ã  la salle "PRETS"
 	$liste_des_prets = $con_gespac->QueryAll ( "SELECT mat_nom, mat_serial, marque_type, marque_model, salle_nom, user_nom, mat_id, materiels.salle_id, materiels.user_id, mat_dsit, mat_etat FROM materiels, marques, salles, users WHERE ( materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id and materiels.user_id=users.user_id and materiels.salle_id=3	) ORDER BY mat_nom" );	
 
 ?>
@@ -52,9 +50,9 @@
 		<th>Nom</th>
 		<th>DSIT</th>
 		<th>Type</th>
-		<th>Modèle</th>
+		<th>ModÃ¨le</th>
 		<th>Etat</th>
-		<th>Prêté à...</th>
+		<th>PrÃªtÃ© Ã ...</th>
 		<th style="display:none"></th>
 	
 		<?PHP	
@@ -62,7 +60,7 @@
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ( $liste_des_prets as $record ) {
-				// On écrit les lignes en brut dans la page html
+				// On Ã©crit les lignes en brut dans la page html
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
@@ -95,7 +93,7 @@
 						echo "<td> <a href='#basdepage' class='bdp' id='bdp$compteur' style='display:none;'><img src='./img/down.png' title='Aller en bas de page' align=left></a></td>";
 					}
 					
-					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='slb_prets title='Caractéristiques de $mat'>$mat</a> </td>";
+					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='slb_prets title='CaractÃ©ristiques de $mat'>$mat</a> </td>";
 					
 					//echo "<td> $serial </td>";
 					echo "<td> $inventaire </td>";
@@ -104,7 +102,7 @@
 					echo "<td> $etat </td>";
 					echo "<td bgcolor=$apreter_color><a href='gestion_prets/convention_pret.php?matid=$mat_id&userid=$user_id' target=_blank> $user </a></td>";
 					
-					echo "<td style=display:none>$mat</td>"; //permet de récupérer juste le nom de la machine pour les fonctions JS de prêt et rendu des machines
+					echo "<td style=display:none>$mat</td>"; //permet de rÃ©cupÃ©rer juste le nom de la machine pour les fonctions JS de prÃªt et rendu des machines
 		
 				echo "</tr>";
 				
@@ -129,9 +127,9 @@
 		if ( $E_chk ) {
 		?>
 		
-		<input type=hidden name=pret_a_poster id=pret_a_poster value=''>	<!--	ID du pret à poster	-->
-		<input type=hidden name=row_table id=row_table value=''>			<!--	ROW du pret à poster	-->
-		<input type=hidden name=select_user id=select_user value=''>		<!--	USER_ID du pret à poster	-->
+		<input type=hidden name=pret_a_poster id=pret_a_poster value=''>	<!--	ID du pret Ã  poster	-->
+		<input type=hidden name=row_table id=row_table value=''>			<!--	ROW du pret Ã  poster	-->
+		<input type=hidden name=select_user id=select_user value=''>		<!--	USER_ID du pret Ã  poster	-->
 		
 		
 		
@@ -142,14 +140,14 @@
 		
 		
 		<div id="preter" style="visibility:hidden; text-align:center" > 
-			Préter à : &nbsp
+			PrÃ©ter Ã  : &nbsp
 			
 			<select id=user_select>
 		
 			<?PHP 
-				// Pour le remplissage de la combobox des user pour l'affectation du matériel prêté
+				// Pour le remplissage de la combobox des user pour l'affectation du matÃ©riel prÃªtÃ©
 					
-				// stockage des lignes retournées par sql dans un tableau nommé combo_des_users
+				// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© combo_des_users
 				$combo_des_users = $con_gespac->QueryAll ( "SELECT user_id, user_nom FROM users ORDER BY user_nom;" );
 							
 				foreach ($combo_des_users as $combo_option ) {
@@ -178,13 +176,13 @@
 		</div>
 		<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
 		
-		<?PHP } // fin test de droit sur le prêt ?>
+		<?PHP } // fin test de droit sur le prÃªt ?>
 		
 	</form>
 
 	
 <?PHP
-	// On se déconnecte de la db
+	// On se dÃ©connecte de la db
 	$con_gespac->Close();
 ?>
 
@@ -245,8 +243,8 @@
 	function select_cette_ligne( id, userid, row ) {
 
 		$('pret_a_poster').value = id;		
-		$('row_table').value = row;	// row du tableau à modifier
-		$('select_user').value = userid;	// userid du matos à modifier
+		$('row_table').value = row;	// row du tableau Ã  modifier
+		$('select_user').value = userid;	// userid du matos Ã  modifier
 		
 		if ( userid == 1 ) {	// On se base sur la valeur USER_ID de root
 			$('rendre').style.visibility = "hidden";
@@ -276,9 +274,9 @@
 		var user_selected_id = $('user_select').selectedIndex;
 		var user_selected_text = $('user_select').options[user_selected_id].text;	
 		
-		var valida = confirm('Voulez-vous vraiment prêter le matériel ' + mat_nom + ' qui est en état '+ mat_etat + ' à ' + user_selected_text + " ?");
+		var valida = confirm('Voulez-vous vraiment prÃªter le matÃ©riel ' + mat_nom + ' qui est en Ã©tat '+ mat_etat + ' Ã  ' + user_selected_text + " ?");
 		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
+		// si la rÃ©ponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 			
 				//	poste la page en ajax	
@@ -303,15 +301,15 @@
 		
 		var mat_nom = $('prets_table').rows[row].cells[8].innerHTML;
 	
-		var valida = confirm('Voulez-vous vraiment rendre le matériel ' + mat_nom + " ?");
+		var valida = confirm('Voulez-vous vraiment rendre le matÃ©riel ' + mat_nom + " ?");
 		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
+		// si la rÃ©ponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 					
 			//	poste la page en ajax
 			$("target").load("gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
 			
-			// recharge la page avec un délais de 1000ms
+			// recharge la page avec un dÃ©lais de 1000ms
 			window.setTimeout("$('conteneur').load('gestion_prets/voir_prets.php');", 1000);
 		}
 	}
