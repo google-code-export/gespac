@@ -1,0 +1,28 @@
+#Les modifications à appliquer pour gespac 3.5
+
+=SQL=
+
+  ===création de la table "menus"===
+
+CREATE TABLE  `gespac`.`menus` (
+`menu_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`menu_titre` VARCHAR( 255 ) NOT NULL ,
+`menu_page` TEXT NOT NULL ,
+`menu_desc` VARCHAR( 255 ) NOT NULL ,
+`menu_cat` VARCHAR( 255 ) NOT NULL
+) ENGINE = MYISAM ;
+
+
+Je ne sais pas si gérer l'étendue n'est pas une perte de temps.
+
+Partie association : 
+
+CREATE TABLE  `gespac`.`droits_assoc` (
+`droit_grade` BIGINT NOT NULL ,
+`droit_menu` INT NOT NULL ,
+`droit_type` SMALLINT NOT NULL
+) ENGINE = MYISAM ;
+
+_partie GRADES : _
+
+supprimer grade_menu
