@@ -16,8 +16,6 @@ session_start();
 
 <script type="text/javascript">	
 
-	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
 
 	// Fonction de validation de la suppression d'une marque
 	function validation_suppr_salle (id, salle, row) {
@@ -109,7 +107,7 @@ session_start();
 	
 	<center>
 	<br>
-	<table class="tablehover" width=800 id='salle_table'>
+	<table class="tablehover" id='salle_table'>
 		<th>Nom</th>
 		<th>VLAN</th>
 		<th>Etage</th>
@@ -179,9 +177,7 @@ session_start();
 <script type="text/javascript">
 	
 	window.addEvent('domready', function(){
-	
 		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
-	
 	});
 
 

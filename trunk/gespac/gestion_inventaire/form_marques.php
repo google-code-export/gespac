@@ -55,7 +55,7 @@
 				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
 				?>
 				
-				<table id="corr_table" class='tablehover'>
+				<table id="corr_table">
 
 					<?PHP
 						foreach ( $liste_correspondances as $corr ) {
@@ -190,7 +190,7 @@
 				</table>
 
 				<br>
-				<input type=submit value='Ajouter une marque' onclick="refresh_quit( $('filt').value );" >
+				<input type=submit value='Ajouter une marque'>
 				
 				<br><br>
 				<a href='#' onclick="affiche_liste_modele();">Liste des modèles</a>
@@ -255,7 +255,7 @@
 				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
 				?>
 				
-				<table id="corr_table" class='tablehover'>
+				<table id="corr_table">
 
 					<?PHP
 						foreach ( $liste_correspondances as $corr ) {
@@ -395,7 +395,7 @@
 				</table>
 
 				<br>
-				<input type=submit value='Modifier cette marque' onclick="refresh_quit( $('filt').value );" >
+				<input type=submit value='Modifier cette marque' >
 
 				</center>
 
@@ -409,12 +409,6 @@
 
 
 <script type="text/javascript"> 
-	
-	// ferme la smoothbox et rafraichit la page
-	function refresh_quit (filt) {
-		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1500);
-	}
 	
 	// masque le combo pour afficher le input et vis-versa
 	function change_combo(select_tr_id, input_tr_id, select_id, input_id) {
@@ -490,11 +484,9 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			//	poste la page en ajax
+			$('target').setStyle("display","block");
 			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
-			//	on recharge la page au bout de 1000ms
-			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
-			TB_remove();
+			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
 		}
 	}
 	
@@ -539,11 +531,9 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			//	poste la page en ajax
+			$('target').setStyle("display","block");
 			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
-			//	on recharge la page au bout de 1000ms
-			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
-			SexyLightbox.close();
+			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
 		}
 	}
 	
@@ -575,9 +565,10 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
 					SexyLightbox.close();
+					window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
 				}
 			
 			}).send(this.toQueryString());
