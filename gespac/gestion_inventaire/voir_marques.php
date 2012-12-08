@@ -16,16 +16,23 @@
 ?>
 
 
-<h3>Visualisation des marques et modèles</h3>
-<br>
+<div class="entetes" id="entete-salles">	
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
+	<span class="entetes-titre">LES MARQUES<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des marques et modèles du parc.<br>Certaines marques sont issues de la table des correspondances et ne peuvent pas être modifiées.</div>
 
-<!-- 	bouton pour le filtrage du tableau	-->
-<form>
-	<center><small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'marque_table', '1');" type="text" value=<?PHP echo $_GET['filter'];?> ></center>
-</form>
+	<span class="entetes-options">
+		
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'><img src='img/icons/add.png'></a>";?></span>
+		<span class="option">
+			<!-- 	bouton pour le filtrage du tableau	-->
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'marque_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+		</span>
+	</span>
+
+</div>
+
+<div class="spacer"></div>
 
 <?PHP 
 
@@ -35,9 +42,8 @@
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$liste_des_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_model, marque_marque FROM marques WHERE marque_suppr = 0 ORDER BY marque_type, marque_stype, marque_marque, marque_model" );
 
-	
-	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
 ?>
+
 	<!-- Gestion de l'affichage des modèles vides ici	
 		<span style="float:right;"><input type="checkbox" id="case_cochee" onclick="cacher_modele(); alterner_couleurs ();" checked> Cacher les modèles vides </span>
 	-->			
@@ -45,7 +51,7 @@
 	<p>
 	
 	<center>
-	<table class="tablehover" width=800 id='marque_table' >
+	<table class="tablehover" id='marque_table' >
 	
 		<th>Famille</th>
 		<th>Sous-famille</th>
@@ -118,17 +124,6 @@
 	</center>
 	
 	<br>
-	
-
-<?PHP
-	if ($E_chk)	echo "<a href='gestion_inventaire/form_marques.php?height=250&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'> <img src='img/add.png'>Ajouter un modèle</a>";
-
-// On se déconnecte de la db
-//$con_gespac->disconnect();
-
-
-?>
-
 
 <script type="text/javascript">
 
@@ -137,12 +132,6 @@
 	});
 
 
-	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
-	
-	// On applique l'alternance des couleurs
-	//alterner_couleurs();
-	
 	// Filtre rémanent
 	filter ( $('filt'), 'marque_table' );	
 	
@@ -160,10 +149,9 @@
 		
 			// si la réponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
-			/*	supprimer la ligne du tableau	*/
-				document.getElementById('marque_table').deleteRow(row);
-			/*	poste la page en ajax	*/
+				$('target').setStyle("display","block");
 				$('target').load("gestion_inventaire/post_marques.php?action=suppr&id=" + id);
+				window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);			
 			}
 		} else {
 			alert('IMPOSSIBLE de supprimer cette marque car des machines y sont associées !');
@@ -179,34 +167,28 @@
 
 	function filter (phrase, _id){
 
-		//$('case_cochee').checked = false;
-	
-		var words = phrase.value.toLowerCase().split(" ");
+	var words = phrase.value.toLowerCase().split(" ");
 		var table = document.getElementById(_id);
 		var ele;
 		var elements_liste = "";
 				
 		for (var r = 1; r < table.rows.length; r++){ // pour chaque ligne du tableau
-		
-		// if (table.rows[r].style.display == '') { // et si le nb de car du filtre est > à la taille de la phrase courante si on efface des caractères, le filtre marche tjs
-
-				ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-				var displayStyle = 'none';
-				
-				
-				for (var i = 0; i < words.length; i++) {
-					if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-						displayStyle = '';
-					}	
-					else {	// on masque les rows qui ne correspondent pas
-						displayStyle = 'none';
-						break;
-					}
+			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
+			var displayStyle = 'none';
+			
+			
+			for (var i = 0; i < words.length; i++) {
+				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
+					displayStyle = '';
+				}	
+				else {	// on masque les rows qui ne correspondent pas
+					displayStyle = 'none';
+					break;
 				}
-				
-				// Affichage on / off en fonction de displayStyle
-				table.rows[r].style.display = displayStyle;	
-			//}
+			}
+			
+			// Affichage on / off en fonction de displayStyle
+			table.rows[r].style.display = displayStyle;	
 		}
 		
 		alterner_couleurs ();

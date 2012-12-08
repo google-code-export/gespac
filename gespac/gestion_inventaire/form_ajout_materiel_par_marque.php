@@ -37,12 +37,6 @@
 		}
 	}
 	
-	// Ferme la smoothbox et rafraichit la page
-	function refresh_quit (filt) {
-		// lance la fonction avec un délais de 1000ms
-		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1000);
-	}
-	
 	
 /******************************************
 	*		Générateur de ssn aléatoire
@@ -69,9 +63,10 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
 					SexyLightbox.close();
+					window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
 				}
 			
 			}).send(this.toQueryString());
@@ -191,6 +186,6 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter un materiel' onclick="refresh_quit( $('filt').value );" id="post_materiel" disabled />
+			<input type=submit value='Ajouter un materiel' id="post_materiel" disabled />
 			</center>
 		</FORM>
