@@ -98,7 +98,8 @@
 				<input type="checkbox" class="opt_entete" id="chk_origine" onclick="hidethem('.td_origine', this.checked);post_modif_entete();"><label for="chk_origine">Origine</label>
 			</div>
 		</span>
-
+	
+	</span>
 </div>
 
 
@@ -413,7 +414,7 @@
 					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='slb_mat' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
 					
 					if ( $E_chk ) {
-						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?height=400&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
+						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?height=500&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='img/write.png'> </a></td>";
 						/*	suppr	*/	echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/delete.png' title='supprimer $nom'>	</a> </td>";
 					}
 					
@@ -471,9 +472,9 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php?filter=" +  $('filt').value + "');", 1500);
+					window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('filt').value + "'", 1500);			
 				}
 			
 			}).send(this.toQueryString());
@@ -499,12 +500,10 @@
 				
 				/* On déselectionne toutes les coches */
 				select_cette_ligne ( id, row, 0 );
-
-				/*	poste la page en ajax	*/
-				$('target').load("gestion_inventaire/post_materiels.php?action=suppr&id=" + id);
 				
-				/*	supprimer la ligne du tableau	*/
-				$('mat_table').deleteRow(row);
+				$('target').setStyle("display","block");
+				$('target').load("gestion_inventaire/post_materiels.php?action=suppr&id=" + id);
+				window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('filt').value + "'", 1500);
 				
 			}
 			
