@@ -4,10 +4,16 @@
 	/*src: url('SourceSansPro-Regular.ttf');*/
 	text-decoration : none;}
 
+	
+/*	GENERAL	*/	
 body {background-color:#fff; font-family:ubuntu, Verdana, Arial, Helvetica, sans-serif; margin:0;}
 h3 {	margin : 0px;}
 input, textarea, select {border:1px solid #6E6F6A;}
 a { text-decoration:none;}
+table {border:1px solid #ccc; padding:4px; text-align:center; font-size:small; border-collapse:collapse;}
+th {background-color:orange; font-size:10px; padding:5px 0px;}
+img {border:0px; vertical-align:middle;}
+
 
 #portail-menu {
 	background		: orange; 
@@ -46,8 +52,6 @@ a { text-decoration:none;}
 }
 
 
-
-
 /*	On execute tous les post dans ce div	*/
 #target {width:100%; position:fixed;	bottom:0px; left:0px; background-color:red; color:white; padding:5px; display:none;}
 
@@ -79,11 +83,13 @@ a { text-decoration:none;}
 .entetes-options img {height:24px; cursor:pointer;}
 .entetes-options form {margin:0; }
 
+
 /*	bandeau pour la partie login, grade et déconnexion	*/
 #bandeau		{font-size:12px; color:black; padding:6px 15px; margin-bottom:15px;}
 #bandeau a		{font-size:12px; color:grey;}
 #bandeau a:hover	{text-decoration:underline;}
 #bandeau img		{width:24px; }
+
 
 /*	La boite de case à cocher pour les colonnes dans matériels	*/
 #options_colonnes {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-34px; position:absolute; background-color:#E8E8E8; overflow:auto; width:120px; box-shadow:1px 5px 10px #888;}
@@ -101,14 +107,6 @@ a { text-decoration:none;}
 
 
 
-table {
-	border		: 1px solid #ccc;
-	padding		: 4px;
-	text-align	: center; 
-	font-size	: small;	
-	border-collapse:collapse;
-	border-radius		: 5px;
-}
 
 .form_table {
 	border		: 1px solid #ccc;
@@ -121,17 +119,6 @@ table {
 /*	Les cases contenant les boutons supprimé, modifié, ...	*/
 .buttons {width:20px;}
 
-
-th {
-	background-color : orange;
-	font-size		 : 10px;
-	padding			 : 5px 0px;
-}
-
-img { 
-	border:0px;
-	vertical-align:middle;
-}
 
 .tablehover {min-width:950px;}
 .tablehover tr:hover {background-color:#FFD769; padding:2px 0px;}
@@ -214,3 +201,8 @@ img {
 .rss_title a{font-size:14px;}
 #rss_content {font-size:12px;}
 .rss_news {border:1px solid black; padding:10px; margin:10px; background-color:#C0FF96; border-radius:5px; white-space:pre-wrap;}
+
+/******************************************* 	SCROLLBAR pour WEBKIT uniquement  *******************************************/
+::-webkit-scrollbar {width:10px; height:10px;}
+::-webkit-scrollbar-track { border-radius:3px;}
+::-webkit-scrollbar-thumb { border-radius:3px; background-color:orange; border:1px solid black;}

@@ -470,25 +470,7 @@
 			}
 		}
 	}	
-	
-	
-	// *********************************************************************************
-	//
-	//			AJOUT d'un MARQUE par sa CORRESPONDANCE
-	//
-	// *********************************************************************************
-	
-	function validation_ajout_marque (corr_id, marque) {
-			
-		var valida = confirm('Voulez-vous vraiment ajouter la marque ' + marque + ' ?');
-		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
-		if (valida) {
-			$('target').setStyle("display","block");
-			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
-			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
-		}
-	}
+
 	
 	
 	// *********************************************************************************
@@ -515,8 +497,25 @@
 	}
 	
 	
+	// *********************************************************************************
+	//
+	//			AJOUT d'un MARQUE par sa CORRESPONDANCE
+	//
+	// *********************************************************************************
 	
-	
+	function validation_ajout_marque (corr_id, marque) {
+			
+		var valida = confirm('Voulez-vous vraiment ajouter la marque ' + marque + ' ?');
+		
+		// si la réponse est TRUE ==> on lance la page post_marques.php
+		if (valida) {
+			$('target').setStyle("display","block");
+			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
+			SexyLightbox.close();
+			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
+		}
+	}	
+		
 	
 		
 	// *********************************************************************************
@@ -533,6 +532,7 @@
 		if (valida) {
 			$('target').setStyle("display","block");
 			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
+			SexyLightbox.close();
 			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
 		}
 	}
