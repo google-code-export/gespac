@@ -1,14 +1,6 @@
 <!--
 
-
-Cette page est chargée lorsqu'on clique sur le nom d'un materiel dans la page voir_materiels.php
-
-les données sont récupérées dans la base OCS.
-
-Attention pour les adresses MAC : le code ne sort que la première valeur ! A MODIIIIIIFFFFIIIIER !
-Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
-
-
+	Cette page est chargée lorsqu'on clique sur le nom d'un materiel dans la page voir_materiels.php
 
 -->
 
@@ -178,7 +170,7 @@ Pour faire la distinction WIFI / ETHERNET, utiliser networks.SPEED de OCSWEB !
 echo "<form method='GET' name='frmTest' id='frmTest'>";
 	
 	echo "<CENTER>";
-	echo "<H1> $NAME </H1>";
+	echo "<H1> $mat_nom </H1>";
 	
 		echo "<TABLE width=550>";
 		echo "<TR>";
@@ -238,7 +230,7 @@ echo "<form method='GET' name='frmTest' id='frmTest'>";
 		echo "<TR>";
 			echo "<TD COLSPAN=2><font color=red><b>$message_fog</b></font></TD>";
 		echo "</TR>";
-		
+
 		if ($image_fog) {
 			echo "<TR class='tr1'>";
 				echo "<TD>Image associée</TD>";
@@ -279,7 +271,11 @@ echo "<form method='GET' name='frmTest' id='frmTest'>";
 		echo "</TR>";
 		
 		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
-			echo "<TR>";
+		echo "<TR>";
+			echo "<TD>NOM</TD>";
+			echo "<TD>$NAME</TD>";
+		echo "</TR>";
+		echo "<TR>";
 				echo "<TD>DOMAINE</TD>";
 				echo "<TD>$USERDOMAIN</TD>";
 			echo "</TR>";		
