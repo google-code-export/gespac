@@ -61,12 +61,17 @@
 		?>
 	
 		<DIV id="page">
+			
+			<DIV id="toggle-menu"><img src="img/icons/menu.png"></DIV>
+			
 			<DIV id="menu">
 				<?PHP	
 					include ("bandeau.php");
 					include ("menu.php");	
 				?>
 			</DIV>
+			
+		
 			
 			<DIV id="contenu">
 		

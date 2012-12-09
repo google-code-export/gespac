@@ -64,7 +64,7 @@ img {border:0px; vertical-align:middle;}
 #contenu {background-color : white;	float:left;	width:auto;	overflow:auto; margin-left:230px;}
 
 /*	menu de gauche	*/
-#menu { width : 225px; margin-top : 80px; position : fixed;}
+#menu { width:225px; margin-top:80px; position:fixed; background-color:#fff;}
 #menu  img{ width:24px; margin-right:4px;}
 #menu-global {}
 .menu-block {margin-bottom:15px;}
@@ -72,6 +72,9 @@ img {border:0px; vertical-align:middle;}
 .menu-items {display:none; }
 .menu-item {padding:2px 10px;font-size:11px; }
 .menu-item:hover {background-color:#E3E3E3;}
+/*	Toggle menu	de gauche quand la taille de l'écran est trop juste*/
+#toggle-menu {position : fixed; top:42px; left:10px; display:none; cursor:pointer;}
+#toggle-menu img {width:20px; }
 
 
 /*	Entetes des pages (avec les options dedans)	*/

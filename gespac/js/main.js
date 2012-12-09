@@ -14,11 +14,34 @@
 
 
 window.addEvent('domready', function(){
+
+	// init l'affichage
+	toggleAffichage(1000);
+
+
+	/////////////////////////////////////////////////////////////
+	//	Change l'affichage en fonction de la taille de la fenetre
+	/////////////////////////////////////////////////////////////
+	function toggleAffichage(size) {
+		if (window.getSize().x < size ) {
+			$('menu').setStyle("display", "none");
+			$('menu').setStyle("border", "1px solid black");
+			$('contenu').setStyle("margin-left", "10px");
+			$('toggle-menu').setStyle("display", "block");
+		}
+		else {
+			$('menu').setStyle("display", "block");
+			$('menu').setStyle("border", "0px");
+			$('contenu').setStyle("margin-left", "230px");
+			$('toggle-menu').setStyle("display", "none");
+		}
+		
+	}
+	
 	
 	///////////////////////////////////////////
 	//		AFFICHE L'AIDE EN LIGNE
 	///////////////////////////////////////////
-
 	$$('.help-button').addEvent('click', function(e)  {
 		
 		if ($$(".helpbox").getStyle("display") == "none")
@@ -28,25 +51,23 @@ window.addEvent('domready', function(){
 	});
 	
 	
+	///////////////////////////////////////////
+	//	Si la taille de la page est trop juste
+	///////////////////////////////////////////
 	window.addEvent('resize', function(){
-	
-		// On ajuste la taille de la barre d'entête
-		$("entete-materiels").style.width = $("contenu").getStyle('width');
-		
-		if (window.getSize().x < 950 ) {
-			console.log ("redim pliz !");
-		}
-	
-		/*
-		
-			si la taille de la fenêtre passe sous 950px
-			- on masque le menu
-			- on colle un bouton genre mouseover, affiche le menu
-			- on vire le margin-left du div page
-			- on réajuste la taille de la barre d'entête
-		
-		*/
-		
+		toggleAffichage(1000);
 	});
+	
+	
+	///////////////////////////////////////////
+	//	toggle du menu quand la page est trop petite
+	///////////////////////////////////////////
+	$('toggle-menu').addEvent('click', function(e)  {
+		if ($("menu").getStyle("display") == "none")
+			$('menu').setStyle("display", "block");
+		else
+			$('menu').setStyle("display", "none");
+	});
+		
 	
 });

@@ -41,11 +41,11 @@
 		</span>
 		
 		<span class="option">	<!-- Modifier le lot -->
-			<?PHP if ( $E_chk ) {echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/icons/modif1.png'></a></span>";}?>
+			<?PHP if ( $E_chk ) {echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?height=300&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/icons/modif1.png'></a></span>";}?>
 		</span>
 		
 		<span class="option">	<!-- renommer le lot -->
-		<?PHP if ( $E_chk ) {echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/icons/pen.png'></a> </span>";} ?>
+		<?PHP if ( $E_chk ) {echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?height=280&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/icons/pen.png'></a> </span>";} ?>
 		</span>
 		
 		<span class="option">	<!-- affecter une salle au lot -->
@@ -434,6 +434,12 @@
 
 
 <script type="text/javascript">	
+
+	window.addEvent('resize', function(){
+		// On ajuste la taille de la barre d'entête
+		$("entete-materiels").style.width = $("contenu").getStyle('width');
+	});
+
 
 	window.addEvent('domready', function(){
 	
