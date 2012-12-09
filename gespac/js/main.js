@@ -36,6 +36,9 @@ window.addEvent('domready', function(){
 			$('toggle-menu').setStyle("display", "none");
 		}
 		
+		// La hauteur du menu principal
+		$('menu').setStyle("max-height", window.getSize().y-100 + "px");
+		
 	}
 	
 	
