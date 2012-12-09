@@ -64,7 +64,7 @@ img {border:0px; vertical-align:middle;}
 #contenu {background-color : white;	float:left;	width:auto;	overflow:auto; margin-left:230px;}
 
 /*	menu de gauche	*/
-#menu { width:225px; margin-top:80px; position:fixed; background-color:#fff;}
+#menu { width:225px; margin-top:80px; position:fixed; background-color:#fff; z-index:12;}
 #menu  img{ width:24px; margin-right:4px;}
 #menu-global {}
 .menu-block {margin-bottom:15px;}
