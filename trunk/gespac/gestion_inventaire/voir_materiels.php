@@ -13,6 +13,10 @@
 	if ( !isset($_SESSION['entetes']) ) $_SESSION['entetes'] = "0111001111";	// Cases à cocher par défaut			
 ?>
 
+
+
+<!-- L'ENTETE DE LA PAGE ET SES OPTIONS	-->
+
 <div class="entetes" id="entete-materiels">	
 
 	<span class="entetes-titre">LES MATERIELS<img class="help-button" src="img/icons/info.png"></span><span id='nb_selectionnes'></span>
@@ -22,48 +26,84 @@
 				
 		<span class="option">	<!-- filtre du matériels -->
 			<form>
-				<small><a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:1 pour la première colonne, CDI:0 pour tout le tableau) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:1 / ecran:1` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:1+fonctionnel:5/ecran:1+d3e:10`.');">[?]</a></small> 
+				<small><a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:t pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:s pour la salle, CDI:t pour tout le tableau, ...) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:n / ecran:n` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:n+fonctionnel:e/ecran:n+d3e:s`.');">[?]</a></small> 
 				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
 				<span id="nb_filtre" title='nombre de matériels affichés'></span>
 			</form>
 		</span>
 		
-		<span class="option">		<!-- Ajout d'un matériel et Modification par lot-->
-			
-			<?PHP
-				echo "<span><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='img/icons/csv.png'></a></span>";
-				if ( $E_chk ) {
-					echo "<span><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='img/icons/add.png'></a></span>";
-					echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/icons/modif1.png'></a></span>";
-					echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/icons/pen.png'></a> </span>";
-				}
-			?>
-			
-				<!-- Gestion de l'affichage des colonnes ici. -->	
-						
-				<a href='#' onclick='showhide_options();'><img src="img/icons/eye.png" title="colonnes à montrer ou à cacher"></a>
-				<div id="options_colonnes">
-					<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();"><label for="chk_pret">Prêt</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();"><label for="chk_dsit">DSIT</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_serial" onclick="hidethem('.td_serial', this.checked);post_modif_entete();"><label for="chk_serial">Serial</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_etat" onclick="hidethem('.td_etat', this.checked);post_modif_entete();"><label for="chk_etat">Etat</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_type" onclick="hidethem('.td_type', this.checked);post_modif_entete();"><label for="chk_type">Famille</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_stype" onclick="hidethem('.td_stype', this.checked);post_modif_entete();"><label for="chk_stype">Sous Famille</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_modele" onclick="hidethem('.td_modele', this.checked);post_modif_entete();"><label for="chk_modele">Modèle</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_marque" onclick="hidethem('.td_marque', this.checked);post_modif_entete();"><label for="chk_marque">Marque</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_salle" onclick="hidethem('.td_salle', this.checked);post_modif_entete();"><label for="chk_salle">Salle</label><br>
-					<input type="checkbox" class="opt_entete" id="chk_origine" onclick="hidethem('.td_origine', this.checked);post_modif_entete();"><label for="chk_origine">Origine</label>
-			</div>
-				
-			
+		<span class="option">	<!-- Créer CSV -->
+			<?PHP echo "<span><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='img/icons/csv.png'></a></span>";	?>
 		</span>
 		
+		<span class="option">	<!-- Ajout Matériel -->
+		<?PHP if ( $E_chk ) {echo "<span><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='img/icons/add.png'></a></span>";} ?>
+		</span>
 		
-	</span>
+		<span class="option">	<!-- Modifier le lot -->
+			<?PHP if ( $E_chk ) {echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?height=200&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/icons/modif1.png'></a></span>";}?>
+		</span>
+		
+		<span class="option">	<!-- renommer le lot -->
+		<?PHP if ( $E_chk ) {echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?height=180&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/icons/pen.png'></a> </span>";} ?>
+		</span>
+		
+		<span class="option">	<!-- affecter une salle au lot -->
+			<?PHP if ( $E_chk ) { ?>
+				<span id='affect_selection'><a href='#' onclick='toggle_affectsalle();'><img src="img/icons/refresh.png" title="Affectation directe à une salle"></a></span>
+				<div id='affect_box'>
+					<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="post_form" >
+						<input type=hidden name='materiel_a_poster' id='materiel_a_poster' value=''>	
+
+					<?PHP 
+						echo "<select name=salle_select id=salle_select>";
+				
+						// Pour le remplissage de la combobox des salles pour l'affectation
+							
+						// stockage des lignes retournées par sql dans un tableau nommé combo_des_salles
+						$combo_des_salles = $con_gespac->QueryAll ( "SELECT salle_id, salle_nom FROM salles ORDER BY salle_nom;" );
+						
+						foreach ($combo_des_salles as $combo_option ) {
+						
+							$option_id 		= $combo_option['salle_id'];
+							$option_salle 	= $combo_option['salle_nom'];
+							
+							//On colle par défaut la salle STOCK, donc ID = 1
+							$defaut = $option_id == 1 ? "selected" : "";
+							
+							echo "<option value=$option_id $defaut> $option_salle </option>";
+						}
+					
+						echo "</select>";
+						echo "<input type=submit value='Affecter' >";
+					?>
+
+					</form>
+				</div>
+			<?PHP } ?>
+		</span>
+						
+		<span class="option">	<!-- Affichage des colonnes -->		
+			<a href='#' onclick='showhide_options();'><img src="img/icons/eye.png" title="colonnes à montrer ou à cacher"></a>
+			<div id="options_colonnes">
+				<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();"><label for="chk_pret">Prêt</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();"><label for="chk_dsit">DSIT</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_serial" onclick="hidethem('.td_serial', this.checked);post_modif_entete();"><label for="chk_serial">Serial</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_etat" onclick="hidethem('.td_etat', this.checked);post_modif_entete();"><label for="chk_etat">Etat</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_type" onclick="hidethem('.td_type', this.checked);post_modif_entete();"><label for="chk_type">Famille</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_stype" onclick="hidethem('.td_stype', this.checked);post_modif_entete();"><label for="chk_stype">Sous Famille</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_modele" onclick="hidethem('.td_modele', this.checked);post_modif_entete();"><label for="chk_modele">Modèle</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_marque" onclick="hidethem('.td_marque', this.checked);post_modif_entete();"><label for="chk_marque">Marque</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_salle" onclick="hidethem('.td_salle', this.checked);post_modif_entete();"><label for="chk_salle">Salle</label><br>
+				<input type="checkbox" class="opt_entete" id="chk_origine" onclick="hidethem('.td_origine', this.checked);post_modif_entete();"><label for="chk_origine">Origine</label>
+			</div>
+		</span>
 
 </div>
 
+
 <div class=spacer></div>
+
 
 <?PHP
 
@@ -251,43 +291,7 @@
 ?>
 	
 	
-	<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="post_form" >
-	
-		<!--------------------------------------------	LISTE DES ID A POSTER	------------------------------------------------>
-		<input type=hidden name='materiel_a_poster' id='materiel_a_poster' value=''>	
-		
-		<span>
-		
-		<?PHP 
-			if ( $E_chk ) {	// test de droit en écriture sur l'affectation de matériel, l'ajout de matériel et la modification par lot
-		
-				echo "<select name=salle_select id=salle_select>";
-		
-				// Pour le remplissage de la combobox des salles pour l'affectation
-					
-				// stockage des lignes retournées par sql dans un tableau nommé combo_des_salles
-				$combo_des_salles = $con_gespac->QueryAll ( "SELECT salle_id, salle_nom FROM salles ORDER BY salle_nom;" );
-				
-				foreach ($combo_des_salles as $combo_option ) {
-				
-					$option_id 		= $combo_option['salle_id'];
-					$option_salle 	= $combo_option['salle_nom'];
-					
-					//On colle par défaut la salle STOCK, donc ID = 1
-					$defaut = $option_id == 1 ? "selected" : "";
-					
-					echo "<option value=$option_id $defaut> $option_salle </option>";
-				}
-			
-			echo "</select>";
-			echo "<input type=submit value='Affecter' >";
-				
-			}
-			?>
-			
-		</span>
-				
-	</form>
+
 	
 	
 	<center>
@@ -426,14 +430,6 @@
 
 	<br>
 
-
-	<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
-	
-<?PHP
-	// On se déconnecte de la db
-	$con_gespac->Close();
-?>
-
 </body>
 
 
@@ -508,7 +504,7 @@
 			
 		} else {
 			
-			alert('Cette machine est déjà prêtée ! Rendez-la avant la suppression !');
+			alert('Cette machine est prêtée ! Rendez-la avant la suppression !');
 		}
 	}
 
@@ -602,10 +598,12 @@
 			if ( $('materiel_a_poster').value != "" ) {
 				$('modif_selection').setStyle("display","inline");
 				$('rename_selection').setStyle("display","inline");
+				$('affect_selection').setStyle("display","inline");
 				nb_selectionnes.setStyle("display","inline");
 			} else { 
 				$('modif_selection').setStyle("display","none");
 				$('rename_selection').setStyle("display","none");
+				$('affect_selection').setStyle("display","none");
 				nb_selectionnes.setStyle("display","none");
 			}
 		}
@@ -676,6 +674,19 @@
 		}
 	}
 	
+	// *********************************************************************************
+	//
+	//			Montre ou masque l'affecation directe à une salle
+	//
+	// *********************************************************************************	
+	
+	function toggle_affectsalle() {
+		if ( $('affect_box').style.display == 'block' ) {
+			$('affect_box').style.display = 'none'; 
+		} else {
+			$('affect_box').style.display = 'block';
+		}
+	}	
 	
 	
 	// *********************************************************************************
@@ -685,7 +696,7 @@
 	// *********************************************************************************	
 	
 	function order_by (tri, phrase) {
-		$('tableau').load("gestion_inventaire/voir_materiels_table.php?tri=" + tri + "&filter=" + phrase);
+		document.location.href="index.php?page=materiels&tri=" + tri + "&filter=" + phrase;
 	}
 	
 	
