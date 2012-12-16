@@ -111,15 +111,15 @@
 						
 						echo "<tr>";
 							echo "<td class='td_$txt_etat'>$txt_etat</td>";
-							echo "<td>$txt_date</td>";
-							echo "<td>$user_nom</td>";
+							echo "<td class='td_$txt_etat'>$txt_date</td>";
+							echo "<td class='td_$txt_etat'>$user_nom</td>";
 						echo "</tr>";
 						
 						echo "<tr>";
 							echo "<td colspan=4>$txt_texte</td>";
 						echo "</tr>";
 						
-						echo "<tr><td colspan=4 style='border:none;background-color:white;'>&nbsp;</td></tr>";
+						//echo "<tr><td colspan=4 style='border:none;background-color:white;'>&nbsp;</td></tr>";
 						
 					}
 					
