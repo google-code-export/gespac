@@ -47,7 +47,7 @@
 <?PHP 
 	$liste_dossiers = $con_gespac->QueryAll ("SELECT dossiers.dossier_id as dossier_id, dossier_type, dossier_mat, txt_date, txt_etat, txt_texte FROM dossiers, dossiers_textes WHERE dossiers.dossier_id=dossiers_textes.dossier_id GROUP BY dossiers.dossier_id ORDER BY dossier_id DESC;");
 		
-	echo "<table id='dossiers_table'>";
+	echo "<table id='dossiers_table' class='tablehover'>";
 	
 		echo "<th>&nbsp;</th>";
 		echo "<th>dossier</th>";
@@ -152,6 +152,7 @@
 	window.addEvent('domready', function(){ 
 		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_dossiers'});	
 	});
+		
 	
 	// Fonction de validation de la suppression d'une marque
 	function validation_suppr_dossier (id) {
