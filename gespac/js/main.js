@@ -14,9 +14,7 @@
 
 
 window.addEvent('domready', function(){
-
-	$$(".entetes").setStyle("width", $("contenu").getStyle('width'));		
-
+	
 	// init l'affichage
 	toggleAffichage(1000);
 
@@ -41,6 +39,9 @@ window.addEvent('domready', function(){
 		// La hauteur du menu principal
 		$('menu').setStyle("max-height", window.getSize().y-100 + "px");
 		
+		// La barre d'entête
+		$$(".entetes").setStyle("width", $("contenu").getStyle('width'));
+		
 	}
 	
 	
@@ -59,7 +60,7 @@ window.addEvent('domready', function(){
 	///////////////////////////////////////////
 	//	Si la taille de la page est trop juste
 	///////////////////////////////////////////
-	window.addEvent('resize', function(){
+	window.addEvent('resize', function(){	
 		toggleAffichage(1000);
 	});
 	

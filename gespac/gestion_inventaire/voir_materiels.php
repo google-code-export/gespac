@@ -436,12 +436,6 @@
 
 <script type="text/javascript">	
 
-	window.addEvent('resize', function(){
-		// On ajuste la taille de la barre d'entête
-		$("entete-materiels").style.width = $("contenu").getStyle('width');
-	});
-
-
 	window.addEvent('domready', function(){
 	
 		// activation des slb
