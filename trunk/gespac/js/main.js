@@ -15,6 +15,8 @@
 
 window.addEvent('domready', function(){
 
+	$$(".entetes").setStyle("width", $("contenu").getStyle('width'));		
+
 	// init l'affichage
 	toggleAffichage(1000);
 

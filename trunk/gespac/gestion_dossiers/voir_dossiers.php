@@ -1,5 +1,4 @@
 <?PHP
-	
 	session_start();
 
 /*
@@ -10,12 +9,6 @@
 */
 
 
-	// lib
-	require_once ('../fonctions.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Sql.class.php');
-
-
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
@@ -24,27 +17,32 @@
 	
 ?>
 
-<h3>Visualisation des dossiers</h3>
 
-<br>
+<div class="entetes" id="entete-dossiers">	
 
+	<span class="entetes-titre">LES DOSSIERS<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Cette page permet de gérer les dossiers, leur création, modification et suppression.</div>
 
-<form id="filterform">
-	<center><small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'dossiers_table');" type="text" value=<?PHP echo $_GET['filter'];?> ></center>
-</form>
+	<span class="entetes-options">
+		
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_dossiers/form_dossiers.php?height=750&width=750&id=-1' rel='slb_dossiers' title='Ajouter un dossier'> <img src='img/icons/add.png'></a>";?></span>
+		<span class="option">
+			<!-- 	bouton pour le filtrage du tableau	-->
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'dossiers_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+		</span>
+	</span>
 
+</div>
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
+<div class="spacer"></div>
+
 
 <?PHP 
-	if ( $E_chk ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=-1');\"> <img src='img/add.png'>Créer un dossier </a>"; 
-	
 	$filtre = $_GET["filter"];	
 		
 	$liste_dossiers = $con_gespac->QueryAll ("SELECT dossiers.dossier_id as dossier_id, dossier_type, dossier_mat, txt_date, txt_etat, txt_texte FROM dossiers, dossiers_textes WHERE dossiers.dossier_id = dossiers_textes.dossier_id GROUP BY dossiers.dossier_id ORDER BY dossier_id DESC;");
 		
-	echo "<table id='dossiers_table' width='900px'>";
+	echo "<table id='dossiers_table'>";
 	
 		echo "<th>&nbsp;</th>";
 		echo "<th>dossier</th>";
@@ -141,12 +139,11 @@
 
 <script>
 	
-	window.addEvent('domready', function(){
-	  
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_dossiers'});	  
+	window.addEvent('domready', function(){ 
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_dossiers'});	
 	});
 	
-		// Fonction de validation de la suppression d'une marque
+	// Fonction de validation de la suppression d'une marque
 	function validation_suppr_dossier (id) {
 	
 		var valida = confirm('Voulez-vous vraiment supprimer le dossier ' + id + ' ?\n ATTENTION, toutes les pages du dossier seront détruites !');
