@@ -41,6 +41,8 @@ window.addEvent('domready', function(){
 		
 		// La barre d'entête
 		$$(".entetes").setStyle("width", $("contenu").getStyle('width'));
+		$$(".entetes-titre").setStyle("width", "auto");		// règle le problème sous firefox : width:auto ne marche pas depuis le css pour une raison étrange ...
+		$$(".entetes-options").setStyle("width", "auto");
 		
 	}
 	
