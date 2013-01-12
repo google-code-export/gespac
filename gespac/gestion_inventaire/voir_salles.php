@@ -90,9 +90,6 @@ session_start();
 
 </div>
 
-
-
-
 <div class="spacer"></div>
 
 <?PHP 
@@ -150,8 +147,8 @@ session_start();
 					
 					
 					if ( $E_chk && $est_modifiable ) {
-						echo "<td class='buttons'><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/write.png'> </a></td>";
-						echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png'>	</a> </td>";
+						echo "<td class='buttons'><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/icons/edit.png'> </a></td>";
+						echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/icons/delete.png'>	</a> </td>";
 							
 					} else {
 						echo "<td>&nbsp</td>	<td>&nbsp</td>";

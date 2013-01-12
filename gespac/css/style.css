@@ -64,7 +64,7 @@ img {border:0px; vertical-align:middle;}
 #contenu {background-color : white;	float:left;	width:auto;	overflow:auto; margin-left:230px;}
 
 /*	menu de gauche	*/
-#menu { width:225px; margin-top:80px; position:fixed; background-color:#fff; z-index:12; overflow:scroll;}
+#menu { width:225px; margin-top:80px; position:fixed; background-color:#fff; z-index:12; overflow:auto;}
 #menu  img{ width:24px; margin-right:4px;}
 #menu-global {}
 .menu-block {margin-bottom:15px;}
@@ -209,7 +209,7 @@ img {border:0px; vertical-align:middle;}
 #rss_content {font-size:12px;}
 .rss_news {border:1px solid black; padding:10px; margin:10px; background-color:#C0FF96; border-radius:5px; white-space:pre-wrap;}
 
-/******************************************* 	SCROLLBAR pour WEBKIT uniquement  *******************************************/
+/******************************************* 	SCROLLBAR pour WEBKIT uniquement  ******************************************
 ::-webkit-scrollbar {width:10px; height:10px;}
 ::-webkit-scrollbar-track { border-radius:3px;}
-::-webkit-scrollbar-thumb { border-radius:3px; background-color:orange; border:1px solid black;}
+::-webkit-scrollbar-thumb { border-radius:3px; background-color:orange; border:1px solid black;}*/
