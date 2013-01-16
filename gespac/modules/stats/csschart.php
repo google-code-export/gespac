@@ -1,19 +1,30 @@
-<?PHP
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-	// cnx √† gespac
+<script type="text/javascript">	
+	// init de la couleur de fond
+	$('conteneur').style.backgroundColor = "#fff";
+</script>
+	
+	
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>	
+
+<?PHP
+  
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// rËgle le problËme d'encodage des caractËres
+	
+	// lib
+	require_once ('../../fonctions.php');
+	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
+		
+	// cnx ‡ gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
-	// nb de mat√©riels
+	// nb de matÈriels
 	$nb_mat = $con_gespac->QueryOne ( "SELECT count(mat_nom) FROM materiels" );
 
 ?>
-
-
-<div class="entetes">	
-	<span class="entetes-titre">LES STATISTIQUES BATONS<img class="help-button" src="img/icons/info.png"></span>
-	<div class="helpbox">Cette page permet l'affichage les statistiques de r√©partition par marque, par salle et par √©tat de fonctionnement du parc. </div>
-</div>
-
 
 <!--
 
@@ -23,12 +34,12 @@
 
 
   <div class="section">
-    <h2>R√©partition par marque</h2>
+    <h2>RÈpartition par marque</h2>
 
     <ul class="chartlist">
 
 	<?PHP
-		// stockage des lignes retourn√©es par sql dans un tableau nomm√© liste_des_materiels
+		// stockage des lignes retournÈes par sql dans un tableau nommÈ liste_des_materiels
 		$liste = $con_gespac->QueryAll ("SELECT CONCAT(marque_marque, ' ', marque_model) as mat, COUNT(mat_nom) as compte FROM marques, materiels WHERE materiels.marque_id = marques.marque_id GROUP BY mat");
 						
 		foreach ($liste as $record) {
@@ -44,9 +55,9 @@
 			echo "<li>";
 				// label
 				echo "<a>$marque</a>";
-				// nb d'√©l√©ments
+				// nb d'ÈlÈments
 				echo "<span class='count'>$val</span>";
-				// row colori√©e
+				// row coloriÈe
 				echo "<span class='index' style='width: $pc%'>($pc %)</span>";
 			echo "</li>";
 		}
@@ -66,12 +77,12 @@
 
 
   <div class="section">
-    <h2>R√©partition par salle</h2>
+    <h2>RÈpartition par salle</h2>
 
     <ul class="chartlist">
 
 	<?PHP
-		// stockage des lignes retourn√©es par sql dans un tableau nomm√© liste_des_materiels
+		// stockage des lignes retournÈes par sql dans un tableau nommÈ liste_des_materiels
 		$liste = $con_gespac->QueryAll ( "SELECT salle_nom, count( mat_nom ) as compte FROM materiels, salles WHERE materiels.salle_id = salles.salle_id GROUP BY salle_nom" );
 		
 		foreach ($liste as $record) {
@@ -84,9 +95,9 @@
 			echo "<li>";
 				// label
 				echo "<a>$salle</a>";
-				// nb d'√©l√©ments
+				// nb d'ÈlÈments
 				echo "<span class='count'>$val</span>";
-				// row colori√©e
+				// row coloriÈe
 				echo "<span class='index' style='width: $pc%'>($pc %)</span>";
 			echo "</li>";
 		}
@@ -111,7 +122,7 @@
     <ul class="chartlist">
 
 	<?PHP
-		// stockage des lignes retourn√©es par sql dans un tableau nomm√© liste_des_materiels
+		// stockage des lignes retournÈes par sql dans un tableau nommÈ liste_des_materiels
 		$liste = $con_gespac->QueryAll ( "SELECT mat_etat, count( mat_etat ) as compte FROM materiels GROUP BY mat_etat" );
 
 		foreach ($liste as $record) {
@@ -124,9 +135,9 @@
 			echo "<li>";
 				// label
 				echo "<a>$etat</a>";
-				// nb d'√©l√©ments
+				// nb d'ÈlÈments
 				echo "<span class='count'>$val</span>";
-				// row colori√©e
+				// row coloriÈe
 				echo "<span class='index' style='width: $pc%'>($pc %)</span>";
 			echo "</li>";
 		}

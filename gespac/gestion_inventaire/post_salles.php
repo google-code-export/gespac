@@ -1,8 +1,13 @@
-﻿<?PHP
+<?PHP
 
 
-	/* 
-		fichier de creation / modif / suppr des salles
+	/* fichier de creation / modif / suppr des salles
+	
+	Si j'ai un ID c'est une modification
+	Si j'en ai pas c'est une création
+	
+	reste à coder pour la suppression
+	
 	*/
 	
 	include ('../includes.php');
@@ -36,7 +41,7 @@
 		//On récupère le nom de la salle en fonction du $salle_id
 		$salle_nom = $con_gespac->QueryOne ( "SELECT salle_nom FROM salles WHERE salle_id = $id" );
 
-		echo $log_texte = "La salle $salle_nom a été supprimée";
+		$log_texte = "La salle $salle_nom a été supprimée";
 
 		$req_log_suppr_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression salle', '$log_texte' );";
 		$con_gespac->Execute ( $req_log_suppr_salle );

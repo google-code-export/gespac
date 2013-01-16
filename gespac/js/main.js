@@ -12,70 +12,21 @@
 		else return true;
 	};
 
+	//	Pour afficher une page	dans un div particulier
+	function AffichePage(div_dest, page) {
+		$(div_dest).set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres pour ne pas dépasser la taille maxi d'une url)
+		$(div_dest).load(page);
+	};
+	
+	
+/*
+* @name: resizeContent
+* @param : rien
+* @return : rien
+* @description : Permet le redimensionnement du contenu de la page à la volée  
+* @reference : toutes les pages
+*/
 
-window.addEvent('domready', function(){
-	
-	// init l'affichage
-	toggleAffichage(1000);
-
-
-	/////////////////////////////////////////////////////////////
-	//	Change l'affichage en fonction de la taille de la fenetre
-	/////////////////////////////////////////////////////////////
-	function toggleAffichage(size) {
-		if (window.getSize().x < size ) {
-			$('menu').setStyle("display", "none");
-			$('menu').setStyle("border", "1px solid black");
-			$('contenu').setStyle("margin-left", "10px");
-			$('toggle-menu').setStyle("display", "block");
-		}
-		else {
-			$('menu').setStyle("display", "block");
-			$('menu').setStyle("border", "0px");
-			$('contenu').setStyle("margin-left", "230px");
-			$('toggle-menu').setStyle("display", "none");
-		}
-		
-		// La hauteur du menu principal
-		$('menu').setStyle("max-height", window.getSize().y-100 + "px");
-		
-		// La barre d'entête
-		$$(".entetes").setStyle("width", $("contenu").getStyle('width'));
-		$$(".entetes-titre").setStyle("width", "auto");		// règle le problème sous firefox : width:auto ne marche pas depuis le css pour une raison étrange ...
-		$$(".entetes-options").setStyle("width", "auto");
-		
-	}
-	
-	
-	///////////////////////////////////////////
-	//		AFFICHE L'AIDE EN LIGNE
-	///////////////////////////////////////////
-	$$('.help-button').addEvent('click', function(e)  {
-		
-		if ($$(".helpbox").getStyle("display") == "none")
-			$$(".helpbox").setStyle("display", "inline");
-		else
-			$$(".helpbox").setStyle("display", "none");
-	});
-	
-	
-	///////////////////////////////////////////
-	//	Si la taille de la page est trop juste
-	///////////////////////////////////////////
-	window.addEvent('resize', function(){	
-		toggleAffichage(1000);
-	});
-	
-	
-	///////////////////////////////////////////
-	//	toggle du menu quand la page est trop petite
-	///////////////////////////////////////////
-	$('toggle-menu').addEvent('click', function(e)  {
-		if ($("menu").getStyle("display") == "none")
-			$('menu').setStyle("display", "block");
-		else
-			$('menu').setStyle("display", "none");
-	});
-		
-	
-});
+function resizeContent() {
+	$('conteneur').style.height = window.getSize().y -240 + 'px';
+}

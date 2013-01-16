@@ -3,116 +3,31 @@
 
 /*
 
-	menu en haut de l'Ã©cran
-	La gestion des droits est activÃ©e de cette faÃ§on :
-	On a stockÃ© dans un variable de session la liste des pages autorisÃ©es en lecture et Ã©criture
-	chaque page est identifiÃ©e par un code par exemple 02-01 ou 03-02.
-	Les codes sont gÃ©rÃ©s par le fichier menu.txt.
+	menu en haut de l'écran
+	La gestion des droits est activée de cette façon :
+	On a stocké dans un variable de session la liste des pages autorisées en lecture et écriture
+	chaque page est identifiée par un code par exemple 02-01 ou 03-02.
+	Les codes sont gérés par le fichier menu.txt.
 	les fonctions checkdroit et checkalldroits permettent respectivement de tester si un item ou une
 	liste d'items est en lecture ou pas.
-	On dessine ou pas l'item en fonction de la valeur retournÃ©e
+	On dessine ou pas l'item en fonction de la valeur retournée
 
 */
 
+include_once ('fonctions.php');
+
 ?>
-	
-	<div id="menu-global">
-
-		<div class="menu-block" id="menu-accueil">
-			<div class="menu-titre"><img src="img/icons/accueil.png">ACCUEIL</div>
-			<div class="menu-items">
-				<a href="index.php?page=accueil"><div class="menu-item">Retour Ã  l'accueil</div></a>
-				<a href="../index.php"><div class="menu-item">Retour au portail</div></a>
-			</div>
-		</div>
-
-		
-		<div class="menu-block" id="menu-inventaire">
-			<div class="menu-titre"><img src="img/icons/inventaire.png">INVENTAIRE</div>
-			<div class="menu-items">
-				<a href="index.php?page=materiels"><div class="menu-item">matÃ©riels</div></a>
-				<a href="index.php?page=marques"><div class="menu-item">marques</div></a>
-				<a href="index.php?page=salles"><div class="menu-item">salles</div></a>
-			</div>
-		</div>
-		
-		
-		<div class="menu-block" id="menu-dossiers">
-			<div class="menu-titre"><img src="img/icons/dossiers.png">DOSSIERS</div>
-			<div class="menu-items">
-				<a href="index.php?page=dossiers"><div class="menu-item">GÃ©rer les dossiers</div></a>
-			</div>
-		</div>
-	
-	
-		<div class="menu-block" id="menu-prets">
-			<div class="menu-titre"><img src="img/icons/pret.png">PRETS</div>
-			<div class="menu-items">
-				<a href="index.php?page=prets"><div class="menu-item">GÃ©rer les prÃªts</div></a>
-			</div>
-		</div>
-		
-		
-		<div class="menu-block" id="menu-users">
-			<div class="menu-titre"><img src="img/icons/users.png">UTILISATEURS</div>
-			<div class="menu-items">
-				<a href="index.php?page=utilisateurs"><div class="menu-item">Visualiser les utilisateurs</div></a>
-				<a href="index.php?page=grades"><div class="menu-item">Visualiser les grades</div></a>
-				<a href="index.php?page=importiaca"><div class="menu-item">Importer les comptes IACA</div></a>
-				<a href="index.php?page=moncompte"><div class="menu-item">Modifier mon compte</div></a>
-			</div>
-		</div>
-		
-		<div class="menu-block" id="menu-modules">
-			<div class="menu-titre"><img src="img/icons/modules.png">MODULES</div>
-			<div class="menu-items">
-				<a href="index.php?page=recapfog"><div class="menu-item">RÃ©capitulatif FOG</div></a>
-				<a href="index.php?page=wol"><div class="menu-item">Wake On Lan</div></a>
-				<a href="index.php?page=exportsperso"><div class="menu-item">Export Perso</div></a>
-				<a href="index.php?page=taginventaire"><div class="menu-item">MAJ No Inventaire</div></a>
-				<a href="index.php?page=imagefog"><div class="menu-item">Images Fog</div></a>
-				<a href="index.php?page=modportail"><div class="menu-item">Menu portail</div></a>
-				<a href="index.php?page=gestfichiers"><div class="menu-item">Gestionnaire de fichiers</div></a>
-				<a href="index.php?page=migfog"><div class="menu-item">Migration Fog</div></a>
-				<a href="index.php?page=migdossiers"><div class="menu-item">Migration dossiers</div></a>
-				<a href="index.php?page=geninventaire"><div class="menu-item">GÃ©nÃ©rer Inventaire</div></a>
-				<a href="index.php?page=migusers"><div class="menu-item">Migration Utilisateurs</div></a>
-				<a href="index.php?page=aic"><div class="menu-item">CrÃ©ation AIC</div></a>
-			</div>
-		</div>
-			
-		<div class="menu-block" id="menu-info">
-			<div class="menu-titre"><img src="img/icons/info.png">INFO</div>
-			<div class="menu-items">
-				<a href="index.php?page=college"><div class="menu-item">Fiche collÃ¨ge</div></a>
-				<a href="index.php?page=rss"><div class="menu-item">Flux RSS</div></a>
-				<a href="index.php?page=statcam"><div class="menu-item">Stats camemberts</div></a>
-				<a href="index.php?page=statbat"><div class="menu-item">Stats bÃ¢tons</div></a>
-				<a href="index.php?page=statparc"><div class="menu-item">Stats utilisation du parc</div></a>
-				<a href="index.php?page=infoserveur"><div class="menu-item">Info serveur</div></a>
-			</div>
-		</div>
-		
-		<div class="menu-block" id="menu-donnees">
-			<div class="menu-titre"><img src="img/icons/data.png">DONNEES</div>
-			<div class="menu-items">
-				<a href="index.php?page=importocs"><div class="menu-item">Importer DB OCS</div></a>
-				<a href="index.php?page=exports"><div class="menu-item">Exports</div></a>
-				<a href="index.php?page=dumpgespac"><div class="menu-item">Dump base GESPAC</div></a>
-				<a href="index.php?page=dumpocs"><div class="menu-item">Dump base OCS</div></a>
-				<a href="index.php?page=logs"><div class="menu-item">Voir les Logs</div></a>
-				<a href="index.php?page=importcsv"><div class="menu-item">Importer CSV</div></a>
-			</div>
-		</div>
-	
-	</div>
-	
 
 	<script type="text/javascript">
 		
+		window.addEvent('domready', function(){ 
+			SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'sexylightbox_menu'});
+		});
+		
+		
 		// Activation des icones sur clic
 		function change_icon_onclick (div) {	
-			// on dÃ©sactive tous les boutons
+			// on désactive tous les boutons
 			
 			if ($('accueil')) $('accueil').className = "accueil";
 			if ($('inventaire')) $('inventaire').className = "inventaire";
@@ -126,17 +41,123 @@
 			// On active le bon bouton
 			$(div).className = div + "-clicked";
 		}
-		
-
-
-		window.addEvent('domready', function(){
-			
-			// Quand on clique sur une image
-			$$('.menu-titre').addEvent('click', function(el)  {
-				$$('.menu-items').setStyle("display", "none");	// On masque tout
-				$(this).getParent().getChildren(".menu-items").setStyle("display", "block");	// On affiche le set d'items
-			});
-		
-		});
-		
+				
 	</script>
+
+
+	
+	<div id="main">
+		<ul id="nav" class="dropdown dropdown-horizontal">
+			
+
+			<li class='dir'><a href='#' onclick="AffichePage('conteneur', './accueil.php');change_icon_onclick('accueil');"><div id='accueil' class='accueil' title='accueil'></div></a>
+				<ul>
+					<li class='item'><a href='../index.php'>	Retour au portail	</a></li>
+				</ul>
+			</li>
+			
+		<?PHP
+			
+			
+			
+			if ( checkalldroits("L-02-01,L-02-02,L-02-03") ) {
+				echo "<li class='dir'>"; if (checkdroit("L-02-01") ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_inventaire/voir_materiels.php');change_icon_onclick('inventaire');\"><div id='inventaire' class='inventaire' title='inventaire'></div></a>"; else echo "<div id='inventaire' class='inventaire' title='inventaire'></div>";
+					echo "<ul>";
+						if ( checkdroit("L-02-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_inventaire/voir_materiels.php');change_icon_onclick('inventaire');\">	Visualiser les matériels		</a></li>";
+						if ( checkdroit("L-02-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_inventaire/voir_marques.php');change_icon_onclick('inventaire');\">	Visualiser les marques		</a></li>";
+						if ( checkdroit("L-02-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_inventaire/voir_salles.php');change_icon_onclick('inventaire');\">	Visualiser les salles		</a></li>";
+					echo "</ul>
+				</li>";
+			}
+			
+
+			
+			if ( checkalldroits("L-03-01,L-03-02, L-03-03") ) {
+				echo "<li class='dir'>"; if (checkdroit("L-03-03") ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='demandes et interventions'></div></a>"; else echo "<div id='demandes' class='demandes' title='demandes et interventions'></div>";
+					echo "<ul>";
+						if (checkdroit("L-03-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\">	Dossiers</a></li>";
+						if (checkdroit("L-03-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_demandes.php');change_icon_onclick('demandes');\">		OLD dossiers	</a></li>";
+						if (checkdroit("L-03-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_demandes/voir_interventions.php');change_icon_onclick('demandes');\">	OLD interventions	</a></li>";
+					echo "</ul>
+				</li>";
+			}
+			
+			
+			
+			if ( checkalldroits("L-04-01,L-04-02,L-04-03,L-04-04,L-04-05,L-04-06") ) {
+				echo "<li class='dir'><a href='#'><div id='donnees' class='donnees' title='gestion des imports et exports de données'></div></a>";
+					echo "<ul>";
+						if (checkdroit("L-04-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_donnees/voir_ocs_db.php');change_icon_onclick('donnees');\">		Importer DB OCS		</a></li>";			
+						if (checkdroit("L-04-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_donnees/exports.php');change_icon_onclick('donnees');\">			Exports </a></li>";			
+						if (checkdroit("L-04-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_donnees/dump_db_gespac.php');change_icon_onclick('donnees');\">	Dump base GESPAC	</a></li>";
+						if (checkdroit("L-04-04") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_donnees/dump_db_ocs.php');change_icon_onclick('donnees');\">		Dump base OCS		</a></li>";
+						if (checkdroit("L-04-05") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_donnees/voir_logs.php');change_icon_onclick('donnees');\">		Voir les Logs		</a></li>";
+						if (checkdroit("L-04-06") ) echo "<li class='item'><a href='gestion_inventaire/form_import_csv.php?height=600&width=640' rel='sexylightbox_menu' title='Import machines CSV'>	Importer CSV	</a></li>";				
+					echo "</ul>
+				</li>";
+			}
+			
+			
+			
+			if (checkdroit("L-05-01") ) echo "
+			<li class='dir'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_prets/voir_prets.php');change_icon_onclick('prets');\"><div id='prets' class='prets' title='preter ou rendre un matériel'></div></a></li>
+				<ul>
+					<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_prets/voir_prets.php');change_icon_onclick('prets');\"><div id='prets' class='prets' title='preter ou rendre un matériel'></div></a></li>
+				</ul>";
+			
+				
+			
+			if ( checkalldroits("L-06-01,L-06-02,L-06-03,L-06-04") ) {	
+			echo "<li class='dir'>"; if (checkdroit("L-06-01") ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');change_icon_onclick('utilisateurs');\"><div id='utilisateurs' class='utilisateurs' title='gestion des utilisateurs'></div></a>"; else echo "<div id='utilisateurs' class='utilisateurs' title='gestion des utilisateurs'></div>";
+				echo "<ul>";
+					if (checkdroit("L-06-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_utilisateurs/voir_utilisateurs.php');change_icon_onclick('utilisateurs');\">	Visualiser les utilisateurs		</a></li>";
+					if (checkdroit("L-06-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_utilisateurs/voir_grades.php');change_icon_onclick('utilisateurs');\">	Visualiser les grades		</a></li>";
+					if (checkdroit("L-06-03") ) echo "<li class='item'><a href='gestion_utilisateurs/form_comptes_iaca.php?height=200&width=640' rel='sexylightbox_menu' title='Import des comptes IACA'>	Importer les comptes IACA	</a></li>";
+					if (checkdroit("L-06-04") ) echo "<li class='item'><a href='gestion_utilisateurs/form_utilisateur_personnel.php?height=300&width=640' rel='sexylightbox_menu' title='Modifier mon compte'>	Modifier mon compte	</a></li>";
+					echo "</ul>
+				</li>";
+			}
+		
+			
+			
+			if ( checkalldroits("L-07-01,L-07-02,L-07-03,L-07-04,L-07-05,L-07-06,L-07-07,L-07-08,L-07-09,L-07-10,L-07-12,L-07-13") ) {	
+			echo "<li class='dir'> <a href='#'><div id='plugins' class='plugins' title='modules et extensions'></div></a>";
+				echo "<ul>";
+					if (checkdroit("L-07-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/fog/recap_fog.php');change_icon_onclick('plugins');\">Récapitulatif FOG</a></li>";
+					if (checkdroit("L-07-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/wol/voir_liste_wol.php');change_icon_onclick('plugins');\">Wake On Lan</a></li>";
+					if (checkdroit("L-07-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/export/export_perso.php');change_icon_onclick('plugins');\">Export Perso</a></li>";
+					if (checkdroit("L-07-04") ) echo "<li class='item'><a href='modules/ssn_dsit/form_import_csv.php?height=250&width=640' rel='sexylightbox_menu' title='MAJ tags DSIT'>	MAJ tags DSIT	</a></li>";				
+					//if (checkdroit("L-07-05") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/image_fog/voir_liste.php');change_icon_onclick('plugins');\">Image FOG</a></li>";
+					if (checkdroit("L-07-06") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/menu_portail/voir_menu_portail.php');change_icon_onclick('plugins');\">Menu portail</a></li>";
+					if (checkdroit("L-07-07") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/gestion_fichiers/voir_fichiers.php');change_icon_onclick('plugins');\">Gestion des fichiers</a></li>";
+					if (checkdroit("L-07-08") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_fog/voir_migration.php');change_icon_onclick('plugins');\">Migration Fog</a></li>";
+					if (checkdroit("L-07-09") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_dossiers/migration_dossiers.php');change_icon_onclick('plugins');\">Migration Dossiers</a></li>";
+					if (checkdroit("L-07-10") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/generate_inv/voir_generate.php');change_icon_onclick('plugins');\">Générer inventaire</a></li>";
+					if (checkdroit("L-07-12") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/migration_users/form_extract.php');change_icon_onclick('plugins');\">Migration utilisateurs 2008</a></li>";
+					if (checkdroit("L-07-13") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/snapin_aic/voir_snapin_aic.php');change_icon_onclick('plugins');\">Création AIC</a></li>";
+					echo "</ul>
+				</li>";
+			}
+			
+			
+			
+			if ( checkalldroits("L-08-01,L-08-02,L-08-03,L-08-04,L-08-05,L-08-06") ) {	
+			echo "<li class='dir'><a href='#' onclick=\"AffichePage('conteneur', 'info.php');change_icon_onclick('info');\"><div id='info' class='info' title='info'></div></a>";
+				echo "<ul>";
+					if (checkdroit("L-08-01") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_college/voir_college.php'); change_icon_onclick('info');\">Fiche collège</a></li>";
+					if (checkdroit("L-08-02") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/rss/rss.php'); change_icon_onclick('info');\">Flux RSS</a></li>";	
+					if (checkdroit("L-08-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/graph.php');change_icon_onclick('info');\">Stats camemberts</a></li>";
+					if (checkdroit("L-08-04") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/csschart.php');change_icon_onclick('info');\">Stats bâtons</a></li>";
+					if (checkdroit("L-08-05") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/stats/utilisation_parc.php');change_icon_onclick('info');\">Stats utilisation du parc</a></li>";	
+					if (checkdroit("L-08-06") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'modules/infoserveur/infoserveur.php');change_icon_onclick('info');\">Infos serveur</a></li>";
+					echo "</ul>
+				</li>";
+			}
+			
+			
+	?>
+
+		</ul>
+	</div>
+
+	
