@@ -16,7 +16,7 @@
 ?>
 
 
-<div class="entetes" id="entete-salles">	
+<div class="entetes" id="entete-marques">	
 
 	<span class="entetes-titre">LES MARQUES<img class="help-button" src="img/icons/info.png"></span>
 	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des marques et modèles du parc.<br>Certaines marques sont issues de la table des correspondances et ne peuvent pas être modifiées.</div>
