@@ -104,9 +104,9 @@
 					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_marques' title='Liste des matériels de modèle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
 					
 					if ($E_chk) {
-						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=500&width=640&id=$id' rel='slb_marques' title='Formulaire d`ajout d`un materiel'><img src='img/add.png'> </a></td>";
-						echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' rel='slb_marques' title='Formulaire de modification de la marque $nom'><img src='img/write.png' style='display:$afficher_modifier'> </a></td>";
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_marque($id, '$model', '$marque', this.parentNode.parentNode.rowIndex, '" . $nb_matos_de_ce_modele ."');\">	<img src='img/delete.png'>	</a> </td>";
+						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=500&width=640&id=$id' rel='slb_marques' title='Formulaire d`ajout d`un materiel'><img src='img/icons/add3.png'> </a></td>";
+						echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' rel='slb_marques' title='Formulaire de modification de la marque $nom'><img src='img/icons/edit.png' style='display:$afficher_modifier'></a></td>";
+						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_marque($id, '$model', '$marque', this.parentNode.parentNode.rowIndex, '" . $nb_matos_de_ce_modele ."');\">	<img src='img/icons/delete.png'>	</a> </td>";
 					}
 					
 				echo "</tr>";
@@ -134,7 +134,7 @@
 	
 	// *********************************************************************************
 	//
-	//				Fonction de validation de la suppression d'une marque
+	//				Fonction de validation de la suppression d'unew marque
 	//
 	// *********************************************************************************	
 
