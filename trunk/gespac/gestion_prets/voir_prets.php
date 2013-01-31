@@ -12,14 +12,85 @@
 	
 ?>
 
-<!--	Ancre haut de page	-->
-<a name="hautdepage"></a>
 
-<h3>Visualisation des matériels disponibles au prêt</h3><br>
+<div class="entetes" id="entete-prets">	
 
+	<span class="entetes-titre">LE PRET de MATERIEL<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Cette page permet de gérer le prêt du matériel du parc.<br>Le matériel doit être dans la salle PRETS pour être affiché ici.</div>
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
+	<span class="entetes-options">
+		
+		<span class="option">
+			<!--	FORMULAIRE DE PRET AUX USERS 	-->
+			<form id=elements_selectionnes method="post">
+				
+				<?PHP
+				if ( $E_chk ) {
+				?>
+				
+				<input type=hidden name=pret_a_poster id=pret_a_poster value=''>	<!--	ID du pret à poster	-->
+				<input type=hidden name=row_table id=row_table value=''>			<!--	ROW du pret à poster	-->
+				<input type=hidden name=select_user id=select_user value=''>		<!--	USER_ID du pret à poster	-->
+				
+				
+				
+				
+				<!--------------------------------------------------------------------
+				!		PARTIE POUR PRETER UN MATERIEL 
+				--------------------------------------------------------------------->
+				
+				
+				<div id="preter" style="display:none; text-align:center" > 
+					Préter à : &nbsp
+					
+					<select id=user_select>
+				
+					<?PHP 
+						// Pour le remplissage de la combobox des user pour l'affectation du matériel prêté
+							
+						// stockage des lignes retournées par sql dans un tableau nommé combo_des_users
+						$combo_des_users = $con_gespac->QueryAll ( "SELECT user_id, user_nom FROM users ORDER BY user_nom;" );
+									
+						foreach ($combo_des_users as $combo_option ) {
+						
+							$option_id 		= $combo_option['user_id'];
+							$option_user 	= $combo_option['user_nom'];
+												
+							echo "<option value=$option_id name=$option_user> $option_user </option>";
+						}
+					?>
+					
+					</select>
+					
+					<?PHP echo "<input type=button value='PRETER LE MATERIEL' onclick=\"javascript:validation_preter_materiel(pret_a_poster.value, user_select.value, row_table.value);\"> "; ?>
+					
+				</div>
+				
+				
+				<!--------------------------------------------------------------------
+				!					PARTIE POUR RENDRE UN MATERIEL 
+				--------------------------------------------------------------------->
+				
+				<div id="rendre" style="display:none; text-align:center">		
+					<?PHP echo "<input type=button value='RENDRE LE MATERIEL' onclick=\"javascript:validation_rendre_materiel(pret_a_poster.value, select_user.value, row_table.value);\"> "; ?>
+				</div>				
+				<?PHP } // fin test de droit sur le prêt ?>
+				
+			</form>
+		</span>
+		<span class="option">
+			<!-- 	bouton pour le filtrage du tableau	-->
+			<form id="filterform"> 
+				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'prets_table');" type="text" value=<?PHP echo $_GET['filter'];?>> 
+				<span id="nb_filtre" title='nombre de matériels affichés'></span>
+			</form>
+			
+		</span>
+	</span>
+
+</div>
+
+<div class="spacer"></div>
 
 
 <?PHP
@@ -27,25 +98,18 @@
 	// cnx à la base de données GESPAC
 	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac ) ;
 
-	// stockage des lignes retournées par sql dans un tableau nommé liste_des_prets 
-	// SAlle_id = 3 (à la fin de la rq) parce que 3 correspond à la salle "PRETS"
-	$liste_des_prets = $con_gespac->QueryAll ( "SELECT mat_nom, mat_serial, marque_type, marque_model, salle_nom, user_nom, mat_id, materiels.salle_id, materiels.user_id, mat_dsit, mat_etat FROM materiels, marques, salles, users WHERE ( materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id and materiels.user_id=users.user_id and materiels.salle_id=3	) ORDER BY mat_nom" );	
+	// liste des matos dans la salle "prets"
+	$liste_des_prets = $con_gespac->QueryAll ( "SELECT mat_nom, mat_serial, marque_type, marque_model, salle_nom, user_nom, mat_id, materiels.salle_id, materiels.user_id, mat_dsit, mat_etat FROM materiels, marques, salles, users WHERE ( materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id and materiels.user_id=users.user_id and salles.salle_nom='PRETS'	) ORDER BY mat_nom" );	
 
 ?>
-	
-	<!--<span style="float:right; margin-right:80px"><a href="#basdepage"><img src="./img/down.png" title="Aller en bas de page"></a></span>-->
-	
-	<!-- 	bouton pour le filtrage du tableau	-->
-	<form>
-		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'prets_table', '1')" type="text"></center>
-	</form>
+
 	
 	<center>
 	
-	<table class="tablehover" id="prets_table" width=800>
+	<table class="tablehover" id="prets_table">
 	
 	<?PHP
-		if ($E_chk) echo "<th> &nbsp </th><th> &nbsp </th>";
+		if ($E_chk) echo "<th> &nbsp </th>";
 	?>
 		<th>Nom</th>
 		<th>DSIT</th>
@@ -80,8 +144,7 @@
 					$etat		= $record['mat_etat'];
 					
 					
-					
-					
+						
 					// couleurs et noms					
 					if ( $user_id == 1 ) {
 						$apreter_color = "#36F572";
@@ -89,8 +152,7 @@
 					} else { $apreter_color = "#F57236"; }
 					
 					if ( $E_chk ) {
-						echo "<td> <input type=radio name=radio value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $user_id, this.parentNode.parentNode.rowIndex); bas_de_page(this.parentNode.parentNode.rowIndex);\"> </td>";
-						echo "<td> <a href='#basdepage' class='bdp' id='bdp$compteur' style='display:none;'><img src='./img/down.png' title='Aller en bas de page' align=left></a></td>";
+						echo "<td> <input type=radio name=radio value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $user_id, this.parentNode.parentNode.rowIndex);\"> </td>";
 					}
 					
 					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='slb_prets title='Caractéristiques de $mat'>$mat</a> </td>";
@@ -114,72 +176,6 @@
 	
 	</center>
 	
-	<!--	Ancre bas de page	-->
-	<a name="basdepage"></a>
-	<br>
-
-
-	<!--	FORMULAIRE DE PRET AUX USERS 	-->
-	
-	<form id=elements_selectionnes method="post">
-		
-		<?PHP
-		if ( $E_chk ) {
-		?>
-		
-		<input type=hidden name=pret_a_poster id=pret_a_poster value=''>	<!--	ID du pret à poster	-->
-		<input type=hidden name=row_table id=row_table value=''>			<!--	ROW du pret à poster	-->
-		<input type=hidden name=select_user id=select_user value=''>		<!--	USER_ID du pret à poster	-->
-		
-		
-		
-		
-		<!--------------------------------------------------------------------
-		!		PARTIE POUR PRETER UN MATERIEL 
-		--------------------------------------------------------------------->
-		
-		
-		<div id="preter" style="visibility:hidden; text-align:center" > 
-			Préter à : &nbsp
-			
-			<select id=user_select>
-		
-			<?PHP 
-				// Pour le remplissage de la combobox des user pour l'affectation du matériel prêté
-					
-				// stockage des lignes retournées par sql dans un tableau nommé combo_des_users
-				$combo_des_users = $con_gespac->QueryAll ( "SELECT user_id, user_nom FROM users ORDER BY user_nom;" );
-							
-				foreach ($combo_des_users as $combo_option ) {
-				
-					$option_id 		= $combo_option['user_id'];
-					$option_user 	= $combo_option['user_nom'];
-										
-					echo "<option value=$option_id name=$option_user> $option_user </option>";
-				}
-			?>
-			
-			</select>
-			
-		
-			<?PHP echo "<input type=button value='PRETER LE MATERIEL' onclick=\"javascript:validation_preter_materiel(pret_a_poster.value, user_select.value, row_table.value);\"> "; ?>
-			
-		</div>
-		
-		
-		<!--------------------------------------------------------------------
-		!					PARTIE POUR RENDRE UN MATERIEL 
-		--------------------------------------------------------------------->
-		
-		<div id="rendre" style="visibility:hidden; text-align:center">		
-			<?PHP echo "<input type=button value='RENDRE LE MATERIEL' onclick=\"javascript:validation_rendre_materiel(pret_a_poster.value, select_user.value, row_table.value);\"> "; ?>
-		</div>
-		<center><a href="#hautdepage"><img src="./img/up.png" title="Retourner en haut de page"></a></center><br>
-		
-		<?PHP } // fin test de droit sur le prêt ?>
-		
-	</form>
-
 	
 <?PHP
 	// On se déconnecte de la db
@@ -193,10 +189,9 @@
 	window.addEvent('domready', function(){
 	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_prets'});
 	});
-
-		
-	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
+	
+	// Filtre rémanent
+	filter ( $('filt'), 'prets_table' );
 	
 	
 	// *********************************************************************************
@@ -210,7 +205,7 @@
 		var words = phrase.value.toLowerCase().split(" ");
 		var table = $(_id);
 		var ele;
-		var elements_liste = "";
+		var compteur = 0;
 			
 		for (var r = 1; r < table.rows.length; r++){
 			
@@ -220,6 +215,7 @@
 			for (var i = 0; i < words.length; i++) {
 				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
 					displayStyle = '';
+					compteur++;
 				} 
 				else {	// on masque les rows qui ne correspondent pas
 					displayStyle = 'none';
@@ -229,6 +225,8 @@
 			
 			// Affichage on / off en fonction de displayStyle
 			table.rows[r].style.display = displayStyle;
+			
+			$('nb_filtre').innerHTML = "<small>" + compteur + "</small>";
 		}
 	}
 	
@@ -247,13 +245,13 @@
 		$('select_user').value = userid;	// userid du matos à modifier
 		
 		if ( userid == 1 ) {	// On se base sur la valeur USER_ID de root
-			$('rendre').style.visibility = "hidden";
-			$('preter').style.visibility = "";
+			$('rendre').setStyle("display", "none");
+			$('preter').setStyle("display", "inline");
 			
 		} else {
 			
-			$('rendre').style.visibility = "";
-			$('preter').style.visibility = "hidden";
+			$('rendre').setStyle("display", "block");
+			$('preter').setStyle("display", "none");
 		}			
 
 	}
@@ -268,8 +266,8 @@
 	 
 	function validation_preter_materiel( matid, userid, row ) {
 		
-		var mat_nom = $('prets_table').rows[row].cells[8].innerHTML;
-		var mat_etat = $('prets_table').rows[row].cells[6].innerHTML;
+		var mat_nom = $('prets_table').rows[row].cells[7].innerHTML;
+		var mat_etat = $('prets_table').rows[row].cells[5].innerHTML;
 		
 		var user_selected_id = $('user_select').selectedIndex;
 		var user_selected_text = $('user_select').options[user_selected_id].text;	
@@ -278,13 +276,10 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			
-				//	poste la page en ajax	
-				$("target").load("gestion_prets/post_prets.php?action=preter&matid=" + matid + "&userid=" + userid);
-			
-				// recharge la page
-				$('conteneur').load("gestion_prets/voir_prets.php");
-			
+			//	poste la page en ajax	
+			$('target').setStyle("display","block");
+			$('target').load("gestion_prets/post_prets.php?action=preter&matid=" + matid + "&userid=" + userid);
+			window.setTimeout("document.location.href='index.php?page=prets&filter=" + $('filt').value + "'", 2000);
 		}
 	}
 
@@ -299,7 +294,7 @@
 	 
 	function validation_rendre_materiel( matid, userid, row ) {
 		
-		var mat_nom = $('prets_table').rows[row].cells[8].innerHTML;
+		var mat_nom = $('prets_table').rows[row].cells[7].innerHTML;
 	
 		var valida = confirm('Voulez-vous vraiment rendre le matériel ' + mat_nom + " ?");
 		
@@ -307,27 +302,10 @@
 		if (valida) {
 					
 			//	poste la page en ajax
-			$("target").load("gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
-			
-			// recharge la page avec un délais de 1000ms
-			window.setTimeout("$('conteneur').load('gestion_prets/voir_prets.php');", 1000);
+			$('target').setStyle("display","block");
+			$('target').load("gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
+			window.setTimeout("document.location.href='index.php?page=prets&filter=" + $('filt').value + "'", 2000);
 		}
-	}
-	
-	// *********************************************************************************
-	//
-	//				Bas de page
-	//
-	// *********************************************************************************
-	
-	function bas_de_page (row) {
-	
-		$$('.bdp').each(function(item) {
-			item.style.display = "none";
-		})
-
-		var div = 'bdp' + (row - 1);
-		$(div).style.display = "";
 	}
 	
 </script>

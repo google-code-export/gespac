@@ -48,15 +48,15 @@
 		$mat_nom = $liste_materiel[0];
 		$mat_serial = $liste_materiel[1];
 		
-		$log_texte = "Le matériel $mat_nom (Numéro de série : <b>$mat_serial</b>) a été prêté à $user_nom";
-		
+		echo $log_texte = "Le matériel $mat_nom (Numéro de série : <b>$mat_serial</b>) a été prêté à $user_nom";
+				
 		// On insère une ligne dans les logs pour tracer tout ça
 		$req_log_preter_materiel = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Prêté', '$log_texte' );";
 		$con_gespac->Execute ( $req_log_preter_materiel );
 		
 		//on log la requête SQL
 		$log->Insert($req_log_preter_materiel);
-		
+				
 		// On ouvre une autre fenêtre pour la convention de pret
 		echo "<script type='text/javascript'>window.open(\"gestion_prets/convention_pret.php?matid=$matid&userid=$userid\", 'CONVENTION DE PRET');</script>";
 		
@@ -88,6 +88,8 @@
 		
 		//on log la requête SQL
 		$log->Insert($req_log_rendu_materiel);
+
+		echo "Le matériel est rendu !";
 				
 		// On ouvre une autre fenêtre pour la convention de retour
 		echo "<script type='text/javascript'>window.open(\"gestion_prets/convention_retour.php?matid=$matid&userid=$userid&id_conv=1\", 'CONVENTION DE RETOUR');</script>";
