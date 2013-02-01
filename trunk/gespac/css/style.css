@@ -16,7 +16,7 @@ img {border:0px; vertical-align:middle;}
 
 
 #portail-menu {
-	background		: orange; 
+	background-color: white; 
 	border			: solid 1px black; 
 	width			: 94%;
 	padding			: 5px 10px 5px 10px; 
@@ -33,7 +33,7 @@ img {border:0px; vertical-align:middle;}
 }
 
 .portail-menu-item:hover {
-	background	: #FFD48A; 
+	background-color	: #FFD48A; 
 	border-radius : 5px;
 }
 
@@ -41,7 +41,7 @@ img {border:0px; vertical-align:middle;}
 
 
 #portail-conteneur {
-	background		: orange; 
+	background-color: white; 
 	border			: solid 1px black; 
 	padding			: 5px 10px; 
 	width			: 94%;
@@ -90,6 +90,7 @@ img {border:0px; vertical-align:middle;}
 #entete-salles {background-color:#AA83E6;}
 #entete-marques {background-color:#8683E6;}
 #entete-prets {background-color:#FFAF75;}
+#entete-utilisateurs {background-color:#759AFF;}
 
 
 /*	bandeau pour la partie login, grade et déconnexion	*/
