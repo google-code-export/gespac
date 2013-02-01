@@ -3,10 +3,10 @@ session_start();
 	
 	#formulaire de modification de son propre compte
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// rÃ¨gle le problÃ¨me d'encodage des caractÃ¨res
 
 	// lib
-	include ('../config/databases.php');	// fichiers de configuration des bases de données
+	include ('../config/databases.php');	// fichiers de configuration des bases de donnÃ©es
 	require_once ('../fonctions.php');
 	include_once ('../../class/Sql.class.php');
 
@@ -16,7 +16,7 @@ session_start();
 
 <script type="text/javascript"> 
 	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	// vÃ©rouille l'accÃ¨s au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
 		var bt_submit 	  = $("post_user");
@@ -48,7 +48,7 @@ session_start();
 
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET Ã  POST (en effet, avec GET il rÃ©cupÃ¨re la totalitÃ© du tableau get en paramÃ¨tres et lorsqu'on poste la page formation on dÃ©passe la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('index.php');", 1500);
 					SexyLightbox.close();
 				}
@@ -64,7 +64,7 @@ session_start();
 
 	if ( $login <> "ati" ) {
 
-		// connexion à la base de données GESPAC
+		// connexion Ã  la base de donnÃ©es GESPAC
 		$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 			
@@ -73,10 +73,10 @@ session_start();
 			#***************************************************************************
 			
 			
-			// Requete pour récupérer les données des champs pour le user à modifier
+			// Requete pour rÃ©cupÃ©rer les donnÃ©es des champs pour le user Ã  modifier
 			$user_a_modifier = $con_gespac->QueryRow ( "SELECT user_id, user_nom, user_logon, user_password, user_mail, user_skin, user_accueil, user_mailing FROM users WHERE user_logon='$login'" );
 			
-			// valeurs à affecter aux champs
+			// valeurs Ã  affecter aux champs
 			$user_id 			= $user_a_modifier[0];
 			$user_nom	 		= $user_a_modifier[1];
 			$user_logon	 		= $user_a_modifier[2];
@@ -122,7 +122,7 @@ session_start();
 					</tr>
 					
 					<tr>
-						<td title="La modification sera visible à la prochaine connexion...">Skin</td>
+						<td title="La modification sera visible Ã  la prochaine connexion...">Skin</td>
 						<td>
 							<select name="skin">
 							<?PHP
@@ -144,16 +144,16 @@ session_start();
 							$selected = $accueil == $user_accueil ? "selected" : "" ;
 						?>
 					
-						<TD>Page de Démarrage</TD>
+						<TD>Page de DÃ©marrage</TD>
 						<TD><select name="page" size="1">
 					
 					<?PHP
 						$lines = file('../menu.txt');
 
-						echo "<option value='bienvenue.php'>Bienvenue</option>";	// Page par défaut
+						echo "<option value='bienvenue.php'>Bienvenue</option>";	// Page par dÃ©faut
 						
 						
-						// Requête de récupération des droits
+						// RequÃªte de rÃ©cupÃ©ration des droits
 						$liste_items = $con_gespac->QueryAll ( "SELECT * FROM droits order by droit_index" );
 						
 						foreach ($liste_items as $ligne) {
@@ -167,7 +167,7 @@ session_start();
 
 							$L_chk = preg_match ("#$droit_index#", $_SESSION['droits']) ;
 
-							if ($L_chk && ($droit_index <> "03-04" && $droit_index <> "01-01"))	// Oui parce que si on met en page de démarrage la page de retour au menu, ça sert à rien !
+							if ($L_chk && ($droit_index <> "03-04" && $droit_index <> "01-01"))	// Oui parce que si on met en page de dÃ©marrage la page de retour au menu, Ã§a sert Ã  rien !
 								echo "<option value='$droit_page'>$droit_titre</option>";
 						}
 					?>
@@ -190,7 +190,7 @@ session_start();
 		}
 		else {
 			
-				echo "<center><h2>Modification du compte $login impossible ! <br> Ce compte de supervision ne doit pas être utilisé en production. <br><br>Merci de créer votre propre compte !</h2></center>";
+				echo "<center><h2>Modification du compte $login impossible ! <br> Ce compte de supervision ne doit pas Ãªtre utilisÃ© en production. <br><br>Merci de crÃ©er votre propre compte !</h2></center>";
 			
 		}
 		?>
