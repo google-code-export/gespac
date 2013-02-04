@@ -184,7 +184,7 @@
 				//$grade est le 2eme champ à UPDATER (ou pas)
 				if ( $grade <> "" ) {
 					
-					// met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre là ...). Si $sql_skin est vide, Ca signifie qu'on ne modifie pas cette valeur donc pas de virgule avant $sql_grade
+					// met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dur à comprendre là ...). Si $sql_skin est vide, Ca signifie qu'on ne modifie pas cette valeur donc pas de virgule avant $sql_grade
 					$sql_grade = $sql_skin == "" ? " grade_id=$grade " : ", grade_id=$grade " ;
 					
 				} else { $sql_grade = ""; }
