@@ -5,7 +5,7 @@
 
 
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// rÃ¨gle le problÃ¨me d'encodage des caractÃ¨res
 
 	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
 
@@ -13,7 +13,7 @@
 
 <script type="text/javascript"> 
 	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	// vÃ©rouille l'accÃ¨s au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
 		var bt_submit = $("post_user");
@@ -43,7 +43,7 @@
 
 				onSuccess: function(responseText, responseXML) {
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET Ã  POST (en effet, avec GET il rÃ©cupÃ¨re la totalitÃ© du tableau get en paramÃ¨tres et lorsqu'on poste la page formation on dÃ©passe la taille maxi d'une url)
 					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_grades.php');", 1500);
 					SexyLightbox.close();
 				}
@@ -56,7 +56,7 @@
 
 <?PHP
 
-	//connexion à la base de données GESPAC
+	//connexion Ã  la base de donnÃ©es GESPAC
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	$id = $_GET['id'];
@@ -68,9 +68,9 @@
 	#***************************************************************************
 	
 	
-	if ( $id == '-1' ) {	// Formulaire vierge de création
+	if ( $id == '-1' ) {	// Formulaire vierge de crÃ©ation
 	
-		echo "<h2>formulaire de création d'un nouveau grade</h2><br>";
+		echo "<h2>formulaire de crÃ©ation d'un nouveau grade</h2><br>";
 		
 		?>
 		
@@ -108,14 +108,14 @@
 		
 		
 		
-	} else {	// formulaire de modification prérempli
+	} else {	// formulaire de modification prÃ©rempli
 	
 		echo "<h2>formulaire de modification d'un grade</h2><br>";
 		
-		// Requete pour récupérer les données des champs pour le user à modifier
+		// Requete pour rÃ©cupÃ©rer les donnÃ©es des champs pour le user Ã  modifier
 		$grade_a_modifier = $con_gespac->QueryRow ( "SELECT grade_id, grade_nom FROM grades WHERE grade_id=$id" );		
 		
-		// valeurs à affecter aux champs
+		// valeurs Ã  affecter aux champs
 		$grade_id 			= $grade_a_modifier[0];
 		$grade_nom	 		= $grade_a_modifier[1];
 
