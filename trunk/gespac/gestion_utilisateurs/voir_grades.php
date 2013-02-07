@@ -77,7 +77,7 @@
 						echo "<td width=20><a href='gestion_utilisateurs/form_menu_portail.php?height=450&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du menu portail du grade $grade_nom'><img src='img/icons/home.png'> </a></td>";
 						echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/icons/unlocked.png'> </a></td>";
 						echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du grade $grade_nom'><img src='img/icons/edit.png'> </a></td>";
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/icons/delete.png' title='supprimer $grade_nom'>	</a> </td>";
+						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom');\">	<img src='img/icons/delete.png' title='supprimer $grade_nom'>	</a> </td>";
 					} else {
 						echo"<td width=20>&nbsp</td>
 						<td width=20>&nbsp</td>
@@ -119,16 +119,15 @@
 	//
 	// *********************************************************************************
 	
-	function validation_suppr_grade (id, nom, row) {
+	function validation_suppr_grade (id, nom) {
 	
 		var valida = confirm('Voulez-vous vraiment supprimer le grade "' + nom + '" ?');
 		// si la réponse est TRUE ==> on lance la page post_grades.php
 		if (valida) {		
-			/*	supprimer la ligne du tableau	*/
-			$('grades_table').deleteRow(row);
-			/*	poste la page en ajax	*/
+			$('target').setStyle("display","block");
 			$('target').load("gestion_utilisateurs/post_grades.php?action=suppr&id=" + id);
-			window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_grades.php');", 1500);
+			window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('filt').value + "'", 2500);
+			
 		}
 	}	
 
