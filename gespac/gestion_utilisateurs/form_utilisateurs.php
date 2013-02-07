@@ -406,9 +406,4 @@
 
 		<?PHP	
 	}
-		
-		
 ?>		
-
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
