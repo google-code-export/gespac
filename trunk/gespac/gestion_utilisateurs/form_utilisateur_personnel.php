@@ -1,63 +1,22 @@
 <?PHP
-session_start();
-	
-	#formulaire de modification de son propre compte
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	// lib
-	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	require_once ('../fonctions.php');
-	include_once ('../../class/Sql.class.php');
+	session_start();
 
 	$login =  $_SESSION['login'];
 
+	#formulaire de modification de son propre compte
+
+
 ?>
 
-<script type="text/javascript"> 
-	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
-	function validation () {
 
-		var bt_submit 	  = $("post_user");
-		var user_nom 	  = $("nom").value;
-		var user_password = $("password").value;
-		
-		if (user_nom == "" || user_password == "") {
-			bt_submit.disabled = true;
-		} else {
-			bt_submit.disabled = false;
-		}
-	}
-	
-	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
-	
-	window.addEvent('domready', function(){
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
 
-				method: this.method,
-				url: this.action,
+<div class="entetes" id="entete-moncompte">	
+	<span class="entetes-titre">MODIFIER MON COMPTE<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Permet de modifier le compte actuellement connecté.</div>
+</div>
 
-				onSuccess: function(responseText, responseXML) {
-					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('index.php');", 1500);
-					SexyLightbox.close();
-				}
-			
-			}).send(this.toQueryString());
-		});			
-	});
-	
-</script>
+<div class="spacer"></div>
 
 
 <?PHP
@@ -88,7 +47,7 @@ session_start();
 			
 			$checked = $user_mailing == 1 ? "checked" : "";
 		
-			echo "<h2>Formulaire de modification de $user_nom</h2><br>";
+			echo "<h2>Formulaire de modification du compte $user_nom</h2><br>";
 			
 			?>
 			
@@ -103,17 +62,17 @@ session_start();
 				
 					<tr>
 						<TD>Nom</TD>
-						<TD><input type=text name=nom id=nom value= "<?PHP echo $user_nom; ?>" 	/></TD>
+						<TD><input type=text size=30 name=nom id=nom value= "<?PHP echo $user_nom; ?>" 	/></TD>
 					</tr>
 					
 					<tr>
 						<TD>Password</TD> 
-						<TD><input type=password name=password value= "<?PHP echo $user_password; ?>"	/></TD>
+						<TD><input type=password size=30 name=password value= "<?PHP echo $user_password; ?>"	/></TD>
 					</tr>
 									
 					<tr>
 						<TD>Mail</TD> 
-						<TD><input type=text name=mail value= "<?PHP echo $user_mail; ?>"	/></TD>
+						<TD><input type=text name=mail size=30 value= "<?PHP echo $user_mail; ?>"	/></TD>
 					</tr>
 					
 					<tr>
@@ -179,21 +138,61 @@ session_start();
 					
 				</table>
 				
-				<br>
+				<br><br>
 				<input type=submit value='Modifier mon compte' >
 
 				</center>
 
-			</FORM>
+			</form>
 		
 		<?PHP
 		}
 		else {
-			
-				echo "<center><h2>Modification du compte $login impossible ! <br> Ce compte de supervision ne doit pas être utilisé en production. <br><br>Merci de créer votre propre compte !</h2></center>";
-			
+			echo "<center><h2>Modification du compte $login impossible ! <br> Ce compte de supervision ne doit pas être utilisé en production. <br><br>Merci de créer votre propre compte !</h2></center>";
 		}
 		?>
+
+
+<script type="text/javascript"> 
+	
+	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	function validation () {
+
+		var bt_submit 	  = $("post_user");
+		var user_nom 	  = $("nom").value;
+		var user_password = $("password").value;
 		
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
+		if (user_nom == "" || user_password == "") {
+			bt_submit.disabled = true;
+		} else {
+			bt_submit.disabled = false;
+		}
+	}
+	
+	
+	/******************************************
+	*
+	*		AJAX
+	*
+	*******************************************/
+	
+	window.addEvent('domready', function(){
+		
+		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+			new Event(e).stop();
+			new Request({
+
+				method: this.method,
+				url: this.action,
+
+				onSuccess: function(responseText, responseXML) {
+					$('target').setStyle("display","block");
+					$('target').set('html', responseText);
+					window.setTimeout("document.location.href='index.php?page=moncompte'", 2500);	
+				}
+			
+			}).send(this.toQueryString());
+		});			
+	});
+	
+</script>

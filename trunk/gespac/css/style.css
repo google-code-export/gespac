@@ -10,7 +10,7 @@ body {background-color:#fff; font-family:ubuntu, Verdana, Arial, Helvetica, sans
 h3 {	margin : 0px;}
 input, textarea, select {border:1px solid #6E6F6A;}
 a { text-decoration:none; color:#003C9C;}
-table {border:1px solid #ccc; padding:4px; text-align:center; font-size:small; border-collapse:collapse;}
+table {border:0; padding:4px; text-align:center; font-size:small; border-collapse:collapse;}
 th {background-color:orange; font-size:10px; padding:5px 0px; color:#000;}
 img {border:0px; vertical-align:middle;}
 
