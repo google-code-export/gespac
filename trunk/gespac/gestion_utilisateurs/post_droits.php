@@ -26,6 +26,6 @@
 	$con_gespac->Execute ( $req_log_modif_grade );
 	$log->Insert( $req_log_modif_grade );
 	
-	echo "<br><small>Les droits ont été modifiés...</small>";
+	echo "Les droits ont été modifiés...";
 	
 ?>
