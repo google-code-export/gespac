@@ -3,13 +3,9 @@
 	#formulaire de modification
 	#des droits !
 
-
-
-	header("Content-Type:text/html; charset=iso-8859-1"); 	// règle le problème d'encodage des caractères
-
 	// lib
+	include ('../config/databases.php');	// fichiers de configuration des bases de donnÃ©es
 	require_once ('../fonctions.php');
-	include_once ('../config/databases.php');
 	include_once ('../../class/Sql.class.php');
 
 ?>
@@ -17,7 +13,7 @@
 
 <script type="text/javascript"> 
 	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	// vÃ©rouille l'accÃ¨s au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
 		var bt_submit = $("post_user");
@@ -31,7 +27,7 @@
 	};
 	
 	
-	// si on coche en écriture, la lecture s'active aussi
+	// si on coche en Ã©criture, la lecture s'active aussi
 	function cocher_lecture (item) {
 		
 		var item_E = $("E-" + item);
@@ -41,7 +37,7 @@
 			item_L.checked = true;	
 	}
 	
-	//si on décoche la lecture, c'est l'écriture qui se désactive
+	//si on dÃ©coche la lecture, c'est l'Ã©criture qui se dÃ©sactive
 	function decocher_ecriture (item) {
 		 
 		var item_E = $("E-" + item);
@@ -65,10 +61,11 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (pour les url trop longues)
-					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_grades.php');", 1500);
 					SexyLightbox.close();
+					window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('filt').value + "'", 2500);	
+					
 				}
 			
 			}).send(this.toQueryString());
@@ -82,20 +79,20 @@
 				$$('.Lchk').each(function (item) {	item.checked = true; }) // on coche tout
 			} else {
 				$$('.Lchk').each(function (item) {	item.checked = false; }) // on decoche toutes les lectures
-				$$('.Echk').each(function (item) {	item.checked = false; }) // on decoche toutes les écritures (parce que si on a pas la lecture, ey, ça sert à rien de pouvoir écrire)
+				$$('.Echk').each(function (item) {	item.checked = false; }) // on decoche toutes les Ã©critures (parce que si on a pas la lecture, ey, Ã§a sert Ã  rien de pouvoir Ã©crire)
 				$('E_CheckAll').checked = false;
 			}	
 		});
 		
-		// Pour checker toutes les cases en écriture
+		// Pour checker toutes les cases en Ã©criture
 		$('E_CheckAll').addEvent ('click', function(e) {
 			
 			if ( $('E_CheckAll').checked == true ) {			
-				$$('.Echk').each(function (item) {	item.checked = true; }) // on coche toutes les écritures
-				$$('.Lchk').each(function (item) {	item.checked = true; }) // on coche toutes les lectures parce que si on peut écrire, on doit pouvoir lire aussi
+				$$('.Echk').each(function (item) {	item.checked = true; }) // on coche toutes les Ã©critures
+				$$('.Lchk').each(function (item) {	item.checked = true; }) // on coche toutes les lectures parce que si on peut Ã©crire, on doit pouvoir lire aussi
 				$('L_CheckAll').checked = true;
 			} else {
-				$$('.Echk').each(function (item) {	item.checked = false; }) // on decoche toutes les écritures
+				$$('.Echk').each(function (item) {	item.checked = false; }) // on decoche toutes les Ã©critures
 			}	
 		});
 		
@@ -106,21 +103,19 @@
 
 <?PHP
 
-	// cnx à la base
+	// cnx Ã  la base
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	$id = $_GET['id'];
 	
 	
-	// Requete pour récupérer les données des champs pour le user à modifier
+	// Requete pour rÃ©cupÃ©rer les donnÃ©es des champs pour le user Ã  modifier
 	$grade_a_modifier = $con_gespac->QueryRow ( "SELECT grade_id, grade_nom, grade_menu FROM grades WHERE grade_id=$id" );		
 	
-	// valeurs à affecter aux champs
+	// valeurs Ã  affecter aux champs
 	$grade_id 			= $grade_a_modifier[0];
 	$grade_nom	 		= $grade_a_modifier[1];
 	$grade_menu	 		= $grade_a_modifier[2];
-
-	echo "<h2>formulaire de modification des droits du grade $grade_nom</h2><br>";
 
 	?>
 	
@@ -128,7 +123,7 @@
 	
 		<center>
 		
-		<table width=500 class="tablehover">
+		<table width=500 >
 			
 			<th>Item</th>
 			<th>Lecture <input type=checkbox id=L_CheckAll> </th>
@@ -145,7 +140,7 @@
 					
 					$droit_id = $ligne ['droit_id'];
 					$droit_index = $ligne ['droit_index'];
-					$droit_titre = utf8_decode($ligne ['droit_titre']);
+					$droit_titre = $ligne ['droit_titre'];
 					$droit_page = $ligne ['droit_page'];
 					$droit_etendue = $ligne ['droit_etendue'];
 					$droit_description = $ligne ['droit_description'];
