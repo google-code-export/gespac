@@ -15,6 +15,29 @@
 
 window.addEvent('domready', function(){
 	
+	// On implémente la fonctionnalité show/hide/toggle
+	Element.implement({
+		//implement show
+		show: function() {
+			this.setStyle('display','');
+		},
+		//implement hide
+		hide: function() {
+			this.setStyle('display','none');
+		},
+		//implement toggle
+		toggle: function() {
+			if (this.getStyle('display')=='none')
+				this.setStyle('display','block');
+			else
+				this.setStyle('display','none');
+		}
+	});
+
+	
+	
+	
+	
 	// init l'affichage
 	toggleAffichage(1000);
 
