@@ -3,14 +3,8 @@
 	#formulaire de modification
 	#des items du menu portail !
 
-
-
-	header("Content-Type:text/html; charset=iso-8859-1"); 	// règle le problème d'encodage des caractères
-
-	include ('../config/databases.php');	// fichiers de configuration des bases de données
-	//include ('../config/pear.php');			// fichiers de configuration des lib PEAR (setinclude + packages)
-	
 	// lib
+	include ('../config/databases.php');	// fichiers de configuration des bases de données
 	require_once ('../fonctions.php');
 	include_once ('../../class/Sql.class.php');
 	
@@ -30,10 +24,10 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (pour les url trop longues)
-					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_grades.php');", 1500);
 					SexyLightbox.close();
+					window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('filt').value + "'", 2500);	
 				}
 			
 			}).send(this.toQueryString());
@@ -44,9 +38,7 @@
 </script>
 
 
-<h3>Visualisation des items du portail</h3>
-<br>
-
+<small>Pour ajouter un raccourci, allez dans les "MODULES" et choisissez "MENU PORTAIL"</small>
 
 <?PHP 
 	
@@ -71,7 +63,7 @@
 	
 	</br>
 	
-	<table width=500 id='portail_table' class="tablehover">
+	<table width=500 id='portail_table'>
 		
 		<th>&nbsp;</th>
 		<th>Icone</th>

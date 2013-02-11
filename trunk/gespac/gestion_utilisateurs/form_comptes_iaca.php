@@ -1,26 +1,19 @@
-<script type="text/javascript"> 
-	// ferme la smoothbox et rafraichis la page
-	function refresh_quit () {
-		// lance la fonction avec un d�lais de 1000ms
-		SexyLightbox.close();
-		window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1000);
-	}
-</script>
 
-<h3>Importation des comptes IACA</h3>
 
-<br>
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
+<div class="entetes" id="entete-importusers">	
 
-<!--  SERVEUR AJAX -->
-<script type="text/javascript" src="server.php?client=all"></script>
+	<span class="entetes-titre">IMPORT IACA<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Permet d'importer des comptes avec un fichier CSV. </div>
+
+</div>
+
+<div class="spacer"></div>
 
 
 <form method="POST" action="gestion_utilisateurs/post_comptes_iaca.php" target=_blank enctype="multipart/form-data">
 <!--<form method="POST" action="gestion_utilisateurs/post_comptes_iaca.php" enctype="multipart/form-data">-->
-	 <!-- On limite le fichier � 10000Ko -->
+	 <!-- On limite le fichier à 10000Ko -->
      <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
 	 <center>
 	 <table width=400 align=center cellpadding=10px>
@@ -29,19 +22,50 @@
 			<td><input type="file" name="myfile"></td>
 		</tr>
 		<tr>
-			<td colspan=2><br><input type="submit" name="envoyer" value="Envoyer le fichier" onclick="refresh_quit();"></td>
+			<td colspan=2><input type="submit" name="envoyer" value="Envoyer le fichier"></td>
 		</tr>
 	 </table>
 	 </center>
       
 </form>
 
-<center>
-	<a href='#' onclick='alert("Importation des comptes IACA profs : \n - Ouvrir IACA \n - Selectionnez le groupe des profs (UAI_P) \n - OUTILS -> Exporter les comptes \n - Decocher `premiere ligne avec noms des champs` \n - Separateur `virgule` \n - Entourer les champs guillemets \n - Cocher `NOM COMPLET` \n - Cocher `NOM OUVERTURE DE SESSION EN MAJUSCULES` \n - Cocher `MOT DE PASSE` \n - Il faut les champs dans cet ordre (utilisez le bouton MONTER) \n - Faire OK, enregistrer en CSV \n - N`importez que le groupe des profs \n");'>AIDE</a>
-</center>
+<br>
+
+<center>Aide <a href="javascript:$('aide1').toggle();"><b>Infra non migrée</b></a> - <a href="javascript:$('aide2').toggle();"><b>Infra migrée</b></a></center>
 
 
 
+<div id="aide1" style='display:none;'>
+	<small>
+		<br><b>Infra NON migrée :</b><br>
+		Ouvrir IACA et selectionnez le groupe des profs (UAI_P)<br>
+		 - OUTILS -> Exporter les comptes <br>
+		 - Decocher `premiere ligne avec noms des champs`  <br>
+		 - Separateur `virgule`  <br>
+		 - Entourer les champs guillemets  <br>
+		 - Cocher `NOM COMPLET`  <br>
+		 - Cocher `NOM OUVERTURE DE SESSION EN MAJUSCULES`  <br>
+		 - Cocher `MOT DE PASSE`  <br>
+		 - Il faut les champs dans cet ordre (utilisez le bouton MONTER)  <br>
+		 - Faire OK, enregistrer en CSV  <br>
+		 - N`importez que le groupe des profs
+	</small>
+</div>
 
 
-
+<div id="aide2" style='display:none;'>
+	<small>
+		<br><b>Infra migrée :</b><br>
+		Ouvrir IACA et selectionnez le groupe des profs (UAI_P)<br>
+		 - OUTILS -> Exporter les comptes <br>
+		 - Decocher `premiere ligne avec noms des champs`  <br>
+		 - Separateur `virgule`  <br>
+		 - Entourer les champs guillemets  <br>
+		 - Cocher `NOM COMPLET`  <br>
+		 - Cocher `NOM OUVERTURE DE SESSION EN MAJUSCULES`  <br>
+		 - Cocher `MOT DE PASSE`  <br>
+		 - Il faut les champs dans cet ordre (utilisez le bouton MONTER)  <br>
+		 - Faire OK, enregistrer en CSV  <br>
+		 - N`importez que le groupe des profs
+	</small>
+</div>
