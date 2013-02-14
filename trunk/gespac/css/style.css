@@ -16,39 +16,48 @@ img {border:0px; vertical-align:middle;}
 
 
 #portail-menu {
-	background-color: white; 
+	background		: #BFBFBF; 
 	border			: solid 1px black; 
 	width			: 94%;
 	padding			: 5px 10px 5px 10px; 
 	margin-left		: auto; 
 	margin-right	: auto;
-	border-radius	: 10px;
+	margin-top : 10px;
+	border-radius	: 5px;
+	font-size : 9px;
+	padding-top : 15px;
+	padding-bottom : 15px;
 }
 
 .portail-menu-item {
 	text-align		: center;
 	width 			: auto;
 	float 			: left;
-	margin-right	: 20px;
+	margin-right	: 0px;
+	padding : 0 12px;
+	-webkit-transition: all .1s ease-out; 
+	-moz-transition: all .1s ease-out; 
+	-o-transition: all .1s ease-out; 
+	transition: all .1s ease-out;
 }
 
 .portail-menu-item:hover {
-	background-color	: #FFD48A; 
-	border-radius : 5px;
+	-moz-transform: scale(1.5);
+	-webkit-transform: scale(1.5);
+	-o-transform: scale(1.5);
+	transform: scale(1.5);
+	-ms-transform: scale(1.5);
 }
 
-
-
-
 #portail-conteneur {
-	background-color: white; 
+	background		: #BFBFBF; 
 	border			: solid 1px black; 
 	padding			: 5px 10px; 
 	width			: 94%;
 	margin-left		: auto; 
 	margin-right	: auto;
 	top 			: 120px;
-	border-radius	: 10px;
+	border-radius	: 5px;
 }
 
 
