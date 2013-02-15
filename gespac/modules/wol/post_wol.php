@@ -2,11 +2,9 @@
 
 
 	/* 
-		Permet le réveil des machines
+		Permet le rÃ©veil des machines
 	*/
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
 	// lib
 	require_once ('../../fonctions.php');
 	include_once ('../../config/databases.php');
@@ -29,7 +27,7 @@
 	$lot = $_POST ['materiel_a_poster'];
 	$lot_array = explode(";", $lot);
 	
-	// cnx à gespac
+	// cnx Ã  gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_id, mat_mac FROM materiels WHERE mat_mac <> '' " );	
@@ -42,6 +40,7 @@
 		}
 	}
 	
+	echo "RÃ©veil des machines...";
 	
 	$con_gespac->Close();
 ?>
