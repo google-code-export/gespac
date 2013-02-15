@@ -7,11 +7,6 @@
 	*/
 	
 
-	// lib
-	require_once ('../../fonctions.php');
-	include_once ('../../config/databases.php');
-	include_once ('../../../class/Sql.class.php');
-	
 	// On regarde si la base FOG existe car dans le cas de sa non existance la page ne s'affiche pas correctement
 	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion à la base de donnée
 	if(!mysql_select_db('fog', $link_bases)) {echo "Base FOG non présente, il est impossible de continuer l'affichage.";}//si la base FOG n'existe pas on arrete la page
@@ -19,17 +14,30 @@
 
 ?>
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
 
+<div class="entetes" id="entete-recapfog">	
 
-<h3>Récapitulatif FOG</h3>
+	<span class="entetes-titre">RECAPITULATIF FOG<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">La liste des machines présentes dans FOG avec association aux groupes et aux snapins.</div>
+
+	<span class="entetes-options">
+
+		<span class="option">
+			<!-- 	bouton pour le filtrage du tableau	-->
+			<form id="filterform">
+				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'table_recap_fog');" type="text"> 
+				<span id="nb_filtre" title="nombre de machines affichées"></span>
+			</form>
+		</span>
+	</span>
+
+</div>
+
+<div class="spacer"></div>
 
 <script type="text/javascript">	
-	
-	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
-	
+
+
 	// *********************************************************************************
 	//
 	//				Fonction de filtrage des tables
@@ -41,7 +49,7 @@
 		var words = phrase.value.toLowerCase().split(" ");
 		var table = document.getElementById(_id);
 		var ele;
-		var elements_liste = "";
+		var compteur = 0;
 				
 		for (var r = 1; r < table.rows.length; r++){
 			
@@ -51,6 +59,7 @@
 			for (var i = 0; i < words.length; i++) {
 				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
 					displayStyle = '';
+					compteur++;
 				}	
 				else {	// on masque les rows qui ne correspondent pas
 					displayStyle = 'none';
@@ -60,6 +69,8 @@
 			
 			// Affichage on / off en fonction de displayStyle
 			table.rows[r].style.display = displayStyle;	
+			
+			$('nb_filtre').innerHTML = "<small>" + compteur + "</small>";
 		}
 	}	
 	
@@ -74,16 +85,9 @@
 		
 ?>
 	
-	
-	<!-- 	bouton pour le filtrage du tableau	-->
-	<form>
-		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'table_recap_fog')" type="text"></center>
-	</form>
-	
-	<br>
 	<center>
 	
-	<table class="tablehover" id="table_recap_fog" width=800>
+	<table class="tablehover" id="table_recap_fog">
 	
 		<th>Nom matériel FOG</th>
 		<th>Adresse MAC</th>
@@ -104,65 +108,40 @@
 				$nom_fog 		= $record_fog['hostName'];
 				$MAC_fog		= $record_fog['hostMAC'];
 				$id				= $record_fog['hostID'];
-// ?
+				$groupe_fog = "";
+				$snapin_fog = "";
+				$image_fog = "";
+				
 				$liste_snapins = $con_fog->QueryAll ("SELECT sName FROM hosts, snapins, snapinAssoc WHERE hosts.hostID = snapinAssoc.saHostID AND snapins.sID = snapinAssoc.saSnapinID AND hosts.hostID = '$id'");
 				
-				$image_associee = $con_fog->QueryAll ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $id");
-				$groupe_associe = $con_fog->QueryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $id");
+				$image_associee = $con_fog->QueryOne ("SELECT imageName FROM images, hosts WHERE imageID=hostImage AND hosts.hostID = $id");
+				$groupes_associes = $con_fog->QueryAll ("SELECT groupName FROM groups, groupMembers, hosts WHERE groupMembers.gmHostID = hosts.hostID AND groups.groupID = groupMembers.gmGroupID AND hosts.hostID = $id");
 	
 				$compteur_snapins = count($liste_snapins);
 				
-				// test si une image est bien associée à un hôte
-				//$image_fog = (!empty($image_associee[0][0])) ? $image_associee[0][0] : "Pas d'image associée";
+
+				// Image associée
+				if (!empty($image_associee)) $image_fog = $image_associee;
+				else $image_fog = "Pas d'image associée";
 				
-				if (!empty($image_associee[0]['imageName'])) {
-					$image_fog = $image_associee[0]['imageName'];
-					
-				} else {
-					$image_fog = "Pas d'image associée";
-					
-				}
+				// Groupes associés
+				if (!empty($groupes_associes)) foreach ($groupes_associes as $groupe) $groupe_fog .= $groupe["groupName"] . "<br>";	
+				else $groupe_fog = "Pas de groupe associé";
 				
-				// test si un groupe est bien associé à un hôte
-				//$groupe_fog = (!empty($groupe_associe[0][0])) ? $groupe_associe[0][0] : "Pas de groupe associé";
+				// snapins associés
+				if (!empty($liste_snapins)) foreach ($liste_snapins as $snapin) $snapin_fog .= $snapin["sName"] . "<br>";	
+				else $snapin_fog = "Pas de snapin associé";
 				
-				if (!empty($groupe_associe[0]['groupName'])) {
-					$groupe_fog = $groupe_associe[0]['groupName'];
-					
-				} else {
-					$groupe_fog = "Pas de groupe associé";
-				}
+
 
 				echo "<tr class=$tr_class>";
-					echo "<td rowspan=$compteur_snapins> $nom_fog </td>";
-					echo "<td rowspan=$compteur_snapins> $MAC_fog </td>";
-					echo "<td rowspan=$compteur_snapins> $image_fog </td>";
-					echo "<td rowspan=$compteur_snapins> $groupe_fog </td>";
-				
-					//si y a des snapins, on les liste et on les affiche dans le tableau
-					if ($compteur_snapins > 0) {
-						
-						$i = 0;
-						$bg_color = ($tr_class == "tr1") ? "tr1" : "tr2";
-						
-						foreach ( $liste_snapins as $record_snapins ) {
-					
-							$nom_snapin = $record_snapins['sName'];
-							
-							if ( $i == 0 ) {
-									echo "<td>$nom_snapin</td></tr>";
-								} else {
-									echo "<tr class=$bg_color><td>$nom_snapin</td></tr>";
-							}
-
-							$i++;
-						}
-						
-					//sinon on dit qu'il n'y a pas de snapin associé
-					} else {
-						$nom_snapin = "Pas de snapin associé";
-						echo "<td>$nom_snapin</td></tr>";
-					}
+					echo "<td> $nom_fog </td>";
+					echo "<td> $MAC_fog </td>";
+					echo "<td> $image_fog </td>";
+					echo "<td> $groupe_fog </td>";
+					echo "<td> $snapin_fog </td>";
+				echo "</tr>";
+			
 					$compteur++;
 				}
 
