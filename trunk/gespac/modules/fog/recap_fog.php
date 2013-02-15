@@ -80,7 +80,6 @@
 
 	// cnx à fog
 	$con_fog = new Sql($host, $user, $pass, $fog);
-	
 	$liste_materiel_fog	= $con_fog->QueryAll ( "SELECT DISTINCT hostName, hostMAC, hostID FROM hosts ORDER BY hostName" );
 		
 ?>
