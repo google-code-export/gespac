@@ -27,7 +27,7 @@
 				<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
 				
 				<span id='nb_selectionnes' title=\"nombre de machines sélectionnées\"></span>
-				<span id='wakethem' style='display:none;'> <a href='#' title='Réveiller la selection' onclick='submit();'><img src='img/icons/eye.png'></a></span>					
+				<span id='wakethem' style='display:none;'> <input type=submit value='Réveiller la selection'></span>					
 				
 			</form>";?>
 		</span>
@@ -89,18 +89,22 @@
 				$salle_id 	= $record['salleid'];
 				$mac 		= $record['mat_mac'];
 			
-				
-				echo "<tr id=tr_id$id class=$tr_class>";
-					/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' rel='slb_wol' title='Caractéristiques de $nom'>$nom</a> </td>";
-					/*	serial	*/	echo "<td> $serial </td>";
-					/*	etat	*/	echo "<td> $etat </td>";
-					/*	salle	*/	echo "<td> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_wol' title='Membres de la salle $salle'>$salle</a> </td>";
-					/*	macaddr	*/	echo "<td> $mac </td>";
+				// On reteste la validité de l'adresse mac
+				$mac_valide = preg_match("#([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}#", $mac);
+			
+				if ($mac_valide) {
+					echo "<tr id=tr_id$id class=$tr_class>";
+						/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
+						/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' rel='slb_wol' title='Caractéristiques de $nom'>$nom</a> </td>";
+						/*	serial	*/	echo "<td> $serial </td>";
+						/*	etat	*/	echo "<td> $etat </td>";
+						/*	salle	*/	echo "<td> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_wol' title='Membres de la salle $salle'>$salle</a> </td>";
+						/*	macaddr	*/	echo "<td> $mac </td>";
 
-				echo "</tr>";
-				
-				$compteur++;
+					echo "</tr>";
+					
+					$compteur++;
+				}
 			}
 		?>		
 		
@@ -121,7 +125,10 @@
 	
 	window.addEvent('domready', function(){
 		
+		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_wol'});
+		
 		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
+		
 			new Event(e).stop();
 			new Request({
 
