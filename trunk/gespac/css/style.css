@@ -64,7 +64,7 @@ img {border:0px; vertical-align:middle;}
 /*	On execute tous les post dans ce div	*/
 #target {width:100%; position:fixed;	top:50%; left:0px; background-color:red; color:white; padding:5px; display:none; z-index:13; text-align:center;}
 
-.spacer { clear:both; height:50px ;}
+.spacer { clear:both; height:50px; min-width:500px;}
 
 /*	Le conteneur principal où on dessine le contenu et les menus	*/
 #page {background-color:white; margin-left:auto; margin-right:auto;}
