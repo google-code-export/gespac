@@ -16,9 +16,9 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('modules/export/post_export_perso.php');", 1500);
+					//window.setTimeout("document.location.href='index.php?page=wol'", 2500);	
 				}
 			
 			}).send(this.toQueryString());
@@ -28,29 +28,33 @@
 
 </script>
 
-<?PHP header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères ?>
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
 
-<h3>Export personnalisé</h3><br>
+<div class="entetes" id="entete-exportperso">	
+
+	<span class="entetes-titre">EXPORT PERSONNALISE<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Permet de crÃ©er un fichier CSV avec des champs personnalisÃ©s de la base Gespac.</div>
+
+</div>
+
+<div class="spacer"></div>
 
 <form action="modules/export/post_export_perso.php" method="post" name="post_form" id="post_form">
 
-	<input type=checkbox class=chkbox id=mat_nom> Nom du matériel <br>
-	<input type=checkbox class=chkbox id=mat_dsit> Numéro d'inventaire <br>
-	<input type=checkbox class=chkbox id=mat_serial> Numéro de série <br>
-	<input type=checkbox class=chkbox id=mat_etat> Etat du matériel<br>
-	<input type=checkbox class=chkbox id=mat_origine> Origine du matériel <br>
+	<input type=checkbox class=chkbox id=mat_nom> Nom du matÃ©riel <br>
+	<input type=checkbox class=chkbox id=mat_dsit> NumÃ©ro d'inventaire <br>
+	<input type=checkbox class=chkbox id=mat_serial> NumÃ©ro de sÃ©rie <br>
+	<input type=checkbox class=chkbox id=mat_etat> Etat du matÃ©riel<br>
+	<input type=checkbox class=chkbox id=mat_origine> Origine du matÃ©riel <br>
 
-	<input type=checkbox class=chkbox id=salle_nom> Salle du matériel <br>
+	<input type=checkbox class=chkbox id=salle_nom> Salle du matÃ©riel <br>
 
-	<input type=checkbox class=chkbox id=marque_type> Type du matériel <br>
-	<input type=checkbox class=chkbox id=marque_stype> Sous-type du matériel <br>
-	<input type=checkbox class=chkbox id=marque_marque> Marque du matériel <br>
-	<input type=checkbox class=chkbox id=marque_model> Modèle du matériel <br>
+	<input type=checkbox class=chkbox id=marque_type> Type du matÃ©riel <br>
+	<input type=checkbox class=chkbox id=marque_stype> Sous-type du matÃ©riel <br>
+	<input type=checkbox class=chkbox id=marque_marque> Marque du matÃ©riel <br>
+	<input type=checkbox class=chkbox id=marque_model> ModÃ¨le du matÃ©riel <br>
 
-	<input type=checkbox class=chkbox id=user_nom> Prêté à <br>
+	<input type=checkbox class=chkbox id=user_nom> PrÃªtÃ© Ã  <br>
 
 	<br>
 
@@ -59,7 +63,7 @@
 	<div id="log"></div>
 
 	<input type=hidden name=rqsql id=rqsql />
-	<input type=submit onclick="add_field()" value="Lancer l'export personnalisé">
+	<input type=submit onclick="add_field()" value="Lancer l'export personnalisÃ©">
 </form>
 
 
@@ -77,13 +81,13 @@
 		
 		$$('.chkbox').each(function (item) {
 		
-			// Si la case en question est cochée
+			// Si la case en question est cochÃ©e
 			if ( $(item.id).checked ) {
 			
-				// On incrémente le nombre de champs
+				// On incrÃ©mente le nombre de champs
 				nb_champs++;
 				
-				// On rajoute à la partie query le champ courant
+				// On rajoute Ã  la partie query le champ courant
 				query_select += item.id + ",";
 				
 				// si c'est un champ de la table "salles"
@@ -118,7 +122,7 @@
 		
 
 		if ( query_select != "" ) {
-			// on vire la dernière virgule
+			// on vire la derniÃ¨re virgule
 			query_select = query_select.substr(0, query_select.length-1);
 			// on rajoute SELECT
 			query_select = "SELECT " + query_select; 
