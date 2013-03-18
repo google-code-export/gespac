@@ -74,6 +74,6 @@
 		}
 	}
 	
-	echo "Mise à jour des numéros d'inventaire effectuée.<br>";
+	echo "Mise à jour des numéros d'inventaire effectuée.";
 
 ?>
