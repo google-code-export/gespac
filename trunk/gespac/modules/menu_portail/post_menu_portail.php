@@ -52,12 +52,12 @@
 		$result = $con_gespac->Execute ( $req_suppr_item );
 		
 		//Suppression de l'icone
-		unlink('./img/' . $mp_icone);
+		unlink('../../img/' . $mp_icone);
 		
 		// On log la requête SQL
 		fwrite($fp, date("Ymd His") . " " . $req_suppr_item."\n");
 		
-		echo "<br><small>L'item <b>$mp_nom</b> a été supprimé.</small>";
+		echo "L'item <b>$mp_nom</b> a été supprimé.";
 
 	}
 
@@ -78,7 +78,7 @@
 	    $req_log_modif_item = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification compte', '$log_texte' );";
 	    $result = $con_gespac->Execute ( $req_log_modif_item );
 		
-		echo "<br><small>L'item <b>$mp_nom</b> a été modifié...</small>";
+		echo "L'item <b>$mp_nom</b> a été modifié...";
 	}
 	
 	/**************** INSERTION ********************/
@@ -109,7 +109,7 @@
 			$fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
 			 
 			//On upload et on teste si la fonction renvoie TRUE
-			if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . $fichier) ) {
+			if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . $fichier)) {
 				echo $fichier . " envoyé avec succès !";
 
 				$req_add_item = "INSERT INTO menu_portail (mp_nom, mp_url, mp_icone) VALUES ('$mp_nom', '$mp_url', '$fichier' );";
@@ -132,7 +132,7 @@
 <?PHP
 			}
 			else	// En cas d'échec d'upload
-				echo 'Echec de l\'upload du fichier ' . $fichier;
+				echo 'Echec de l\'upload du fichier <b>' . $fichier . '</b> dans le dossier <b>' . $dossier . '</b>';
 				  
 		} else	// En cas d'erreur dans l'extension
 			 echo $erreur;
