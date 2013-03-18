@@ -16,47 +16,43 @@
 
 -->
 
-
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
-
 <?PHP
-
-	// lib
-	require_once ('../../fonctions.php');
-	include_once ('../../config/databases.php');
-	include_once ('../../../class/Sql.class.php');
-
 	
 	// gestion des droits particuliers (Migrer les pc)
 	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-10#", $_SESSION['droits']);
-	
 
-
-	echo "<h3>CREATION DES NUMEROS d'INVENTAIRE</h3>";
-	echo "<br><small><i>On génère un numéro d'inventaire codifié pour chaque matériel sans numéro DSIT.<br> En jaune, les lignes avec un id qui dépasse 999.<br> En rouge, les matériels avec une origine DOTATION supérieure à 2010.</small></i>";
-	echo "<br><br>";
+?>
 	
 	
-	?>
+	<div class="entetes" id="entete-geninventaire">	
 
-	<!-- Partie post de la sélection -->
-	<form name="post_form" id="post_form" action="modules/generate_inv/post_generate.php" method="post">
-		<center>
-		<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
-		<input type=submit name='post_selection' id='post_selection' value='générer' style='display:none;'><br>
-		<span id='nb_selectionnes'> [0] </span> sélectionné(s)	<br>
-		</center>
+	<span class="entetes-titre">CREATION DES NUMEROS d'INVENTAIRE<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">On génère un numéro d'inventaire codifié pour chaque matériel sans numéro DSIT.<br> En jaune, les lignes avec un id qui dépasse 999.<br> En rouge, les matériels avec une origine DOTATION supérieure à 2010.</div>
+
+	<span class="entetes-options">
 		
-	</form>
+		<span class="option">
+			<!-- Partie post de la sélection -->
+			<form name="post_form" id="post_form" action="modules/generate_inv/post_generate.php" method="post">
+				<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
+				<input type=submit name='post_selection' id='post_selection' value='générer' style='display:none;'>	<span id='nb_selectionnes'> [0] </span>			
+			</form>
+		</span>
+		
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/icons/add.png'></a>";?></span>
+		<span class="option">
+			<!-- 	bouton pour le filtrage du tableau	-->
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'generate_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+		</span>
+	</span>
+
+</div>
+
+<div class="spacer"></div>
 	
-	
-	<!-- 	bouton pour le filtrage du tableau	-->
-	<form>
-		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'generate_table', '0')" type="text"></center>
-	</form>
-	
+
+
+
 
 	
 	<?PHP
@@ -81,7 +77,7 @@
 	*
 	**************************************/
 
-	echo "<table id='generate_table' width=100%>";
+	echo "<table class='tablehover' id='generate_table'>";
 	
 	$compteur = 0;
 	
@@ -199,9 +195,9 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('modules/generate_inv/voir_generate.php')", 1500);
+					window.setTimeout("document.location.href='index.php?page=geninventaire'", 1500);			
 				}
 			
 			}).send(this.toQueryString());
