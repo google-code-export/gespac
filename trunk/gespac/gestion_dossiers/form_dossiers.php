@@ -45,7 +45,7 @@ if ( $dossierid == -1 ) {
 
 
 	$liste_materiels = $con_gespac->QueryAll ('Select mat_id, mat_nom, marque_type, salle_nom FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id;');
-	$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
+	//$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
 	$liste_salles 	 = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
 	$liste_etats 	 = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
 	$liste_types 	 = $con_gespac->QueryAll ( "SELECT type FROM dossiers_types" );
