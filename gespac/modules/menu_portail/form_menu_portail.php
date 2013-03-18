@@ -24,10 +24,10 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (pour les url trop longues)
-					window.setTimeout("$('conteneur').load('modules/menu_portail/voir_menu_portail.php');", 1500);
 					SexyLightbox.close();
+					window.setTimeout("document.location.href='index.php?page=modportail'", 1500);					
 				}
 			
 			}).send(this.toQueryString());
@@ -38,8 +38,7 @@
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit () {
 		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("$('conteneur').load('modules/menu_portail/voir_menu_portail.php');", 1500);
-		SexyLightbox.close();
+		window.setTimeout("document.location.href='index.php?page=modportail'", 1500);
 	}
 	
 		
@@ -104,9 +103,6 @@
 
 			</table>
 			
-
-
-			<br>
 			<br>
 			<center>
 			<input type="submit" name="envoyer" id="bt_submit" value="Envoyer">
@@ -157,13 +153,9 @@
 					<td><input type="file" name="myfile"></td>
 				</tr>
 			 </table>
-			 </center>
-
-
-
+			
 			<br>
-			<br>
-			<center>
+			
 			<input type="submit" name="envoyer" id="bt_submit" value="Envoyer" onclick="refresh_quit();" disabled />
 
 			</center>
