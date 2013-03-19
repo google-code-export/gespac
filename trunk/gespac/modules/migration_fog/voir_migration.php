@@ -7,50 +7,42 @@
 
 -->
 
-
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
-
 <?PHP
-
-	// lib
-	require_once ('../../fonctions.php');
-	include_once ('../../config/databases.php');
-	include_once ('../../../class/Sql.class.php');
-
-	
 	// gestion des droits particuliers (Migrer les pc)
 	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-08#", $_SESSION['droits']);
-	
-
-
-	echo "<h3>MIGRATION des TAGS DSIT vers FOG</h3>";
-	echo "<br><small><i>On affiche uniquement les PC qui ont une correspondance dans FOG sur le serial, qui ont un numéro d'inventaire et dont le nom FOG est différent du numéro d'inventaire...</small></i>";
-	echo "<br><br>";
+?>
 	
 	
-	?>
+<div class="entetes" id="entete-migfog">	
 
-	<!-- Partie post de la sélection -->
-	<form name="post_form" id="post_form" action="modules/migration_fog/post_migration.php" method="post">
-		<center>
-		<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
-		<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration' style='display:none;'>	<br>
-		<span id='nb_selectionnes'>[0] </span> sélectionné(s)	<br>
-		<input type=checkbox name='import_nom' id='import_nom'><label for='import_nom' title="Met à jour le champ description dans fog avec le nom du matériel. Ca simplifie la recherche dans fog...">Nom dans la description</label>
-		</center>
+	<span class="entetes-titre">MIGRATION DES NOMS DANS FOG<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Script permettant de mettre à jour les noms des machines dans FOG avec le numéro d'inventaire de GESPAC.<br>On affiche uniquement les PC qui ont une correspondance dans FOG sur le serial, qui ont un numéro d'inventaire et dont le nom FOG est différent du numéro d'inventaire.<br>Il est important que les machines dans FOG aient leur inventaire remonté.</div>
+
+	<span class="entetes-options">
 		
-	</form>
-	
-	
-	<!-- 	bouton pour le filtrage du tableau	-->
-	<form>
-		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'migration_table', '0')" type="text"></center>
-	</form>
+		<span class="option">
+			<!-- Partie post de la sélection -->
+			<form name="post_form" id="post_form" action="modules/migration_fog/post_migration.php" method="post">
+				<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
+				<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration' style='display:none;'>
+				<input type=checkbox name='import_nom' id='import_nom'><label for='import_nom' title="Met à jour le champ description dans fog avec le nom du matériel. Ca simplifie la recherche dans fog...">Nom dans la description</label>
+			</form>
+		</span>
+		
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/icons/add.png'></a>";?></span>
+		<span class="option">
+			<!-- 	bouton pour le filtrage du tableau	-->
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'migration_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+		</span>
+	</span>
+
+</div>
+
+<div class="spacer"></div>
 	
 
-	
+
+		
 	<?PHP
 	
 	// cnx à gespac
@@ -69,7 +61,7 @@
 	*
 	**************************************/
 
-	echo "<table id='migration_table' width=100%>";
+	echo "<table id='migration_table' class='tablehover'>";
 	
 	$compteur = 0;
 	
@@ -142,9 +134,10 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
+					$('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('modules/migration_fog/voir_migration.php')", 1500);
+					window.setTimeout("document.location.href='index.php?page=migfog'", 1500);	
+			
 				}
 			
 			}).send(this.toQueryString());
@@ -227,9 +220,6 @@
 
 		var chaine_id = $('pc_a_poster').value;
 		var table_id = chaine_id.split(";");
-
-		var nb_selectionnes = $('nb_selectionnes');
-		
 		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
 		var li = document.getElementById(ligne);
 		
@@ -240,14 +230,12 @@
 					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
 						table_id.push(tr_id);
 						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
 					}
 				break;
 				
 				case 0: // On force la déselection
 					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
 						table_id.erase(tr_id);
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
 						// alternance des couleurs calculée avec la parité
 						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
 					}
@@ -258,15 +246,12 @@
 					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
 						table_id.erase(tr_id);
 						
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-
 						// alternance des couleurs calculée avec la parité
 						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
 					
 					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
 						table_id.push(tr_id);
 						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
 					}
 				break;			
 			}
@@ -275,10 +260,11 @@
 			$('pc_a_poster').value = table_id.join(";");
 			
 			if ( $('pc_a_poster').value != "" ) {
-				$('post_selection').style.display = "";
+				$('post_selection').setStyle("display","inline");
+				$('post_selection').value = "Migration [" + (table_id.length-1) + " PC]";
 
 			} else { 
-				$('post_selection').style.display = "none";
+				$('post_selection').setStyle("display","none");
 			}
 
 		}

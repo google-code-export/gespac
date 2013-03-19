@@ -10,15 +10,15 @@
 	$lot 		= $_POST ['pc_a_poster'];
 	$lot_array 	= explode(";", $lot);
 
-	// cnx à la db gespac
+	// cnx Ã  la db gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
-	// Log des requêtes SQL
+	// Log des requÃªtes SQL
 	$log = new Log ("../../dump/log_sql.sql");
 	
 	$liste = "";
 
-	// On constitue la requête
+	// On constitue la requÃªte
 	foreach ($lot_array as $machine) {
 		if ( $machine <> "" ) $liste .= " OR mat_id=$machine";
 	}
@@ -27,7 +27,7 @@
 	$pc_gespac = $con_gespac->QueryAll ("SELECT mat_serial, mat_dsit, mat_nom FROM materiels WHERE mat_id='' $liste");
 	
 	
-	// cnx à la db fog
+	// cnx Ã  la db fog
 	$con_fog = new Sql($host, $user, $pass, $fog);	
 	
 	foreach ($pc_gespac as $pc) {
@@ -36,7 +36,7 @@
 		$gespac_dsit = $pc['mat_dsit'];
 		$gespac_nom = $pc['mat_nom'];
 		
-		// On récupère les hostIDs grace au serial
+		// On rÃ©cupÃ¨re les hostIDs grace au serial
 		$hostIDs = $con_fog->QueryAll ("SELECT iHostID FROM inventory WHERE iSysserial='$gespac_serial'");
 		
 		foreach ( $hostIDs as $hostID ) {
@@ -56,6 +56,8 @@
 		}
 
 	}
+	
+	echo "Migration des noms des machines dans FOG effectuÃ©e !";
 	
 
 ?>
