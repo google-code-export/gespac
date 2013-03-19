@@ -1,6 +1,3 @@
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
 <?PHP
 
 $id = $_GET['id'];
@@ -133,7 +130,7 @@ if ( $id <> -1 ) {
 		<br>
 		
 		<br>
-		<input type="submit" name="envoyer" value="Envoyer le fichier" onclick="refresh_quit();">
+		<input type="submit" name="envoyer" value="Envoyer le fichier">
 		 
 		</center>
 		  
@@ -166,9 +163,10 @@ if ( $id <> -1 ) {
 					url: this.action,
 
 					onSuccess: function(responseText, responseXML, filt) {
+						$('target').setStyle("display","block");
 						$('target').set('html', responseText);
-						$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
 						SexyLightbox.close();
+						window.setTimeout("document.location.href='index.php?page=gestfichiers&filter=" + $('filt').value + "'", 1500);
 					}
 				
 				}).send(this.toQueryString());
@@ -234,8 +232,7 @@ if ( $id <> -1 ) {
 
 	function refresh_quit () {
 		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("$('conteneur').load('modules/gestion_fichiers/voir_fichiers.php');", 1500);
-		SexyLightbox.close();
+		window.setTimeout("document.location.href='index.php?page=gestfichiers'", 1500);
 	}
 	
 	// Permet de mettre une valeur numérique aux cases cochées

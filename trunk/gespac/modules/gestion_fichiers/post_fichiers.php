@@ -41,6 +41,8 @@ if ( $action == 'suppr') {
 		$log_texte = "Suppression du fichier $fichier.";
 		$rq = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression fichier', '$log_texte' );";
 		$con_gespac->Execute($rq);
+		
+		echo "Le fichier " . $fichier . " a été supprimé.";
 	
 	} else {
 		echo "fichier introuvable... Je supprime la ligne dans la base.";
