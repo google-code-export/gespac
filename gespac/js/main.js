@@ -39,7 +39,7 @@ window.addEvent('domready', function(){
 	
 	
 	// init l'affichage
-	toggleAffichage(1000);
+	toggleAffichage(1100);
 
 
 	/////////////////////////////////////////////////////////////
@@ -63,9 +63,9 @@ window.addEvent('domready', function(){
 		$('menu').setStyle("max-height", window.getSize().y-100 + "px");
 		
 		// La barre d'entête
-		$$(".entetes").setStyle("width", $("contenu").getStyle('width'));
-		$$(".entetes-titre").setStyle("width", "auto");		// règle le problème sous firefox : width:auto ne marche pas depuis le css pour une raison étrange ...
-		$$(".entetes-options").setStyle("width", "auto");
+		//$$(".entetes").setStyle("width", $("contenu").getStyle('width'));
+		//$$(".entetes-titre").setStyle("width", "auto");		// règle le problème sous firefox : width:auto ne marche pas depuis le css pour une raison étrange ...
+		//$$(".entetes-options").setStyle("width", "auto");
 		
 	}
 	
@@ -86,7 +86,7 @@ window.addEvent('domready', function(){
 	//	Si la taille de la page est trop juste
 	///////////////////////////////////////////
 	window.addEvent('resize', function(){	
-		toggleAffichage(1000);
+		toggleAffichage(1100);
 	});
 	
 	

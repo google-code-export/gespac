@@ -87,10 +87,10 @@ img {border:0px; vertical-align:middle;}
 
 
 /*	Entetes des pages (avec les options dedans)	*/
-.entetes { font-size:14px; font-weight:700; padding:6px 15px; border-bottom:solid #B8B8B8 1px; float:top; margin-left:-5px; position:fixed; width:950px; z-index:10; background-color:#fff; /*box-shadow:1px 1px 5px #888;*/}
+.entetes { font-size:14px; font-weight:700; padding:6px 15px; border-bottom:solid #B8B8B8 1px; float:top; left:0; position:fixed; width:100%; z-index:10; background-color:#fff; /*box-shadow:1px 1px 5px #888;*/}
 .entetes-titre 		{float:left;}
 .entetes-titre img 	{height:24px; margin-left:10px; cursor:pointer;}
-.entetes-options 	{float:right; font-size:12px;}
+.entetes-options 	{float:right; font-size:12px; margin-right:20px;}
 .entetes-options .option {float:left; padding:0 3px;}
 .entetes-options img {height:24px; cursor:pointer;}
 .entetes-options form {margin:0; }
@@ -123,7 +123,7 @@ img {border:0px; vertical-align:middle;}
 #affect_box {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-34px; position:absolute; background-color:#E8E8E8; overflow:auto; width:auto; /*box-shadow:1px 5px 10px #888;*/}
 
 /* la boite d'aide */
-.helpbox {display:none; font-size:10px; border:1px grey solid; padding:5px; position:absolute; margin-top:30px; margin-left:-158px; background-color:#E8E8E8; /*box-shadow:1px 5px 10px #888;*/}
+.helpbox {display:none; font-size:10px; border:1px grey solid; padding:5px; position:fixed; top:30px; left:100px; background-color:#E8E8E8; /*box-shadow:1px 5px 10px #888;*/}
 
 /*	On masque par défaut le renommage et la modification par lot	*/
 #modif_selection {display:none; }

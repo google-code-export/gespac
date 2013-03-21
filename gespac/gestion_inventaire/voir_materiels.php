@@ -651,7 +651,7 @@
 		})
 		
 		// On ajuste la taille de la barre d'entête
-		$("entete-materiels").style.width = $("contenu").getStyle('width');
+		//$("entete-materiels").style.width = $("contenu").getStyle('width');
 	}
 	
 	
