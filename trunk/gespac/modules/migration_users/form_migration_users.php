@@ -5,11 +5,6 @@
 	
 		view de la db gespac avec tous les users du parc
 	*/
-	
-	// lib
-	require_once ('../../fonctions.php');
-	include_once ('../../config/databases.php');
-	include_once ('../../../class/Sql.class.php');
 
 
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
@@ -18,24 +13,33 @@
 	
 ?>
 
+<div class="entetes" id="entete-migusers">	
+	<span class="entetes-titre">MIGRATION DES UTILISATEURS<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">
+		Selectionnez dans les listes déroulantes les professeurs correspondants. Les sûrs à 100%, je les ai déjà selectionnés ;) 
+		<br><SPAN style="background-color:green;">VERT</SPAN> : Correspondances sur nom et prénom.
+		<br><SPAN style="background-color:yellow;">JAUNE</SPAN> : Correspondances	sur le nom.
+		<br><SPAN style="background-color:red;">ROUGE</SPAN> : Aucune correspondance.
+	</div>
+	
+	<span class="entetes-options">
+		
+		<span class="option">
+			<!-- 	bouton pour le filtrage du tableau	-->
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'migration_users_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+		</span>
+	</span>
+	
+</div>
 
-<h3>Formulaire de migration des utilisateurs pour architecture AD 2008</h3><br>
-<small><i>
-	Selectionnez dans les listes déroulantes les professeurs correspondants. Les sûrs à 100%, je les ai déjà selectionnés ;) 
-	<br> En <SPAN style="background-color:green;">VERT</SPAN> : Correspondances sur nom et prénom. En <SPAN style="background-color:yellow;">JAUNE</SPAN> : Correspondances	sur le nom. En <SPAN style="background-color:red;">ROUGE</SPAN> : Aucune correspondance.
-</i></small>
-
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
+<div class="spacer"></div>
 
 
 <?PHP 
 
 	// Le fichier migration_users_ad2008.csv existe t'il ?
 	
-	$handle = fopen("../../dump/migration_users_ad2008.csv", "r");
-
+	$handle = fopen("dump/migration_users_ad2008.csv", "r");
 	
 	if ($handle) {
 
@@ -71,20 +75,13 @@
 		$liste_des_utilisateurs = $con_gespac->QueryAll ( "SELECT user_id, user_nom, user_logon FROM users WHERE user_logon<>'ati' ORDER BY user_nom" );
 
 	?>
-		<form method="POST" action="modules/migration_users/post_migration_users.php" id="post_form">
-			
-			<br><br>
-			
+		<form method="POST" action="modules/migration_users/post_migration_users.php" name="post_form" id="post_form">
+		
 			<center>
+				
+			<input type=submit value="migrer les comptes"><br><br>
 			
-			<input type=submit value="migrer les comptes">
-			
-			
-			<br><br>
-			
-	
-			<br>
-			<table class="tablehover" id="migration_users_table" width=800>
+			<table class="tablehover" id="migration_users_table">
 				<th>Nom</th>
 				<th>Logon</th>
 				<th>Correspondance</th>
@@ -175,13 +172,46 @@
 	
 	else {
 	
-		echo "Il faut poster (ou reposter ?) le fichier de migration ad2008";
+		echo "Il faut poster (ou reposter ?) le fichier de migration ad2008<br><br><a href='index.php?page=migusers'>CLIQUEZ ICI pour reposter le fichier.</a>";
 				
 	}
 	?>
 
 	
 	<script>
+		
+	// *********************************************************************************
+	//
+	//				Fonction de filtrage des tables
+	//
+	// *********************************************************************************
+
+	function filter (phrase, _id){
+
+		var words = phrase.value.toLowerCase().split(" ");
+		var table = document.getElementById(_id);
+		var ele;
+		var elements_liste = "";
+				
+		for (var r = 1; r < table.rows.length; r++){
+			
+			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
+			var displayStyle = 'none';
+			
+			for (var i = 0; i < words.length; i++) {
+				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
+					displayStyle = '';
+				}	
+				else {	// on masque les rows qui ne correspondent pas
+					displayStyle = 'none';
+					break;
+				}
+			}
+			
+			// Affichage on / off en fonction de displayStyle
+			table.rows[r].style.display = displayStyle;	
+		}
+	}	
 	
 	/******************************************
 	*
@@ -200,13 +230,13 @@
 					url: this.action,
 
 					onSuccess: function(responseText, responseXML, filt) {
+						$('target').setStyle("display","block");
 						$('target').set('html', responseText);
-						$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-						window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1500);
+						window.setTimeout("document.location.href='index.php?page=migusers'", 1500);
 					}
 				
 				}).send(this.toQueryString());
-			});	
+			});		
 		}
 		
 	});

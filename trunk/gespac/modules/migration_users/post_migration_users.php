@@ -31,7 +31,7 @@
 	// On shoot le fichier iaca
 	$kill_csv_file = unlink ("../../dump/migration_users_ad2008.csv");		
 
-	echo $compteur . " comptes mis à jour !";
+	echo $compteur . " compte(s) mis à jour !";
 
 
 ?>
