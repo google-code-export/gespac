@@ -118,7 +118,8 @@
 						case "migfog" :	include ("modules/migration_fog/voir_migration.php");	break;
 						case "migdossiers" :	include ("modules/migration_dossiers/migration_dossiers.php");	break;
 						case "geninventaire" :	include ("modules/generate_inv/voir_generate.php");	break;
-						case "migusers" :	include ("modules/migration_users/voir_migration_users.php");	break;
+						case "migusers" :	include ("modules/migration_users/form_extract.php");	break;
+						case "migusers2" :	include ("modules/migration_users/form_migration_users.php");	break;
 						case "aic" :	include ("modules/snapin_aic/voir_snapin_aic.php");	break;
 						
 						case "college" :	include ("gestion_college/voir_college.php");	break;

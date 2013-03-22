@@ -107,6 +107,9 @@ img {border:0px; vertical-align:middle;}
 #entete-modportail {background-color:#759AFF;}
 #entete-geninventaire {background-color:#8683E6;}
 #entete-gestfichiers {background-color:#83E684;}
+#entete-migdossiers {background-color:#83E684;}
+#entete-migfog {background-color:#83E684;}
+#entete-migusers {background-color:#83E684;}
 
 
 /*	bandeau pour la partie login, grade et déconnexion	*/
@@ -117,13 +120,13 @@ img {border:0px; vertical-align:middle;}
 
 
 /*	La boite de case à cocher pour les colonnes dans matériels	*/
-#options_colonnes {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-34px; position:absolute; background-color:#E8E8E8; overflow:auto; width:120px; /*box-shadow:1px 5px 10px #888;*/}
+#options_colonnes {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-34px; position:absolute; background-color:#E6E6E6; overflow:auto; width:120px; /*box-shadow:1px 5px 10px #888;*/}
 
 /*	La boite pour l'affectation directe d'un matériel	*/
-#affect_box {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-34px; position:absolute; background-color:#E8E8E8; overflow:auto; width:auto; /*box-shadow:1px 5px 10px #888;*/}
+#affect_box {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-34px; position:absolute; background-color:#E6E6E6; overflow:auto; width:auto; /*box-shadow:1px 5px 10px #888;*/}
 
 /* la boite d'aide */
-.helpbox {display:none; font-size:10px; border:1px grey solid; padding:5px; position:fixed; top:30px; left:100px; background-color:#E8E8E8; /*box-shadow:1px 5px 10px #888;*/}
+.helpbox {display:none; font-size:11px; border:1px grey solid; padding:5px; position:fixed; top:30px; left:225px; background-color:#E6E6E6; z-index:11; /*box-shadow:1px 5px 10px #888;*/}
 
 /*	On masque par défaut le renommage et la modification par lot	*/
 #modif_selection {display:none; }
@@ -233,5 +236,7 @@ img {border:0px; vertical-align:middle;}
 
 /******************************************* 	SCROLLBAR pour WEBKIT uniquement  *******************************************/
 ::-webkit-scrollbar {width:10px; height:10px;}
-::-webkit-scrollbar-track { border-radius:3px;}
-::-webkit-scrollbar-thumb { border-radius:3px; background-color:orange; border:1px solid black;}
+::-webkit-scrollbar-track { border:0;}
+::-webkit-scrollbar-track:hover { border:1px solid grey;}
+::-webkit-scrollbar-thumb { background-color:#E6E6E6; border:1px solid grey;}
+::-webkit-scrollbar-thumb:hover { background-color:#B0B0B0; border:1px solid grey;}
