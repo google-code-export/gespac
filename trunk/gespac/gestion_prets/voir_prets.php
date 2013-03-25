@@ -41,7 +41,7 @@
 				
 				
 				<div id="preter" style="display:none; text-align:center" > 
-					Préter à : &nbsp
+					Prêter à : &nbsp
 					
 					<select id=user_select>
 				
