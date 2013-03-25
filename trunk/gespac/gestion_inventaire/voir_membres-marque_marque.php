@@ -7,9 +7,11 @@
 
 <?PHP
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../includes.php');
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Log.class.php');	
+	include_once ('../../class/Sql.class.php');	
 
 	
 	// libellé du type de marque récupéré de la page voir_marques.php

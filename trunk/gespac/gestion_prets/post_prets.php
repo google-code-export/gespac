@@ -7,7 +7,11 @@
 	*/
 
 	
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Log.class.php');	
+	include_once ('../../class/Sql.class.php');	
 
 	// Connexion à la base de données GESPAC
 	$con_gespac = new Sql($host, $user, $pass, $gespac);

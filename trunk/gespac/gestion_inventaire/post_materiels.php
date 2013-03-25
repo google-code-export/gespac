@@ -5,15 +5,13 @@ session_start();
 	/* 
 		fichier de creation / modif / suppr du matériel
 		
-		Si j'ai un ID c'est une modification
-		Si j'en ai pas c'est une création
-		
-		reste à coder pour la suppression
 	*/
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Log.class.php');	
+	include_once ('../../class/Sql.class.php');	
 	
 	// cnx à la base de données GESPAC
 	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
@@ -97,12 +95,12 @@ session_start();
 		
 	if ( $action == 'modlot' ) {
 		
-		$lot		= addslashes(utf8_decode(urldecode($_POST ['lot'])));
-		$etat   	= addslashes(utf8_decode(urldecode($_POST ['etat'])));
-		$salle  	= addslashes(utf8_decode(urldecode($_POST ['salle'])));
-		$type   	= addslashes(utf8_decode(urldecode($_POST ['type'])));
-		$modele 	= addslashes(utf8_decode(urldecode($_POST ['modele'])));
-		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
+		$lot		= addslashes($_POST ['lot']);
+		$etat   	= addslashes($_POST ['etat']);
+		$salle  	= addslashes($_POST ['salle']);
+		$type   	= addslashes($_POST ['type']);
+		$modele 	= addslashes($_POST ['modele']);
+		$origine 	= addslashes($_POST ['origine']);
 		
 		$message_pret_ok = "";
 		$message_pret_ko = "";
@@ -186,8 +184,8 @@ session_start();
 		
 	if ( $action == 'renomlot' ) {
 		
-		$lot		= addslashes(urldecode($_POST ['lot']));
-		$prefixe   	= addslashes(urldecode($_POST ['prefixe']));
+		$lot		= addslashes($_POST ['lot']);
+		$prefixe   	= addslashes($_POST ['prefixe']);
 		$suffixe   	= $_POST ['suffixe'];
 		
 
@@ -230,15 +228,15 @@ session_start();
 	
 		$id			= $_POST ['materiel_id'];
 		$marque_id	= $_POST['marque_id'];
-		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
-		$dsit 		= addslashes(utf8_decode(urldecode($_POST ['dsit'])));
-		$serial		= addslashes(utf8_decode(urldecode($_POST ['serial'])));
-		$etat   	= addslashes(utf8_decode(urldecode($_POST ['etat'])));
-		$gign   	= addslashes(utf8_decode(urldecode($_POST ['num_gign'])));
+		$nom 		= addslashes($_POST ['nom']);
+		$dsit 		= addslashes($_POST ['dsit']);
+		$serial		= addslashes($_POST ['serial']);
+		$etat   	= addslashes($_POST ['etat']);
+		$gign   	= addslashes($_POST ['num_gign']);
 		$salle  	= $_POST ['salle'];
-		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
-		$mac_input	= addslashes(utf8_decode(urldecode($_POST ['mac_input'])));
-		$mac_radio	= addslashes(utf8_decode(urldecode($_POST ['mac_radio'])));
+		$origine 	= addslashes($_POST ['origine']);
+		$mac_input	= addslashes($_POST ['mac_input']);
+		$mac_radio	= addslashes($_POST ['mac_radio']);
 
 
 		// En fonction du champ rempli (input ou radio) on récupère l'une ou l'autre des valeurs
@@ -280,17 +278,17 @@ session_start();
 	
 	if ( $action == 'add' ) {
 		$marque_id	= $_POST['marque_id'];
-		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
-		$dsit 		= addslashes(utf8_decode(urldecode($_POST ['dsit'])));
-		$serial		= addslashes(utf8_decode(urldecode($_POST ['serial'])));
-		$etat   	= addslashes(utf8_decode(urldecode($_POST ['etat'])));
-		$salle  	= addslashes(utf8_decode(urldecode($_POST ['salle'])));
-		$type   	= addslashes(utf8_decode(urldecode($_POST ['type'])));
-		$stype   	= addslashes(utf8_decode(urldecode($_POST ['stype'])));
-		$marque   	= addslashes(utf8_decode(urldecode($_POST ['marque'])));
-		$modele 	= addslashes(utf8_decode(urldecode($_POST ['modele'])));
-		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
-		$mac	 	= addslashes(utf8_decode(urldecode($_POST ['mac'])));
+		$nom 		= addslashes($_POST ['nom']);
+		$dsit 		= addslashes($_POST ['dsit']);
+		$serial		= addslashes($_POST ['serial']);
+		$etat   	= addslashes($_POST ['etat']);
+		$salle  	= addslashes($_POST ['salle']);
+		$type   	= addslashes($_POST ['type']);
+		$stype   	= addslashes($_POST ['stype']);
+		$marque   	= addslashes($_POST ['marque']);
+		$modele 	= addslashes($_POST ['modele']);
+		$origine 	= addslashes($_POST ['origine']);
+		$mac	 	= addslashes($_POST ['mac']);
 		
 		
 		// on récupére le numéro d'id de salle que l'on veut modifier dans la table materiels avec comme clause WHERE le nom de salle posté
@@ -319,13 +317,13 @@ session_start();
 	if ( $action == 'add_mat_marque' ) {
 		
 		$marque_id  = $_POST['add_marque_materiel'];
-		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
-		$dsit 		= addslashes(utf8_decode(urldecode($_POST ['dsit'])));
-		$serial		= addslashes(utf8_decode(urldecode($_POST ['serial'])));
-		$etat   	= addslashes(utf8_decode(urldecode($_POST ['etat'])));
-		$salle  	= addslashes(utf8_decode(urldecode($_POST ['salle'])));
-		$origine 	= addslashes(utf8_decode(urldecode($_POST ['origine'])));
-		$mac	 	= addslashes(utf8_decode(urldecode($_POST ['mac'])));
+		$nom 		= addslashes($_POST ['nom']);
+		$dsit 		= addslashes($_POST ['dsit']);
+		$serial		= addslashes($_POST ['serial']);
+		$etat   	= addslashes($_POST ['etat']);
+		$salle  	= addslashes($_POST ['salle']);
+		$origine 	= addslashes($_POST ['origine']);
+		$mac	 	= addslashes($_POST ['mac']);
 		
 		// on récupére le numéro d'id de salle que l'on veut modifier dans la table materiels avec comme clause WHERE le nom de salle posté
 		$salle_id = $con_gespac->QueryOne ( "SELECT salle_id FROM salles WHERE salle_nom='$salle'" );
