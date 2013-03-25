@@ -1,11 +1,15 @@
-﻿<?PHP
+<?PHP
 
 
 	/* 
 		fichier de creation / modif / suppr des salles
 	*/
 	
-	include ('../includes.php');
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Log.class.php');		
+	include_once ('../../class/Sql.class.php');	
 	
 	// Connexion à la base GESPAC
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
@@ -154,7 +158,7 @@
 			//On log la requête
 			$log->Insert ( $req_log_modif_salle );
 			
-			echo "<small>Modification de la salle <b>$nom</b> !</small>";
+			echo "Modification de la salle <b>$nom</b> !";
 		}
 	}
 	
