@@ -34,7 +34,7 @@
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
 	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion à la base de donnée	
-	if(!mysql_select_db($ocsweb, $link_bases)) { echo "BASE OCS introuvable";}
+	if(!mysql_select_db($ocsweb, $link_bases)) { }
 	else {
 		// cnx ocs
 		$con_ocs = new Sql($host, $user, $pass, $ocsweb);
