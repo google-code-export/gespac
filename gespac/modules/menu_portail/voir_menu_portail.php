@@ -46,7 +46,7 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_menu_portail.php
 		if (valida) {
-			$('target').setStyle("display","block");
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 			$('target').load("modules/menu_portail/post_menu_portail.php?action=suppr&id=" + id);
 			window.setTimeout("document.location.href='index.php?page=modportail'", 1500);		
 		}

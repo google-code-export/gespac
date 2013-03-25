@@ -295,7 +295,7 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
-					$('target').setStyle("display","block");
+					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
 					SexyLightbox.close();
 					window.setTimeout("document.location.href='index.php?page=materiels&filter=" +encodeURIComponent($('filt').value) + "'", 1500);

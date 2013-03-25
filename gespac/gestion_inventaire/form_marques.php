@@ -509,7 +509,7 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			$('target').setStyle("display","block");
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
 			SexyLightbox.close();
 			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
@@ -530,7 +530,7 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			$('target').setStyle("display","block");
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
 			SexyLightbox.close();
 			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
@@ -565,7 +565,7 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
-					$('target').setStyle("display","block");
+					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
 					SexyLightbox.close();
 					window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);

@@ -170,7 +170,7 @@
 				/* On déselectionne les lignes cocchées */
 				select_cette_ligne ( id, row, 0 );
 							
-				$('target').setStyle("display","block");
+				$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 				$('target').load("gestion_utilisateurs/post_utilisateurs.php?action=suppr&id=" + id);
 				window.setTimeout("document.location.href='index.php?page=utilisateurs&filter=" + $('filt').value + "'", 1500);
 				
