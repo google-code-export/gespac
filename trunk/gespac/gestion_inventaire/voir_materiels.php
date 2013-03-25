@@ -466,7 +466,7 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
-					$('target').setStyle("display","block");
+					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
 					window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('filt').value + "'", 1500);			
 				}
@@ -495,7 +495,7 @@
 				/* On déselectionne toutes les coches */
 				select_cette_ligne ( id, row, 0 );
 				
-				$('target').setStyle("display","block");
+				$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 				$('target').load("gestion_inventaire/post_materiels.php?action=suppr&id=" + id);
 				window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('filt').value + "'", 1500);
 				

@@ -144,7 +144,7 @@
 		
 			// si la réponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
-				$('target').setStyle("display","block");
+				$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 				$('target').load("gestion_inventaire/post_marques.php?action=suppr&id=" + id);
 				window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);			
 			}

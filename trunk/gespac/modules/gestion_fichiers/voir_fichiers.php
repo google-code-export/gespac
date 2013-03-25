@@ -160,7 +160,7 @@
 		// si la réponse est TRUE ==> on lance la page post_materiels.php
 		if (valida) {
 			
-			$('target').setStyle("display","block");
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 			$('target').load("modules/gestion_fichiers/post_fichiers.php?action=suppr&id=" + id);
 			window.setTimeout("document.location.href='index.php?page=gestfichiers'", 1500);		
 		}

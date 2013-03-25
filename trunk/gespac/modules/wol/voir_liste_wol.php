@@ -136,7 +136,7 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
-					$('target').setStyle("display","block");
+					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
 					window.setTimeout("document.location.href='index.php?page=wol'", 2500);	
 				}

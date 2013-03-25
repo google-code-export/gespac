@@ -52,7 +52,7 @@
 	<BODY>
 	
 	<!--	DIV target pour Ajax	-->
-	<div id="target"></div>
+	<div id="targetback"></div><div id="target"></div>
 
 		<?PHP
 			// lib

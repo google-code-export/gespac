@@ -277,7 +277,7 @@
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
 			//	poste la page en ajax	
-			$('target').setStyle("display","block");
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 			$('target').load("gestion_prets/post_prets.php?action=preter&matid=" + matid + "&userid=" + userid);
 			window.setTimeout("document.location.href='index.php?page=prets&filter=" + $('filt').value + "'", 2000);
 		}
@@ -302,7 +302,7 @@
 		if (valida) {
 					
 			//	poste la page en ajax
-			$('target').setStyle("display","block");
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 			$('target').load("gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
 			window.setTimeout("document.location.href='index.php?page=prets&filter=" + $('filt').value + "'", 2000);
 		}

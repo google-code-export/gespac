@@ -124,7 +124,7 @@
 		var valida = confirm('Voulez-vous vraiment supprimer le grade "' + nom + '" ?');
 		// si la réponse est TRUE ==> on lance la page post_grades.php
 		if (valida) {		
-			$('target').setStyle("display","block");
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 			$('target').load("gestion_utilisateurs/post_grades.php?action=suppr&id=" + id);
 			window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('filt').value + "'", 2500);
 			

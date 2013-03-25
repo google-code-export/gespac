@@ -163,7 +163,7 @@ if ( $id <> -1 ) {
 					url: this.action,
 
 					onSuccess: function(responseText, responseXML, filt) {
-						$('target').setStyle("display","block");
+						$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 						$('target').set('html', responseText);
 						SexyLightbox.close();
 						window.setTimeout("document.location.href='index.php?page=gestfichiers&filter=" + $('filt').value + "'", 1500);

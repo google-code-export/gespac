@@ -63,6 +63,7 @@ img {border:0px; vertical-align:middle;}
 
 /*	On execute tous les post dans ce div	*/
 #target {width:100%; position:fixed;	top:50%; left:0px; background-color:red; color:white; padding:5px; display:none; z-index:13; text-align:center;}
+#targetback {width:100%; height:100%; position:fixed; top:0; left:0px; background-color:black; opacity:.75; color:white; padding:5px; display:none; z-index:13; text-align:center;}
 
 .spacer { clear:both; height:50px; min-width:500px;}
 
