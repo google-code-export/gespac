@@ -28,12 +28,26 @@ session_start();
 			
 			// si la réponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
-				$('target').setStyle("display","block");
+				$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 				$('target').load("gestion_inventaire/post_salles.php?action=suppr&id=" + id);
 				window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('filt').value + "'", 1500);			
 			}
 		}
 	}
+	
+	// Fonction de validation pour vider la salle d3e
+	function validation_suppr_d3e () {
+
+		var valida = confirm('Voulez-vous vraiment vider la salle D3E ? \n\n(Une sauvegarde sera créée dans le gestionnaire de fichiers)');
+		
+		// si la réponse est TRUE ==> on lance la page post_marques.php
+		if (valida) {
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
+			$('target').load("gestion_inventaire/post_salles.php?action=vider_d3e");
+			window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('filt').value + "'", 1500);
+		}
+
+	}	
 	
 	
 	// *********************************************************************************
@@ -81,6 +95,7 @@ session_start();
 
 	<span class="entetes-options">
 		
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='#' onclick=\"javascript:validation_suppr_d3e();\" title='Vider la salle D3E'><img src='img/icons/refresh.png'></a>"; ?></span>
 		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/icons/add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
