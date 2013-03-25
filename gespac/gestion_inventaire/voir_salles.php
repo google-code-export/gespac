@@ -58,6 +58,23 @@ session_start();
 	}
 	
 	
+	// Fonction de validation pour vider la salle d3e
+	function validation_suppr_d3e () {
+
+		var valida = confirm('Voulez-vous vraiment vider la salle D3E ? \n\n(Une sauvegarde sera créée dans le gestionnaire de fichiers)');
+		
+		// si la réponse est TRUE ==> on lance la page post_marques.php
+		if (valida) {
+			/*	poste la page en ajax	*/
+			$('target').load("gestion_inventaire/post_salles.php?action=vider_d3e");
+			/*	on recharge la page au bout de 1000ms	*/
+			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php');", 1000);
+		}
+
+	}	
+	
+	
+	
 	// *********************************************************************************
 	//
 	//				Fonction de filtrage des tables
@@ -111,7 +128,10 @@ session_start();
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$liste_des_salles = $con_gespac->QueryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment, est_modifiable FROM salles ORDER BY salle_nom" );
 
-	if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
+	if ( $E_chk ) {
+		echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
+		echo "<a href='#' onclick=\"javascript:validation_suppr_d3e();\" title='Vider la salle D3E'> <img src='img/delete.png'>Vider la salle D3E</a>";	
+	}
 ?>
 	
 	<center>

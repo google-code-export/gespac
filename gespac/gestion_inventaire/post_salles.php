@@ -163,4 +163,54 @@
 		}
 	}
 	
+	
+	#**************** VIDER SALLE D3E ********************#
+
+	
+	if ( $action == 'vider_d3e' ) {
+	
+		// Liste des PC dans la salle D3E
+		$id_D3E = $con_gespac->QueryOne("SELECT salle_id FROM salles WHERE salle_nom='D3E'");
+		$liste_D3E = $con_gespac->QueryAll("SELECT mat_nom, mat_dsit, mat_serial, mat_origine, marque_marque, marque_model, marque_type, marque_stype FROM materiels, marques WHERE materiels.marque_id=marques.marque_id AND salle_id=$id_D3E");
+	
+		// On fait un dump de la salle d3e dans un fichier dans le dossier "fichiers"
+		$fp = fopen('../fichiers/dump-D3E.txt', 'a+');
+		
+		//fputcsv($fp, array('mat_nom', 'mat_dsit', 'mat_serial', 'mat_origine', 'marque_marque', 'marque_model', 'marque_type', 'marque_stype'), ',' );
+		
+		foreach ($liste_D3E as $mat) {
+			$mat_nom 		= $mat['mat_nom'];
+			$mat_dsit 		= $mat['mat_dsit'];
+			$mat_serial 	= $mat['mat_serial'];
+			$mat_origine 	= $mat['mat_origine'];
+			$marque_marque 	= $mat['marque_marque'];
+			$marque_model 	= $mat['marque_model'];
+			$marque_type 	= $mat['marque_type'];
+			$marque_stype 	= $mat['marque_stype'];
+			
+			fputcsv($fp, array($mat_nom, $mat_dsit, $mat_serial, $mat_origine, $marque_marque, $marque_model, $marque_type, $marque_stype), ',' );
+		}
+				
+		// On créé une ligne dans la table "fichiers" si elle n'existe pas
+		$verifie_existence_fichier = $con_gespac->QueryOne("SELECT fichier_id FROM fichiers WHERE fichier_chemin='dump-D3E.txt'; ");
+		
+		if (!$verifie_existence_fichier) {
+			$insert = "INSERT INTO fichiers (fichier_chemin, fichier_description, fichier_droits, user_id) VALUES ('dump-D3E.txt', 'Extraction de la salle D3E avant de la vider', 11, 1);";
+			$con_gespac->Execute($insert);
+			$log->Insert ( $insert );
+		}
+		
+		// On vide la table D3E en SUPPRIMANT les machines associées
+		$del = "DELETE FROM materiels WHERE salle_id=$id_D3E;";
+		$con_gespac->Execute($del);
+		$log->Insert ( $del );
+		
+	
+		echo "La salle D3E est vidée de tout son matériel...";
+	
+	}
+	
+	
+	
+	
 ?>
