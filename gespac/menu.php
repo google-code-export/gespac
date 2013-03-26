@@ -70,16 +70,12 @@ include_once ('fonctions.php');
 				</li>";
 			}
 			
-
-			
-			if ( checkalldroits("L-03-03") ) {
-				echo "<li class='dir'>"; if (checkdroit("L-03-03") ) echo "<a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='demandes et interventions'></div></a>"; else echo "<div id='demandes' class='demandes' title='demandes et interventions'></div>";
-					echo "<ul>";
-						if (checkdroit("L-03-03") ) echo "<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\">	Dossiers</a></li>";
-					echo "</ul>
-				</li>";
-			}
-			
+	
+			if (checkdroit("L-03-03") ) echo "
+			<li class='dir'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='preter ou rendre un matériel'></div></a></li>
+				<ul>
+					<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='preter ou rendre un matériel'></div></a></li>
+				</ul>";	
 			
 			
 			if ( checkalldroits("L-04-01,L-04-02,L-04-03,L-04-04,L-04-05,L-04-06") ) {
