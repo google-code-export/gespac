@@ -96,22 +96,12 @@ img {border:0px; vertical-align:middle;}
 .entetes-options img {height:24px; cursor:pointer;}
 .entetes-options form {margin:0; }
 
-#entete-materiels {background-color:#83E684;}
-#entete-salles {background-color:#AA83E6;}
-#entete-marques {background-color:#8683E6;}
+#entete-materiels, #entete-salles, #entete-marques {background-color:#83E684;}
+#entete-dossiers {background-color:#8683E6;}
 #entete-prets {background-color:#FFAF75;}
-#entete-utilisateurs {background-color:#759AFF;}
-#entete-grades {background-color:#759AFF;}
-#entete-importusers {background-color:#fff;}
-#entete-college {background-color:#05ff01;}
-#entete-recapfog {background-color:#AA83E6;}
-#entete-modportail {background-color:#759AFF;}
-#entete-geninventaire {background-color:#8683E6;}
-#entete-gestfichiers {background-color:#83E684;}
-#entete-migdossiers {background-color:#83E684;}
-#entete-migfog {background-color:#83E684;}
-#entete-migusers {background-color:#83E684;}
-
+#entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#759AFF;}
+#entete-college {background-color:#3DD5E0;}
+#entete-recapfog, #entete-modportail, #entete-geninventaire, #entete-gestfichiers, #entete-migdossiers, #entete-migfog, #entete-migusers, #entete-wol, #entete-exportperso, #entete-taginventaire {background-color:#AA83E6;}
 
 /*	bandeau pour la partie login, grade et déconnexion	*/
 #bandeau		{font-size:12px; color:black; padding:6px 15px; margin-bottom:15px;}

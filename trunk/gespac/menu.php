@@ -19,7 +19,7 @@
 	<div id="menu-global">
 
 		<div class="menu-block" id="menu-accueil">
-			<div class="menu-titre"><img src="img/icons/accueil.png">ACCUEIL</div>
+			<div class="menu-titre" id="entete-menu-accueil"><img src="img/icons/accueil.png">ACCUEIL</div>
 			<div class="menu-items">
 				<a href="index.php?page=accueil"><div class="menu-item">Retour à l'accueil</div></a>
 				<a href="../index.php"><div class="menu-item">Retour au portail</div></a>
@@ -28,7 +28,7 @@
 
 		
 		<div class="menu-block" id="menu-inventaire">
-			<div class="menu-titre"><img src="img/icons/inventaire.png">INVENTAIRE</div>
+			<div class="menu-titre" id="entete-menu-inventaire"><img src="img/icons/inventaire.png">INVENTAIRE</div>
 			<div class="menu-items">
 				<a href="index.php?page=materiels"><div class="menu-item">matériels</div></a>
 				<a href="index.php?page=marques"><div class="menu-item">marques</div></a>
@@ -38,7 +38,7 @@
 		
 		
 		<div class="menu-block" id="menu-dossiers">
-			<div class="menu-titre"><img src="img/icons/dossiers.png">DOSSIERS</div>
+			<div class="menu-titre" id="entete-menu-dossiers"><img src="img/icons/dossiers.png">DOSSIERS</div>
 			<div class="menu-items">
 				<a href="index.php?page=dossiers"><div class="menu-item">Gérer les dossiers</div></a>
 			</div>
@@ -46,7 +46,7 @@
 	
 	
 		<div class="menu-block" id="menu-prets">
-			<div class="menu-titre"><img src="img/icons/pret.png">PRETS</div>
+			<div class="menu-titre" id="entete-menu-prets"><img src="img/icons/pret.png">PRETS</div>
 			<div class="menu-items">
 				<a href="index.php?page=prets"><div class="menu-item">Gérer les prêts</div></a>
 			</div>
@@ -54,7 +54,7 @@
 		
 		
 		<div class="menu-block" id="menu-users">
-			<div class="menu-titre"><img src="img/icons/users.png">UTILISATEURS</div>
+			<div class="menu-titre" id="entete-menu-users"><img src="img/icons/users.png">UTILISATEURS</div>
 			<div class="menu-items">
 				<a href="index.php?page=utilisateurs"><div class="menu-item">Visualiser les utilisateurs</div></a>
 				<a href="index.php?page=grades"><div class="menu-item">Visualiser les grades</div></a>
@@ -64,7 +64,7 @@
 		</div>
 		
 		<div class="menu-block" id="menu-modules">
-			<div class="menu-titre"><img src="img/icons/modules.png">MODULES</div>
+			<div class="menu-titre" id="entete-menu-modules"><img src="img/icons/modules.png">MODULES</div>
 			<div class="menu-items">
 				<a href="index.php?page=recapfog"><div class="menu-item">Récapitulatif FOG</div></a>
 				<a href="index.php?page=wol"><div class="menu-item">Wake On Lan</div></a>
@@ -82,7 +82,7 @@
 		</div>
 			
 		<div class="menu-block" id="menu-info">
-			<div class="menu-titre"><img src="img/icons/info.png">INFO</div>
+			<div class="menu-titre" id="entete-menu-info"><img src="img/icons/info.png">INFO</div>
 			<div class="menu-items">
 				<a href="index.php?page=college"><div class="menu-item">Fiche collège</div></a>
 				<a href="index.php?page=rss"><div class="menu-item">Flux RSS</div></a>
@@ -94,7 +94,7 @@
 		</div>
 		
 		<div class="menu-block" id="menu-donnees">
-			<div class="menu-titre"><img src="img/icons/data.png">DONNEES</div>
+			<div class="menu-titre" id="entete-menu-donnees"><img src="img/icons/data.png">DONNEES</div>
 			<div class="menu-items">
 				<a href="index.php?page=importocs"><div class="menu-item">Importer DB OCS</div></a>
 				<a href="index.php?page=exports"><div class="menu-item">Exports</div></a>
