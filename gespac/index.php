@@ -121,6 +121,7 @@
 						case "migusers" :	include ("modules/migration_users/form_extract.php");	break;
 						case "migusers2" :	include ("modules/migration_users/form_migration_users.php");	break;
 						case "aic" :	include ("modules/snapin_aic/voir_snapin_aic.php");	break;
+						case "aicform" :	include ("modules/snapin_aic/form_snapin_aic.php");	break;
 						
 						case "college" :	include ("gestion_college/voir_college.php");	break;
 						case "rss" :	include ("modules/rss/rss.php");	break;
