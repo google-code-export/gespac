@@ -13,35 +13,21 @@ session_start();
 		de la supprimer en faisant gaffe à bien rebalancer TOUTES les machines dans la salle de stockage
 	
 	*/
-
-
-	// lib
-	require_once ('../../fonctions.php');
-	include_once ('../../config/databases.php');
-	include_once ('../../../class/Sql.class.php');
 		
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-11#", $_SESSION['droits']);
 
 	
-	echo "<h3>Création des snapins pour intégration dans le domaine via client iaca.</h3>";
-	echo "<br><small><i>Tout d'abord, créez vos UO sur le contrôleur de domaine puis créez les snapins avec cette interface et enfin associez ces snapins aux machines dans fog !</small></i>";
-	echo "<br><br><br><br>";
-	
 	if ( $E_chk ) {
 		
 ?>
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
+	<div class="entetes" id="entete-aic">	
+		<span class="entetes-titre">SNAPINS FOG pour AIC<img class="help-button" src="img/icons/info.png"></span>
+		<div class="helpbox">Afin d'éviter de créer un fichier AIC par OU de l'AD, on peut déployer le même fichier AIC.EXE avec des paramètres.<br>Cette page permet de créer dans fog un snapin paramétré pour intégrer les machines au domaine.</div>
+	</div>
 
-<script type="text/javascript">	
-
-	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
-	
-</script>
-
+	<div class="spacer"></div>
 
 <?PHP 
 
@@ -57,40 +43,41 @@ session_start();
 
 <center>
 
-<form action="modules/snapin_aic/post_snapin_aic.php?action=add" method="post" name="post_form" id="post_form">
-	
-	<input type="submit" value="Créer le Snapin dans FOG">
-	
-		<br>
-	<br>
-	
-	
-	<?PHP
-	echo "<table class=paramdiv>";
-						
-					echo "<tr align=left><td>UO *</td><td><input type=text id='nom_uo' name='nom_uo' size=15 required><small>Les OU et sous-OU sont séparées par des virgules.</small></td>";
+	<form action="modules/snapin_aic/post_snapin_aic.php?action=add" method="post" name="post_form" id="post_form">
+		
 
-					echo "<tr align=left><td>PARAMETRES</td>
-						<td>
-						<div id='paramdiv' class='paramdiv' style='padding:10px;'>		
-							<input type=checkbox id='e'>Afficher les messages d'erreur<br>
-							<input type=checkbox id='u'>N'affiche pas le dernier login<br>
-							<input type=checkbox id='m' checked>Verrouillage MAJ<br>
-							<input type=checkbox id='c' checked>Supprime la fenêtre Ctrl Alt Suppr<br>
-							<input type=checkbox id='s' checked>Supprime la synchronisation<br>
-							<input type=checkbox id='r' checked>Reboot<br>
-							<input type=checkbox id='p' checked>Poste Fixe<br>
-							<input type=checkbox id='a' checked>Installe le client IACA<br>
-						</div>
-					</td></tr>";	
+		<br><br>
+		
+		
+		<?PHP
+		echo "<table class=paramdiv>";
+							
+						echo "<tr align=left><td>UO *</td><td><input type=text id='nom_uo' name='nom_uo' size=15 required><small>Les OU et sous-OU sont séparées par des virgules.</small></td>";
+
+						echo "<tr align=left><td>PARAMETRES</td>
+							<td>
+							<div id='paramdiv' class='paramdiv' style='padding:10px;'>		
+								<input type=checkbox id='e'>Afficher les messages d'erreur<br>
+								<input type=checkbox id='u'>N'affiche pas le dernier login<br>
+								<input type=checkbox id='m' checked>Verrouillage MAJ<br>
+								<input type=checkbox id='c' checked>Supprime la fenêtre Ctrl Alt Suppr<br>
+								<input type=checkbox id='s' checked>Supprime la synchronisation<br>
+								<input type=checkbox id='r' checked>Reboot<br>
+								<input type=checkbox id='p' checked>Poste Fixe<br>
+								<input type=checkbox id='a' checked>Installe le client IACA<br>
+							</div>
+						</td></tr>";	
+						
+						echo "<tr align=left><td>Arguments</td><td><textarea id='param' name='param' readonly style='height:60px;width:500px;' required></textarea></td></tr>";
 					
-					echo "<tr align=left><td>Arguments</td><td><textarea id='param' name='param' readonly style='height:60px;width:500px;'></textarea></td></tr>";
-				
-					
-			echo "</table>";
-	?>
-	
-	
+						
+				echo "</table>";
+		?>
+		
+			<br><br>
+
+			<input type="submit" value="Créer le Snapin dans FOG">
+		
 	</form>
 	
 </center>
@@ -107,10 +94,7 @@ session_start();
 <script type="text/javascript">
 	
 	window.addEvent('domready', function(){
-	 
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
-		
-		
+	 		
 		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
 			new Event(e).stop();
 			new Request({
@@ -119,8 +103,9 @@ session_start();
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
+					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					//$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("document.location.href='index.php?page=aic'", 1500);	
 				}
 			
 			}).send(this.toQueryString());
