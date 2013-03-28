@@ -100,7 +100,7 @@ img {border:0px; vertical-align:middle;}
 #entete-dossiers {background-color:#8683E6;}
 #entete-prets {background-color:#FFAF75;}
 #entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#759AFF;}
-#entete-college, #entete-statbat, #entete-infoserveur {background-color:#3DD5E0;}
+#entete-college, #entete-statbat, #entete-infoserveur, #entete-statparc {background-color:#FAEF7D;}
 #entete-aic, #entete-recapfog, #entete-modportail, #entete-geninventaire, #entete-gestfichiers, #entete-migdossiers, #entete-migfog, #entete-migusers, #entete-wol, #entete-exportperso, #entete-taginventaire {background-color:#AA83E6;}
 
 /*	bandeau pour la partie login, grade et déconnexion	*/

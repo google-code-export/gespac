@@ -1,13 +1,5 @@
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
 <script type="text/javascript">	
-	// init de la couleur de fond
-	$('conteneur').style.backgroundColor = "#fff";
-	
-	
+
 	// filtrer les stats
 	function filtrer_stat (pc, datedebut, datefin) {
 		var pc_value = $('pc').value
@@ -23,23 +15,34 @@
 		if (datefin_value == '')
 			datefin_value='2050-01-01';
 				
-		$("conteneur").load("modules/stats/utilisation_parc.php?pc=" + pc_value + "&datefin=" + datefin_value + "&datedebut=" + datedebut_value);
+		document.location.href="index.php?page=statparc&pc=" + pc_value + "&datefin=" + datefin_value + "&datedebut=" + datedebut_value;
 	}
 	
 	
 </script>
+
+
+<div class="entetes" id="entete-statparc">	
+	<span class="entetes-titre">UTILISATION DU PARC<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Statistique du nombre d'identifications par machines sur le parc.<br>Les statistiques sont tirÃ©es du module userTracking de FOG.</div>
+
+	<span class="entetes-options">
+
+		<span class="option"><input type=text id=pc placeholder="nom machine"></span>
+		<span class="option"><input type=text id=datedebut placeholder="dÃ©but (aaaa-mm-jj)"></span>
+		<span class="option"><input type=text id=datefin placeholder="fin (aaaa-mm-jj)"></span>
+		<span class="option"><input type=button value=Filtrer onclick="filtrer_stat(pc, datedebut, datefin);" ></span>
+		
+	</span>
+
+</div>
+
+<div class="spacer"></div>
 	
 
 <?PHP
-  
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-	
-	// lib
-	require_once ('../../fonctions.php');
-	include_once ('../../config/databases.php');
-	include_once ('../../../class/Sql.class.php');
-		
-	// cnx à fog
+
+	// cnx Ã  fog
 	$con_fog = new Sql($host, $user, $pass, $fog);
 	
 	$pc = $_GET['pc'];
@@ -54,25 +57,7 @@
 	
 ?>
 
-<h3>Utilisation du parc info (cumul des logins)</h3><br>
 
-<center>
-	<table width=400 align=center>
-		<tr>
-			<td>PC</td>
-			<td><input type=text id=pc></td>
-		</tr>
-		<tr>
-			<td>Date (aaaa-mm-jj)</td>
-			<td>Déb <input type=text id=datedebut SIZE=10 MAXLENGTH=10>
-			<br>Fin <input type=text id=datefin SIZE=10 MAXLENGTH=10></td>
-		</tr>
-		<tr>
-			<td colspan=2 align=center><br><input type=button value=Filtrer onclick="filtrer_stat(pc, datedebut, datefin);" ></td>	
-		</tr>
-	
-	</table>
-</center>
 
 <!--
 
@@ -82,9 +67,9 @@
 
 
   <div class="section">
-	<?PHP echo "<h3>Filtre : $pc de $datedebut à $datefin</h3><br>"; ?>
-	
-	Nombre d`identifications par machines sur la période filtrée.<br> 
+	<?PHP
+		if ( $_GET['datedebut'] ) echo "<h3>Filtre : $pc de $datedebut Ã  $datefin</h3><br>"; 
+	?>
 	
 		
     <ul class="microchart">
@@ -106,9 +91,9 @@
 			echo "<li>";
 				// label
 				echo "<a>$mat</a>";
-				// nb d'éléments
+				// nb d'Ã©lÃ©ments
 				echo "<span class='count'>$val</span>";
-				// row coloriée
+				// row coloriÃ©e
 				echo "<span class='index' style='width: $pc%'>($pc %)</span>";
 			echo "</li>";
 		}
