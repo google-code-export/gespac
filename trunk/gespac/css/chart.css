@@ -53,6 +53,14 @@
     .chartlist li:hover { 
       background: orange; 
     }
+    .chartlist li:hover a{ 
+		color: black; 
+		font-size:16px;
+	}
+	.chartlist li:hover .count{ 
+		font-size:16px;
+		color:black;
+	}
 	
 	
 	
@@ -111,10 +119,12 @@
 	.microchart li:hover a{ 
 		font-size: 20px;
 		line-height: 30px;
+		color:black;
 	}
 	.microchart li:hover .count{ 
 		font-size: 20px;
 		line-height: 30px;
+		color:black;
 	}
 	.microchart li:hover .index { 
 		background: #C9C8C8;
