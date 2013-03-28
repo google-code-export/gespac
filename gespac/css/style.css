@@ -111,10 +111,10 @@ img {border:0px; vertical-align:middle;}
 
 
 /*	La boite de case à cocher pour les colonnes dans matériels	*/
-#options_colonnes {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-34px; position:absolute; background-color:#E6E6E6; overflow:auto; width:120px; /*box-shadow:1px 5px 10px #888;*/}
+#options_colonnes {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-100px; position:absolute; background-color:#E6E6E6; overflow:auto; width:120px; /*box-shadow:1px 5px 10px #888;*/}
 
 /*	La boite pour l'affectation directe d'un matériel	*/
-#affect_box {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-34px; position:absolute; background-color:#E6E6E6; overflow:auto; width:auto; /*box-shadow:1px 5px 10px #888;*/}
+#affect_box {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-220px; position:absolute; background-color:#E6E6E6; overflow:auto; width:auto; /*box-shadow:1px 5px 10px #888;*/}
 
 /* la boite d'aide */
 .helpbox {display:none; font-size:11px; border:1px grey solid; padding:5px; position:fixed; top:30px; left:225px; background-color:#E6E6E6; z-index:11; /*box-shadow:1px 5px 10px #888;*/}
