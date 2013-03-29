@@ -16,7 +16,6 @@
 		<!--	JS	-->
 		<script type="text/javascript" src="./gespac/js/mootools-1.2.3-core-yc.js"></script>	
 		<script type="text/javascript" src="./gespac/js/mootools-1.2.3.1-more.js"></script>
-		<script type="text/javascript" src="./gespac/js/main.js"></script>
 		
 		<!--	CSS	-->
 		<link rel="stylesheet" href="./gespac/css/style.css" type="text/css" media="screen" />
