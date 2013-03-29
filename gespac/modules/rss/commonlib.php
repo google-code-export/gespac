@@ -145,7 +145,7 @@ function Common_Display($url, $size = 25, $chanopt = false, $descopt = false, $d
 
 	$opened = false;
 	$page = "";
-
+	
 	if(Atom_Retrieve($url) === false)
 	{
 		if(RSS_Retrieve($url) === false)
@@ -177,7 +177,7 @@ function Common_Display($url, $size = 25, $chanopt = false, $descopt = false, $d
 		{
 			if($opened == false && $chanopt == true) 
 			{
-				$page .= "<div>\n";
+				$page .= "<div>";
 				$opened = true;
 			}
 		}
@@ -185,8 +185,10 @@ function Common_Display($url, $size = 25, $chanopt = false, $descopt = false, $d
 		$link = $article["link"];
 		$page .= "<div class='rss_news'><span class='rss_title'><a href=\"$link\" target=_blank>$title</a></span>";
 		
-		if($descopt != false)
-		{
+		if($descopt != false) {
+			
+			$page .= "<div class='rss_content'>";
+			
 			$description = $article["description"];
 			if($description != false)
 			{
@@ -199,13 +201,15 @@ function Common_Display($url, $size = 25, $chanopt = false, $descopt = false, $d
 				$page .= "<br>$content";
 			}
 			
+			$page .= "</div>";
+			
 		}	
-		if($dateopt != false)
-		{			
+		
+		if($dateopt != false) {			
 			$updated = $article["updated"];
 			if($updated != false)
 			{
-				$page .= "<br /><font $Common_Date_Font>$updated</font>";
+				$page .= "<div class='rss_date'>$updated</div>";
 			}
 		}	
 

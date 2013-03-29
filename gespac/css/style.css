@@ -220,10 +220,11 @@ img {border:0px; vertical-align:middle;}
 #listbox {display:inline; z-index:0; top:0px; position:absolute; width:30px; left:90px;}
 
 /******************************************* 	RSS / ATOM  *******************************************/
-.rss_title {font-size:14px;}
-.rss_title a{font-size:14px;}
-#rss_content {font-size:12px;}
-.rss_news {border:1px solid black; padding:10px; margin:10px; background-color:#C0FF96; border-radius:5px; white-space:pre-wrap;}
+.rss_content {font-size:13px; padding-bottom:5px;}
+.rss_date {font-size:10px;}
+.rss_title {font-size:16px; padding-bottom:5px;}
+.rss_title a{font-size:16px;}
+.rss_news {border:1px solid black; padding:5px 10px; margin:10px; background-color:#EDEDED; white-space:pre-wrap;}
 
 /******************************************* 	SCROLLBAR pour WEBKIT uniquement  *******************************************/
 ::-webkit-scrollbar {width:10px; height:10px;}

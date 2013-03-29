@@ -1,6 +1,6 @@
 <?PHP
 
-$action = $_GET['action'];
+	$action = $_GET['action'];
 
 
 
@@ -12,6 +12,8 @@ $action = $_GET['action'];
 		$fp = fopen('../../dump/flux.txt', 'a+');
 		fwrite($fp, '"' . $nom . '";"' . $url . '"' . "\n");			
 		fclose ($fp);
+		
+		echo "Le flux <b>$nom</b> est ajouté à la liste";
 	}
 	
 	
@@ -22,9 +24,9 @@ $action = $_GET['action'];
 		$id = $_GET ['id'];
 		$fichier = "";
 		
-		
+		// On lit le fichier et on colle tout dans une variable sauf la ligne à supprimer
 		$fp = fopen('../../dump/flux.txt', 'r');
-		
+
 		$row = 0;
 		
 		while (!feof($fp)) {
@@ -39,16 +41,13 @@ $action = $_GET['action'];
 		}
 		
 		fclose ($fp);
-			
+		
 		// Maintenant on recrache la variable fichier dans le fichier flux.txt
 		$fp = fopen('../../dump/flux.txt', 'w+');
 		fwrite ($fp, $fichier);
 		fclose ($fp);
+		
+		echo "Le flux est supprimé de la liste";
 	
 	}
 ?>
-
-	<script>					
-		// on recharge la page de rss
-		//$('conteneur').load('modules/rss/rss.php');
-	</script>
