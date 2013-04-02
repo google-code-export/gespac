@@ -1,31 +1,26 @@
 <?PHP
-
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 	
-	// lib
-	require_once ('../fonctions.php');
-	require_once ('../config/pear.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Sql.class.php');		
-	include_once ('../../class/Log.class.php');		
-	
-	echo "<h2>formulaire d'ajout de matériels en masse par fichier CSV</h2><br>";
-	echo "<h3>ATTENTION : Il faut faire UN fichier CSV par modèle !</h3><br>";
-
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$con_gespac	= new Sql($host, $user, $pass, $gespac);
 	
-	// Requête qui va récupérer les origines des dotations ...
+	// RequÃªte qui va rÃ©cupÃ©rer les origines des dotations ...
 	$liste_origines = $con_gespac->QueryAll ( "SELECT origine FROM origines ORDER BY origine" );
 	
-	// Requête qui va récupérer les états des matériels ...
+	// RequÃªte qui va rÃ©cupÃ©rer les Ã©tats des matÃ©riels ...
 	$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
 	
-	?>
+?>
 	
-	<!--  SERVEUR AJAX -->
-<script type="text/javascript" src="server.php?client=all"></script>
+	
+	
+<div class="entetes" id="entete-importcsv">	
+	<span class="entetes-titre">IMPORT DE MATERIELS PAR CSV<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Cette page permet d'importer en masse des matÃ©riels via un fichier CSV.<br>ATTENTION : Il faut UN fichier CSV par modÃ¨le !</div>
+</div>
 
+<div class="spacer"></div>
+	
+	
 <script type="text/javascript"> 
 	
 		
@@ -67,7 +62,7 @@
 				table.rows[r].style.display = displayStyle;	
 			}
 			
-			// Affiche le div "pasderesultat", si jamais il n'y a ... pas de résultat !
+			// Affiche le div "pasderesultat", si jamais il n'y a ... pas de rÃ©sultat !
 			if ( nb_resultats == 0 )
 				$('pasderesultat').style.display = "";
 			else
@@ -88,7 +83,7 @@
 			
 		var valida = confirm('Voulez-vous vraiment choisir la marque ' + marque + ' ?');
 		
-		// si la réponse est TRUE ==> on colle dans un input la valeur corr_id
+		// si la rÃ©ponse est TRUE ==> on colle dans un input la valeur corr_id
 		if (valida) {
 			$('marque_id').value = corr_id;
 			
@@ -117,18 +112,13 @@
 	
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit () {
-		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_materiels.php');", 1500);
-		SexyLightbox.close();
+		// lance la fonction avec un dÃ©lais de 1500ms
+		window.setTimeout("document.location.href='index.php?page=materiels'", 1500);
 	}
 	
 	
 </SCRIPT>
 		
-<script>
-	// Donne le focus au premier champ du formulaire
-	$('filt').focus();
-</script>
 		
 <form method="POST" action="gestion_inventaire/post_import_csv.php" target=_blank enctype="multipart/form-data">
 	<center>
@@ -145,7 +135,7 @@
 		</tr>
 		
 		<tr>
-			<TD>Etat du matériel</TD>
+			<TD>Etat du matÃ©riel</TD>
 			<TD>
 				<select name="etat">
 					<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
@@ -163,30 +153,29 @@
 
 	-->
 		
-	<div id='choix_modele'>
+	<div id='choix_modele' style='border:1px dotted grey;'>
 	
 		<center>
 	
-		<table width=400 align=center cellpadding=10px>
+		<table align=center cellpadding=10px >
 			<tr>
-				<td>Choisir un modèle :</td>
+				<td>Choisir un modÃ¨le :</td>
 				<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'marque_table_csv');" type="text"> </td>
 			</tr>
 		</table>
-	
-		<br>
+
 		
 		<?PHP
-		// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
+		// ici il faut rÃ©cupÃ©rer les lignes DISTINCTES histoire de ne pas surcharger le tableau
 		//$liste_correspondances = $db_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
 		$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_marque, marque_model, marque_type, marque_stype FROM marques ORDER BY marque_model" );
 		?>
 		 	 	 	 	
-		<!-- s'affiche si il n'y a pas de résultat -->
-		<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez créer le modèle manuellement.</div>
+		<!-- s'affiche si il n'y a pas de rÃ©sultat -->
+		<div id="pasderesultat" style='display:none'>Pas de rÃ©sultat, vous devez crÃ©er le modÃ¨le manuellement.</div>
 		
 		<table id="marque_table_csv" class='tablehover'>
-
+			
 			<?PHP
 				foreach ( $liste_marques as $marque ) {
 				
@@ -201,7 +190,7 @@
 						echo "<td width=200>$marque_stype</td>";
 						echo "<td width=200>$marque_marque</td>";
 						echo "<td width=200>$marque_model</td>";
-						echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_model');\"><img src='img/arrow-right.png' width=16 height=16 title='Choisir ce modèle'> </a></td>";
+						echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_model');\"><img src='img/arrow-right.png' width=16 height=16 title='Choisir ce modÃ¨le'> </a></td>";
 					echo "</tr>";
 				
 				}
@@ -211,9 +200,9 @@
 		</table>
 	</div>	
 	
-	<table width=400 align=center cellpadding=10px style='display:none' id="table_modele_selectionne">
+	<table align=center cellpadding=10px style='display:none' id="table_modele_selectionne">
 	 	<tr>
-			<td>Modèle sélectionné :</td>
+			<td>ModÃ¨le sÃ©lectionnÃ© :</td>
 			<td><input type=hidden name="marque_id" id="marque_id"> <input type="text" id="modele_selectionne"> </td>
 			<td><a href='#' onclick="choisir_modele();">changer</a></td>
 		</tr>
@@ -222,29 +211,32 @@
 	 <br>
 	
 	<input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-	 <center>
-	 <table width=400 align=center cellpadding=10px>
+	 
+	 <table align=center cellpadding=10px>
 		<tr>
 			<td>Fichier CSV</td>
 			<td><input type="file" name="myfile"></td>
 		</tr>
 	 </table>
-	 </center>
-
-
-
+	 
 	<br>
 	<br>
-	<center>
+
 	<input type="submit" name="envoyer" value="Envoyer le fichier" onclick="refresh_quit();">
 
-	</center>
 
 </FORM>
 
 <br>
 <br>
-<center>
-	<a href='#' onclick='alert("Formalisme pour le fichier CSV d`import : \n \"Nom_materiel1\";\"no_serie1\";\"no_dsit1\" \n \"Nom_materiel2\";\"no_serie2\";\"no_dsit\" \n \"Nom_materiel3\";\"no_serie3\";\"no_dsit3\" \n ... ");'>AIDE</a>
-</center>
-	
+
+<div>
+	<small>
+		<br><b>formalisme du fichier CSV :</b><br>
+			"Nom_materiel1";"no_serie1";"no_dsit1"<br>
+			"Nom_materiel2";"no_serie2";"no_dsit2"<br>
+			"Nom_materiel3";"no_serie3";"no_dsit3"<br>
+			"Nom_materiel4";"no_serie4";"no_dsit4"<br>
+			...
+	</small>
+</div>	
