@@ -13,9 +13,12 @@
 		<!--	FAVICON	-->
 		<link rel="SHORTCUT ICON" href="./gespac/img/favicon.ico"/>
 		
-		<!--	JS	-->
-		<script type="text/javascript" src="./gespac/js/mootools-1.2.3-core-yc.js"></script>	
-		<script type="text/javascript" src="./gespac/js/mootools-1.2.3.1-more.js"></script>
+		<!--	JS	-->	
+		<!--<script type="text/javascript" src="./gespac/js/mootools-1.2.3-core-yc.js"></script>	
+		<script type="text/javascript" src="./gespac/js/mootools-1.2.3.1-more.js"></script>-->
+		<script type="text/javascript" src="./gespac/js/mootools-core-1.4.5-full-compat-yc.js"></script>	
+		<script type="text/javascript" src="./gespac/js/mootools-more-1.4.0.1.js"></script>
+
 		
 		<!--	CSS	-->
 		<link rel="stylesheet" href="./gespac/css/style.css" type="text/css" media="screen" />
