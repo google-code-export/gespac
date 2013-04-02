@@ -129,7 +129,6 @@
 						
 						case "college" :	include ("gestion_college/voir_college.php");	break;
 						case "rss" :	include ("modules/rss/rss.php");	break;
-						case "statcam" :	include ("modules/stats/piechart.php");	break;
 						case "statbat" :	include ("modules/stats/csschart.php");	break;
 						case "statparc" :	include ("modules/stats/utilisation_parc.php");	break;
 						case "infoserveur" :	include ("modules/infoserveur/infoserveur.php");	break;
