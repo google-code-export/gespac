@@ -38,10 +38,14 @@
 		<!--<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />-->
 		
 		<!--	JS	-->
-		<script type="text/javascript" src="js/mootools-1.2.3-core-yc.js"></script>	
-		<script type="text/javascript" src="js/mootools-1.2.3.1-more.js"></script>
+		<!--<script type="text/javascript" src="js/mootools-1.2.3-core-yc.js"></script>	-->
+		<!--<script type="text/javascript" src="js/mootools-1.2.3.1-more.js"></script>-->
+		<script type="text/javascript" src="js/mootools-core-1.4.5-full-compat-yc.js"></script>	
+		<script type="text/javascript" src="js/mootools-more-1.4.0.1.js"></script>
 		<script type="text/javascript" src="js/sexylightbox.js"></script> 
 		<script type="text/javascript" src="js/main.js"></script>
+		
+	
 
 
 		<title>GESPAC -> GEStion du PArc des Collèges</title>
@@ -125,7 +129,7 @@
 						
 						case "college" :	include ("gestion_college/voir_college.php");	break;
 						case "rss" :	include ("modules/rss/rss.php");	break;
-						case "statcam" :	include ("modules/stats/camembert.php");	break;
+						case "statcam" :	include ("modules/stats/piechart.php");	break;
 						case "statbat" :	include ("modules/stats/csschart.php");	break;
 						case "statparc" :	include ("modules/stats/utilisation_parc.php");	break;
 						case "infoserveur" :	include ("modules/infoserveur/infoserveur.php");	break;
