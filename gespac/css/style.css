@@ -102,7 +102,7 @@ img {border:0px; vertical-align:middle;}
 #entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#759AFF;}
 #entete-college, #entete-statbat, #entete-infoserveur, #entete-statparc {background-color:#FAEF7D;}
 #entete-aic, #entete-recapfog, #entete-modportail, #entete-geninventaire, #entete-gestfichiers, #entete-migdossiers, #entete-migfog, #entete-migusers, #entete-wol, #entete-exportperso, #entete-taginventaire {background-color:#AA83E6;}
-#entete-importcsv {background-color:#FF7A7A;}
+#entete-importcsv, #entete-logs {background-color:#FF7A7A;}
 
 /*	bandeau pour la partie login, grade et déconnexion	*/
 #bandeau		{font-size:12px; color:black; padding:6px 15px; margin-bottom:15px;}
@@ -148,6 +148,9 @@ img {border:0px; vertical-align:middle;}
 .tablehover tr:hover {background-color:#FFD769; padding:2px 0px;}
 .tablehover td {padding:2px 4px; font-size:11px ;}
 .tablehover th {font-size:12px ;}
+
+#log_prets_table {border-collapse:collapse; max-width:950px;}
+#log_prets_table td {min-width:110px; font-size:10px;}
 
 /*	table des correspondances pour l'ajout d'une marque	(toujours après tablehover) */
 #corr_table {min-width:380px;}
