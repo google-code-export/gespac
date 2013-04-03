@@ -156,7 +156,7 @@ session_start();
 						
 						//on récupére le nom et le serial de chaque item
 						$req_nom_serial_materiel = $con_gespac->QueryRow ("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
-						$liste_noms_serial   .=  '<b>'.$req_nom_serial_materiel[0].' (</b>serial : <b>'.$req_nom_serial_materiel[1].')</b>, ';
+						$liste_noms_serial   .=  '<br><b>'.$req_nom_serial_materiel[0].' (</b>serial : <b>'.$req_nom_serial_materiel[1].')</b>, ';
 						
 						// On log la requête SQL
 						$log->Insert( $req_modif_materiel );
