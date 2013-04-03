@@ -82,7 +82,7 @@
 				</table>
 
 				<br>
-				<a href='#' onclick="affiche_creer_modele();">Créer un nouveau modèle</a>
+				<span id='creer_modele' style='display:none;'><a href='#' onclick="affiche_creer_modele();">Créer un nouveau modèle</a></span>
 				</center>
 
 			</FORM>
@@ -282,7 +282,7 @@
 				</table>
 
 				<br>
-				<a href='#' onclick="affiche_modif_modele();">Modification manuelle du modèle</a>
+				<span id='modif_modele' style='display:none;'><a href='#' onclick="affiche_modif_modele();">Modification manuelle du modèle</a></span>
 				</center>
 
 			</FORM>
@@ -444,7 +444,7 @@
 		var words = phrase.value.toLowerCase().split(" ");
 		var table = document.getElementById(_id);
 		var ele;
-		var elements_liste = "";
+		var compte = 0;
 			
 		if (phrase.value == "") {	// Si la phrase est nulle, on masque toutes les lignes
 			for (var r = 1; r < table.rows.length; r++)	table.rows[r].style.display = "none";	
@@ -458,6 +458,7 @@
 				for (var i = 0; i < words.length; i++) {
 					if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
 						displayStyle = '';
+						compte++;
 					}	
 					else {	// on masque les rows qui ne correspondent pas
 						displayStyle = 'none';
@@ -467,6 +468,16 @@
 				
 				// Affichage on / off en fonction de displayStyle
 				table.rows[r].style.display = displayStyle;	
+				
+				if ($("creer_modele")) {
+					if (compte > 0) {$("creer_modele").setStyle("display", "none");}
+					else {$("creer_modele").setStyle("display", "block");}
+				}
+				
+				if ($("modif_modele")) {
+					if (compte > 0) {$("modif_modele").setStyle("display", "none");}
+					else {$("modif_modele").setStyle("display", "block");}
+				}
 			}
 		}
 	}	
