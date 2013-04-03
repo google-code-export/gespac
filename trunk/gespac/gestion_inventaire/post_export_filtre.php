@@ -2,7 +2,10 @@
 
 /*	CREATION DU FICHIER D'EXPORT DU FILTRE	*/
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 
 	// cnx à la base de données GESPAC
 	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
@@ -158,4 +161,6 @@ $con_gespac->Close();
 
 ?>
 
-<script>window.open('dump/export_filtre.csv', 'export du filtre');</script>
+<script>
+	window.open('dump/export_filtre.csv', 'export du filtre');
+</script>
