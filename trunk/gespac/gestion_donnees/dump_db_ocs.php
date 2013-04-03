@@ -1,14 +1,13 @@
-﻿<script type="text/javascript">	
-	// init de la couleur de fond
-	document.getElementById('conteneur').style.backgroundColor = "#fff";
-</script>
+<div class="entetes" id="entete-dumpocs">	
+
+	<span class="entetes-titre">DUMP BASE OCS<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Permet la création d'un dump de la base OCS.</div>
+
+</div>
+
+<div class="spacer"></div>
 
 <?php
-
-	// lib
-	require_once ('../config/databases.php');
-	require_once ('../fonctions.php');
-	include_once ('../../class/Sql.class.php');	
 
 	// Connexion à la base de données GESPAC
 	$con_ocs = new Sql ( $host, $user, $pass, $ocsweb );
@@ -20,7 +19,7 @@
 	$dumpfile = $base. "-sqldump-".date("Ymd-His").".sql"; 
 	
 	// création du fichier dump dans le dossier dump
-	file_put_contents( "../dump/" . $dumpfile, dump_base($host, $user, $pass, $base) );
+	file_put_contents( "dump/" . $dumpfile, dump_base($host, $user, $pass, $base) );
 	
 	// On écrit des choses interessantes ici ...
 	echo "<center><h2>Création du fichier dump de la base OCS dans le dossier dump du site ...";
