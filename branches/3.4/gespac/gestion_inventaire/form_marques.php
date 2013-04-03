@@ -522,6 +522,7 @@
 	function affiche_creer_modele() {
 		$('creer_nouveau_modele').style.display = "";
 		$('creer_modele_par_corr').style.display = "none";
+		$('creer_modele').style.display = "none";
 	}
 	
 	
@@ -571,6 +572,7 @@
 	function affiche_modif_modele() {
 		$('modif_manuelle_modele').style.display = "";
 		$('modif_modele_par_corr').style.display = "none";
+		$('modif_modele').style.display = "none";
 	}
 	
 	/******************************************
