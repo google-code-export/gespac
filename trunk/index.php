@@ -14,8 +14,6 @@
 		<link rel="SHORTCUT ICON" href="./gespac/img/favicon.ico"/>
 		
 		<!--	JS	-->	
-		<!--<script type="text/javascript" src="./gespac/js/mootools-1.2.3-core-yc.js"></script>	
-		<script type="text/javascript" src="./gespac/js/mootools-1.2.3.1-more.js"></script>-->
 		<script type="text/javascript" src="./gespac/js/mootools-core-1.4.5-full-compat-yc.js"></script>	
 		<script type="text/javascript" src="./gespac/js/mootools-more-1.4.0.1.js"></script>
 
@@ -36,30 +34,19 @@
 </head>
 
 <body>
-	
-	
 
-<?PHP
-	$ping_google = EXEC('ping -c 1 www.google.com'); //on ping internet si ça ne ping pas on ne charge pas chrome frame
-	
-	if ($ping_google <> "") {
-	
-?>
-		<script type="text/javascript" src="gespac/js/CFInstall.min.js"> </script>
-		 
-		<div id="placeholder"></div>
+	<script type="text/javascript" src="gespac/js/CFInstall.min.js"> </script>
+	 
+	<div id="placeholder"></div>
 
-		<script>
-		 CFInstall.check({
-			mode: "inline",
-			node: "placeholder",
-			destination: "cf:http://localhost/GESPAC3/"
-		  });
-		</script>
+	<script>
+	 CFInstall.check({
+		mode: "inline",
+		node: "placeholder",
+		destination: "cf:http://localhost/GESPAC3/"
+	  });
+	</script>
 
-<?PHP
-	}
-?>
 
 	<div id=portail-menu>
 	
