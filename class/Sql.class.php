@@ -28,8 +28,9 @@
 			$this->pass = $pass;
 			$this->db 	= $db;
 			
-			$this->link	= mysql_connect($this->host, $this->user, $this->pass);
+			$this->link	= mysql_pconnect($this->host, $this->user, $this->pass);
 			$Base = mysql_select_db($this->db, $this->link);
+			
 		}
 		
 				
@@ -57,6 +58,10 @@
 		
 		
 		# Méthodes
+		public function Exists () {
+			if($basetest = mysql_select_db($this->db, $this->link)) return true;
+			else return false;
+		}
 		
 		
 		/*
@@ -184,6 +189,9 @@
 		
 		
 		# GETTERS
+		public function GetLink () {
+			return $this->link;
+		}
 		
 		public function GetDatabase () {
 			return $this->db;
