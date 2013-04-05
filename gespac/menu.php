@@ -72,9 +72,9 @@ include_once ('fonctions.php');
 			
 	
 			if (checkdroit("L-03-03") ) echo "
-			<li class='dir'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='preter ou rendre un matériel'></div></a></li>
+			<li class='dir'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='Demandes et interventions'></div></a></li>
 				<ul>
-					<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='preter ou rendre un matériel'></div></a></li>
+					<li class='item'><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/voir_dossiers.php');change_icon_onclick('demandes');\"><div id='demandes' class='demandes' title='Demandes et interventions'></div></a></li>
 				</ul>";	
 			
 			
