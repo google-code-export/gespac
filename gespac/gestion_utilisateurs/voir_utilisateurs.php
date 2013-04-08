@@ -100,7 +100,7 @@
 					
 					// on affiche pas la checkbox pour les comptes dont le champ "est_modifiable" est TRUE
 					if ( $E_chk && $est_modifiable) {
-						echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur); \"> </td>";	
+						echo "<td> <input type=checkbox name=chk indexed=true id='chk$id' value='$id' onclick=\"select_cette_ligne('$id', $compteur); \"> </td>";	
 					} else {
 						echo "<td>&nbsp</td>";
 					}
@@ -233,17 +233,22 @@
 		
 		for ( var i = 1 ; i < table.rows.length ; i++ ) {
 
-			var lg = table.rows[i].id					// le tr_id (genre tr115)
+			var lg = table.rows[i].id;					// le tr_id (genre tr115)
+			var id = lg.replace("tr_id","");
+		
+			if (lg != "tr_id1") {
 			
-			if (checkall_box.checked == true) {
-				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
-			} else {
-				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
+				if (checkall_box.checked == true) {
+					$('chk' + id).checked = true;
+					select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
+				} else {
+					$('chk' + id).checked = false;
+					select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
+				}
 			}
 			
 		}
+		
 	}
 	
 	
