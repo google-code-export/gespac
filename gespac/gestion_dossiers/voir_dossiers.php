@@ -87,7 +87,7 @@
 					echo "<td width=60px class='td_$last_etat'>$last_etat</td>";
 					echo "<td>$txt_texte</td>";
 					echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?height=480&width=500&dossier=$dossier_id' rel='slb_dossiers' title='Liste des matériels du dossier $dossier_id'><img src='img/outils.png'></a></td>";
-					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"AffichePage('conteneur', 'gestion_dossiers/form_dossiers.php?id=$dossier_id');\"> <img src='img/write.png'> </a></td>";
+					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='gestion_dossiers/form_dossiers.php?height=550&width=750&id=$dossier_id' rel='slb_dossiers' title='Modifier le dossier $dossier_id'> <img src='img/write.png'> </a></td>";
 					else echo "<td>&nbsp;</td>";
 					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"validation_suppr_dossier('$dossier_id');\"> <img src='img/delete.png'> </a></td>";
 					else echo "<td>&nbsp;</td>";
@@ -173,11 +173,7 @@
 	function toggleDossier(dossier) {
 		if ( $('dossiers' + dossier).style.display == "none" ) {
 			$('dossiers' + dossier).style.display = "";
-			$('tr_' + dossier).style.borderStyle = "solid";
-			$('tr_' + dossier).style.borderBottom = "none";
-			$('tr_' + dossier).style.borderColor = "blue";
-			$('tr_' + dossier).style.borderWidth = "3px";
-			
+			$('tr_' + dossier).style.borderTop = "1px solid grey";				
 		}
 		else {
 			$('dossiers' + dossier).style.display = "none";
