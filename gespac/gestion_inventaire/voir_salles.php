@@ -130,7 +130,7 @@ session_start();
 
 	if ( $E_chk ) {
 		echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
-		echo "<a href='#' onclick=\"javascript:validation_suppr_d3e();\" title='Vider la salle D3E'> <img src='img/delete.png'>Vider la salle D3E</a>";	
+		echo "<a id='viderd3e' href='#' onclick=\"javascript:validation_suppr_d3e();\" title='Vider la salle D3E'> <img src='img/delete.png'>Vider la salle D3E</a>";	
 	}
 ?>
 	
@@ -171,6 +171,9 @@ session_start();
 					
 					//faire un queryOne
 					$nb_matos_dans_cette_salle 	= $con_gespac->QueryOne ( "SELECT COUNT(*) FROM materiels WHERE salle_id=$id" );
+					
+					// On affiche le bouton pour vider le D3E que si la salle contient du matos
+					if ($nom == "D3E" && $nb_matos_dans_cette_salle <= 0) echo "<script>$('viderd3e').hide();</script>";
 
 					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$id' rel='slb_salles' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle ."] </td>";
 					echo "<td>" . $vlan . "</td>";
