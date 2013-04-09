@@ -15,10 +15,6 @@
 -->
 
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
-
 <?PHP
 
 	// lib
@@ -373,9 +369,10 @@ if ( $dossierid <> -1 ) {
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
+					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
-					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php')", 1500);
+					SexyLightbox.close();
+					window.setTimeout("document.location.href='index.php?page=dossiers'", 1500);					
 				}
 			
 			}).send(this.toQueryString());

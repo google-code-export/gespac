@@ -80,16 +80,16 @@
 				// Le dossier
 				
 				echo "<tr id='tr_$dossier_id' class=$tr_class>";
-					echo "<td width=20px><a href='#' onclick=\"toggleDossier($dossier_id);\"><img src='img/deplier.png'></a></td>";
+					echo "<td width=20px><a href='#' onclick=\"toggleDossier($dossier_id);\"><img src='img/icons/deplier.png'></a></td>";
 					echo "<td width=20px>$dossier_id</td>";
 					echo "<td width=100px>$date_ouverture</td>";
 					echo "<td width=60px>$dossier_type</td>";
 					echo "<td width=60px class='td_$last_etat'>$last_etat</td>";
 					echo "<td>$txt_texte</td>";
-					echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?height=480&width=500&dossier=$dossier_id' rel='slb_dossiers' title='Liste des matériels du dossier $dossier_id'><img src='img/outils.png'></a></td>";
-					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='gestion_dossiers/form_dossiers.php?height=550&width=750&id=$dossier_id' rel='slb_dossiers' title='Modifier le dossier $dossier_id'> <img src='img/write.png'> </a></td>";
+					echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?height=480&width=500&dossier=$dossier_id' rel='slb_dossiers' title='Liste des matériels du dossier $dossier_id'><img src='img/icons/icon_eye.png'></a></td>";
+					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='gestion_dossiers/form_dossiers.php?height=550&width=750&id=$dossier_id' rel='slb_dossiers' title='Modifier le dossier $dossier_id'> <img src='img/icons/edit.png'> </a></td>";
 					else echo "<td>&nbsp;</td>";
-					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"validation_suppr_dossier('$dossier_id');\"> <img src='img/delete.png'> </a></td>";
+					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"validation_suppr_dossier('$dossier_id');\"> <img src='img/icons/delete.png'> </a></td>";
 					else echo "<td>&nbsp;</td>";
 				
 				echo "</tr>";
@@ -161,10 +161,9 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			/*	poste la page en ajax	*/
+			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 			$('target').load("gestion_dossiers/post_dossiers.php?action=suppr&id=" + id);
-			/*	on recharge la page au bout de 1000ms	*/
-			window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php');", 1000);
+			window.setTimeout("document.location.href='index.php?page=dossiers'", 1500);				
 		}
 	
 	}
