@@ -272,7 +272,7 @@ if ( $dossierid <> -1 ) {
 	
 		$arr_dossier_courant_mat = explode(";", $dossier_courant_mat);
 		
-		echo "<div class='dossier_section' id='materiels' style='display:none;'>";
+		echo "<div class='dossier_section' id='listemateriels' style='display:none;'>";
 		
 			echo "<table width=100%>";
 				echo "<th>Matériel</th>";
@@ -378,29 +378,31 @@ if ( $dossierid <> -1 ) {
 			}).send(this.toQueryString());
 		}); 
 		
+		if ($('mat_hs')) {
+			$('mat_hs').addEvent('change', function(e) {
+						
+				if ( $('mat_hs').checked) {
+					$('CB_etats').style.display = "";
+				} 
+				else {
+					$('CB_etats').style.display = "none";
+					$('gign').style.display = "none";
+				}
+				
+			});
+		}
 		
-		$('mat_hs').addEvent('change', function(e) {
+		if ($('CB_etats')) {
+			$('CB_etats').addEvent('change', function(e) {
+					new Event(e).stop();
 					
-			if ( $('mat_hs').checked) {
-				$('CB_etats').style.display = "";
-			} 
-			else {
-				$('CB_etats').style.display = "none";
-				$('gign').style.display = "none";
-			}
-			
-		});
-		
-		$('CB_etats').addEvent('change', function(e) {
-				new Event(e).stop();
-				
-				var mystr = $('liste_mat').value;
-				
-				// On vérifie si l'état est cassé, volé ... et surtout si on a seulement un matériel sélectionné pour gign
-				if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} && mystr.split(';').length == 2) {	$('gign').style.display = ""; }
-				else { $('gign').style.display = "none";	}
-		});
-		
+					var mystr = $('liste_mat').value;
+					
+					// On vérifie si l'état est cassé, volé ... et surtout si on a seulement un matériel sélectionné pour gign
+					if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} && mystr.split(';').length == 2) {	$('gign').style.display = ""; }
+					else { $('gign').style.display = "none";	}
+			});
+		}
 		
 		$$('.chkbx').addEvent('click', function(e) {
 			var mystr = $('liste_mat').value;
@@ -533,10 +535,9 @@ if ( $dossierid <> -1 ) {
 	// *********************************************************************************
 
 	function toggleMateriels () {
-		
-		if ( $('materiels').style.display == "none" ) $('materiels').style.display = "";
-		else $('materiels').style.display = "none";
-		
+		if ( $('listemateriels').getStyle("display") == "none" ) 
+			$('listemateriels').setStyle("display", 'block');
+		else $('listemateriels').setStyle("display", 'none');		
 	}
 	
 	
