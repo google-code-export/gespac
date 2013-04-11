@@ -1,15 +1,25 @@
+<div class="entetes" id="entete-importocs">	
 
-<h2>Importation de la base OCS</h2>
+	<span class="entetes-titre">IMPORT BASE OCS<img class="help-button" src="img/icons/info.png"></span>
+	<div class="helpbox">Cette page permet d'importer les données de la base OCS vers GESPAC. Très bien quand on part de zéro.<br>Attention ! Si votre base gespac est plutôt à jour, merci d'utiliser l'import CSV.</div>
+
+	<span class="entetes-options">
+		
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_marques.php?height=300&width=640&id=-1' rel='slb_marques' title='Ajout d une marque'><img src='img/icons/add.png'></a>";?></span>
+		<span class="option">
+			<!-- 	bouton pour le filtrage du tableau	-->
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'table_ocs');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+		</span>
+	</span>
+
+</div>
+
+<div class="spacer"></div>
+
 
 <h3><center>Attention ! Si votre base gespac est plutôt à jour, merci d'utiliser l'import CSV.</center></h3>
 
 <hr>
-
-		
-<script type="text/javascript" src="server.php?client=all"></script>
-
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
 
 <script type="text/javascript">
 	
@@ -30,10 +40,6 @@
 
 <?PHP
 	
-	// lib
-	require_once ('../fonctions.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Sql.class.php');
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
 	$link_bases = mysql_pconnect('localhost', 'root', $pass);	//connexion à la base de donnée
@@ -82,7 +88,7 @@
 		?>
 		
 		<br><br>
-		<table width=800 align=center>
+		<table align=center id='table_ocs'>
 			<th>id</th>
 			<th>name</th>
 			<th>manufacturer</th>
@@ -184,8 +190,41 @@
 		?>
 	
 	<script>$("nb_materiels").innerHTML = "<?PHP echo ' (<span style=\"background-color:yellow\"><b>' . count($liste_doublons). "</b></span> doublons).  <b><span style='background-color:#29C920'>" .$nb_materiels_dans_gespac . "</b> déjà présents dans GESPAC.</span>"; ?>";</script>
-	
-<br>
 
+<script>
+	// *********************************************************************************
+	//
+	//				Fonction de filtrage des tables
+	//
+	// *********************************************************************************
 
+	function filter (phrase, _id){
 
+	var words = phrase.value.toLowerCase().split(" ");
+		var table = document.getElementById(_id);
+		var ele;
+		var elements_liste = "";
+				
+		for (var r = 1; r < table.rows.length; r++){ // pour chaque ligne du tableau
+			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
+			var displayStyle = 'none';
+			
+			
+			for (var i = 0; i < words.length; i++) {
+				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
+					displayStyle = '';
+				}	
+				else {	// on masque les rows qui ne correspondent pas
+					displayStyle = 'none';
+					break;
+				}
+			}
+			
+			// Affichage on / off en fonction de displayStyle
+			table.rows[r].style.display = displayStyle;	
+		}
+		
+		alterner_couleurs ();
+		
+	}		
+</script>
