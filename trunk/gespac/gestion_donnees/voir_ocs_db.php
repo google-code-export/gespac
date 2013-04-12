@@ -223,8 +223,6 @@
 			// Affichage on / off en fonction de displayStyle
 			table.rows[r].style.display = displayStyle;	
 		}
-		
-		alterner_couleurs ();
-		
+				
 	}		
 </script>
