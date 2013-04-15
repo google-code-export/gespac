@@ -32,7 +32,7 @@
 
 <div class="entetes" id="entete-exportperso">	
 
-	<span class="entetes-titre">EXPORT PERSONNALISE<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">EXPORT PERSONNALISE<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Permet de créer un fichier CSV avec des champs personnalisés de la base Gespac.</div>
 
 </div>

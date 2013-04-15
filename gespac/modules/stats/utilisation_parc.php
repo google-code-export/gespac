@@ -23,7 +23,7 @@
 
 
 <div class="entetes" id="entete-statparc">	
-	<span class="entetes-titre">UTILISATION DU PARC<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">UTILISATION DU PARC<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Statistique du nombre d'identifications par machines sur le parc.<br>Les statistiques sont tirées du module userTracking de FOG.</div>
 
 	<span class="entetes-options">

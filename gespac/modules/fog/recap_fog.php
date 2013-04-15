@@ -17,7 +17,7 @@
 
 <div class="entetes" id="entete-recapfog">	
 
-	<span class="entetes-titre">RECAPITULATIF FOG<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">RECAPITULATIF FOG<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">La liste des machines présentes dans FOG avec association aux groupes et aux snapins.</div>
 
 	<span class="entetes-options">

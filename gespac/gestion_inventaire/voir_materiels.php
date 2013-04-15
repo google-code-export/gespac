@@ -19,7 +19,7 @@
 
 <div class="entetes" id="entete-materiels">	
 
-	<span class="entetes-titre">LES MATERIELS<img class="help-button" src="img/icons/info.png"></span><span id='nb_selectionnes'></span>
+	<span class="entetes-titre">LES MATERIELS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span><span id='nb_selectionnes'></span>
 	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des matériels du parc.<br>On peut aussi modifier ou renommer un lot de matériels.</div>
 
 	<span class="entetes-options">
@@ -33,24 +33,24 @@
 		</span>
 		
 		<span class="option">	<!-- Créer CSV -->
-			<?PHP echo "<span><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='img/icons/csv.png'></a></span>";	?>
+			<?PHP echo "<span><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='" . ICONSPATH . "csv.png'></a></span>";	?>
 		</span>
 		
 		<span class="option">	<!-- Ajout Matériel -->
-		<?PHP if ( $E_chk ) {echo "<span><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='img/icons/add.png'></a></span>";} ?>
+		<?PHP if ( $E_chk ) {echo "<span><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='" . ICONSPATH . "add.png'></a></span>";} ?>
 		</span>
 		
 		<span class="option">	<!-- Modifier le lot -->
-			<?PHP if ( $E_chk ) {echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?height=300&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='img/icons/modif1.png'></a></span>";}?>
+			<?PHP if ( $E_chk ) {echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?height=300&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='" . ICONSPATH . "modif1.png'></a></span>";}?>
 		</span>
 		
 		<span class="option">	<!-- renommer le lot -->
-		<?PHP if ( $E_chk ) {echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?height=280&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='img/icons/pen.png'></a> </span>";} ?>
+		<?PHP if ( $E_chk ) {echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?height=280&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='" . ICONSPATH . "pen.png'></a> </span>";} ?>
 		</span>
 		
 		<span class="option">	<!-- affecter une salle au lot -->
 			<?PHP if ( $E_chk ) { ?>
-				<span id='affect_selection'><a href='#' onclick='toggle_affectsalle();'><img src="img/icons/refresh.png" title="Affectation directe à une salle"></a></span>
+				<span id='affect_selection'><a href='#' onclick='toggle_affectsalle();'><img src="<?PHP echo ICONSPATH . "refresh.png";?>" title="Affectation directe à une salle"></a></span>
 				<div id='affect_box'>
 					<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="post_form" >
 						<input type=hidden name='materiel_a_poster' id='materiel_a_poster' value=''>	
@@ -84,7 +84,7 @@
 		</span>
 						
 		<span class="option">	<!-- Affichage des colonnes -->		
-			<a href='#' onclick='showhide_options();'><img src="img/icons/eye.png" title="colonnes à montrer ou à cacher"></a>
+			<a href='#' onclick='showhide_options();'><img src="<?PHP echo ICONSPATH . "eye.png";?>" title="colonnes à montrer ou à cacher"></a>
 			<div id="options_colonnes">
 				<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();"><label for="chk_pret">Prêt</label><br>
 				<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();"><label for="chk_dsit">DSIT</label><br>
@@ -414,8 +414,8 @@
 					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='slb_mat' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
 					
 					if ( $E_chk ) {
-						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?height=500&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='img/icons/edit.png'> </a></td>";
-						/*	suppr	*/	echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/icons/delete.png' title='supprimer $nom'>	</a> </td>";
+						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?height=500&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
+						/*	suppr	*/	echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='" . ICONSPATH . "delete.png' title='supprimer $nom'>	</a> </td>";
 					}
 					
 				echo "</tr>";

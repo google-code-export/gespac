@@ -1,6 +1,6 @@
 <div class="entetes" id="entete-exports">	
 
-	<span class="entetes-titre">EXPORTS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">EXPORTS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Permet la création d'exports de la base GESPAC.</div>
 
 </div>

@@ -26,7 +26,7 @@
 	
 	<div class="entetes" id="entete-geninventaire">	
 
-	<span class="entetes-titre">CREATION DES NUMEROS d'INVENTAIRE<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">CREATION DES NUMEROS d'INVENTAIRE<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">On génère un numéro d'inventaire codifié pour chaque matériel sans numéro DSIT.<br> En jaune, les lignes avec un id qui dépasse 999.<br> En rouge, les matériels avec une origine DOTATION supérieure à 2010.</div>
 
 	<span class="entetes-options">
@@ -39,7 +39,7 @@
 			</form>
 		</span>
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/icons/add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'generate_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>

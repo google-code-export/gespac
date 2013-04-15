@@ -15,7 +15,7 @@
 	
 <div class="entetes" id="entete-migfog">	
 
-	<span class="entetes-titre">MIGRATION DES NOMS DANS FOG<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">MIGRATION DES NOMS DANS FOG<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Script permettant de mettre à jour les noms des machines dans FOG avec le numéro d'inventaire de GESPAC.<br>On affiche uniquement les PC qui ont une correspondance dans FOG sur le serial, qui ont un numéro d'inventaire et dont le nom FOG est différent du numéro d'inventaire.<br>Il est important que les machines dans FOG aient leur inventaire remonté.</div>
 
 	<span class="entetes-options">
@@ -29,7 +29,7 @@
 			</form>
 		</span>
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/icons/add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'migration_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>

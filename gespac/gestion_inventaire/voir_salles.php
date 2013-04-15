@@ -90,13 +90,13 @@ session_start();
 
 <div class="entetes" id="entete-salles">	
 
-	<span class="entetes-titre">LES SALLES<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">LES SALLES<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des salles du parc.<br>Certaines salles, comme PRETS ou STOCK sont bloquées car elles ont un rôle particulier.</div>
 
 	<span class="entetes-options">
 		
-		<span class="option" id="viderd3e"><?PHP if ( $E_chk ) echo "<a href='#' onclick=\"javascript:validation_suppr_d3e();\" title='Vider la salle D3E'><img src='img/icons/refresh.png'></a>"; ?></span>
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/icons/add.png'></a>";?></span>
+		<span class="option" id="viderd3e"><?PHP if ( $E_chk ) echo "<a href='#' onclick=\"javascript:validation_suppr_d3e();\" title='Vider la salle D3E'><img src='" . ICONSPATH . "refresh.png'></a>"; ?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'salle_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
@@ -165,8 +165,8 @@ session_start();
 					
 					
 					if ( $E_chk && $est_modifiable ) {
-						echo "<td class='buttons'><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/icons/edit.png'> </a></td>";
-						echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/icons/delete.png'>	</a> </td>";
+						echo "<td class='buttons'><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
+						echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
 							
 					} else {
 						echo "<td>&nbsp</td>	<td>&nbsp</td>";

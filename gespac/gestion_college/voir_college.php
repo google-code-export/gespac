@@ -31,11 +31,11 @@ session_start();
 
 <div class="entetes" id="entete-college">	
 
-	<span class="entetes-titre">FICHE COLLEGE<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">FICHE COLLEGE<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">C'est la fiche d'identité du collège.</div>
 
 	<span class="entetes-options">
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_college/form_college.php?height=450&width=640&id=$clg_uai' rel='slb_college' title=\"Modifier la fiche collège\"><img src='img/icons/modif1.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_college/form_college.php?height=450&width=640&id=$clg_uai' rel='slb_college' title=\"Modifier la fiche collège\"><img src='" . ICONSPATH . "modif1.png'></a>";?></span>
 	</span>
 
 </div>

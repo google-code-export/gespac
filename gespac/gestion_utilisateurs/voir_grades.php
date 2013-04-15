@@ -15,12 +15,12 @@
 
 <div class="entetes" id="entete-grades">	
 
-	<span class="entetes-titre">LES GRADES<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">LES GRADES<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Les grades sont des groupes d'utilisateurs.<br>A chaque grade on peut affecter une liste de droits en lecture/écriture sur les pages ainsi que le contenu du portail.</div>
 
 	<span class="entetes-options">
 
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='slb_grades' title=\"ajouter un grade\"><img src='img/icons/add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='slb_grades' title=\"ajouter un grade\"><img src='" . ICONSPATH . "add.png'></a>";?></span>
 		
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
@@ -74,10 +74,10 @@
 					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='slb_grades' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
 					if ( $E_chk && $est_modifiable ) {
-						echo "<td width=20><a href='gestion_utilisateurs/form_menu_portail.php?height=450&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du menu portail du grade $grade_nom'><img src='img/icons/home.png'> </a></td>";
-						echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/icons/unlocked.png'> </a></td>";
-						echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du grade $grade_nom'><img src='img/icons/edit.png'> </a></td>";
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom');\">	<img src='img/icons/delete.png' title='supprimer $grade_nom'>	</a> </td>";
+						echo "<td width=20><a href='gestion_utilisateurs/form_menu_portail.php?height=450&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du menu portail du grade $grade_nom'><img src='" . ICONSPATH . "home.png'> </a></td>";
+						echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification des droits du grade $grade_nom'><img src='" . ICONSPATH . "unlocked.png'> </a></td>";
+						echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du grade $grade_nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
+						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom');\">	<img src='" . ICONSPATH . "delete.png' title='supprimer $grade_nom'>	</a> </td>";
 					} else {
 						echo"<td width=20>&nbsp</td>
 						<td width=20>&nbsp</td>

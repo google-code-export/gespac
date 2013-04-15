@@ -8,7 +8,7 @@
 
 
 <div class="entetes" id="entete-migusers">	
-	<span class="entetes-titre">MIGRATION DES UTILISATEURS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">MIGRATION DES UTILISATEURS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Script permettant de migrer les anciens comptes utilisateurs sur l'architecture AD2008.<br>Il faut un fichier CSV comportant le nom, le prénom, le login et le mot de passe, séparés par des points-virgules et encadrés de double-quotes.<br>Par exemple "LECHAT";"RAOUL";"rlechat";"4511932"</div>
 </div>
 
