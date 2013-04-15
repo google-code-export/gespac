@@ -94,7 +94,7 @@
 					$page_accueil = $con_gespac->QueryOne ( "SELECT user_accueil FROM users WHERE user_logon='" . $_SESSION ['login'] . "' " );
 					if ($page_accueil == "") $page_accueil = "bienvenue.php";
 					
-					if ( !$college_existe ) $page='form_college';	// si pas de college, on charge la page du formulaire de creation d'un college
+					if ( !$college_existe ) $page='form_init';	// si pas de college, on charge la page du formulaire de creation d'un college
 
 					switch ($page) {
 						case "accueil" :	include ($page_accueil);	break;					
@@ -140,8 +140,7 @@
 						case "logs" :	include ("gestion_donnees/voir_logs.php");	break;
 						case "importcsv" :	include ("gestion_inventaire/form_import_csv.php");	break;
 						
-						
-						case "form_college" :	include ("gestion_college/form_college.php");	break;
+						case "form_init" :	include ("gestion_college/form_creation.php");	break;
 						
 						default : include ($page_accueil); break;
 					}
