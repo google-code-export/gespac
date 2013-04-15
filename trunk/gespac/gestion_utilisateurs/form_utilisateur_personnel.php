@@ -12,7 +12,7 @@
 
 
 <div class="entetes" id="entete-moncompte">	
-	<span class="entetes-titre">MODIFIER MON COMPTE<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">MODIFIER MON COMPTE<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Permet de modifier le compte actuellement connecté.</div>
 </div>
 

@@ -1,6 +1,6 @@
 <div class="entetes" id="entete-dumpocs">	
 
-	<span class="entetes-titre">DUMP BASE OCS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">DUMP BASE OCS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Permet la création d'un dump de la base OCS.</div>
 
 </div>

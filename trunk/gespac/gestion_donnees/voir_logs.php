@@ -70,7 +70,7 @@
 
 <div class="entetes" id="entete-logs">	
 
-	<span class="entetes-titre">LES LOGS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">LES LOGS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Toutes les opérations importantes laissent une trace dans les logs.<br>Vider les logs créé automatiquement un fichier dans le gestionnaire de fichiers.</div>
 
 	<span class="entetes-options">

@@ -1,5 +1,5 @@
 <div class="entetes" id="entete-infoserveur">	
-	<span class="entetes-titre">INFO SERVEUR<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">INFO SERVEUR<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet un tas d'info sur la version des services et sur l'état du serveur.</div>
 </div>
 

@@ -15,7 +15,7 @@
 
 
 <div class="entetes" id="entete-statparc">	
-	<span class="entetes-titre">FLUX RSS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">FLUX RSS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet de s'abonner et de lire des flux RSS/ATOM.</div>
 
 	<span class="entetes-options">
@@ -47,9 +47,9 @@
 				
 		if ( $E_chk ) {
 			// si le fichier flux n'existe pas, on ne permet pas la suppression (et la suppression de quoi d'abord ?)
-			if ( $row > 0 )	echo "<span class='option'><a href='#' onclick='supprimer_flux( $(\"select_flux\").value);' title='Supprimer le flux'><img src='img/icons/minus.png'></a></span>";
+			if ( $row > 0 )	echo "<span class='option'><a href='#' onclick='supprimer_flux( $(\"select_flux\").value);' title='Supprimer le flux'><img src='" . ICONSPATH . "minus.png'></a></span>";
 			
-			echo "<span class='option'><a href='modules/rss/form_rss.php?height=210&width=640&action=ajout' rel='slb_rss' title='Ajouter un flux'><img src='img/icons/add.png'></a></span>";
+			echo "<span class='option'><a href='modules/rss/form_rss.php?height=210&width=640&action=ajout' rel='slb_rss' title='Ajouter un flux'><img src='" . ICONSPATH . "add.png'></a></span>";
 		}
 		
 		?>

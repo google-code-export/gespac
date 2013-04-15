@@ -8,7 +8,7 @@
 	****************************************************************/
 	
 	$skin_name = $_SESSION['skin'];
-	
+	define("ICONSPATH", "skins/$skin_name/icons/");
 	
 	// on vérifie si l'utilisateur est identifié
 	if (!isset( $_SESSION['login'])) {
@@ -35,11 +35,9 @@
 		<link rel="stylesheet" href="css/dropdown/dropdown.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/dropdown/default.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-		<!--<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />-->
+		<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />
 		
 		<!--	JS	-->
-		<!--<script type="text/javascript" src="js/mootools-1.2.3-core-yc.js"></script>	-->
-		<!--<script type="text/javascript" src="js/mootools-1.2.3.1-more.js"></script>-->
 		<script type="text/javascript" src="js/mootools-core-1.4.5-full-compat-yc.js"></script>	
 		<script type="text/javascript" src="js/mootools-more-1.4.0.1.js"></script>
 		<script type="text/javascript" src="js/sexylightbox.js"></script> 
@@ -67,7 +65,7 @@
 	
 		<DIV id="page">
 			
-			<DIV id="toggle-menu"><img src="img/icons/menu.png"></DIV>
+			<DIV id="toggle-menu"><img src="" . ICONSPATH . "menu.png"></DIV>
 			
 			<DIV id="menu">
 				<?PHP	

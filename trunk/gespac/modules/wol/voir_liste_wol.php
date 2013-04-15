@@ -16,7 +16,7 @@
 
 <div class="entetes" id="entete-wol">	
 
-	<span class="entetes-titre">WAKE ON LAN<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">WAKE ON LAN<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet d'envoyer un signal d'allumage aux machines sélectionnées.</div>
 
 	<span class="entetes-options">

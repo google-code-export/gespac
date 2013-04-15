@@ -19,13 +19,13 @@
 
 <div class="entetes" id="entete-modportail">	
 
-	<span class="entetes-titre">ICONES DU PORTAIL<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">ICONES DU PORTAIL<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des raccourcis du portail.<br>L'affectation des raccourcis à un groupe d'utilisateurs se fait dans les <a href='index.php?page=grades'>GRADES</a>.</div>
 
 	<span class="entetes-options">
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='index.php?page=grades' title='Aller à la page de gestion des grades'><img src='img/icons/accueil.png'></a>";?></span>
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'><img src='img/icons/add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='index.php?page=grades' title='Aller à la page de gestion des grades'><img src='" . ICONSPATH . "accueil.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'><img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'portail_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>

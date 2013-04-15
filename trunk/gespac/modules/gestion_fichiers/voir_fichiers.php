@@ -19,12 +19,12 @@
 
 <div class="entetes" id="entete-gestfichiers">	
 
-	<span class="entetes-titre">GESTIONNAIRE DE FICHIERS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">GESTIONNAIRE DE FICHIERS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Le gestionnaire de fichier permet de poster et partager des fichiers entre utilisateurs.</div>
 
 	<span class="entetes-options">
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?height=350&width=640&id=-1' rel='slb_fichiers' title='Ajout fichier'> <img src='img/icons/add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?height=350&width=640&id=-1' rel='slb_fichiers' title='Ajout fichier'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'fichiers_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
