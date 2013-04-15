@@ -6,12 +6,12 @@
 
 	
 /*	GENERAL	*/	
-body {background-color:#ffd2f1; font-family:ubuntu, Verdana, Arial, Helvetica, sans-serif; margin:0; color:#000;	background-position : left bottom;	background-image	: url('fond.jpg');	background-repeat	: no-repeat;}
+body {background-color:#ffd2f1; font-family:ubuntu, Verdana, Arial, Helvetica, sans-serif; margin:0; color:#000;	background-position:right top; background-image:url('fond.jpg'); background-repeat:no-repeat;}
 h3 {	margin : 0px;}
 input, textarea, select {border:1px solid #6E6F6A;}
-a { text-decoration:none; color:#003C9C;}
+a { text-decoration:none; color:#5F1499;}
 table {border:0; padding:4px; text-align:center; font-size:small; border-collapse:collapse;}
-th {background-color:orange; font-size:10px; padding:5px 0px; color:#000;}
+th {background-color:#A95EDB; font-size:10px; padding:5px 0px; color:#000;}
 img {border:0px; vertical-align:middle;}
 
 
@@ -28,18 +28,18 @@ img {border:0px; vertical-align:middle;}
 /*	menu de gauche	*/
 #menu { background-color:#ffd2f1;}
 .menu-item {padding:2px 10px;font-size:11px; }
-.menu-item:hover {background-color:#E3E3E3;}
+.menu-item:hover {background-color:#FF61A0;}
 .menu-current{font-size:14px; background-color:#FFF;}
 
 
 /*	Entetes des pages (avec les options dedans)	*/
-#entete-materiels, #entete-salles, #entete-marques {background-color:#83E684;}
-#entete-dossiers {background-color:#8683E6;}
-#entete-prets {background-color:#FFAF75;}
-#entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#759AFF;}
-#entete-college, #entete-statbat, #entete-infoserveur, #entete-statparc {background-color:#FAEF7D;}
-#entete-aic, #entete-recapfog, #entete-modportail, #entete-geninventaire, #entete-gestfichiers, #entete-migdossiers, #entete-migfog, #entete-migusers, #entete-wol, #entete-exportperso, #entete-taginventaire {background-color:#AA83E6;}
-#entete-importcsv, #entete-logs, #entete-dumpocs, #entete-dumpgespac, #entete-exports, #entete-importocs {background-color:#FF7A7A;}
+#entete-materiels, #entete-salles, #entete-marques {background-color:#DB5ECF;}
+#entete-dossiers {background-color:#DB5ECF;}
+#entete-prets {background-color:#DB5ECF;}
+#entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#DB5ECF;}
+#entete-college, #entete-statbat, #entete-infoserveur, #entete-statparc {background-color:#DB5ECF;}
+#entete-aic, #entete-recapfog, #entete-modportail, #entete-geninventaire, #entete-gestfichiers, #entete-migdossiers, #entete-migfog, #entete-migusers, #entete-wol, #entete-exportperso, #entete-taginventaire {background-color:#DB5ECF;}
+#entete-importcsv, #entete-logs, #entete-dumpocs, #entete-dumpgespac, #entete-exports, #entete-importocs {background-color:#DB5ECF;}
 
 /*	bandeau pour la partie login, grade et déconnexion	*/
 #bandeau		{font-size:12px; color:black;}
@@ -55,7 +55,7 @@ img {border:0px; vertical-align:middle;}
 /* la boite d'aide */
 .helpbox {font-size:11px; border:1px grey solid; background-color:#E6E6E6;}
 
-.tablehover tr:hover {background-color:#FFD769; padding:2px 0px;}
+.tablehover tr:hover {background-color:#DE87AD; padding:2px 0px;}
 
 /*	pour les dossiers	*/
 .innertable {background-color:#D9DBDC; border:none ;}
