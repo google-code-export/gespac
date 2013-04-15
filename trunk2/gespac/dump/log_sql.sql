@@ -1,0 +1,6 @@
+20121202 222516 
+20121202 222516 UPDATE materiels SET mat_nom='CDI1' WHERE mat_id=449 ;
+20121202 222516 UPDATE materiels SET mat_nom='CDI2' WHERE mat_id=445 ;
+20121202 222516 UPDATE materiels SET mat_nom='CDI3' WHERE mat_id=446 ;
+20121202 222516 UPDATE materiels SET mat_nom='CDI4' WHERE mat_id=447 ;
+20121202 222516 UPDATE materiels SET mat_nom='CDI5' WHERE mat_id=448 ;
