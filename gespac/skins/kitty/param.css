@@ -1,0 +1,106 @@
+@font-face {
+	font-family: ubuntu;
+	src: url('Ubuntu-R.ttf');
+	/*src: url('SourceSansPro-Regular.ttf');*/
+	text-decoration : none;}
+
+	
+/*	GENERAL	*/	
+body {background-color:#ffd2f1; font-family:ubuntu, Verdana, Arial, Helvetica, sans-serif; margin:0; color:#000;	background-position : left bottom;	background-image	: url('fond.jpg');	background-repeat	: no-repeat;}
+h3 {	margin : 0px;}
+input, textarea, select {border:1px solid #6E6F6A;}
+a { text-decoration:none; color:#003C9C;}
+table {border:0; padding:4px; text-align:center; font-size:small; border-collapse:collapse;}
+th {background-color:orange; font-size:10px; padding:5px 0px; color:#000;}
+img {border:0px; vertical-align:middle;}
+
+
+/*	On execute tous les post dans ce div	*/
+#target {width:100%; position:fixed;	top:50%; left:0px; background-color:red; color:white; padding:5px; display:none; z-index:13; text-align:center;}
+#targetback {width:100%; height:100%; position:fixed; top:0; left:0px; background-color:black; opacity:.75; color:white; padding:5px; display:none; z-index:13; text-align:center;}
+
+/*	Le conteneur principal où on dessine le contenu et les menus	*/
+#page {background-color:#ffd2f1;}
+
+/*	Conteneur où on dessine les matériels, salles, ...	*/
+#contenu {background-color : #ffd2f1;}
+
+/*	menu de gauche	*/
+#menu { background-color:#ffd2f1;}
+.menu-item {padding:2px 10px;font-size:11px; }
+.menu-item:hover {background-color:#E3E3E3;}
+.menu-current{font-size:14px; background-color:#FFF;}
+
+
+/*	Entetes des pages (avec les options dedans)	*/
+#entete-materiels, #entete-salles, #entete-marques {background-color:#83E684;}
+#entete-dossiers {background-color:#8683E6;}
+#entete-prets {background-color:#FFAF75;}
+#entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#759AFF;}
+#entete-college, #entete-statbat, #entete-infoserveur, #entete-statparc {background-color:#FAEF7D;}
+#entete-aic, #entete-recapfog, #entete-modportail, #entete-geninventaire, #entete-gestfichiers, #entete-migdossiers, #entete-migfog, #entete-migusers, #entete-wol, #entete-exportperso, #entete-taginventaire {background-color:#AA83E6;}
+#entete-importcsv, #entete-logs, #entete-dumpocs, #entete-dumpgespac, #entete-exports, #entete-importocs {background-color:#FF7A7A;}
+
+/*	bandeau pour la partie login, grade et déconnexion	*/
+#bandeau		{font-size:12px; color:black;}
+#bandeau a		{font-size:12px; color:grey;}
+#bandeau a:hover	{text-decoration:underline;}
+
+/*	La boite de case à cocher pour les colonnes dans matériels	*/
+#options_colonnes {border:1px grey solid; background-color:#E6E6E6;}
+
+/*	La boite pour l'affectation directe d'un matériel	*/
+#affect_box {border:1px grey solid; background-color:#E6E6E6;}
+
+/* la boite d'aide */
+.helpbox {font-size:11px; border:1px grey solid; background-color:#E6E6E6;}
+
+.tablehover tr:hover {background-color:#FFD769; padding:2px 0px;}
+
+/*	pour les dossiers	*/
+.innertable {background-color:#D9DBDC; border:none ;}
+.innertable th{background-color:green;}
+.inner_tr {background-color:white; border:0px solid blue;}
+
+
+/*	Pour la couleur des dossiers	*/
+.td_ouverture {background-color:#5AC8FF;}
+.td_clos {background-color:#46FF80;}
+.td_intervention {background-color:#FF464A;}
+.td_precision {background-color:#FF9B46;}
+
+
+/*	Pour les lignes selectionnées	*/
+.selected {	background-color : #7EEF9F;}
+/*	Pour les lignes paires	*/
+.tr1 {	background-color : #D9DBDC;}
+/*	Pour les lignes impaires	*/
+.tr2 {	background-color : #fff;}
+/*	Pour les lignes paires surlignées	*/
+.tr1:hover {	background-color : #FFD769;}
+/*	Pour les lignes impaires surlignées */
+.tr2:hover {	background-color : #FFD769;}
+
+/*	Pour les lignes paires sans rollover	*/
+.tr3 {	background-color : #D9DBDC;}
+/*	Pour les lignes impaires sans rollover	*/
+.tr4 {	background-color : #fff;}
+/*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
+.tr_doublon {	background-color : #29C920;}
+/*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
+.tr_doublon_ocs {	background-color : yellow;}
+
+	
+/******************************************* 	RSS / ATOM  *******************************************/
+.rss_content {font-size:13px; padding-bottom:5px;}
+.rss_date {font-size:10px;}
+.rss_title {font-size:16px; padding-bottom:5px;}
+.rss_title a{font-size:16px;}
+.rss_news {border:1px solid black; padding:5px 10px; margin:10px; background-color:#EDEDED; white-space:pre-wrap;}
+
+/******************************************* 	SCROLLBAR pour WEBKIT uniquement  *******************************************/
+::-webkit-scrollbar {width:10px; height:10px;}
+::-webkit-scrollbar-track { border:0;}
+::-webkit-scrollbar-track:hover { border:1px solid grey;}
+::-webkit-scrollbar-thumb { background-color:#E6E6E6; border:1px solid grey;}
+::-webkit-scrollbar-thumb:hover { background-color:#B0B0B0; border:1px solid grey;}
