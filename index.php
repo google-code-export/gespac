@@ -70,8 +70,7 @@
 
 		// on vérifie la connectivité avec la base avant d'aller plus loin	
 		if(!mysql_select_db($gespac)) {
-			echo '<img src="./gespac/img/info.png"><br>
-			vous devez installer au préalable la base de données en cliquant <a href="install_mysql/installation.php">ici</a>';
+			echo '<img src="./gespac/img/icons/info.png"> Vous devez installer au préalable la base de données en cliquant <a href="install_mysql/installation.php">ICI</a>';
 			exit();
 		}	
 
