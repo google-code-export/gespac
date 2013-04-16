@@ -15,7 +15,7 @@
 
 <div class="entetes" id="entete-prets">	
 
-	<span class="entetes-titre">LE PRET de MATERIEL<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">LE PRET de MATERIEL<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet de gérer le prêt du matériel du parc.<br>Le matériel doit être dans la salle PRETS pour être affiché ici.</div>
 
 	<span class="entetes-options">

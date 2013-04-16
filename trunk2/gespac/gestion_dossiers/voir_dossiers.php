@@ -22,16 +22,16 @@
 
 <div class="entetes" id="entete-dossiers">	
 
-	<span class="entetes-titre">LES DOSSIERS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">LES DOSSIERS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet de gérer les dossiers, leur création, modification et suppression.</div>
 
 	<span class="entetes-options">
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_dossiers/form_dossiers.php?height=750&width=750&id=-1' rel='slb_dossiers' title='Ajouter un dossier'> <img src='img/icons/add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_dossiers/form_dossiers.php?height=750&width=750&id=-1' rel='slb_dossiers' title='Ajouter un dossier'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
 		
 		<span class="option"><?PHP 
-			if (!$showclos) echo "<a href='index.php?page=dossiers&showclos=1' title='Montrer les dossiers clos'> <img src='img/icons/eye.png'></a>";
-			else echo "<a href='index.php?page=dossiers' title='Cacher les dossiers clos'> <img src='img/icons/eye.png'></a>";?></span>
+			if (!$showclos) echo "<a href='index.php?page=dossiers&showclos=1' title='Montrer les dossiers clos'> <img src='" . ICONSPATH . "eye.png'></a>";
+			else echo "<a href='index.php?page=dossiers' title='Cacher les dossiers clos'> <img src='" . ICONSPATH . "eye.png'></a>";?></span>
 			
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
@@ -80,16 +80,16 @@
 				// Le dossier
 				
 				echo "<tr id='tr_$dossier_id' class=$tr_class>";
-					echo "<td width=20px><a href='#' onclick=\"toggleDossier($dossier_id);\"><img src='img/icons/deplier.png'></a></td>";
+					echo "<td width=20px><a href='#' onclick=\"toggleDossier($dossier_id);\"><img src='" . ICONSPATH . "deplier.png'></a></td>";
 					echo "<td width=20px>$dossier_id</td>";
 					echo "<td width=100px>$date_ouverture</td>";
 					echo "<td width=60px>$dossier_type</td>";
 					echo "<td width=60px class='td_$last_etat'>$last_etat</td>";
 					echo "<td>$txt_texte</td>";
-					echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?height=480&width=500&dossier=$dossier_id' rel='slb_dossiers' title='Liste des matériels du dossier $dossier_id'><img src='img/icons/icon_eye.png'></a></td>";
-					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='gestion_dossiers/form_dossiers.php?height=550&width=750&id=$dossier_id' rel='slb_dossiers' title='Modifier le dossier $dossier_id'> <img src='img/icons/edit.png'> </a></td>";
+					echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?height=480&width=500&dossier=$dossier_id' rel='slb_dossiers' title='Liste des matériels du dossier $dossier_id'><img src='" . ICONSPATH . "icon_eye.png'></a></td>";
+					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='gestion_dossiers/form_dossiers.php?height=550&width=750&id=$dossier_id' rel='slb_dossiers' title='Modifier le dossier $dossier_id'> <img src='" . ICONSPATH . "edit.png'> </a></td>";
 					else echo "<td>&nbsp;</td>";
-					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"validation_suppr_dossier('$dossier_id');\"> <img src='img/icons/delete.png'> </a></td>";
+					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' onclick=\"validation_suppr_dossier('$dossier_id');\"> <img src='" . ICONSPATH . "delete.png'> </a></td>";
 					else echo "<td>&nbsp;</td>";
 				
 				echo "</tr>";

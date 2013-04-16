@@ -1,6 +1,6 @@
 <div class="entetes" id="entete-taginventaire">	
 
-	<span class="entetes-titre">MISE A JOUR des NUMEROS INVENTAIRE<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">MISE A JOUR des NUMEROS INVENTAIRE<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Permet de mettre à jour les numéros d'inventaire de la base en fonction du numéro de série du matériel.</div>
 
 </div>

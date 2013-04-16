@@ -15,14 +15,14 @@
 
 <div class="entetes" id="entete-utilisateurs">	
 
-	<span class="entetes-titre">LES UTILISATEURS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">LES UTILISATEURS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des utilisateurs du parc.<br>On peut gérer ici les skins, le mailing et les grades des utilisateurs.</div>
 
 	<span class="entetes-options">
 
-		<span class="option"><?PHP if ( $E_chk ) { echo "<span id='nb_selectionnes' title=\"nombre d'utilisateurs sélectionnés\"></span>"; echo "<span id='modif_selection' style='display:none;'> <a href='gestion_utilisateurs/form_utilisateurs.php?height=200&width=640&action=modlot' rel='slb_users' title='modifier selection'> <img src='img/icons/modif1.png'></a></span>"; }?>  </span>
+		<span class="option"><?PHP if ( $E_chk ) { echo "<span id='nb_selectionnes' title=\"nombre d'utilisateurs sélectionnés\"></span>"; echo "<span id='modif_selection' style='display:none;'> <a href='gestion_utilisateurs/form_utilisateurs.php?height=200&width=640&action=modlot' rel='slb_users' title='modifier selection'> <img src='" . ICONSPATH . "modif1.png'></a></span>"; }?>  </span>
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='slb_users' title=\"ajout d'un utilisateur\"><img src='img/icons/add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=-1' rel='slb_users' title=\"ajout d'un utilisateur\"><img src='" . ICONSPATH . "add.png'></a>";?></span>
 		
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
@@ -116,8 +116,8 @@
 					
 					if ( $E_chk && $est_modifiable) {
 						
-						echo "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id&action=mod' rel='slb_users' title='Formulaire de modification de l`utilisateur $nom'><img src='img/icons/edit.png'> </a></td>";
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user('$id', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='img/icons/delete.png' title='supprimer $nom'>	</a> </td>";
+						echo "<td><a href='gestion_utilisateurs/form_utilisateurs.php?height=300&width=640&id=$id&action=mod' rel='slb_users' title='Formulaire de modification de l`utilisateur $nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
+						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_user('$id', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='" . ICONSPATH . "delete.png' title='supprimer $nom'>	</a> </td>";
 							
 					} else {
 						echo "<td>&nbsp</td>";

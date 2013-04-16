@@ -23,7 +23,7 @@ session_start();
 ?>
 
 	<div class="entetes" id="entete-aic">	
-		<span class="entetes-titre">SNAPINS FOG pour AIC<img class="help-button" src="img/icons/info.png"></span>
+		<span class="entetes-titre">SNAPINS FOG pour AIC<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 		<div class="helpbox">Afin d'éviter de créer un fichier AIC par OU de l'AD, on peut déployer le même fichier AIC.EXE avec des paramètres.<br>Cette page permet de créer dans fog un snapin paramétré pour intégrer les machines au domaine.</div>
 	</div>
 

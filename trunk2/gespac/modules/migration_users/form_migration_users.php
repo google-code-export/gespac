@@ -14,7 +14,7 @@
 ?>
 
 <div class="entetes" id="entete-migusers">	
-	<span class="entetes-titre">MIGRATION DES UTILISATEURS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">MIGRATION DES UTILISATEURS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">
 		Selectionnez dans les listes déroulantes les professeurs correspondants. Les sûrs à 100%, je les ai déjà selectionnés ;) 
 		<br><SPAN style="background-color:green;">VERT</SPAN> : Correspondances sur nom et prénom.

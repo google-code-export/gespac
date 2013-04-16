@@ -12,7 +12,7 @@
 
 
 <div class="entetes" id="entete-moncompte">	
-	<span class="entetes-titre">MODIFIER MON COMPTE<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">MODIFIER MON COMPTE<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Permet de modifier le compte actuellement connecté.</div>
 </div>
 
@@ -85,7 +85,7 @@
 						<td>
 							<select name="skin">
 							<?PHP
-								$dossier = opendir("../skins");
+								$dossier = opendir("skins");
 								while ( $skin = readdir($dossier) ) {
 									if ( $skin != "." && $skin != ".." && $skin != ".svn") {
 										$selected = $skin == $user_skin ? "selected" : "" ;
@@ -107,7 +107,6 @@
 						<TD><select name="page" size="1">
 					
 					<?PHP
-						$lines = file('../menu.txt');
 
 						echo "<option value='bienvenue.php'>Bienvenue</option>";	// Page par défaut
 						

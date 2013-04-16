@@ -8,7 +8,7 @@
 	
 <div class="entetes" id="entete-migdossiers">	
 
-	<span class="entetes-titre">MIGRATION DES DEMANDES<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">MIGRATION DES DEMANDES<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Script permettant de migrer les anciennes demandes vers le nouveau système de dossier.<br>A n'utiliser qu'une fois et seulement si vous avez utilisé les anciennes demandes...</div>
 
 </div>

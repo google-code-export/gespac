@@ -14,7 +14,7 @@
 	
 	
 <div class="entetes" id="entete-importcsv">	
-	<span class="entetes-titre">IMPORT DE MATERIELS PAR CSV<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">IMPORT DE MATERIELS PAR CSV<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet d'importer en masse des matériels via un fichier CSV.<br>ATTENTION : Il faut UN fichier CSV par modèle !</div>
 </div>
 

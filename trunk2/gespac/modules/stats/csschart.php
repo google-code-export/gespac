@@ -10,7 +10,7 @@
 
 
 <div class="entetes" id="entete-statbat">	
-	<span class="entetes-titre">LES STATISTIQUES BATONS<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">LES STATISTIQUES BATONS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Cette page permet l'affichage les statistiques de répartition par marque, par salle et par état de fonctionnement du parc. </div>
 </div>
 

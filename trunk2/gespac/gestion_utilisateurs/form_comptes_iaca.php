@@ -3,7 +3,7 @@
 
 <div class="entetes" id="entete-importusers">	
 
-	<span class="entetes-titre">IMPORT IACA<img class="help-button" src="img/icons/info.png"></span>
+	<span class="entetes-titre">IMPORT IACA<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
 	<div class="helpbox">Permet d'importer des comptes avec un fichier CSV. </div>
 
 </div>

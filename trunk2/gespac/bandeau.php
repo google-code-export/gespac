@@ -26,7 +26,7 @@
 
 
 <div id="bandeau">
-		<img src="img/icons/user.png">
+		<img src="<?PHP echo ICONSPATH . "user.png";?>">
 		<b><?PHP echo "$login ($grade)"; ?></b><br>
-		<a href="../logout.php" title="Cliquer ici pour se déconnecter"><img src="img/icons/quit.png"><b>quitter</b></a>
+		<a href="../logout.php" title="Cliquer ici pour se déconnecter"><img src="<?PHP echo ICONSPATH . "quit.png";?>"><b>quitter</b></a>
 </div>
