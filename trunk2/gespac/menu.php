@@ -113,32 +113,32 @@
 		function change_icon_onclick (div) {	
 			// on désactive tous les boutons
 			
-			if ($('accueil')) $('accueil').className = "accueil";
-			if ($('inventaire')) $('inventaire').className = "inventaire";
-			if ($('demandes')) $('demandes').className = "demandes";
-			if ($('donnees')) $('donnees').className = "donnees";
-			if ($('prets')) $('prets').className = "prets";
-			if ($('utilisateurs')) $('utilisateurs').className = "utilisateurs";
-			if ($('plugins')) $('plugins').className = "plugins";
-			if ($('info')) $('info').className = "info";
+			if ($('#accueil')) $('#accueil').className = "accueil";
+			if ($('#inventaire')) $('#inventaire').className = "inventaire";
+			if ($('#demandes')) $('#demandes').className = "demandes";
+			if ($('#donnees')) $('#donnees').className = "donnees";
+			if ($('#prets')) $('#prets').className = "prets";
+			if ($('#utilisateurs')) $('#utilisateurs').className = "utilisateurs";
+			if ($('#plugins')) $('#plugins').className = "plugins";
+			if ($('#info')) $('#info').className = "info";
 			
 			// On active le bon bouton
-			$(div).className = div + "-clicked";
+			$("#" + div).className = div + "-clicked";
 		}
 		
 
 
-		window.addEvent('domready', function(){
+		$(function () {
 			
 			// Quand on clique sur une image
-			$$('.menu-titre').addEvent('click', function(el)  {
-				$$('.menu-items').setStyle("display", "none");	// On masque tout
-				$(this).getParent().getChildren(".menu-items").setStyle("display", "block");	// On affiche le set d'items
+			$('.menu-titre').click( function(el)  {
+				$('.menu-items').hide();	// On masque tout
+				$(this).parent().children(".menu-items").show("fast");	// On affiche le set d'items
 			});
 			
 			var page = getQueryVariable("page");
 			if (page) {
-				$(page).getParent(".menu-items").setStyle("display", "block");	// On affiche le set d'items
+				$(page).parent(".menu-items").show("fast");	// On affiche le set d'items
 				$(page).className='menu-current';
 			}
 		

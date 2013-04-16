@@ -30,22 +30,22 @@
 		<link rel="SHORTCUT ICON" href="img/favicon.ico"/>
 		
 		<!--	CSS	-->
-		<link rel="stylesheet" href="css/sexylightbox.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/chart.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="css/dropdown/dropdown.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="css/dropdown/default.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="css/default/jquery-ui-1.9.0.custom.min.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="css/jquery.ui.dialog.css" type="text/css" media="screen" charset="utf-8">
 		<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />
 		
 		<!--	JS	-->
-		<script type="text/javascript" src="js/mootools-core-1.4.5-full-compat-yc.js"></script>	
-		<script type="text/javascript" src="js/mootools-more-1.4.0.1.js"></script>
-		<script type="text/javascript" src="js/sexylightbox.js"></script> 
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.js"></script>	
+		<script type="text/javascript" src="js/jquery.ui.widget.js"></script>	
+		<script type="text/javascript" src="js/jquery.ui.tooltip.js"></script>			
+		<script type="text/javascript" src="js/jquery.ui.dialog.js"></script>	
 		<script type="text/javascript" src="js/main.js"></script>
 		
-	
-
-
+		
+		
 		<title>GESPAC -> GEStion du PArc des Collèges</title>
 	
 	</head>
@@ -65,7 +65,7 @@
 	
 		<DIV id="page">
 			
-			<DIV id="toggle-menu"><img src="" . ICONSPATH . "menu.png"></DIV>
+			<DIV id="toggle-menu"><img src="<?PHP echo ICONSPATH . "menu.png";?>"></DIV>
 			
 			<DIV id="menu">
 				<?PHP	

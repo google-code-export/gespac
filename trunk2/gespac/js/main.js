@@ -32,31 +32,8 @@
 	}
 
 
-window.addEvent('domready', function(){
-	
-	// On implémente la fonctionnalité show/hide/toggle
-	Element.implement({
-		//implement show
-		show: function() {
-			this.setStyle('display','');
-		},
-		//implement hide
-		hide: function() {
-			this.setStyle('display','none');
-		},
-		//implement toggle
-		toggle: function() {
-			if (this.getStyle('display')=='none')
-				this.setStyle('display','block');
-			else
-				this.setStyle('display','none');
-		}
-	});
-
-	
-	
-	
-	
+$(function () {
+		
 	// init l'affichage
 	toggleAffichage(1100);
 
@@ -65,21 +42,21 @@ window.addEvent('domready', function(){
 	//	Change l'affichage en fonction de la taille de la fenetre
 	/////////////////////////////////////////////////////////////
 	function toggleAffichage(size) {
-		if (window.getSize().x < size ) {
-			$('menu').setStyle("display", "none");
-			$('menu').setStyle("border", "1px solid black");
-			$('contenu').setStyle("margin-left", "10px");
-			$('toggle-menu').setStyle("display", "block");
+		if ($(window).width() < size ) {
+			$('#menu').hide();
+			$('#menu').css("border","1px solid black");
+			$('#contenu').css("margin-left","10px");
+			$('#toggle-menu').show();
 		}
 		else {
-			$('menu').setStyle("display", "block");
-			$('menu').setStyle("border", "0px");
-			$('contenu').setStyle("margin-left", "230px");
-			$('toggle-menu').setStyle("display", "none");
+			$('#menu').show();
+			$('#menu').css("border","0px");
+			$('#contenu').css("margin-left","230px");
+			$('#toggle-menu').hide();
 		}
 		
 		// La hauteur du menu principal
-		$('menu').setStyle("max-height", window.getSize().y-100 + "px");
+		$('#menu').css("max-height", $(window).height()-100 + "px");
 		
 		// La barre d'entête
 		//$$(".entetes").setStyle("width", $("contenu").getStyle('width'));
@@ -92,19 +69,19 @@ window.addEvent('domready', function(){
 	///////////////////////////////////////////
 	//		AFFICHE L'AIDE EN LIGNE
 	///////////////////////////////////////////
-	$$('.help-button').addEvent('click', function(e)  {
+	$('.help-button').click( function(e)  {
 		
-		if ($$(".helpbox").getStyle("display") == "none")
-			$$(".helpbox").setStyle("display", "inline");
+		if ($(".helpbox").is(':visible'))
+			$(".helpbox").fadeOut();
 		else
-			$$(".helpbox").setStyle("display", "none");
+			$(".helpbox").fadeIn();
 	});
 	
 	
 	///////////////////////////////////////////
 	//	Si la taille de la page est trop juste
 	///////////////////////////////////////////
-	window.addEvent('resize', function(){	
+	$(window).resize( function(){	
 		toggleAffichage(1100);
 	});
 	
@@ -112,11 +89,8 @@ window.addEvent('domready', function(){
 	///////////////////////////////////////////
 	//	toggle du menu quand la page est trop petite
 	///////////////////////////////////////////
-	$('toggle-menu').addEvent('click', function(e)  {
-		if ($("menu").getStyle("display") == "none")
-			$('menu').setStyle("display", "block");
-		else
-			$('menu').setStyle("display", "none");
+	$('#toggle-menu').click( function()  {
+		$('#menu').toggle("slide");
 	});
 		
 	

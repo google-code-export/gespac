@@ -4,7 +4,7 @@
 	
   $host = 'localhost';
   $user = 'root';
-  $pass = ''; 
+  $pass = 'raoul'; 
 
    //identification de base de données  
   $gespac='gespac';
