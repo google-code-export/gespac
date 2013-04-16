@@ -20,7 +20,7 @@
 	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
-		var bt_submit = document.getElementById("post_salle");
+		var bt_submit = document.getElementById("post_form");
 		var salle_nom = document.getElementById("nom").value;
 		
 		if (salle_nom == "") {
@@ -37,7 +37,7 @@
 	*
 	*******************************************/
 	
-	window.addEvent('domready', function(){
+	/*window.addEvent('domready', function(){
 		
 		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
 			new Event(e).stop();
@@ -55,6 +55,37 @@
 			
 			}).send(this.toQueryString());
 		});			
+	});*/
+	
+	$(function() {	
+	
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+		
+			// Permet d'avoir les données à envoyer
+			var dataString = $("#formulaire").serialize();
+			
+			// action du formulaire
+			var url = $("#formulaire").attr( 'action' );
+
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('filt').value + "'", 1500);
+			 });
+			 
+		});	
 	});
 		
 </script>
@@ -64,9 +95,7 @@
 	$id = $_GET['id'];
 
 	if ( $id == '-1' ) {	// Formulaire vierge de création
-	
-		echo "<h2>formulaire de création d'une salle</h2><br>";
-		
+
 		?>
 		
 		<script>
@@ -74,7 +103,7 @@
 			$('nom').focus();
 		</script>
 		
-		<form action="gestion_inventaire/post_salles.php?action=add" method="post" name="post_form" id="post_form">
+		<form action="gestion_inventaire/post_salles.php?action=add" method="post" name="post_form" id='formulaire'>
 		
 			<center>
 			<table width=500>
@@ -110,7 +139,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter une salle' id="post_salle" disabled>
+			<input type=submit value='Ajouter une salle' id="post_form" disabled>
 
 			</center>
 

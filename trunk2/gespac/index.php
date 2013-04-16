@@ -32,7 +32,7 @@
 		<!--	CSS	-->
 		<link rel="stylesheet" href="css/chart.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="css/default/jquery-ui-1.9.0.custom.min.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="css/default/jquery-ui-1.9.0.custom.css" type="text/css" media="screen" charset="utf-8">
 		<link rel="stylesheet" href="css/jquery.ui.dialog.css" type="text/css" media="screen" charset="utf-8">
 		<link rel="stylesheet" href="skins/<?PHP echo $skin_name;?>/param.css" type="text/css" />
 		
