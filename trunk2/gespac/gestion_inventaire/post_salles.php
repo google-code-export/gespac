@@ -32,13 +32,13 @@
 	#**************** SUPPRESSION ********************#
 
 	
-	if ( $action == 'suppr' ) {
+	if ( $action == 'del' ) {
 	
-		$id 	= $_GET['id'];
+		$salle_id = $_POST['salle_id'];
 		
 		//Insertion d'un log (avant la suppression!)
 		//On récupère le nom de la salle en fonction du $salle_id
-		$salle_nom = $con_gespac->QueryOne ( "SELECT salle_nom FROM salles WHERE salle_id = $id" );
+		$salle_nom = $con_gespac->QueryOne ( "SELECT salle_nom FROM salles WHERE salle_id = $salle_id" );
 
 		echo $log_texte = "La salle $salle_nom a été supprimée";
 
@@ -49,14 +49,14 @@
 		$log->Insert ( $req_log_suppr_salle );
 				
 		// déplace le matériel de la salle à supprimer dans la table STOCK (à priori la salle_id = 1)
-		$req_deplace_materiel_dans_stock = "UPDATE materiels SET salle_id = 1 WHERE salle_id=$id";				// En cas, ici faire une sous requête pour obtenir le salle_id de la salle STOCK (mais bon, on créra la salle automatiquement avec cet id normalement)
+		$req_deplace_materiel_dans_stock = "UPDATE materiels SET salle_id = 1 WHERE salle_id=$salle_id";				// En cas, ici faire une sous requête pour obtenir le salle_id de la salle STOCK (mais bon, on créra la salle automatiquement avec cet id normalement)
 		$con_gespac->Execute ( $req_deplace_materiel_dans_stock );
 		
 		//On log la requête
 		$log->Insert ( $req_deplace_materiel_dans_stock );
 		
 		// Suppression de la salle
-		$req_suppr_salle = "DELETE FROM salles WHERE salle_id=$id";
+		$req_suppr_salle = "DELETE FROM salles WHERE salle_id=$salle_id";
 		$con_gespac->Execute ( $req_suppr_salle );
 	
 		//On log la requête
@@ -167,7 +167,7 @@
 	#**************** VIDER SALLE D3E ********************#
 
 	
-	if ( $action == 'vider_d3e' ) {
+	if ( $action == 'd3e' ) {
 	
 		// Liste des PC dans la salle D3E
 		$id_D3E = $con_gespac->QueryOne("SELECT salle_id FROM salles WHERE salle_nom='D3E'");

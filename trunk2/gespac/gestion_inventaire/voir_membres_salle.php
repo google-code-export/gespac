@@ -1,30 +1,30 @@
 	<!-- 
-
-
-
 		Liste des membres de la salle 
-
-
-
-
 	-->
 
 
 <?PHP
 
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
+	// lib
+	include_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
 	
-	// id ocs du matériel à afficher
+	// id ocs du matÃ©riel Ã  afficher
 	$salle_id = $_GET ['salle_id'];
 
-	// cnx à la base de données OCS
+	// cnx Ã  la base de donnÃ©es OCS
 	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
-	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
+	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© avec originalitÃ© "array" (mais "tableau" peut aussi marcher)
 	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_model, marque_type, mat_id, user_nom FROM materiels, marques, users WHERE materiels.user_id=users.user_id AND materiels.salle_id=$salle_id AND materiels.marque_id = marques.marque_id order by mat_nom" );
 
-	echo "<p><small>" . count($liste_des_materiels) . " matériel(s) dans cette salle.</small></p>";
+	if (count($liste_des_materiels) <1 ) {
+		echo "<br><h3>Pas de matÃ©riel dans cette salle ! </h3>"; exit();
+	}
+	
+	echo "<p><small>" . count($liste_des_materiels) . " matÃ©riel(s) dans cette salle.</small></p>";
 	
 	$fp = fopen('../dump/extraction.csv', 'w+');	//Ouverture du fichier
 	fputcsv($fp, array('nom', 'dsit', 'serial', 'etat', 'modele', 'type'), ',' );	// ENTETES
@@ -36,11 +36,11 @@
 	
 	<table id="myTable" width=620>
 		<th>Nom</th>
-		<th>Prêt</th>
+		<th>PrÃªt</th>
 		<th>DSIT</th>
 		<th>Serial</th>
 		<th>Etat</th>
-		<th>Modèle</th>
+		<th>ModÃ¨le</th>
 		<th>Type</th>
 		
 		<?PHP	
@@ -48,7 +48,7 @@
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ($liste_des_materiels as $record ) {
-				// On écrit les lignes en brut dans la page html
+				// On Ã©crit les lignes en brut dans la page html
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";

@@ -4,70 +4,82 @@
 //
 // *********************************************************************************
 
-	// désactive postage sur touche entrée
-	function disableEnterKey(e){
-		var key = e.which;
+/*
+* @name: AffichePage
+* @param : touche frappée
+* @return : rien
+* @description : désactive postage sur touche entrée
+* @reference : toutes les pages avec un filtre
+*/	
+function disableEnterKey(e){
+	var key = e.which;
 
-		if(key == 13) return false;
-		else return true;
-	};
+	if(key == 13) return false;
+	else return true;
+};
 	
-	//	Pour afficher une page	dans un div particulier
-	function AffichePage(div_dest, page) {
-		$(div_dest).set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres pour ne pas dépasser la taille maxi d'une url)
-		$(div_dest).load(page);
-	};
+/*
+* @name: AffichePage
+* @param : string:variable, string:page
+* @return : rien
+* @description : Permet d'afficher dans un div le contenu d'une page (genre ajax)
+* @reference : ???? encore utile ???
+*/
+function AffichePage(div_dest, page) {
+	$(div_dest).set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres pour ne pas dépasser la taille maxi d'une url)
+	$(div_dest).load(page);
+};
 
 
-	// Pour parser la chaine get en js
-	function getQueryVariable(variable) {
-		var query = window.location.search.substring(1);
-		var vars = query.split('&');
-		for (var i = 0; i < vars.length; i++) {
-			var pair = vars[i].split('=');
-			if (decodeURIComponent(pair[0]) == variable) {
-				return decodeURIComponent(pair[1]);
-			}
+/*
+* @name: getQueryVariable
+* @param : string:variable
+* @return : string:valeur de la variable
+* @description : Permet de récupérer la valeur d'une variable de l'url
+* @reference : menu.php
+*/
+function getQueryVariable(variable) {
+	var query = window.location.search.substring(1);
+	var vars = query.split('&');
+	for (var i = 0; i < vars.length; i++) {
+		var pair = vars[i].split('=');
+		if (decodeURIComponent(pair[0]) == variable) {
+			return decodeURIComponent(pair[1]);
 		}
 	}
+}
+		
+		
+/*
+* @name: filter
+* @param : string:phrase, string:tableid
+* @return : rien
+* @description : Permet de filtrer une table et éventuellement de marquer le nombre de lignes filtrées
+* @reference : Presque toutes les pages
+*/
+function filter (phrase, tableid){
 	
-		
-		
-	/////////////////////////////////////////////////////////////
-	//			Fonction de filtrage des tables
-	/////////////////////////////////////////////////////////////
+	var data = phrase.split(" ");
+	var cells=$("#" + tableid + " td");
+				
+	if(data != "") {
+		// On cache toutes les lignes
+		cells.parent("tr").hide();
+		// puis on filtre pour n'afficher que celles qui répondent au critère du filtre
+		cells.filter(function() {
+			return $(this).text().toLowerCase().indexOf(data) > -1;
+		}).parent("tr").show();		
+	} else {
+		// On montre toutes les lignes
+		cells.parent("tr").show();
+	}
 	
-	function filter (phrase, tableid){
-		
-		if(typeof phrase.value != 'undefined') {
-			var data = phrase.value.split(" ");
-			var cells=$("#" + tableid + " td");
-						
-			if(data != "") {
-				// On cache toutes les lignes
-				cells.parent("tr").hide("fast");
-				// puis on filtre pour n'afficher que celles qui répondent au critère du filtre
-				cells.filter(function() {
-					return $(this).text().toLowerCase().indexOf(data) > -1;
-				}).parent("tr").show("fast");	
-			} else {
-				// On montre toutes les lignes
-				cells.parent("tr").show("fast");
-			}
-
-			// Si il existe on remplit le filtercount (même si pour le moment il a un coup de retard, sans que je me l'explique)
-			if ($("#filtercount")) $("#filtercount").html($("#" + tableid + " tr:visible").length -1);			
-		}
-	}	
+	if ($("#filtercount")) $("#filtercount").html( $("#" + tableid + " tr:visible").length -1 );
+}	
 	
 	
 $(function () {
-
-	// custom css expression for a case-insensitive contains()
-	jQuery.expr[':'].Contains = function(a, i, m) {
-		return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
-	};
-		
+	
 	// init l'affichage
 	toggleAffichage(1100);
 
