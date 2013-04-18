@@ -40,7 +40,7 @@ session_start();
 
 ?>
 	
-	<table class="tablehover" id='salle_table'>
+	<table class="alternate hover bigtable" id='salle_table'>
 		<th>Nom</th>
 		<th>VLAN</th>
 		<th>Etage</th>
@@ -54,11 +54,8 @@ session_start();
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ($liste_des_salles as $record ) {
-							
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-						
-				echo "<tr class=$tr_class>";
+								
+				echo "<tr class='alternate'>";
 						
 					$id		 		= $record['salle_id'];
 					$nom	 		= $record['salle_nom'];

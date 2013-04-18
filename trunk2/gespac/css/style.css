@@ -130,8 +130,27 @@ img {border:0px; vertical-align:middle;}
 /*	Le nombre de lignes selectionnées	*/
 #nb_selectionnes {display:none; font-size:10px; margin-left:10px;}
 
+/*	Le nombre de lignes filtrées	*/
+#filtercount {font-size:9px;}
 
 
+
+/*	Les grandes tables, comme les salles, marques ...	*/
+.bigtable {min-width:950px;}
+.bigtable  td{padding:2px 4px; font-size:11px ;}
+.bigtable  th{font-size:12px ;}
+
+/*	Les tables, comme les membres des salles ...	*/
+.smalltable  td{padding:2px 4px; font-size:11px; border:1px solid grey;}
+.smalltable  th{font-size:11px ;}
+
+.selected {	background-color : #7EEF9F;}
+
+/*	Cette classe ajoute la coloration une ligne sur deux	*/
+.alternate tr:nth-child(odd){background-color : #D9DBDC;}
+.alternate tr:nth-child(even){background-color : #fff;}
+/*	Si cette classe est ajoutée à la classe de la table, il y a effet de surlignage	*/
+.hover tr:hover {background-color:#FFD769;}
 
 
 .form_table {
@@ -144,12 +163,6 @@ img {border:0px; vertical-align:middle;}
 
 /*	Les cases contenant les boutons supprimé, modifié, ...	*/
 .buttons {width:20px;}
-
-
-.tablehover {min-width:950px;}
-.tablehover tr:hover {background-color:#FFD769; padding:2px 0px;}
-.tablehover td {padding:2px 4px; font-size:11px ;}
-.tablehover th {font-size:12px ;}
 
 #log_prets_table {border-collapse:collapse; max-width:950px;}
 #log_prets_table td {min-width:110px; font-size:10px;}
@@ -197,22 +210,6 @@ img {border:0px; vertical-align:middle;}
 .td_intervention {background-color:#FF464A;}
 .td_precision {background-color:#FF9B46;}
 
-
-/*	Pour les lignes selectionnées	*/
-.selected {	background-color : #7EEF9F;}
-/*	Pour les lignes paires	*/
-.tr1 {	background-color : #D9DBDC;}
-/*	Pour les lignes impaires	*/
-.tr2 {	background-color : #fff;}
-/*	Pour les lignes paires surlignées	*/
-.tr1:hover {	background-color : #FFD769;}
-/*	Pour les lignes impaires surlignées */
-.tr2:hover {	background-color : #FFD769;}
-
-/*	Pour les lignes paires sans rollover	*/
-.tr3 {	background-color : #D9DBDC;}
-/*	Pour les lignes impaires sans rollover	*/
-.tr4 {	background-color : #fff;}
 /*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
 .tr_doublon {	background-color : #29C920;}
 /*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/

@@ -34,7 +34,7 @@
 
 <center>
 	
-	<table id="myTable" width=620>
+	<table class='alternate smalltable'>
 		<th>Nom</th>
 		<th>Prêt</th>
 		<th>DSIT</th>
