@@ -111,7 +111,7 @@
 	$(function () {
 		// Quand on clique sur une image
 		$('.menu-titre').click( function(el)  {
-			$('.menu-items').hide();	// On masque tout
+			$('.menu-items').hide("fast");	// On masque tout
 			$(this).parent().children(".menu-items").show("fast");	// On affiche le set d'items
 		});
 		
