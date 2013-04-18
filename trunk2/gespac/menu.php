@@ -109,13 +109,20 @@
 
 <script type="text/javascript">
 	$(function () {
+	
+		// La page courante dans l'url
+		var page = getQueryVariable("page");
+	
 		// Quand on clique sur une image
 		$('.menu-titre').click( function(el)  {
-			$('.menu-items').hide("fast");	// On masque tout
-			$(this).parent().children(".menu-items").show("fast");	// On affiche le set d'items
+			// Si ce n'est pas le menu courant
+			if ( $(this).parent().children(".menu-items").is(":hidden") ) {		
+				$('.menu-items').hide("fast");	// On masque tout
+				$(this).parent().children(".menu-items").show("fast");	// On affiche le set d'items
+			}
 		});
 		
-		var page = getQueryVariable("page");
+		// On affiche le set d'item en fonction de la page
 		if (page) {
 			$("#" + page).parent().parent().show();	// On affiche le set d'items
 			$("#" + page).toggleClass('menu-current');
