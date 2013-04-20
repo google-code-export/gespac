@@ -1,9 +1,8 @@
 <?PHP
-
-
 	/* 
 		fichier de creation / modif / suppr des salles
 	*/
+
 	
 	// lib
 	require_once ('../fonctions.php');

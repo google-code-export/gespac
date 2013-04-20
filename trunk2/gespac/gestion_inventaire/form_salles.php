@@ -1,8 +1,8 @@
 <?PHP
-
-	#formulaire d'ajout et de modification
-	#des marques
-
+	/*
+		formulaires des salles
+		ajout, modification, suppression, vidage D3E
+	*/
 
 
 	// lib
