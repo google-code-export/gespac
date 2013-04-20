@@ -9,6 +9,7 @@
 body {background-color:#ffd2f1; font-family:ubuntu, Verdana, Arial, Helvetica, sans-serif; margin:0; color:#000;	background-position:right top; background-image:url('fond.jpg'); background-repeat:no-repeat;}
 h3 {	margin : 0px;}
 input, textarea, select {border:1px solid #6E6F6A;}
+input:hover {background-color:#C42364;color:white;cursor:pointer;}
 a { text-decoration:none; color:#5F1499;}
 table {border:0; padding:4px; text-align:center; font-size:small; border-collapse:collapse;}
 th {background-color:#A95EDB; font-size:10px; padding:5px 0px; color:#000;}
