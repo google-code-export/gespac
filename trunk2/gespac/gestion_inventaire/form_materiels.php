@@ -673,7 +673,7 @@
 		
 		
 		// Requete pour récupérer les données des champs pour le matériel à modifier
-		$materiel_a_modifier = $con_gespac->QueryRow ( "SELECT mat_id, mat_nom, mat_dsit, mat_serial, mat_etat, salle_nom, marque_type, marque_model, mat_origine, marque_stype, marque_marque, mat_mac, materiels.marque_id FROM materiels, marques, salles WHERE mat_id=$id AND materiels.marque_id = marques.marque_id AND materiels.salle_id = salles.salle_id" );		
+		$materiel_a_modifier = $con_gespac->QueryRow ( "SELECT mat_id, mat_nom, mat_dsit, mat_serial, mat_etat, salle_nom, marque_type, marque_model, mat_origine, marque_stype, marque_marque, mat_mac, materiels.marque_id, user_id FROM materiels, marques, salles WHERE mat_id=$id AND materiels.marque_id = marques.marque_id AND materiels.salle_id = salles.salle_id" );		
 		
 		// valeurs à affecter aux champs
 		$materiel_id 			= $materiel_a_modifier[0];
@@ -689,8 +689,9 @@
 		$materiel_marque		= $materiel_a_modifier[10];
 		$materiel_mac			= $materiel_a_modifier[11];
 		$marque_id				= $materiel_a_modifier[12];
+		$user_id				= $materiel_a_modifier[13];
 
-		
+		$disabled = $user_id <> 1 ? " style='display:none;'": "";
 		?>
 		
 		<script>
@@ -855,7 +856,7 @@
 				</tr>
 				
 			
-				<tr>
+				<tr <?PHP echo $disabled; ?>>
 					<TD>Salle où se trouve le matériel</TD> 
 					<TD>
 						<select name="salle" >
