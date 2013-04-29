@@ -251,30 +251,23 @@ session_start();
 		// Si un dossier est entré, on concatène etat et dossier, sinon on ne colle que l'état.
 		if ( $gign ) $etat = $etat . "-" . $gign;
 			
-		// test si la machine est prétée ou pas
-		@$mat_id = $con_gespac->QueryOne ( "SELECT mat_id FROM materiels WHERE user_id<>1 AND mat_id=$id" );
-		
-		if ( !isset($mat_id) ) {// la machine n'est pas prêtée ($mat_id n'existe pas)
-			if ( $marque_id ) {
-				$req_modif_materiel = "UPDATE materiels SET mat_nom='$nom', mat_dsit='$dsit', mat_serial='$serial', mat_etat='$etat', salle_id=$salle_id, marque_id=$marque_id, mat_origine = '$origine', mat_mac='$mac' WHERE mat_id=$id";
-				$con_gespac->Execute ( $req_modif_materiel );
-				
-				echo "<small>Le matériel <b>$nom</b> a bien été modifié.</small>";
-				
-				// On log la requête SQL
-				$log->Insert( $req_modif_materiel );
-			} 
-		
-			//Insertion d'un log
-
-			$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été modifié";
-
-			$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
-			$con_gespac->Execute ( $req_log_modif_mat );
+		if ( $marque_id ) {
+			$req_modif_materiel = "UPDATE materiels SET mat_nom='$nom', mat_dsit='$dsit', mat_serial='$serial', mat_etat='$etat', salle_id=$salle_id, marque_id=$marque_id, mat_origine = '$origine', mat_mac='$mac' WHERE mat_id=$id";
+			$con_gespac->Execute ( $req_modif_materiel );
+			
+			echo "<small>Le matériel <b>$nom</b> a bien été modifié.</small>";
+			
+			// On log la requête SQL
+			$log->Insert( $req_modif_materiel );
+		} 
 	
-		} else {
-			echo "Le matériel <b>$nom</b> est prêté. Merci de le rendre avant de modifier sa salle.";
-		}
+		//Insertion d'un log
+
+		$log_texte = "Le matériel <b>$nom</b> ayant pour numéro de série <b>$serial</b> a été modifié";
+
+		$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
+		$con_gespac->Execute ( $req_log_modif_mat );
+
 	}	
 	
 	/**************** INSERTION ********************/
