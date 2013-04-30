@@ -23,7 +23,11 @@
 
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id FROM materiels, marques WHERE materiels.marque_id = marques.marque_id AND marque_marque='$marque_marque' order by mat_nom" );
-
+	
+	if (count($liste_des_materiels) <1 ) {
+		echo "<br><h3>Pas de matériel pour cette marque ! </h3>"; exit();
+	}
+	
 	echo "<p><small>" . count($liste_des_materiels) . " matériel(s)</small></p>";
 	
 	$fp = fopen('../dump/extraction.csv', 'w+');	//Ouverture du fichier
@@ -35,7 +39,7 @@
 
 <center>
 	
-	<table id="myTable" width=620>
+	<table id="myTable" class='alternate smalltable'>
 		<th>nom</th>
 		<th>dsit</th>
 		<th>serial</th>
