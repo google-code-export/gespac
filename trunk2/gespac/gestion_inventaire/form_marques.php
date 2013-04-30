@@ -10,7 +10,8 @@
 	include_once ('../../class/Sql.class.php');		
 
 	
-	$id = $_GET['id'];
+	$action = $_GET['action'];
+
 	
 	// cnx à la base de données GESPAC
 	$con_gespac 	= new Sql ($host, $user, $pass, $gespac);
@@ -23,20 +24,15 @@
 	// *********************************************************************************
 	
 	
-	if ( $id == '-1' ) {
-	
-		echo "<h2>Formulaire de création d'une marque</h2><br>";
-			
+	if ( $action == 'add' ) {
 		
 		?>
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('filt').focus();
+			$('#filt').focus();
 		</script>
 
-		
-		
 		
 		<!--
 		
@@ -47,7 +43,7 @@
 			<form>
 				<center>
 			
-				<p>Choisir un modèle : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"></p>
+				<p>Choisir un modèle : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'corr_table');" type="text"><span id="marquescount" title="Nombre de lignes filtrées"></span></p>
 				
 				
 				<?PHP
@@ -55,7 +51,7 @@
 				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
 				?>
 				
-				<table id="corr_table">
+				<table id="corr_table" class='alternate smalltable'>
 
 					<?PHP
 						foreach ( $liste_correspondances as $corr ) {
@@ -67,7 +63,7 @@
 							$corr_marque 		= $corr['corr_marque'];
 							$corr_modele 		= $corr['corr_modele'];
 						
-							echo "<tr style='display:none' class='tr_filter'>";
+							echo "<tr style='display:none;' class='tr_filter'>";
 								echo "<td width=200>&nbsp $corr_type</td>";
 								echo "<td width=200>&nbsp $corr_stype</td>";
 								echo "<td width=200>&nbsp $corr_marque</td>";
@@ -94,7 +90,7 @@
 		
 		-->
 		<div id='creer_nouveau_modele' style='display:none'>
-			<form action="gestion_inventaire/post_marques.php?action=add" method="post" name="post_form" id="post_form">
+			<form action="gestion_inventaire/post_marques.php?action=add" method="post" name="post_form" id="formulaire">
 
 				<center>
 				<table width=500>
@@ -212,15 +208,14 @@
 	// *********************************************************************************
 	
 	
-	else {
+	if ($action == "mod") {
+	
+		$id = $_GET['id'];
 	
 		echo "<h2>Formulaire de modification d'une marque</h2><br>";
 		
 
 		// Requete pour récupérer les données des champs pour la marque à modifier
-
-
-		// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 		$marque_a_modifier = $con_gespac->queryRow ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques WHERE marque_id=$id" );
 
 		// valeur à affecter aux champs
@@ -234,7 +229,7 @@
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('select_type').focus();
+			$('#select_type').focus();
 		</script>
 
 		
@@ -255,7 +250,7 @@
 				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
 				?>
 				
-				<table id="corr_table">
+				<table id="corr_table" class='alternate smalltable'>
 
 					<?PHP
 						foreach ( $liste_correspondances as $corr ) {
@@ -435,52 +430,41 @@
 	
 	// *********************************************************************************
 	//
-	//				Fonction de filtrage des tables
+	//				Fonction de filtrage des marques pour correspondance
 	//
 	// *********************************************************************************
 
-	function filter (phrase, _id){
 
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var compte = 0;
-			
-		if (phrase.value == "") {	// Si la phrase est nulle, on masque toutes les lignes
-			for (var r = 1; r < table.rows.length; r++)	table.rows[r].style.display = "none";	
+	function filter_marque (phrase, tableid){
+		
+		var data = phrase.split(" ");
+		var cells=$("#" + tableid + " td");
+					
+		if(data != "") {
+			// On cache toutes les lignes
+			cells.parent("tr").hide();
+			// puis on filtre pour n'afficher que celles qui répondent au critère du filtre
+			cells.filter(function() {
+				return $(this).text().toLowerCase().indexOf(data) > -1;
+			}).parent("tr").show();		
+		} else {
+			// On montre toutes les lignes
+			cells.parent("tr").hide();
 		}
-		else {			
-			for (var r = 1; r < table.rows.length; r++){
-				
-				ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-				var displayStyle = 'none';
-				
-				for (var i = 0; i < words.length; i++) {
-					if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-						displayStyle = '';
-						compte++;
-					}	
-					else {	// on masque les rows qui ne correspondent pas
-						displayStyle = 'none';
-						break;
-					}
-				}
-				
-				// Affichage on / off en fonction de displayStyle
-				table.rows[r].style.display = displayStyle;	
-				
-				if ($("creer_modele")) {
-					if (compte > 0) {$("creer_modele").setStyle("display", "none");}
-					else {$("creer_modele").setStyle("display", "block");}
-				}
-				
-				if ($("modif_modele")) {
-					if (compte > 0) {$("modif_modele").setStyle("display", "none");}
-					else {$("modif_modele").setStyle("display", "block");}
-				}
-			}
+		
+		$("#marquescount").html( $("#" + tableid + " tr:visible").length );
+		
+		if ($("creer_modele")) {
+			if ($("#" + tableid + " tr:visible").length < 1 && data != "") {$("#creer_modele").show();}
+			else {$("#creer_modele").hide();}
 		}
-	}	
+		
+		if ($("modif_modele")) {
+			if ($("#" + tableid + " tr:visible").length < 1 && data != "") {$("#modif_modele").show();}
+			else {$("#modif_modele").hide();}
+		}
+		
+	}
 
 	
 	
@@ -491,9 +475,9 @@
 	// *********************************************************************************
 	
 	function affiche_creer_modele() {
-		$('creer_nouveau_modele').style.display = "";
-		$('creer_modele_par_corr').style.display = "none";
-		$('creer_modele').style.display = "none";
+		$('#creer_nouveau_modele').show();
+		$('#creer_modele_par_corr').hide();
+		$('#creer_modele').hide();
 	}
 	
 	
@@ -504,8 +488,8 @@
 	// *********************************************************************************
 	
 	function affiche_liste_modele() {
-		$('creer_nouveau_modele').style.display = "none";
-		$('creer_modele_par_corr').style.display = "";
+		$('#creer_modele_par_corr').show();
+		$('#creer_nouveau_modele').hide();
 	}
 	
 	
@@ -521,10 +505,10 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
-			SexyLightbox.close();
-			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
+			$('#dialog').dialog('close');
+			$('#targetback').show(); $('#target').show();
+			$('#target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
+			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('#filt').val() + "'", 1500);			
 		}
 	}	
 		
@@ -567,7 +551,40 @@
 	*		AJAX
 	*
 	*******************************************/
+
 	
+	$(function() {	
+	
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+		
+			// Permet d'avoir les données à envoyer
+			var dataString = $("#formulaire").serialize();
+			
+			// action du formulaire
+			var url = $("#formulaire").attr( 'action' );
+			
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('#filt').val() + "'", 1500);
+			 });
+			 
+		});	
+	});
+	
+/*	
 	window.addEvent('domready', function(){
 		
 		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
@@ -588,5 +605,5 @@
 		});			
 	});
 	
-	
+	*/
 </script>

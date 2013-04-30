@@ -76,7 +76,7 @@ session_start();
 					// On affiche le bouton pour vider le D3E que si la salle contient du matos
 					if ($nom == "D3E" && $nb_matos_dans_cette_salle <= 0) echo "<script>$('#viderd3e').hide();</script>";
 					
-					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?salle_id=$id' class='editbox' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle ."] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?salle_id=$id&maxheight=650' class='editbox' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle ."] </td>";
 					echo "<td>" . $vlan . "</td>";
 					echo "<td>" . $etage . "</td>";
 					echo "<td>" . $batiment . "</td>";

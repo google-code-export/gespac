@@ -1,23 +1,19 @@
 	<!-- 
 
-
-
-		Liste des membres d'un état particulier 
-
-
-
+		Liste des membres d'un Ã©tat particulier 
 
 	-->
 
 
 <?PHP
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../includes.php');
+	// lib
+	include_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
 	
-	// id ocs du matériel à afficher
+	// id ocs du matÃ©riel Ã  afficher
 	$etat = $_GET ['etat'];
 	
 	$etat_explode = explode("-", $etat);
@@ -25,13 +21,13 @@
 	$etat_std = $etat_explode[0];
 	$dossier = $etat_explode[1];
 
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$con_gespac = new Sql ($host, $user, $pass, $gespac);
 
-	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
+	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© avec originalitÃ© "array" (mais "tableau" peut aussi marcher)
 	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, marque_type, marque_marque, marque_model, mat_id, salle_nom FROM materiels, marques, salles WHERE materiels.salle_id=salles.salle_id AND mat_etat LIKE '$etat_std%' AND materiels.marque_id = marques.marque_id order by mat_nom" );
 
-	echo "<p><small>" . count($liste_des_materiels) . " matériel(s) avec l'état $etat_std.</small></p>";
+	echo "<p><small>" . count($liste_des_materiels) . " matÃ©riel(s) avec l'Ã©tat $etat_std.</small></p>";
 	
 	$fp = fopen('../dump/extraction.csv', 'w+');	//Ouverture du fichier
 	fputcsv($fp, array('nom', 'dsit', 'serial', 'famille', 'marque', 'modele', 'salle'), ',' );	// ENTETES
@@ -47,7 +43,7 @@
 		<th>Serial</th>
 		<th>Famille</th>
 		<th>Marque</th>
-		<th>Modèle</th>
+		<th>ModÃ¨le</th>
 		<th>Salle</th>
 		
 		<?PHP	
@@ -55,7 +51,7 @@
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ($liste_des_materiels as $record ) {
-				// On écrit les lignes en brut dans la page html
+				// On Ã©crit les lignes en brut dans la page html
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
@@ -97,7 +93,7 @@
 	
 <?PHP
 
-	// On se déconnecte de la db
+	// On se dÃ©connecte de la db
 	$con_gespac->Close ();
 
 

@@ -144,11 +144,13 @@ $(function () {
 		
 		var width = "auto";
 		var height = "auto";
+		var maxheight = "auto";
 		var modal = false;
 		
-		if (url.match(/width=([^&]+)/)) width = url.match(/width=([^&]+)/)[1];
-		if (url.match(/height=([^&]+)/)) height = url.match(/height=([^&]+)/)[1];
-		if (url.match(/modal=([^&]+)/)) modal = url.match(/modal=([^&]+)/)[1];
+		if (url.match(/[&|?]width=([^&]+)/)) width = url.match(/[&|?]width=([^&]+)/)[1];
+		if (url.match(/[&|?]height=([^&]+)/)) height = url.match(/[&|?]height=([^&]+)/)[1];
+		if (url.match(/[&|?]maxheight=([^&]+)/)) maxheight = url.match(/[&|?]maxheight=([^&]+)/)[1];
+		if (url.match(/[&|?]modal=([^&]+)/)) modal = url.match(/[&|?]modal=([^&]+)/)[1];
 							
 		var dialog = $("#dialog");
 		if ($("#dialog").length == 0) {	dialog = $('<div id="dialog" style="display:hidden"></div>').appendTo('body');	} 
@@ -159,6 +161,7 @@ $(function () {
 			{},
 			function(responseText, textStatus, XMLHttpRequest) {
 				dialog.dialog({	title:title, width:width, height:height, modal:modal, stack: false});
+				dialog.css('maxHeight', maxheight + "px"); //on applique une hauteur maximum
 			}
 		);
 		
