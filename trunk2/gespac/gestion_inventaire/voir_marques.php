@@ -23,7 +23,7 @@
 
 	<span class="entetes-options">
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_marques.php?height=300&width=640&action=add' class='editbox' title='Ajouter une marque'><img src='" . ICONSPATH . "add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_marques.php?maxheight=300&height=230&width=500&action=add' class='editbox' title='Ajouter une marque'><img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'marque_table');" type="text" value=<?PHP echo $_GET['filter'];?>><span id="filtercount" title="Nombre de lignes filtrées"></span></form>
@@ -97,9 +97,7 @@
 					if ($E_chk) {
 						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=500&width=640&id=$id' rel='slb_marques' title='Formulaire d`ajout d`un materiel'><img src='" . ICONSPATH . "add3.png'> </a></td>";
 						echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' rel='slb_marques' title='Formulaire de modification de la marque $nom'><img src='" . ICONSPATH . "edit.png' style='display:$afficher_modifier'></a></td>";
-					//	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_marque($id, '$model', '$marque', this.parentNode.parentNode.rowIndex, '" . $nb_matos_de_ce_modele ."');\">	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
 						echo "<td width=20 align=center> <a href='gestion_inventaire/form_marques.php?action=del&id=$id' class='editbox' title='Supprimer une marque'>	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
-						//echo "<td class='buttons'><a href='gestion_inventaire/form_salles.php?action=del&id=$id' class='editbox' title='Suppression de la salle $nom'>	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
 					}
 					
 				echo "</tr>";
