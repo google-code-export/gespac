@@ -55,7 +55,7 @@ session_start();
 			// On parcourt le tableau
 			foreach ($liste_des_salles as $record ) {
 								
-				echo "<tr class='alternate'>";
+				echo "<tr>";
 						
 					$id		 		= $record['salle_id'];
 					$nom	 		= $record['salle_nom'];

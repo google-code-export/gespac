@@ -47,7 +47,7 @@
 	<p>
 	
 	<center>
-	<table class="tablehover" id='marque_table' >
+	<table  class="alternate hover bigtable" id='marque_table' >
 	
 		<th>Famille</th>
 		<th>Sous-famille</th>
@@ -61,19 +61,10 @@
 		<th>&nbsp</th>
 		<th>&nbsp</th>";
 		
-		
-		
-			$compteur = 0;
-			//$option_id = 0;
-			
+
 			// On parcourt le tableau
 			foreach ($liste_des_marques as $record ) {
-				// On écrit les lignes en brut dans la page html
-				
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-				
-				//echo "<tr>";
+
 				echo "<tr id=tr_id$id class=$tr_class>";
 						
 					$id		 	= $record['marque_id'];
@@ -106,12 +97,13 @@
 					if ($E_chk) {
 						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=500&width=640&id=$id' rel='slb_marques' title='Formulaire d`ajout d`un materiel'><img src='" . ICONSPATH . "add3.png'> </a></td>";
 						echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' rel='slb_marques' title='Formulaire de modification de la marque $nom'><img src='" . ICONSPATH . "edit.png' style='display:$afficher_modifier'></a></td>";
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_marque($id, '$model', '$marque', this.parentNode.parentNode.rowIndex, '" . $nb_matos_de_ce_modele ."');\">	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
+					//	echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_marque($id, '$model', '$marque', this.parentNode.parentNode.rowIndex, '" . $nb_matos_de_ce_modele ."');\">	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
+						echo "<td width=20 align=center> <a href='gestion_inventaire/form_marques.php?action=del&id=$id' class='editbox' title='Supprimer une marque'>	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
+						//echo "<td class='buttons'><a href='gestion_inventaire/form_salles.php?action=del&id=$id' class='editbox' title='Suppression de la salle $nom'>	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
 					}
 					
 				echo "</tr>";
-				
-				$compteur++;
+
 			}
 		?>		
 

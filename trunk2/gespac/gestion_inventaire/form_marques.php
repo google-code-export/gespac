@@ -400,6 +400,35 @@
 <?PHP
 
 	}	
+	
+	
+	//********************************************* formulaire de suppression
+	if ($action == "del") {	
+	
+		$marque_id = $_GET['id'];
+		$marque_nom = $con_gespac->QueryRow ( "SELECT marque_marque, marque_model, marque_type, marque_stype FROM marques WHERE marque_id=$marque_id" );
+
+		$marque = $marque_nom[0];
+		$modele = $marque_nom[1];
+		$type = $marque_nom[2];
+		$stype = $marque_nom[3];
+		
+		$marque_nb = $con_gespac->QueryOne ( "SELECT COUNT(mat_nom) FROM marques, materiels WHERE materiels.marque_id=marques.marque_id AND marque_model = '$modele' AND marque_marque = '$marque' AND marque_type = '$type' AND marque_stype = '$stype'" );
+
+		if ($marque_nb > 0) {echo "<h3>Vous ne pouvez pas supprimer la marque <u>$marque $modele</u> : <br>Elle contient des matériels !</h3>"; exit();}
+
+		echo "Voulez vous vraiment supprimer la marque $marque $modele ?";
+	?>	
+		<center><br><br>
+		<form action="gestion_inventaire/post_marques.php?action=del" method="post" name="post_form" id='formulaire'>
+			<input type=hidden value="<?PHP echo $marque_id;?>" name="marque_id">
+			<input type=submit value='Supprimer' id="post_form">
+			<input type=button onclick="$('#dialog').dialog('close');" value='Annuler'>
+		</form>
+		</center>
+		
+	<?PHP	
+	}
 ?>
 
 
@@ -578,7 +607,7 @@
 				$('#dialog').dialog('close');
 				$('#targetback').show(); $('#target').show();
 				$('#target').html(msg);
-				window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('#filt').val() + "'", 1500);
+				window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('#filt').val() + "'", 1500);
 			 });
 			 
 		});	

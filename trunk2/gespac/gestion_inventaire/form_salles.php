@@ -200,7 +200,7 @@
 	<?PHP
 	}
 
-	//********************************************* formulaire de modification prérempli
+	//********************************************* formulaire de suppression
 	if ($action == "del") {	
 	
 		$salle_id = $_GET['id'];
@@ -219,7 +219,7 @@
 	<?PHP	
 	}
 	
-	//********************************************* formulaire de modification prérempli
+	//********************************************* formulaire pour vider la salle d3e
 	if ($action == "d3e") {	
 	
 		echo "Voulez vous vraiment vider la salle <b>D3E</b> ? <br> TOUT le matériel contenu dans cette salle sera SUPPRIME.<br>Un fichier récapitulatif sera créé dans le gestionnaire de fichiers.";

@@ -25,8 +25,6 @@
 		
 	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
-	$id 		= $_GET['id'];
-	
 	
 	
 	/*********************************************
@@ -77,7 +75,9 @@
 	
 	/**************** ACTION => SUPPRESSION ********************/
 	
-	if ( $action == 'suppr' ) {
+	if ( $action == 'del' ) {
+		
+		$id	= $_POST['marque_id'];
 	
 		//Insertion d'un log
 		//On récupère le nom de la marque en fonction du marque_id avant sa suppression
