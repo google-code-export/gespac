@@ -52,7 +52,7 @@
 				
 				<?PHP
 				// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
+				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances ORDER BY corr_modele" );
 				?>
 				
 				<table id="corr_table" class='tablehover'>
@@ -252,7 +252,7 @@
 				
 				<?PHP
 				// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
+				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances ORDER BY corr_modele" );
 				?>
 				
 				<table id="corr_table" class='tablehover'>
