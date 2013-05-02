@@ -2,33 +2,28 @@
 
 	/*
 		formulaire d'ajout et de modification des materiels !
-		permet de créer un nouveau matos,
+		permet de crÃ©er un nouveau matos,
 		de modifier un matos particulier
-		de modifier par lot des matériels
+		de modifier par lot des matÃ©riels
 	*/
 	
 	
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Log.class.php');	
+	include_once ('../../class/Sql.class.php');		
 
 ?>
 
-<!--	DIV target pour Ajax	-->
-<div id="target"></div>
-
-<!--  SERVEUR AJAX -->
-<script type="text/javascript" src="server.php?client=all"></script>
-
-
 <script type="text/javascript"> 
 	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
+	// vÃ©rouille l'accÃ¨s au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
-		var bt_submit 	= $("post_materiel");
-		var mat_nom 	= $("nom").value;
-		var mat_serial 	= $("serial").value;
+		var bt_submit 	= $("#post_materiel");
+		var mat_nom 	= $("#nom").val();
+		var mat_serial 	= $("#serial").val();
 	
 		if (mat_nom == "" || mat_serial == "" ) {
 			bt_submit.disabled = true;
@@ -39,12 +34,12 @@
 	
 	
 /******************************************
-	*		Générateur de ssn aléatoire
+	*		GÃ©nÃ©rateur de ssn alÃ©atoire
 	*******************************************/
 	function SSNgenerator () {
 		
 		number = Math.floor(Math.random() * 100000);
-		$('serial').value =  "NC" + number;
+		$('#serial').val("NC" + number);
 	}
 	
 	/******************************************
@@ -53,31 +48,42 @@
 	*
 	*******************************************/
 	
-	window.addEvent('domready', function(){
+	$(function() {	
+	
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
 		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML, filt) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
-				}
+			// Permet d'avoir les donnÃ©es Ã  envoyer
+			var dataString = $("#formulaire").serialize();
 			
-			}).send(this.toQueryString());
-		});			
+			// action du formulaire
+			var url = $("#formulaire").attr( 'action' );
+			
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('#filt').val() + "'", 1500);
+			 });
+			 
+		});	
 	});
 
 </script>
 
 <?PHP
 
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 	
@@ -87,56 +93,54 @@
 	
 	// *********************************************************************************
 	//
-	//			Formulaire ajout à partir d'une marque (champs de marque préremplis)
+	//			Formulaire ajout Ã  partir d'une marque (champs de marque prÃ©remplis)
 	//
 	// *********************************************************************************	
 		
 		
-		// Requête qui va récupérer les champs à partir de la marque
+		// RequÃªte qui va rÃ©cupÃ©rer les champs Ã  partir de la marque
 		$ajout_materiel_de_marque = $con_gespac->QueryRow ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques WHERE marque_id=$id" );
 	
 		
-		// valeurs à affecter aux champs
+		// valeurs Ã  affecter aux champs
 		$materiel_id 			= $ajout_materiel_de_marque[0];
 		$materiel_type 			= $ajout_materiel_de_marque[1];
 		$materiel_stype			= $ajout_materiel_de_marque[2];
 		$materiel_marque		= $ajout_materiel_de_marque[3];
 		$materiel_modele		= $ajout_materiel_de_marque[4];		
 		
-		// Requête qui va récupérer les origines des dotations ...
+		// RequÃªte qui va rÃ©cupÃ©rer les origines des dotations ...
 		$liste_origines = $con_gespac->QueryAll ( "SELECT origine FROM origines ORDER BY origine" );
 	
-		// Requête qui va récupérer les états des matériels ...
+		// RequÃªte qui va rÃ©cupÃ©rer les Ã©tats des matÃ©riels ...
 		$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
-		
-		echo "<h2><center>Formulaire d'ajout d'un nouveau matériel de marque $materiel_marque et de modèle $materiel_modele</center></h2><br>";
-		
-		?>
+
+	?>
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('nom').focus();
+			$('#nom').focus();
 		</script>
 		
 		
-		<form action="gestion_inventaire/post_materiels.php?action=add_mat_marque" method="post" name="post_form" id="post_form">
+		<form action="gestion_inventaire/post_materiels.php?action=add_mat_marque" method="post" name="post_form" id="formulaire">
 			<input type=hidden name=add_marque_materiel value=<?PHP echo $id; ?> >
-			<center>
-			<table width=500>
+
+			<table>
 			
 				<tr>
 					<TD>Nom du materiel *</TD>
-					<TD><input type=text id=nom name=nom onkeyup="validation();" /></TD>
+					<TD><input type=text id=nom name=nom required onkeyup="validation();" /></TD>
 				</tr>
 				
 				<tr>
-					<TD>Référence DSIT</TD>
+					<TD>RÃ©fÃ©rence DSIT</TD>
 					<TD><input type=text id=dsit name=dsit 	/></TD>
 				</tr>
 				
 				<tr>
-					<TD>Numéro de série *</TD> 
-					<TD><input type=text id=serial name=serial onkeyup="validation();" /> <input type=button value="générer" onclick="SSNgenerator(); validation();"> </TD>
+					<TD>NumÃ©ro de sÃ©rie *</TD> 
+					<TD><input type=text id=serial name=serial required onkeyup="validation();" /> <input type=button value="gÃ©nÃ©rer" onclick="SSNgenerator(); validation();"> </TD>
 				</tr>
 				
 				<tr>
@@ -156,7 +160,7 @@
 				</tr>
 				
 				<tr>
-					<TD>Etat du matériel</TD> 
+					<TD>Etat du matÃ©riel</TD> 
 					<TD>
 						<select name="etat">
 							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
@@ -166,11 +170,11 @@
 				
 			
 				<tr>
-					<TD>Salle où se trouve le matériel</TD> 
+					<TD>Salle oÃ¹ se trouve le matÃ©riel</TD> 
 					<TD>
 						<select name="salle" >
 							<?PHP
-								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
+								// requÃªte qui va afficher dans le menu dÃ©roulant les salles saisies dans la table 'salles'
 								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT salle_nom FROM salles" );
 								foreach ( $req_salles_disponibles as $record) { 
 									$salle_nom = $record['salle_nom'];
@@ -186,6 +190,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter un materiel' id="post_materiel" disabled />
-			</center>
+			<br>
+			<center><input type=submit value='Ajouter le materiel' id="post_form" disabled></center>
+
 		</FORM>

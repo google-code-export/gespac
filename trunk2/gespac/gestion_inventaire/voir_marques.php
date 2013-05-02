@@ -23,7 +23,7 @@
 
 	<span class="entetes-options">
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_marques.php?maxheight=300&height=230&width=500&action=add' class='editbox' title='Ajouter une marque'><img src='" . ICONSPATH . "add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_marques.php?maxheight=450&width=550&action=add' class='editbox' title='Ajouter une marque'><img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'marque_table');" type="text" value=<?PHP echo $_GET['filter'];?>><span id="filtercount" title="Nombre de lignes filtrées"></span></form>
@@ -44,9 +44,7 @@
 
 ?>
 
-	<p>
-	
-	<center>
+
 	<table  class="alternate hover bigtable" id='marque_table' >
 	
 		<th>Famille</th>
@@ -95,8 +93,8 @@
 					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?maxheight=650&marque_model=$model' class='editbox' title='Liste des matériels de modèle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
 					
 					if ($E_chk) {
-						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?height=500&width=640&id=$id' rel='slb_marques' title='Formulaire d`ajout d`un materiel'><img src='" . ICONSPATH . "add3.png'> </a></td>";
-						echo "<td><a href='gestion_inventaire/form_marques.php?height=250&width=640&id=$id' rel='slb_marques' title='Formulaire de modification de la marque $nom'><img src='" . ICONSPATH . "edit.png' style='display:$afficher_modifier'></a></td>";
+						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?id=$id' class='editbox' title='Ajouter un matériel à $marque $model'><img src='" . ICONSPATH . "add3.png'> </a></td>";
+						echo "<td><a href='gestion_inventaire/form_marques.php?maxheight=450&width=550&action=mod&id=$id' class='editbox' title='Modifier la marque $marque $model'><img src='" . ICONSPATH . "edit.png' style='display:$afficher_modifier'></a></td>";
 						echo "<td width=20 align=center> <a href='gestion_inventaire/form_marques.php?action=del&id=$id' class='editbox' title='Supprimer une marque'>	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
 					}
 					
@@ -106,39 +104,13 @@
 		?>		
 
 	</table>
-	</center>
-	
-	<br>
 
+	<br>
+	
 <script type="text/javascript">
 
 	// Filtre rémanent	
 	filter ( $('#filt').val(), 'marque_table' );
-	
-
-	
-	// *********************************************************************************
-	//
-	//				Fonction de validation de la suppression d'unew marque
-	//
-	// *********************************************************************************	
-
-	function validation_suppr_marque (id, modele, marque, row, nb_de_suppr) {
-		if (nb_de_suppr == 0) {
-			var valida = confirm('Voulez-vous vraiment supprimer le modèle "' + modele + '" de marque "' + marque + '" ?');
-		
-			// si la réponse est TRUE ==> on lance la page post_marques.php
-			if (valida) {
-				$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-				$('target').load("gestion_inventaire/post_marques.php?action=suppr&id=" + id);
-				window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);			
-			}
-		} else {
-			alert('IMPOSSIBLE de supprimer cette marque car des machines y sont associées !');
-		}
-	}
-
-	
 	
 </script>
 

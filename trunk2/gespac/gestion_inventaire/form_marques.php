@@ -48,7 +48,7 @@
 				
 				<?PHP
 				// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
+				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances ORDER BY corr_modele" );
 				?>
 				
 				<table id="corr_table" class='alternate smalltable'>
@@ -63,7 +63,7 @@
 							$corr_marque 		= $corr['corr_marque'];
 							$corr_modele 		= $corr['corr_modele'];
 						
-							echo "<tr style='display:none;' class='tr_filter'>";
+							echo "<tr style='display:none;'>";
 								echo "<td width=200>&nbsp $corr_type</td>";
 								echo "<td width=200>&nbsp $corr_stype</td>";
 								echo "<td width=200>&nbsp $corr_marque</td>";
@@ -186,7 +186,7 @@
 				</table>
 
 				<br>
-				<input type=submit value='Ajouter une marque'>
+				<input type=submit value='Ajouter une marque' id="post_form">
 				
 				<br><br>
 				<a href='#' onclick="affiche_liste_modele();">Liste des modèles</a>
@@ -212,9 +212,6 @@
 	
 		$id = $_GET['id'];
 	
-		echo "<h2>Formulaire de modification d'une marque</h2><br>";
-		
-
 		// Requete pour récupérer les données des champs pour la marque à modifier
 		$marque_a_modifier = $con_gespac->queryRow ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques WHERE marque_id=$id" );
 
@@ -242,12 +239,11 @@
 			<form>
 				<center>
 			
-				<p>Choisir un modèle : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"></p>
-				
+				<p>Choisir un modèle : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'corr_table');" type="text"><span id="marquescount" title="Nombre de lignes filtrées"></span></p>
 				
 				<?PHP
 				// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
+				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances ORDER BY corr_modele" );
 				?>
 				
 				<table id="corr_table" class='alternate smalltable'>
@@ -390,7 +386,7 @@
 				</table>
 
 				<br>
-				<input type=submit value='Modifier cette marque' >
+				<input type=submit value='Modifier cette marque' id="post_form">
 
 				</center>
 
@@ -555,10 +551,10 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
-			SexyLightbox.close();
-			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
+			$('#dialog').dialog('close');
+			$('#targetback').show(); $('#target').show();
+			$('#target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
+			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('#filt').val() + "'", 1500);				
 		}
 	}
 	
@@ -570,9 +566,9 @@
 	// *********************************************************************************
 	
 	function affiche_modif_modele() {
-		$('modif_manuelle_modele').style.display = "";
-		$('modif_modele_par_corr').style.display = "none";
-		$('modif_modele').style.display = "none";
+		$('#modif_manuelle_modele').show();
+		$('#modif_modele_par_corr').hide();
+		$('#modif_modele').hide();
 	}
 	
 	/******************************************
@@ -613,26 +609,4 @@
 		});	
 	});
 	
-/*	
-	window.addEvent('domready', function(){
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML, filt) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
-				}
-			
-			}).send(this.toQueryString());
-		});			
-	});
-	
-	*/
 </script>
