@@ -20,20 +20,12 @@
 	
 	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 	function validation () {
-
-		var bt_submit 	= $("#post_materiel");
-		var mat_nom 	= $("#nom").val();
-		var mat_serial 	= $("#serial").val();
-	
-		if (mat_nom == "" || mat_serial == "" ) {
-			bt_submit.disabled = true;
-		} else {
-			bt_submit.disabled = false;
-		}
+		if ($("#nom").val() == "" || $("#serial").val() == "" ) $("#post_form").attr('disabled', 'disabled');	
+		else $("#post_form").removeAttr('disabled');
 	}
 	
 	
-/******************************************
+	/******************************************
 	*		Générateur de ssn aléatoire
 	*******************************************/
 	function SSNgenerator () {
@@ -126,7 +118,7 @@
 		<form action="gestion_inventaire/post_materiels.php?action=add_mat_marque" method="post" name="post_form" id="formulaire">
 			<input type=hidden name=add_marque_materiel value=<?PHP echo $id; ?> >
 
-			<table>
+			<table
 			
 				<tr>
 					<TD>Nom du materiel *</TD>
