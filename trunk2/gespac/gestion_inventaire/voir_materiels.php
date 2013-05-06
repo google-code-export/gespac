@@ -297,7 +297,7 @@
 	
 	<center>
 	
-	<table class="tablehover" id="mat_table">
+	<table class="bigtable alternate hover" id="mat_table">
 		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
 		<?PHP if ( $E_chk ) echo "<th> <input type=checkbox id=checkall onclick=\"checkall('mat_table');\" > </th>"; ?>
 		
@@ -355,10 +355,6 @@
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ( $liste_des_materiels as $record ) {
-				// On écrit les lignes en brut dans la page html
-
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 
 				$nom 		= $record['mat_nom'];
 				$dsit 		= $record['mat_dsit'];
@@ -397,24 +393,24 @@
 					$font_color = "#FF0000";
 					$pret = "Indisponible";
 				}
-				
-				echo "<tr id=tr_id$id class=$tr_class>";
+				//gestion_inventaire/voir_membres-marque_stype.php?maxheight=650&marque_stype=$soustype
+				echo "<tr id=tr_id$id>";
 				
 					/*	chckbox	*/	if ( $E_chk ) echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom&mat_ssn=$serial' rel='slb_mat' title='Nom du matériel : $nom'>$nom</a> </td>";
+					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?maxheight=650&mat_nom=$nom&mat_ssn=$serial' class='editbox' title='Fiche du matériel $nom'>$nom</a> </td>";
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
 					/*	serial	*/	echo "<td class='td_serial'> $serial </td>";
-					/*	etat	*/	echo "<td class='td_etat'> <a href='gestion_inventaire/voir_membres_etat.php?height=480&width=640&etat=$etat' rel='slb_mat' title='Liste des materiels $etat'>$etat</a> </td>";
-					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?height=480&width=720&marque_type=$type' rel='slb_mat' title='Liste de la famille $type'>$type</a></td>";
-					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?height=480&width=720&marque_stype=$stype' rel='slb_mat' title='Liste de la sous famille $stype'>$stype</a></td>";
-					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?height=480&width=720&marque_marque=$marque' rel='slb_mat' title='Liste de la marque $marque'>$marque</a></td>";
-					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?height=480&width=720&marque_model=$model' rel='slb_mat' title='Liste du modèle $model'>$model</a></td>";
-					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_mat' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
-					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?height=480&width=640&origine=$origine' rel='slb_mat' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
+					/*	etat	*/	echo "<td class='td_etat'> <a href='gestion_inventaire/voir_membres_etat.php?maxheight=650&etat=$etat' class='editbox' title='Liste des materiels $etat'>$etat</a> </td>";
+					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?maxheight=650&marque_type=$type' class='editbox' title='Liste de la famille $type'>$type</a></td>";
+					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?maxheight=650&marque_stype=$stype' class='editbox' title='Liste de la sous famille $stype'>$stype</a></td>";
+					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?maxheight=650&marque_marque=$marque' class='editbox' title='Liste de la marque $marque'>$marque</a></td>";
+					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?maxheight=650&marque_model=$model' class='editbox' title='Liste du modèle $model'>$model</a></td>";
+					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?maxheight=650&salle_id=$salle_id' class='editbox' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
+					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?maxheight=650&origine=$origine' class='editbox' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
 					
 					if ( $E_chk ) {
-						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?height=500&width=640&action=mod&id=$id&mat_ssn=$serial' rel='slb_mat' title='Formulaire de modification du matériel $nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
+						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?action=mod&id=$id&mat_ssn=$serial' class='editbox' title='Formulaire de modification du matériel $nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
 						/*	suppr	*/	echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='" . ICONSPATH . "delete.png' title='supprimer $nom'>	</a> </td>";
 					}
 					
@@ -436,7 +432,7 @@
 
 <script type="text/javascript">	
 
-	window.addEvent('domready', function(){
+	/*window.addEvent('domready', function(){
 	
 		// activation des slb
 		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_mat'});
@@ -475,7 +471,7 @@
 		}); 
 
 		
-	});
+	});*/
 	
 		
 	// *********************************************************************************
@@ -646,8 +642,8 @@
 			var state = "";
 		else var state = "none";
 	
-		$$(col_name).each(function(item) {
-			item.style.display = state;
+		$("." + col_name).each(function(item) {
+			item.css("display", state);
 		})
 		
 		// On ajuste la taille de la barre d'entête

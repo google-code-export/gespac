@@ -18,13 +18,6 @@
 	$mat_nom = $_GET ['mat_nom'];
 	
 	
-?>
-
-	<!--	DIV target pour Ajax	-->
-	<div id="target"></div>
-
-<?PHP
-
 
 	/*******************************************
 	*
@@ -170,11 +163,10 @@
 echo "<form method='GET' name='frmTest' id='frmTest'>";
 	
 	echo "<CENTER>";
-	echo "<H1> $mat_nom </H1>";
 	
-		echo "<TABLE width=550>";
+		echo "<TABLE class='smalltable alternate' width=550>";
 		echo "<TR>";
-		echo "<TD COLSPAN=2><b>GESPAC</b><HR></TD>";
+		echo "<TD COLSPAN=2><b>GESPAC</b></TD>";
 		echo "</TR>";
 		echo "<TR>";
 			echo "<TD>DSIT</TD>";
@@ -222,13 +214,9 @@ echo "<form method='GET' name='frmTest' id='frmTest'>";
 	//			PARTIE FOG
 	////////////////////////////////////
 	
-	echo "<TABLE width=550>";
+	echo "<TABLE class='smalltable alternate' width=550>";
 		echo "<TR>";
-		echo "<TD COLSPAN=2><b>FOG</b><HR></TD>";
-		echo "</TR>";
-		
-		echo "<TR>";
-			echo "<TD COLSPAN=2><font color=red><b>$message_fog</b></font></TD>";
+		echo "<TD COLSPAN=2><b>FOG<br><font color=red>$message_fog</font></b></TD>";
 		echo "</TR>";
 
 		if ($image_fog) {
@@ -261,13 +249,9 @@ echo "<form method='GET' name='frmTest' id='frmTest'>";
 	echo "<br>";
 
 	
-	echo "<TABLE width=550>";
+	echo "<TABLE class='smalltable alternate' width=550>";
 		echo "<TR>";
-		echo "<TD COLSPAN=10><b>OCS</b><HR></TD>";
-		echo "</TR>";
-		
-		echo "<TR>";
-			echo "<TD COLSPAN=10><font color=red><b>$message_ocs</b></font></TD>";
+		echo "<TD COLSPAN=10><b>OCS<br><font color=red>$message_ocs</font></b></TD>";
 		echo "</TR>";
 		
 		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
