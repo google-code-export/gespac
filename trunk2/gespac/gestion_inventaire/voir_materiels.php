@@ -28,7 +28,7 @@
 			<form>
 				<small><a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:t pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:s pour la salle, CDI:t pour tout le tableau, ...) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:n / ecran:n` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:n+fonctionnel:e/ecran:n+d3e:s`.');">[?]</a></small> 
 				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
-				<span id="nb_filtre" title='nombre de matériels affichés'></span>
+				<span id="filtercount" title='nombre de matériels affichés'></span>
 			</form>
 		</span>
 		
@@ -37,15 +37,15 @@
 		</span>
 		
 		<span class="option">	<!-- Ajout Matériel -->
-		<?PHP if ( $E_chk ) {echo "<span><a href='gestion_inventaire/form_materiels.php?height=600&width=640&action=add' rel='slb_mat' title='ajout d un matériel'> <img src='" . ICONSPATH . "add.png'></a></span>";} ?>
+		<?PHP if ( $E_chk ) {echo "<span><a href='gestion_inventaire/form_materiels.php?action=add' class='editbox' title='Ajouter un matériel'> <img src='" . ICONSPATH . "add.png'></a></span>";} ?>
 		</span>
 		
 		<span class="option">	<!-- Modifier le lot -->
-			<?PHP if ( $E_chk ) {echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?height=300&width=640&action=modlot' rel='slb_mat' title='modifier selection'> <img src='" . ICONSPATH . "modif1.png'></a></span>";}?>
+			<?PHP if ( $E_chk ) {echo "<span id='modif_selection'><a href='gestion_inventaire/form_materiels.php?action=modlot' class='editbox' title='Modifier la selection'> <img src='" . ICONSPATH . "modif1.png'></a></span>";}?>
 		</span>
 		
 		<span class="option">	<!-- renommer le lot -->
-		<?PHP if ( $E_chk ) {echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?height=280&width=640&action=renomlot' rel='slb_mat' title='renommer selection'> <img src='" . ICONSPATH . "pen.png'></a> </span>";} ?>
+		<?PHP if ( $E_chk ) {echo "<span id='rename_selection'><a href='gestion_inventaire/form_materiels.php?action=renomlot' class='editbox' title='Renommer la selection'> <img src='" . ICONSPATH . "pen.png'></a> </span>";} ?>
 		</span>
 		
 		<span class="option">	<!-- affecter une salle au lot -->
@@ -282,65 +282,61 @@
 		
 	if ( $_GET['filter'] <> '' ) {
 		$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND $like $jonction $notlike) $orderby" );
-		echo "<script>$('nb_filtre').innerHTML = ' <small>[" . count($liste_des_materiels) . "]</small>';</script>";
+		echo "<script>$('#filtercount').html('" . count($liste_des_materiels) . "');</script>";
 	}
 	else {
 		$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id) $orderby" );
-		echo "<script>$('nb_filtre').innerHTML = ' <small>[" . count($liste_des_materiels) . "]</small>';</script>";
+		echo "<script>$('#filtercount').html('" . count($liste_des_materiels) . "');</script>";
 	}
 	
 ?>
 	
 	
 
-	
-	
-	<center>
-	
 	<table class="bigtable alternate hover" id="mat_table">
 		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
 		<?PHP if ( $E_chk ) echo "<th> <input type=checkbox id=checkall onclick=\"checkall('mat_table');\" > </th>"; ?>
 		
 		<th title="n : le nom de la machine">
-			<a href="#" onclick="order_by('<?PHP echo $tri_nom; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_nom; ?>', filt.value);">
 			Nom<sup>n</sup> <?PHP echo $img_nom; ?></a></th>
 			
 		<th class="td_pret" style='display:none' title="p : le nom du professeur à qui le matériel est prêté">Prêté à<sup>p</sup></th>
 		
 		<th class="td_dsit" title="d : le numéro de série de la DSIT">
-			<a href="#" onclick="order_by('<?PHP echo $tri_dsit; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_dsit; ?>', filt.value);">
 			DSIT<sup>d</sup><?PHP echo $img_dsit; ?></a></th>
 			
 		<th class="td_serial" title="s : le numéro de série de la machine">
-			<a href="#" onclick="order_by('<?PHP echo $tri_serial; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_serial; ?>', filt.value);">
 			Serial<sup>s</sup><?PHP echo $img_serial; ?></a></th>
 			
 		<th class="td_etat" title="e : L'état général de la machine">
-			<a href="#" onclick="order_by('<?PHP echo $tri_etat; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_etat; ?>', filt.value);">
 			Etat<sup>e</sup><?PHP echo $img_etat; ?></a></th>
 			
 		<th class="td_type" style='display:none' title="f : Famille du matériel">
-			<a href="#" onclick="order_by('<?PHP echo $tri_type; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_type; ?>', filt.value);">
 			Famille<sup>f</sup><?PHP echo $img_type; ?></a></th>
 			
 		<th class="td_stype" style='display:none' title="sf : Sous Famille du matériel">
-			<a href="#" onclick="order_by('<?PHP echo $tri_stype; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_stype; ?>', filt.value);">
 			Sous-famille<sup>sf</sup> <?PHP echo $img_stype; ?></a></th>
 			
 		<th class="td_marque" title="m : Marque du matériel">
-			<a href="#" onclick="order_by('<?PHP echo $tri_marque; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_marque; ?>', filt.value);">
 			Marque<sup>m</sup> <?PHP echo $img_marque; ?></a></th>
 			
 		<th class="td_modele" title="mo : Modèle du matériel">
-			<a href="#" onclick="order_by('<?PHP echo $tri_modele; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_modele; ?>', filt.value);">
 			Modèle<sup>mo</sup> <?PHP echo $img_modele; ?></a></th>
 			
 		<th class="td_salle"  title="sa : Salle où est affecté le matériel">
-			<a href="#" onclick="order_by('<?PHP echo $tri_salle; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_salle; ?>', filt.value);">
 			Salle<sup>sa</sup> <?PHP echo $img_salle; ?></a></th>
 			
 		<th class='td_origine' title="o : Propriétaire et année d'achat du matériel">
-			<a href="#" onclick="order_by('<?PHP echo $tri_origine; ?>', $('filt').value);">
+			<a href="#" onclick="order_by('<?PHP echo $tri_origine; ?>', filt.value);">
 			Origine<sup>o</sup> <?PHP echo $img_origine; ?></a></th>
 	
 	<?PHP 
@@ -421,7 +417,7 @@
 		?>		
 		
 	</table>
-	</center>
+
 	<!--	Ancre bas de page	-->
 	<a name="basdepage"></a>
 
@@ -432,25 +428,28 @@
 
 <script type="text/javascript">	
 
-	/*window.addEvent('domready', function(){
-	
-		// activation des slb
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_mat'});
-	
-	
-		// fonction de filtrage
-		function filter (phrase) {
-			document.location.href='index.php?page=materiels&filter=' + encodeURIComponent(phrase);
-		};
-			
-
-		// Tamporisation du filtre + envoi
-		$('filt').addEvent('keyup', function(el)  {
-			 el.stop();
-			 if($defined(this.timer))
-				 $clear(this.timer);
-			 this.timer = (function() { filter($('filt').value); }).delay(1000);
+	$(function() {	
+				
+		// Fonction de temporisation du filtre
+		var delay = (function(){
+			var timer = 0;
+			return function(callback, ms){
+				clearTimeout (timer);
+				timer = setTimeout(callback, ms);
+				};
+		})();
+				
+		$('#filt').keyup(function() {
+			delay(function(){
+				document.location.href='index.php?page=materiels&filter=' + encodeURIComponent( $('#filt').val() );
+			}, 1000 );
 		});
+		
+	});
+	
+
+	/*window.addEvent('domready', function(){
+
 		
 
 		// AJAX		
