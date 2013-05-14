@@ -50,13 +50,13 @@
 		
 		<span class="option">	<!-- affecter une salle au lot -->
 			<?PHP if ( $E_chk ) { ?>
-				<span id='affect_selection'><a href='#' onclick='toggle_affectsalle();'><img src="<?PHP echo ICONSPATH . "refresh.png";?>" title="Affectation directe à une salle"></a></span>
+				<span id='affect_selection'><a href='#'><img src="<?PHP echo ICONSPATH . "refresh.png";?>" title="Affectation directe à une salle"></a></span>
 				<div id='affect_box'>
 					<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="post_form" >
 						<input type=hidden name='materiel_a_poster' id='materiel_a_poster' value=''>	
 
 					<?PHP 
-						echo "<select name=salle_select id=salle_select>";
+						echo "<select name='salle_select' id='salle_select'>";
 				
 						// Pour le remplissage de la combobox des salles pour l'affectation
 							
@@ -84,7 +84,7 @@
 		</span>
 						
 		<span class="option">	<!-- Affichage des colonnes -->		
-			<a href='#' onclick='showhide_options();'><img src="<?PHP echo ICONSPATH . "eye.png";?>" title="colonnes à montrer ou à cacher"></a>
+			<span id='affiche_colonne'><a href='#'><img src="<?PHP echo ICONSPATH . "eye.png";?>" title="colonnes à montrer ou à cacher"></a></span>
 			<div id="options_colonnes">
 				<input type="checkbox" class="opt_entete" id="chk_pret" onclick="hidethem('.td_pret', this.checked);post_modif_entete();"><label for="chk_pret">Prêt</label><br>
 				<input type="checkbox" class="opt_entete" id="chk_dsit" onclick="hidethem('.td_dsit', this.checked);post_modif_entete();"><label for="chk_dsit">DSIT</label><br>
@@ -295,7 +295,7 @@
 
 	<table class="bigtable alternate hover" id="mat_table">
 		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
-		<?PHP if ( $E_chk ) echo "<th> <input type=checkbox id=checkall onclick=\"checkall('mat_table');\" > </th>"; ?>
+		<?PHP if ( $E_chk ) echo "<th> <input type='checkbox' id='checkall'> </th>"; ?>
 		
 		<th title="n : le nom de la machine">
 			<a href="#" onclick="order_by('<?PHP echo $tri_nom; ?>', filt.value);">
@@ -392,7 +392,7 @@
 				//gestion_inventaire/voir_membres-marque_stype.php?maxheight=650&marque_stype=$soustype
 				echo "<tr id=tr_id$id>";
 				
-					/*	chckbox	*/	if ( $E_chk ) echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
+					/*	chckbox	*/	if ( $E_chk ) echo "<td> <input type=checkbox name=chk indexed=true value='$id' class='chk_line' id='$id'> </td>";	
 					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?maxheight=650&mat_nom=$nom&mat_ssn=$serial' class='editbox' title='Fiche du matériel $nom'>$nom</a> </td>";
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
@@ -428,7 +428,79 @@
 
 <script type="text/javascript">	
 
-	$(function() {	
+	$(function() {
+		
+		
+		//--------------------------------------- Selection d'une ligne
+		
+		$('.chk_line').click(function(){
+			
+			var poster = $('#materiel_a_poster').val();
+			var id = $(this).attr('id');
+			
+			if ( $(this).is(':checked') ){		
+				$('#materiel_a_poster').val( $('#materiel_a_poster').val() + ";" + id );
+				$("#tr_id" + id).addClass("selected");
+			}
+			else {
+				$('#materiel_a_poster').val( $('#materiel_a_poster').val().replace(";" + id + ";", ";") );	// Supprime la valeur au milieu de la chaine
+				var re = new RegExp(";" + id + "$", "g"); $('#materiel_a_poster').val( $('#materiel_a_poster').val().replace(re, "") );			// Supprime la valeur en fin de la chaine
+				$("#tr_id" + id).removeClass("selected");
+				$('#checkall').attr("checked", false);
+			}
+			
+			// On affiche les boutons
+			if ( $('#materiel_a_poster').val() != "" ) {
+				$('#modif_selection').show();	$('#rename_selection').show(); $('#affect_selection').show();				
+				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+			} else { 
+				$('#modif_selection').hide();	$('#rename_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
+			}
+			
+		});
+		
+		
+		//--------------------------------------- Selection de toutes les lignes
+		
+		$('#checkall').click(function(){
+			
+			if ( $('#checkall').is(':checked') ){		
+				
+				$('.chk_line').prop("checked", true);	// On coche toutes les cases
+				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+				
+				// On alimente le input à poster
+				$('#materiel_a_poster').val("");	// On vide les matos à poster
+				$('.chk_line').each (function(){$('#materiel_a_poster').val( $('#materiel_a_poster').val() + ";" + $(this).attr('id') );	});
+				
+				$('tr').addClass("selected");	// On colorie toutes les lignes	
+			}
+			else {
+				$('#materiel_a_poster').val("");	// On vide les matos à poster
+				$('.chk_line').prop("checked", false);	// On décoche toutes les cases
+				$('tr').removeClass("selected");	// On vire le coloriage de toutes les lignes	
+				$('#nb_selectionnes').hide();
+
+			}			
+		});
+		
+		
+		//--------------------------------------- Affiche l'affectation aux salles
+		
+		$('#affect_selection').click(function(){
+			$('#affect_box').slideToggle();
+		});
+		
+		
+		
+		//--------------------------------------- Affiche le choix des colonnes
+		
+		$('#affiche_colonne').click(function(){
+			$('#options_colonnes').slideToggle();
+		});
+		
+
+		//--------------------------------------- Le filtre
 				
 		// Fonction de temporisation du filtre
 		var delay = (function(){
@@ -502,107 +574,7 @@
 		}
 	}
 
-
-			
-	// *********************************************************************************
-	//
-	//				Selection/déselection de toutes les rows
-	//
-	// *********************************************************************************	
 	
-	function checkall(_table) {
-		var table = document.getElementById(_table);	// le tableau du matériel
-		var checkall_box = document.getElementById('checkall');	// la checkbox "checkall"
-		
-		for ( var i = 1 ; i < table.rows.length ; i++ ) {
-
-			var lg = table.rows[i].id					// le tr_id (genre tr115)
-			
-			if (checkall_box.checked == true) {
-				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
-			} else {
-				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
-			}
-		}
-	}
-	
-
-	
-	
-	// *********************************************************************************
-	//
-	//				Ajout des index pour postage sur clic de la checkbox
-	//
-	// *********************************************************************************	
-	 
-	function select_cette_ligne( tr_id, num_ligne, check ) {
-
-		var chaine_id = $('materiel_a_poster').value;
-		var table_id = chaine_id.split(";");
-				
-		var nb_selectionnes = $('nb_selectionnes');
-		
-		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
-		var li = document.getElementById(ligne);	
-		
-		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
-		
-			switch (check) {
-				case 1: // On force la selection si la ligne n'est pas déjà cochée
-					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
-						table_id.push(tr_id);
-						li.className = "selected";
-						nb_selectionnes.innerHTML = "[" + (table_id.length-1) + "] sélectionné(s)";	// On entre le nombre de machines sélectionnées	
-					}
-				break;
-				
-				case 0: // On force la déselection
-					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
-						table_id.erase(tr_id);
-						nb_selectionnes.innerHTML = " [" + (table_id.length-1) + "] sélectionné(s)";	 // On entre le nombre de machines sélectionnées			
-						// alternance des couleurs calculée avec la parité
-						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-					}
-				break;
-				
-				
-				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
-					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
-						table_id.erase(tr_id);
-						
-						nb_selectionnes.innerHTML = " [" + (table_id.length-1) + "] sélectionné(s)";	 // On entre le nombre de machines sélectionnées			
-
-						// alternance des couleurs calculée avec la parité
-						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-					
-					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
-						table_id.push(tr_id);
-						li.className = "selected";
-						nb_selectionnes.innerHTML = " [" + (table_id.length-1) + "] sélectionné(s)";	// On entre le nombre de machines sélectionnées	
-					}
-				break;			
-			}
-	
-			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
-			$('materiel_a_poster').value = table_id.join(";");
-			
-
-			if ( $('materiel_a_poster').value != "" ) {
-				$('modif_selection').setStyle("display","inline");
-				$('rename_selection').setStyle("display","inline");
-				$('affect_selection').setStyle("display","inline");
-				nb_selectionnes.setStyle("display","inline");
-			} else { 
-				$('modif_selection').setStyle("display","none");
-				$('rename_selection').setStyle("display","none");
-				$('affect_selection').setStyle("display","none");
-				nb_selectionnes.setStyle("display","none");
-			}
-		}
-	}
-
 		
 	// *********************************************************************************
 	//
@@ -629,65 +601,29 @@
 	
 
 	
-	// *********************************************************************************
-	//
-	//			Montre ou masque des colonnes
-	//
-	// *********************************************************************************	
-	
-	function hidethem (col_name, show) {
-	
-		if ( show == true)
-			var state = "";
-		else var state = "none";
-	
-		$("." + col_name).each(function(item) {
-			item.css("display", state);
-		})
-		
-		// On ajuste la taille de la barre d'entête
-		//$("entete-materiels").style.width = $("contenu").getStyle('width');
-	}
 	
 	
 	function post_modif_entete () {
 		$('target').load("gestion_inventaire/post_materiels.php?action=entetes&value=" + etat_entetes() );
 	}
 	
-	// *********************************************************************************
-	//
-	//			Montre ou masque les options d'affichage de la page
-	//
-	// *********************************************************************************	
-	
-	function showhide_options() {
-		if ( $('options_colonnes').style.display == 'block' ) {
-			$('options_colonnes').style.display = 'none'; 
-		} else {
-			$('options_colonnes').style.display = 'block';
-		}
-	}
-	
+
 	// *********************************************************************************
 	//
 	//			Montre ou masque l'affecation directe à une salle
 	//
 	// *********************************************************************************	
 	
-	function toggle_affectsalle() {
+	/*function toggle_affectsalle() {
 		if ( $('affect_box').style.display == 'block' ) {
 			$('affect_box').style.display = 'none'; 
 		} else {
 			$('affect_box').style.display = 'block';
 		}
-	}	
+	}*/	
 	
 	
-	// *********************************************************************************
-	//
-	//			Tri ORDERBY
-	//
-	// *********************************************************************************	
+	//-------------------------------------	Tri des colonnes
 	
 	function order_by (tri, phrase) {
 		document.location.href="index.php?page=materiels&tri=" + tri + "&filter=" + phrase;
@@ -714,43 +650,49 @@
 		return liste;
 	}
 	
-	// *********************************************************************************
-	//
-	//		initialisation des cases à cocher et de l'état des colonnes (hide/show)
-	//
-	// *********************************************************************************	
+	
+	
+	//-------------------------------------	Montre ou masque des colonnes	-> Passer cette fonction dans $(function(){})
+	
+	function hidethem (col_name, show) {
+		if ( show == true) $(col_name).show();
+		else $(col_name).hide();
+	}
+	
+	
+	//------------------------------------ initialisation des cases à cocher et de l'état des colonnes (hide/show)
 	
 	function init_entetes (value) {
 		
-		if (value.substr(0, 1) == "1") {$('chk_pret').checked = true; hidethem('.td_pret', true);} 
-		else {$('chk_pret').checked = false; hidethem('.td_pret', false);}
+		if (value.substr(0, 1) == "1") {$('#chk_pret').attr('checked',true); hidethem('.td_pret', true);} 
+		else {$('#chk_pret').attr('checked',false); hidethem('.td_pret', false);}
 		
-		if (value.substr(1, 1) == "1") {$('chk_dsit').checked = true; hidethem('.td_dsit', true);} 
-		else {$('chk_dsit').checked = false; hidethem('.td_dsit', false);}
+		if (value.substr(1, 1) == "1") {$('#chk_dsit').attr('checked',true); hidethem('.td_dsit', true);} 
+		else {$('#chk_dsit').attr('checked',false); hidethem('.td_dsit', false);}
 		
-		if (value.substr(2, 1) == "1") {$('chk_serial').checked = true; hidethem('.td_serial', true);} 
-		else {$('chk_serial').checked = false; hidethem('.td_serial', false);}
+		if (value.substr(2, 1) == "1") {$('#chk_serial').attr('checked',true); hidethem('.td_serial', true);} 
+		else {$('#chk_serial').attr('checked',false); hidethem('.td_serial', false);}
 		
-		if (value.substr(3, 1) == "1") {$('chk_etat').checked = true; hidethem('.td_etat', true);} 
-		else {$('chk_etat').checked = false; hidethem('.td_etat', false);}
+		if (value.substr(3, 1) == "1") {$('#chk_etat').attr('checked',true); hidethem('.td_etat', true);} 
+		else {$('#chk_etat').attr('checked',false); hidethem('.td_etat', false);}
 		
-		if (value.substr(4, 1) == "1") {$('chk_type').checked = true; hidethem('.td_type', true);} 
-		else {$('chk_type').checked = false; hidethem('.td_type', false);}
+		if (value.substr(4, 1) == "1") {$('#chk_type').attr('checked',true); hidethem('.td_type', true);} 
+		else {$('#chk_type').attr('checked',false); hidethem('.td_type', false);}
 		
-		if (value.substr(5, 1) == "1") {$('chk_stype').checked = true; hidethem('.td_stype', true);} 
-		else {$('chk_stype').checked = false; hidethem('.td_stype', false);}
+		if (value.substr(5, 1) == "1") {$('#chk_stype').attr('checked',true); hidethem('.td_stype', true);} 
+		else {$('#chk_stype').attr('checked',false); hidethem('.td_stype', false);}
 		
-		if (value.substr(6, 1) == "1") {$('chk_modele').checked = true; hidethem('.td_modele', true);} 
-		else {$('chk_modele').checked = false; hidethem('.td_modele', false);}
+		if (value.substr(6, 1) == "1") {$('#chk_modele').attr('checked',true); hidethem('.td_modele', true);} 
+		else {$('#chk_modele').attr('checked',false); hidethem('.td_modele', false);}
 		
-		if (value.substr(7, 1) == "1") {$('chk_marque').checked = true; hidethem('.td_marque', true);} 
-		else {$('chk_marque').checked = false; hidethem('.td_marque', false);}
+		if (value.substr(7, 1) == "1") {$('#chk_marque').attr('checked',true); hidethem('.td_marque', true);} 
+		else {$('#chk_marque').attr('checked',false); hidethem('.td_marque', false);}
 		
-		if (value.substr(8, 1) == "1") {$('chk_salle').checked = true; hidethem('.td_salle', true);} 
-		else {$('chk_salle').checked = false; hidethem('.td_salle', false);}
+		if (value.substr(8, 1) == "1") {$('#chk_salle').attr('checked',true); hidethem('.td_salle', true);} 
+		else {$('#chk_salle').attr('checked',false); hidethem('.td_salle', false);}
 	
-		if (value.substr(9, 1) == "1") {$('chk_origine').checked = true; hidethem('.td_origine', true);} 
-		else {$('chk_origine').checked = false; hidethem('.td_origine', false);}
+		if (value.substr(9, 1) == "1") {$('#chk_origine').attr('checked',true); hidethem('.td_origine', true);} 
+		else {$('#chk_origine').attr('checked',false); hidethem('.td_origine', false);}
 	}
 	
 	// On initialise tout le bazar d'entête en cochant les checkbox et en cachant/montrant les colonnes

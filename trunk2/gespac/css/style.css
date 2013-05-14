@@ -145,14 +145,14 @@ img {border:0px; vertical-align:middle;}
 .smalltable td{padding:2px 4px; font-size:11px; border:1px solid grey;}
 .smalltable th{font-size:11px ;}
 
-.selected {	background-color : #7EEF9F;}
+/*	couleur d'une ligne selectionnée	*/
+.selected {	background-color : #7EEF9F !important;}
 
 /*	Cette classe ajoute la coloration une ligne sur deux	*/
 .alternate tr:nth-child(odd){background-color : #D9DBDC;}
 .alternate tr:nth-child(even){background-color : #fff;}
 /*	Si cette classe est ajoutée à la classe de la table, il y a effet de surlignage	*/
-.hover tr:hover {background-color:#FFD769;}
-
+.hover tr:hover {background-color:#FFD769 !important;}
 
 .form_table {
 	border		: 1px solid #ccc;
