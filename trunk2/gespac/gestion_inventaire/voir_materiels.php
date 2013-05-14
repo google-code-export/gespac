@@ -446,7 +446,7 @@
 				$('#materiel_a_poster').val( $('#materiel_a_poster').val().replace(";" + id + ";", ";") );	// Supprime la valeur au milieu de la chaine
 				var re = new RegExp(";" + id + "$", "g"); $('#materiel_a_poster').val( $('#materiel_a_poster').val().replace(re, "") );			// Supprime la valeur en fin de la chaine
 				$("#tr_id" + id).removeClass("selected");
-				$('#checkall').attr("checked", false);
+				$('#checkall').prop("checked", false);
 			}
 			
 			// On affiche les boutons
@@ -467,20 +467,19 @@
 			if ( $('#checkall').is(':checked') ){		
 				
 				$('.chk_line').prop("checked", true);	// On coche toutes les cases
-				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
-				
-				// On alimente le input à poster
+
 				$('#materiel_a_poster').val("");	// On vide les matos à poster
-				$('.chk_line').each (function(){$('#materiel_a_poster').val( $('#materiel_a_poster').val() + ";" + $(this).attr('id') );	});
+				$('.chk_line').each (function(){$('#materiel_a_poster').val( $('#materiel_a_poster').val() + ";" + $(this).attr('id') );	});	// On alimente le input à poster
 				
+				$('#modif_selection').show();	$('#rename_selection').show(); $('#affect_selection').show();		// On fait apparaitre les boutons
+				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
 				$('tr').addClass("selected");	// On colorie toutes les lignes	
 			}
 			else {
 				$('#materiel_a_poster').val("");	// On vide les matos à poster
 				$('.chk_line').prop("checked", false);	// On décoche toutes les cases
 				$('tr').removeClass("selected");	// On vire le coloriage de toutes les lignes	
-				$('#nb_selectionnes').hide();
-
+				$('#modif_selection').hide();	$('#rename_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
 			}			
 		});
 		
