@@ -26,29 +26,28 @@
 				
 		<span class="option">	<!-- filtre du matériels -->
 			<form>
-				<!--<small><a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:t pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:s pour la salle, CDI:t pour tout le tableau, ...) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:n / ecran:n` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:n+fonctionnel:e/ecran:n+d3e:s`.');">[?]</a></small> -->
 				<small><a href="#" id='searchtaskshelp_bt'>[?]</a></small> 
 				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
 				<span id="filtercount" title='nombre de matériels affichés'></span>
 			</form>			
 				
 			<div id='searchtaskshelp' style='display:none;'>
-			- <b>recherche</b> : cherche dans le nom des matériels<br><br>
-			- <b>!recherche</b> : cherche tous les noms de matériels qui ne correspondent pas à la recherche<br><br>
-			- <b>champ=valeur</b> : cherche dans la colonne spécifiée la valeur de la recherche (ex : "d=07p")<br><br>
-			- <b>champ!=valeur</b> : cherche dans la colonne spécifiée la valeur qui ne correspond pas à recherche<br><br>
-			- <b>&&</b> permet de combiner plusieurs facteurs de recherche<br><br>
-			Exemple : <b>sdc&&!ecran&&m=hp&&!mo=netvista</b> <br>
-			- tous les matériels appelés "sdc" <br>
-			- mais pas "ecran" <br>
-			- avec une marque égale à "hp" <br>
-			- et un modele différent de "netvista"<br>
-			<br><br>
-			La recherche n'est pas sensible à la casse.<br>
-			De plus on cherche par sur une ressemblance pas une égalité : Si le matériel s'appelle "07C123456", "d=07C123" peut suffire
+				- <b>recherche</b> : cherche dans le nom des matériels<br><br>
+				- <b>!recherche</b> : cherche tous les noms de matériels qui ne correspondent pas à la recherche<br><br>
+				- <b>champ=valeur</b> : cherche dans la colonne spécifiée la valeur de la recherche (ex : "d=07p")<br><br>
+				- <b>champ!=valeur</b> : cherche dans la colonne spécifiée la valeur qui ne correspond pas à recherche<br><br>
+				- <b>&&</b> permet de combiner plusieurs facteurs de recherche<br><br>
+				Exemple : <b>sdc&&!ecran&&m=hp&&!mo=netvista</b> <br>
+				- tous les matériels appelés "sdc" <br>
+				- mais pas "ecran" <br>
+				- avec une marque égale à "hp" <br>
+				- et un modele différent de "netvista"<br>
+				<br><br>
+				La recherche n'est pas sensible à la casse.<br>
+				De plus on cherche par sur une ressemblance pas une égalité : Si le matériel s'appelle "07C123456", "d=07C123" peut suffire
 			</div>
-			
 		</span>
+		
 		
 		<span class="option">	<!-- Créer CSV -->
 			<?PHP echo "<span><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='" . ICONSPATH . "csv.png'></a></span>";	?>
@@ -396,13 +395,26 @@
 
 	$(function() {
 		
+		//--------------------------------------- taille du champ filtre sur focusIn
 		
+		$('#filt').focusin(function(){
+			$(this).animate({"width":"400px"}, 250);
+		});
+
+
+		//--------------------------------------- taille du champ filtre sur focusOut		
+		
+		$('#filt').focusout(function(){
+			$(this).animate({"width":"130px"}, 250);
+		});
+		
+		
+		//--------------------------------------- Fait apparaitre l'aide pour le filtre
 		
 		$('#searchtaskshelp_bt').click(function() {
 			$('#searchtaskshelp').dialog({title:'Aide de la barre de recherche',width:'740',height:'390'}); 
 		});
 	
-		
 		
 		//--------------------------------------- Selection d'une ligne
 		
