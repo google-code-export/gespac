@@ -69,9 +69,11 @@ session_start();
 	
 	if ( $action == 'suppr' ) {	
 		
+		$mat_id = $_POST['mat_id'];
+		
 		//Insertion d'un log (avant la suppression!)
 		//On récupère le nom du matériel en fonction du mat_id
-		$liste_materiel = $con_gespac->QueryRow ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $id" );
+		$liste_materiel = $con_gespac->QueryRow ( "SELECT mat_nom, mat_serial FROM materiels WHERE mat_id = $mat_id" );
 		$mat_nom 	= $liste_materiel [0];
 		$mat_serial = $liste_materiel [1];
 
@@ -82,7 +84,7 @@ session_start();
 			
 		//Suppression
 				
-		$req_suppr_materiel = "DELETE FROM materiels WHERE mat_id=$id;";
+		$req_suppr_materiel = "DELETE FROM materiels WHERE mat_id=$mat_id;";
 		$con_gespac->Execute ( $req_suppr_materiel );
 		
 		// On log la requête SQL

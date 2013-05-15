@@ -407,7 +407,7 @@
 					
 					if ( $E_chk ) {
 						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?action=mod&id=$id&mat_ssn=$serial' class='editbox' title='Formulaire de modification du matériel $nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
-						/*	suppr	*/	echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_materiel('$id', '$model', '$nom', this.parentNode.parentNode.rowIndex, $id_pret);\">	<img src='" . ICONSPATH . "delete.png' title='supprimer $nom'>	</a> </td>";
+						/*	suppr	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?action=del&id=$id' class='editbox' title='Supprimer un matériel'>	<img src='" . ICONSPATH . "delete.png' title='supprimer $nom'>	</a> </td>";
 					}
 					
 				echo "</tr>";
@@ -543,36 +543,6 @@
 		
 	});*/
 	
-		
-	// *********************************************************************************
-	//
-	//			Fonction de validation de la suppression d'un matériel
-	//
-	// *********************************************************************************
-		function validation_suppr_materiel (id, model, nom, row, id_pret) {
-		
-		if (id_pret == 0) {
-		
-			var valida = confirm('Voulez vous supprimer le matériel ' + nom + ' de modèle ' + model + " ?");
-			
-			// si la réponse est TRUE ==> on lance la page post_materiels.php
-			if (valida) {
-				
-				/* On déselectionne toutes les coches */
-				select_cette_ligne ( id, row, 0 );
-				
-				$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-				$('target').load("gestion_inventaire/post_materiels.php?action=suppr&id=" + id);
-				window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('filt').value + "'", 1500);
-				
-			}
-			
-		} else {
-			
-			alert('Cette machine est prêtée ! Rendez-la avant la suppression !');
-		}
-	}
-
 	
 		
 	// *********************************************************************************
@@ -599,7 +569,12 @@
 	}
 	
 
+	/*
 	
+	 A mettre dans la base de données ?
+	 Comme ça à chaque boot, la session est restaurée
+	
+	*/
 	
 	
 	function post_modif_entete () {
@@ -629,18 +604,14 @@
 	}
 	
 	
-	// *********************************************************************************
-	//
-	//		On retourne la liste des états des entêtes (colonne montrée ou masquée)
-	//
-	// *********************************************************************************	
+	//-------------------------------------	On retourne la liste des états des entêtes (colonne montrée ou masquée)
 	
 	function etat_entetes () {
 		
 		var liste = "";
 	
-		$$('.opt_entete').each(function(item) {
-			if ( item.checked )
+		$('.opt_entete').each(function() {
+			if ( $(this).prop("checked") )
 				liste += "1";
 			else 
 				liste += "0";

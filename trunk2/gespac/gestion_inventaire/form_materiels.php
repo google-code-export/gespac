@@ -282,7 +282,7 @@
 	*
 	*		AJAX
 	*
-	*******************************************/
+	******************************************
 	
 	window.addEvent('domready', function(){
 		
@@ -318,7 +318,7 @@
 
 	
 	});
-	
+	*/
 	
 
 </script>
@@ -938,5 +938,36 @@
 
 
 <?PHP	
+	}
+	
+	// *********************************************************************************
+	//
+	//			Formulaire suppression
+	//
+	// *********************************************************************************	
+	
+
+	if ( $action == 'del' ) {
+		
+		$mat_id = $_GET['id'];
+		$mat = $con_gespac->QueryRow ( "SELECT mat_nom, mat_serial, user_id FROM materiels WHERE mat_id=$mat_id" );
+
+		$mat_nom = $mat[0];
+		$mat_serial = $mat[1];
+		$user_id = $mat[2];
+
+		if ($user_id <> 1) {echo "<h3>Vous ne pouvez pas supprimer le matériel <u>$mat_nom ($mat_serial)</u> : <br>Il est prêté. Rendez le d'abord !</h3>"; exit();}
+
+		echo "Voulez vous vraiment supprimer le matériel $mat_nom portant le numéro de série $mat_serial ?";
+	?>	
+		<center><br><br>
+		<form action="gestion_inventaire/post_materiels.php?action=suppr" method="post" name="post_form" id='formulaire'>
+			<input type=hidden value="<?PHP echo $mat_id;?>" name="mat_id">
+			<input type=submit value='Supprimer' id="post_form">
+			<input type=button onclick="$('#dialog').dialog('close');" value='Annuler'>
+		</form>
+		</center>
+		
+	<?PHP		
 	}
 ?>
