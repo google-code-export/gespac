@@ -33,19 +33,19 @@
 			</form>			
 				
 			<div id='searchtaskshelp' style='display:none;'>
-			- <b>recherche</b> : cherche dans le nom des entités<br><br>
-			- <b>!recherche</b> : cherche tous les noms d'entités qui ne correspondent pas à la recherche<br><br>
-			- <b>propriété=valeur</b> : cherche toutes les propriétés égales à cette valeur (ex : "mac=bd:7c")<br><br>
-			- <b>!propriété=valeur</b> : cherche toutes les propriétés NON égales à cette valeur<br><br>
+			- <b>recherche</b> : cherche dans le nom des matériels<br><br>
+			- <b>!recherche</b> : cherche tous les noms de matériels qui ne correspondent pas à la recherche<br><br>
+			- <b>champ=valeur</b> : cherche dans la colonne spécifiée la valeur de la recherche (ex : "d=07p")<br><br>
+			- <b>champ!=valeur</b> : cherche dans la colonne spécifiée la valeur qui ne correspond pas à recherche<br><br>
 			- <b>&&</b> permet de combiner plusieurs facteurs de recherche<br><br>
-			Exemple : <b>sdc&&!ecran&&marqu=hp&&!modele=netvista</b> <br>
-			- toutes entites appelées "sdc" <br>
+			Exemple : <b>sdc&&!ecran&&m=hp&&!mo=netvista</b> <br>
+			- tous les matériels appelés "sdc" <br>
 			- mais pas "ecran" <br>
-			- contenant une propriété contenant "marqu" égale à "hp" <br>
-			- et une propriété "modele" différente de "netvista"<br>
+			- avec une marque égale à "hp" <br>
+			- et un modele différent de "netvista"<br>
 			<br><br>
 			La recherche n'est pas sensible à la casse.<br>
-			De plus on cherche par sur une ressemblance pas une égalité : Si la propriété s'appelle "ADRESSE MAC", "mac=4d" suffit
+			De plus on cherche par sur une ressemblance pas une égalité : Si le matériel s'appelle "07C123456", "d=07C123" peut suffire
 			</div>
 			
 		</span>
@@ -181,125 +181,75 @@
 		$orderby = "ORDER BY mat_nom asc";
 	}
 	
+	//-------------------------------------------------------------------------------------------------------- LE FILTRE
 
 	// cnx à la base de données GESPAC
 	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 	$filtre = $_GET['filter'];
-	$filter_explode_exclusion = @explode ("/", $filtre);
-	$value_like_tab 	= $filter_explode_exclusion[0];	// Pour le filtre d'inclusion
-	$value_notlike_tab 	= $filter_explode_exclusion[1]; // Pour le filtre d'exclusion
-
-
-	/**************************
-	* 	PARTIE INCLUSION
-	***************************/
+	$segments = @explode ("&&", $filtre);
+	$curseur = 1;	
+	$where = " ";
 	
-	$filter_explode_like = @explode ("+", $value_like_tab);
-	$curseur_like = 1;
-	
-	
-	foreach ( $filter_explode_like as $value_like) {
-	
-		// Si la valeur du champ est renseignée on l'intègre à la requête
-		if ( $value_like <> "" ) {
+	foreach ($segments as $segment) {
+		
+		// On explose les segments par les '='
+		$couple = explode ('=', $segment);
+		
+		// Pour la partie champ
+		$key = $couple[0];
+		
+		// pour la partie valeur
+		if ($couple[1]) {
+			$value = $couple[1];	
 			
-			$value_like_explode = @explode (":", $value_like);
-			$value_inc 			= trim($value_like_explode[0]);
-			$champ_inc 			= trim($value_like_explode[1]);
-			
-			
-			// Si le champ numérique n'est pas renseigné, on lui affecte une valeur bidon pour tomber dans le cas "default"
-			if ( !isset($champ_inc)  || $champ_inc == "") $champ_inc = -1;
-			
-			switch ($champ_inc) {
-				case "t" :	$like .= "(mat_nom LIKE '%$value_inc%' OR user_nom LIKE '%$value_inc%' OR mat_dsit LIKE '%$value_inc%' OR mat_serial LIKE '%$value_inc%' OR mat_origine LIKE '%$value_inc%' OR mat_etat LIKE '%$value_inc%' OR marque_type LIKE '%$value_inc%' OR marque_stype LIKE '%$value_inc%' OR marque_marque LIKE '%$value_inc%' OR marque_model LIKE '%$value_inc%' OR salle_nom LIKE '%$value_inc%')";	break;
-				case "n" :	$like .= "mat_nom LIKE '%$value_inc%'";			break;
-				case "p" :	$like .= "user_nom LIKE '%$value_inc%'";		break;
-				case "d" :	$like .= "mat_dsit LIKE '%$value_inc%'";		break;
-				case "s" :	$like .= "mat_serial LIKE '%$value_inc%'";		break;
-				case "e" :	$like .= "mat_etat LIKE '%$value_inc%'";		break;
-				case "f" :	$like .= "marque_type LIKE '%$value_inc%'";		break;
-				case "sf" :	$like .= "marque_stype LIKE '%$value_inc%'";	break;
-				case "m" :	$like .= "marque_marque LIKE '%$value_inc%'";	break;
-				case "mo" :	$like .= "marque_model LIKE '%$value_inc%'";	break;
-				case "sa" :	$like .= "salle_nom LIKE '%$value_inc%'";		break;
-				case "o" :	$like .= "mat_origine LIKE '%$value_inc%'";		break;
-				default :	$like .= "mat_nom LIKE '%$value_inc%'";			break;
-			}
-			
-			// Si ce n'est pas le dernier élément du tableau on rajoute " AND " sinon on ne rajoute rien			
-			if ( $curseur_like <> count($filter_explode_like) ) {
-				$like .= " AND ";
-			}
-			
-			$curseur_like++;
+			if (substr($key, -1) == '!') {	// forme négative ?
+				$not = " NOT ";
+				$key = substr ($key, 0, -1);
+			} else $not = " ";
 		}
+		else {
+			$value=$couple[0];
 			
-	}
-	
-	
-	/**************************
-	* 	PARTIE EXCLUSION
-	***************************/
-	
-	$filter_explode_notlike = @explode ("+", $value_notlike_tab);
-	$curseur_notlike = 1;
-		
-		
-	foreach ( $filter_explode_notlike as $value_notlike) {
-	
-		// Si la valeur du champ est renseignée on l'intègre à la requête
-		if ( $value_notlike <> "" ) {
-			
-			$value_notlike_explode = @explode (":", $value_notlike);
-			$value_exc 			= trim($value_notlike_explode[0]);
-			$champ_exc 			= trim($value_notlike_explode[1]);
-			
-			
-			// Si le champ numérique n'est pas renseigné, on lui affecte une valeur bidon pour tomber dans le cas "default"
-			if ( !isset($champ_exc)  || $champ_exc == "") $champ_exc = -1;
-			
-			switch ($champ_exc) {
-				case "t" :	$notlike .= "(mat_nom NOT LIKE '%$value_exc%' OR user_nom NOT LIKE '%$value_exc%' OR mat_dsit NOT LIKE '%$value_exc%' OR mat_serial NOT LIKE '%$value_exc%' OR mat_origine NOT LIKE '%$value_exc%' OR mat_etat NOT LIKE '%$value_exc%' OR marque_type NOT LIKE '%$value_exc%' OR marque_stype NOT LIKE '%$value_exc%' OR marque_marque NOT LIKE '%$value_exc%' OR marque_model NOT LIKE '%$value_exc%' OR salle_nom NOT LIKE '%$value_exc%')";	break;
-				case "n" :	$notlike .= "mat_nom NOT LIKE '%$value_exc%'";			break;
-				case "p" :	$notlike .= "user_nom NOT LIKE '%$value_exc%'";			break;
-				case "d" :	$notlike .= "mat_dsit NOT LIKE '%$value_exc%'";			break;
-				case "s" :	$notlike .= "mat_serial NOT LIKE '%$value_exc%'";		break;
-				case "e" :	$notlike .= "mat_etat NOT LIKE '%$value_exc%'";			break;
-				case "f" :	$notlike .= "marque_type NOT LIKE '%$value_exc%'";		break;
-				case "sf" :	$notlike .= "marque_stype NOT LIKE '%$value_exc%'";		break;
-				case "m" :	$notlike .= "marque_marque NOT LIKE '%$value_exc%'";	break;
-				case "mo" :	$notlike .= "marque_model NOT LIKE '%$value_exc%'";		break;
-				case "sa" :	$notlike .= "salle_nom NOT LIKE '%$value_exc%'";		break;
-				case "o" :	$notlike .= "mat_origine NOT LIKE '%$value_exc%'";		break;
-				default :	$notlike .= "mat_nom NOT LIKE '%$value_exc%'";			break;
-			}
+			if (substr($value, 0, 1) == '!') { // forme négative ?	
+				$not = " NOT ";
+				$value = substr ($value,1);
+			} else $not = "";		
 		}
+
+	
 		
+		switch ($key) {
+			case "t" :	break;
+			case "n" :	$champ = "mat_nom";			break;
+			case "p" :	$champ = "user_nom";		break;
+			case "d" :	$champ = "mat_dsit";		break;
+			case "s" :	$champ = "mat_serial";		break;
+			case "e" :	$champ = "mat_etat";		break;
+			case "f" :	$champ = "marque_type";		break;
+			case "sf" :	$champ = "marque_stype";	break;
+			case "m" :	$champ = "marque_marque";	break;
+			case "mo" :	$champ = "marque_model";	break;
+			case "sa" :	$champ = "salle_nom";		break;
+			case "o" :	$champ = "mat_origine";		break;
+			default :	$champ = "mat_nom";			break;
+		}
+	
+		if ($key == "t")  $where .= "(mat_nom LIKE '%$value%' OR user_nom LIKE '%$value%' OR mat_dsit LIKE '%$value%' OR mat_serial LIKE '%$value%' OR mat_origine LIKE '%$value%' OR mat_etat LIKE '%$value%' OR marque_type LIKE '%$value%' OR marque_stype LIKE '%$value%' OR marque_marque LIKE '%$value%' OR marque_model LIKE '%$value%' OR salle_nom LIKE '%$value%')";
+		else $where .= " $champ $not LIKE '%" . $value . "%'";
+	
 		// Si ce n'est pas le dernier élément du tableau on rajoute " AND " sinon on ne rajoute rien			
-		if ( $curseur_notlike <> count($filter_explode_notlike) ) {
-			$notlike .= " AND ";
-		}
-		
-		$curseur_notlike++;
-			
+		if ( $curseur <> count($segments) ) $where .= " AND ";
+	
+		$curseur++;
+				
 	}
 	
-	
-	/**************************
-	* 		PARTIE JONCTION
-	***************************/
-	
-	// permet de mettre la particule "AND" dans le cas ou le filtre d'exclusion existe
-	if ( $value_like_tab <> "" && $value_notlike_tab <> "" ) $jonction = " AND ";
+	echo "$where \n";
 
-	
-	//echo $like . $jonction . $notlike;
-	
-		
+
 	if ( $_GET['filter'] <> '' ) {
-		$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND $like $jonction $notlike) $orderby" );
+		$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id, salle_nom, salles.salle_id, mat_origine, user_nom FROM materiels, marques, salles, users WHERE (materiels.user_id=users.user_id AND materiels.marque_id=marques.marque_id and materiels.salle_id=salles.salle_id AND $where) $orderby" );
 		echo "<script>$('#filtercount').html('" . count($liste_des_materiels) . "');</script>";
 	}
 	else {
@@ -538,7 +488,7 @@
 		$('#filt').keyup(function() {
 			delay(function(){
 				document.location.href='index.php?page=materiels&filter=' + encodeURIComponent( $('#filt').val() );
-			}, 1000 );
+			}, 2000 );
 		});
 		
 	});
