@@ -244,8 +244,6 @@
 		$curseur++;
 				
 	}
-	
-	echo "$where \n";
 
 
 	if ( $_GET['filter'] <> '' ) {
