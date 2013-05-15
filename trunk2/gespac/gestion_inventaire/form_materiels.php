@@ -254,9 +254,8 @@
 	*******************************************/
 	
 	function SSNgenerator () {
-		
-		number = Math.floor(Math.random() * 100000);
-		$('serial').value =  "NC" + number;
+		var number = Math.floor(Math.random() * 100000);
+		$('#serial').val("NC" + number);
 	}
 	
 	/******************************************
@@ -367,14 +366,12 @@
 	
 
 	if ( $action == 'add' ) {
-	
-		echo "<h2>formulaire de création d'un nouveau matériel</h2><br>";
-		
-		?>
+
+	?>
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('filt').focus();
+			$('#filt').focus();
 		</script>
 		
 		<form action="gestion_inventaire/post_materiels.php?action=add" method="post" name="post_form" id="post_form2">
@@ -406,7 +403,7 @@
 					<!-- s'affiche si il n'y a pas de résultat -->
 					<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez d'abord créer le modèle manuellement.</div>
 					
-					<table id="corr_table" class='tablehover'>
+					<table id="corr_table" class='alternate smalltable'>
 
 						<?PHP
 							foreach ( $liste_marques as $marque) {

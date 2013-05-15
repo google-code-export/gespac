@@ -21,15 +21,33 @@
 
 	<span class="entetes-titre">LES MATERIELS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span><span id='nb_selectionnes'></span>
 	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des matériels du parc.<br>On peut aussi modifier ou renommer un lot de matériels.</div>
-
+	
 	<span class="entetes-options">
 				
 		<span class="option">	<!-- filtre du matériels -->
 			<form>
-				<small><a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:t pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:s pour la salle, CDI:t pour tout le tableau, ...) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:n / ecran:n` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:n+fonctionnel:e/ecran:n+d3e:s`.');">[?]</a></small> 
+				<!--<small><a href="#" title="Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:t pour tout le tableau) " onclick="alert('Cherchez dans une colonne précise avec le séparateur deux points (CDI:n pour le nom, CDI:s pour la salle, CDI:t pour tout le tableau, ...) \n Le filtre d`exclusion permet de ne pas sélectionner une valeur particulière.\n Ainsi `CDI:n / ecran:n` permet de selectionner tout le matériel appelé CDI mais pas les écrans CDI. \n On peut aussi ajouter des champs avec l`opérateur +. par exemple `cdi:n+fonctionnel:e/ecran:n+d3e:s`.');">[?]</a></small> -->
+				<small><a href="#" id='searchtaskshelp_bt'>[?]</a></small> 
 				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
 				<span id="filtercount" title='nombre de matériels affichés'></span>
-			</form>
+			</form>			
+				
+			<div id='searchtaskshelp' style='display:none;'>
+			- <b>recherche</b> : cherche dans le nom des entités<br><br>
+			- <b>!recherche</b> : cherche tous les noms d'entités qui ne correspondent pas à la recherche<br><br>
+			- <b>propriété=valeur</b> : cherche toutes les propriétés égales à cette valeur (ex : "mac=bd:7c")<br><br>
+			- <b>!propriété=valeur</b> : cherche toutes les propriétés NON égales à cette valeur<br><br>
+			- <b>&&</b> permet de combiner plusieurs facteurs de recherche<br><br>
+			Exemple : <b>sdc&&!ecran&&marqu=hp&&!modele=netvista</b> <br>
+			- toutes entites appelées "sdc" <br>
+			- mais pas "ecran" <br>
+			- contenant une propriété contenant "marqu" égale à "hp" <br>
+			- et une propriété "modele" différente de "netvista"<br>
+			<br><br>
+			La recherche n'est pas sensible à la casse.<br>
+			De plus on cherche par sur une ressemblance pas une égalité : Si la propriété s'appelle "ADRESSE MAC", "mac=4d" suffit
+			</div>
+			
 		</span>
 		
 		<span class="option">	<!-- Créer CSV -->
@@ -37,7 +55,7 @@
 		</span>
 		
 		<span class="option">	<!-- Ajout Matériel -->
-		<?PHP if ( $E_chk ) {echo "<span><a href='gestion_inventaire/form_materiels.php?action=add' class='editbox' title='Ajouter un matériel'> <img src='" . ICONSPATH . "add.png'></a></span>";} ?>
+		<?PHP if ( $E_chk ) {echo "<span><a href='gestion_inventaire/form_materiels.php?action=add&maxheight=650&width=550' class='editbox' title='Ajouter un matériel'> <img src='" . ICONSPATH . "add.png'></a></span>";} ?>
 		</span>
 		
 		<span class="option">	<!-- Modifier le lot -->
@@ -429,6 +447,13 @@
 <script type="text/javascript">	
 
 	$(function() {
+		
+		
+		
+		$('#searchtaskshelp_bt').click(function() {
+			$('#searchtaskshelp').dialog({title:'Aide de la barre de recherche',width:'740',height:'390'}); 
+		});
+	
 		
 		
 		//--------------------------------------- Selection d'une ligne
