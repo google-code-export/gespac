@@ -394,12 +394,14 @@
 <script type="text/javascript">	
 
 	$(function() {
+
 		
 		//--------------------------------------- taille du champ filtre sur focusIn
 		
 		$('#filt').focusin(function(){
 			$(this).animate({"width":"400px"}, 250);
 		});
+
 
 
 		//--------------------------------------- taille du champ filtre sur focusOut		
@@ -409,12 +411,14 @@
 		});
 		
 		
+		
 		//--------------------------------------- Fait apparaitre l'aide pour le filtre
 		
 		$('#searchtaskshelp_bt').click(function() {
 			$('#searchtaskshelp').dialog({title:'Aide de la barre de recherche',width:'740',height:'390'}); 
 		});
 	
+		
 		
 		//--------------------------------------- Selection d'une ligne
 		
@@ -445,6 +449,7 @@
 		});
 		
 		
+		
 		//--------------------------------------- Selection de toutes les lignes
 		
 		$('#checkall').click(function(){
@@ -467,6 +472,7 @@
 				$('#modif_selection').hide();	$('#rename_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
 			}			
 		});
+
 		
 		
 		//--------------------------------------- Affiche l'affectation aux salles
@@ -483,6 +489,7 @@
 			$('#options_colonnes').slideToggle();
 		});
 		
+
 
 		//--------------------------------------- Le filtre
 				
@@ -554,32 +561,13 @@
 	}
 	
 
-	/*
-	
-	 A mettre dans la base de données ?
-	 Comme ça à chaque boot, la session est restaurée
-	
-	*/
-	
+
+	//-------------------------------------	On poste dans $_SESSION les entêtes affichées
 	
 	function post_modif_entete () {
-		$('target').load("gestion_inventaire/post_materiels.php?action=entetes&value=" + etat_entetes() );
+		$('#target').load("gestion_inventaire/post_materiels.php?action=entetes&value=" + etat_entetes() );
 	}
 	
-
-	// *********************************************************************************
-	//
-	//			Montre ou masque l'affecation directe à une salle
-	//
-	// *********************************************************************************	
-	
-	/*function toggle_affectsalle() {
-		if ( $('affect_box').style.display == 'block' ) {
-			$('affect_box').style.display = 'none'; 
-		} else {
-			$('affect_box').style.display = 'block';
-		}
-	}*/	
 	
 	
 	//-------------------------------------	Tri des colonnes
@@ -587,6 +575,7 @@
 	function order_by (tri, phrase) {
 		document.location.href="index.php?page=materiels&tri=" + tri + "&filter=" + phrase;
 	}
+	
 	
 	
 	//-------------------------------------	On retourne la liste des états des entêtes (colonne montrée ou masquée)
@@ -613,6 +602,7 @@
 		if ( show == true) $(col_name).show();
 		else $(col_name).hide();
 	}
+	
 	
 	
 	//------------------------------------ initialisation des cases à cocher et de l'état des colonnes (hide/show)
