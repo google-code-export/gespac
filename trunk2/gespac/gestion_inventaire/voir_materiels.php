@@ -27,15 +27,16 @@
 		<span class="option">	<!-- filtre du matériels -->
 			<form>
 				<small><a href="#" id='searchtaskshelp_bt'>[?]</a></small> 
-				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
+				<input placeholder=" filtrer" name="filt" id="filt" style='width:300px;' onKeyPress="return disableEnterKey(event)" type="text" value=<?PHP echo $_GET['filter']; ?> >
 				<span id="filtercount" title='nombre de matériels affichés'></span>
 			</form>			
 				
 			<div id='searchtaskshelp' style='display:none;'>
 				- <b>recherche</b> : cherche dans le nom des matériels<br><br>
 				- <b>!recherche</b> : cherche tous les noms de matériels qui ne correspondent pas à la recherche<br><br>
-				- <b>champ=valeur</b> : cherche dans la colonne spécifiée la valeur de la recherche (ex : "d=07p")<br><br>
-				- <b>champ!=valeur</b> : cherche dans la colonne spécifiée la valeur qui ne correspond pas à recherche<br><br>
+				- <b>champ=valeur</b> : cherche dans la colonne spécifiée les valeurs qui correspondent à la recherche (ex : "d=07p")<br><br>
+				- <b>champ!=valeur</b> : cherche dans la colonne spécifiée les valeurs qui ne correspondent pas à la recherche<br><br>
+				- <b>t=valeur</b> : cherche dans toutes les colonnes les valeurs qui correspondent à la recherche<br><br>
 				- <b>&&</b> permet de combiner plusieurs facteurs de recherche<br><br>
 				Exemple : <b>sdc&&!ecran&&m=hp&&!mo=netvista</b> <br>
 				- tous les matériels appelés "sdc" <br>
@@ -50,7 +51,7 @@
 		
 		
 		<span class="option">	<!-- Créer CSV -->
-			<?PHP echo "<span><a href='#' onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\" title='générer CSV'> <img src='" . ICONSPATH . "csv.png'></a></span>";	?>
+			<?PHP echo "<span><a href='#' id='creer_csv' title='générer CSV'> <img src='" . ICONSPATH . "csv.png'></a></span>";	?>
 		</span>
 		
 		<span class="option">	<!-- Ajout Matériel -->
@@ -69,7 +70,7 @@
 			<?PHP if ( $E_chk ) { ?>
 				<span id='affect_selection'><a href='#'><img src="<?PHP echo ICONSPATH . "refresh.png";?>" title="Affectation directe à une salle"></a></span>
 				<div id='affect_box'>
-					<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="post_form" >
+					<form action="gestion_inventaire/post_materiels.php?action=affect" method="post" name="post_form" id="form_affect_salles" >
 						<input type=hidden name='materiel_a_poster' id='materiel_a_poster' value=''>	
 
 					<?PHP 
@@ -92,7 +93,7 @@
 						}
 					
 						echo "</select>";
-						echo "<input type=submit value='Affecter' >";
+						echo "<input type=submit value='Affecter' id='post_affect_salles'>";
 					?>
 
 					</form>
@@ -394,21 +395,46 @@
 <script type="text/javascript">	
 
 	$(function() {
+		
+		
+		//-------------------------------------------------- POST AJAX FORMULAIRES
+		$("#post_affect_salles").click(function(event) {
 
+			/* stop form from submitting normally */
+			event.preventDefault(); 
 		
-		//--------------------------------------- taille du champ filtre sur focusIn
-		
-		$('#filt').focusin(function(){
-			$(this).animate({"width":"400px"}, 250);
+			// Permet d'avoir les données à envoyer
+			var dataString = $("#form_affect_salles").serialize();
+			
+			// action du formulaire
+			var url = $("#form_affect_salles").attr( 'action' );
+			
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('#filt').val() + "'", 2000);
+			 });
+			 
+		});	
+			
+			
+			
+		//--------------------------------------- créer un fichier CSV du filtre
+		 //onclick=\"AffichePage('target','gestion_inventaire/post_export_filtre.php?filtre=" . urlencode($filtre) . "');\"
+		$('#creer_csv').click(function() {
+			$('#target').load("gestion_inventaire/post_export_filtre.php?filter=" + $('#filt').val() );
 		});
-
-
-
-		//--------------------------------------- taille du champ filtre sur focusOut		
 		
-		$('#filt').focusout(function(){
-			$(this).animate({"width":"130px"}, 250);
-		});
+		
+		
 		
 		
 		
@@ -509,56 +535,6 @@
 		});
 		
 	});
-	
-
-	/*window.addEvent('domready', function(){
-
-		
-
-		// AJAX		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML, filt) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('filt').value + "'", 1500);			
-				}
-			
-			}).send(this.toQueryString());
-		}); 
-
-		
-	});*/
-	
-	
-		
-	// *********************************************************************************
-	//
-	//			Modifie à la volée l'affectation dans la salle
-	//
-	// *********************************************************************************	
-	 	
-	function change_affectation_salle ( salleid ) {
-		var table = document.getElementById("mat_table");
-		
-		var salle_selected_id = document.getElementById('salle_select').selectedIndex;
-		var salle_selected_text = document.getElementById('salle_select').options[salle_selected_id].text;	
-
-
-		for (var r = 1; r < table.rows.length; r++){
-			if ( document.getElementsByName("chk")[r-1].checked == true ) {
-				
-				var lg = "<a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=" + salleid + "' rel='slb_mat' title='Membres de la salle " + salle_selected_text + "'>" + salle_selected_text + "</a>";
-				// On change le texte de la salle par la nouvelle affectation
-				document.getElementById('mat_table').rows[r].cells[6].innerHTML = lg;
-			}
-		}
-	}
 	
 
 

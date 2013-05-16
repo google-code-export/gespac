@@ -384,7 +384,7 @@ session_start();
 					$nom_materiel = $con_gespac->QueryOne ( "SELECT mat_nom FROM materiels WHERE mat_id = $id" );
 					$salle_nom 	  = $con_gespac->QueryOne ( "SELECT salle_nom FROM salles WHERE salle_id = $salle_id" );
 					
-					echo $log_texte .= "Réaffectation de <b>$nom_materiel</b> dans la salle <b>$salle_nom</b><br> ";
+					$log_texte .= "Réaffectation de <b>$nom_materiel</b> dans la salle <b>$salle_nom</b><br> ";
 					
 					
 				} else {	// la machine est prêtée ($mat_id existe)
