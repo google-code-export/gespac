@@ -281,8 +281,37 @@
 	*
 	*		AJAX
 	*
-	******************************************
+	*******************************************/
 	
+	
+		//-------------------------------------------------- POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+		
+			// Permet d'avoir les données à envoyer
+			var dataString = $("#formulaire").serialize();
+			
+			// action du formulaire
+			var url = $("#formulaire").attr( 'action' );
+			
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('#filt').val() + "'", 2000);
+			 });
+			 
+		});	
+	/*
 	window.addEvent('domready', function(){
 		
 		$('post_form2').addEvent('submit', function(e) {	//	Pour poster un formulaire
@@ -895,18 +924,17 @@
 	
 	
 	if ($action == 'renomlot') {
-		
-			echo "<h2>formulaire pour renommer un lot</h2><br>";
+
 ?>
 
-		<form action="gestion_inventaire/post_materiels.php?action=renomlot" method="post" name="post_form" id="post_form2">
+		<form action="gestion_inventaire/post_materiels.php?action=renomlot" method="post" name="post_form" id="formulaire">
 			<center>
 			
 			<input type=hidden name=lot id=lot>
 			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
-			<script>$("lot").value = $('materiel_a_poster').value;</script>
+			<script>$("#lot").val( $('#materiel_a_poster').val() );</script>
 
-			<table width=500>
+			<table>
 				
 				<tr>
 					<TD>Préfixe du lot</TD> 
@@ -918,16 +946,32 @@
 				<tr>
 					<TD>Suffixe séquentiel</TD> 
 					<TD>
-						<input type=checkbox name=suffixe id=suffixe checked />
+						<input type='checkbox' name='suffixe' id='suffixe' checked />
 					</TD>
 				</tr>
 				
+				<tr>
+					<TD>nombre de chiffre</TD> 
+					<TD>
+						<select name='bourrage' id='bourrage' >
+							<option value=1>1</option>
+							<option value=2>2</option>
+							<option value=3>3</option>
+							<option value=4>4</option>
+							<option value=5>5</option>
+							<option value=6>6</option>
+							<option value=7>7</option>
+							<option value=8>8</option>
+							<option value=9>9</option>
+						</select>
+					</TD>
+				</tr>
 				
 			</table>
 
 			<br>
-			<input type=submit value='Renommer le lot' >
-			<input type=button value='sortir sans renommer' onclick="SexyLightbox.close();" >
+			<input type=submit value='Renommer le lot'  id="post_form">
+			<input type=button value='sortir sans renommer' onclick="$('#dialog').dialog('close');">
 
 			</center>
 

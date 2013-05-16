@@ -189,6 +189,7 @@ session_start();
 		$lot		= addslashes($_POST ['lot']);
 		$prefixe   	= addslashes($_POST ['prefixe']);
 		$suffixe   	= $_POST ['suffixe'];
+		$bourrage  	= $_POST ['bourrage'];
 		
 
 		$lot_array = explode(";", $lot);
@@ -201,7 +202,10 @@ session_start();
 				//on récupère le nom initial
 				$req_materiel_old = $con_gespac->QueryRow("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
 				
-				$req_renomme_materiel = "UPDATE materiels SET mat_nom='" . $prefixe ."". $sequence . "' WHERE mat_id=$item ;";
+				// bourrage
+				if ($suffixe == "on") $bourre = str_pad($sequence, $bourrage, '0', STR_PAD_LEFT);
+								
+				$req_renomme_materiel = "UPDATE materiels SET mat_nom='" . $prefixe . "" . $bourre . "' WHERE mat_id=$item ;";
 				$con_gespac->Execute ( $req_renomme_materiel );
 				
 				if ( $suffixe == 'on' ) $sequence++;	//Pour faire un suffixe séquentiel
