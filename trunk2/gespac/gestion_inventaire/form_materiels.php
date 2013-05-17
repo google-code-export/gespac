@@ -18,53 +18,39 @@
 
 <script type="text/javascript"> 
 	
+
 	
 	// *********************************************************************************
 	//
-	//				Fonction de filtrage des tables
+	//				Fonction de filtrage des marques pour correspondance
 	//
 	// *********************************************************************************
 
-	function filter (phrase, _id){
 
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-		var nb_resultats = 0;
+	function filter_marque (phrase, tableid){
 		
-			
-		if (phrase.value == "") {	// Si la phrase est nulle, on masque toutes les lignes
-			for (var r = 1; r < table.rows.length; r++)	table.rows[r].style.display = "none";	
+		var data = phrase.split(" ");
+		var cells=$("#" + tableid + " td");
+					
+		if(data != "") {
+			// On cache toutes les lignes
+			cells.parent("tr").hide();
+			// puis on filtre pour n'afficher que celles qui répondent au critère du filtre
+			cells.filter(function() {
+				return $(this).text().toLowerCase().indexOf(data) > -1;
+			}).parent("tr").show();		
+		} else {
+			// On montre toutes les lignes
+			cells.parent("tr").hide();
 		}
-		else {			
-			for (var r = 1; r < table.rows.length; r++){
-				
-				ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-				var displayStyle = 'none';
-				
-				for (var i = 0; i < words.length; i++) {
-					if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-						displayStyle = '';
-						nb_resultats++;
+		
 
-					}	
-					else {	// on masque les rows qui ne correspondent pas
-						displayStyle = 'none';
-						break;
-					}
-				}
-				
-				// Affichage on / off en fonction de displayStyle
-				table.rows[r].style.display = displayStyle;	
-			}
-			
-			// Affiche le div "pasderesultat", si jamais il n'y a ... pas de résultat !
-			if ( nb_resultats == 0 )
-				$('pasderesultat').style.display = "";
-			else
-				$('pasderesultat').style.display = "none";
+		if ($("pasderesultat")) {
+			if ($("#" + tableid + " tr:visible").length < 1 && data != "") {$("#pasderesultat").show();}
+			else {$("#pasderesultat").hide();}
 		}
+		
+		
 	}	
 	
 	
@@ -81,12 +67,11 @@
 		
 		// si la réponse est TRUE ==> on colle dans un input la valeur corr_id
 		if (valida) {
-			$('marque_id').value = marque_id;
-			
-			$('choix_modele').style.display = 'none';
-			$('table_modele_selectionne').style.display = '';
-			
-			$('modele_selectionne').value = marque;
+			$('#marque_id').val(marque_id);
+			$('#choix_modele').hide();
+			$('#table_modele_selectionne').show();
+			$('#proprietes').show();
+			$('#modele_selectionne').val(marque);
 		}
 	}
 	
@@ -99,11 +84,11 @@
 	
 	function choisir_modele () {
 		
-		$('choix_modele').style.display = '';
-		$('table_modele_selectionne').style.display = 'none';
-		
-		$('marque_id').value = "";
-		$('modele_selectionne').value = "";
+		$('#choix_modele').show();
+		$('#table_modele_selectionne').hide();
+		$('#proprietes').hide();
+		$('#marque_id').val("");
+		$('#modele_selectionne').val("");
 	}
 	
 	
@@ -181,16 +166,16 @@
 	
 	function validation () {
 
-		var bt_submit  = document.getElementById("post_materiel");
-		var mat_nom    = document.getElementById("nom").value;
-		var mat_serial = $('serial').value;
-		var mat_modele = document.getElementById("modele_selectionne").value;
+		var bt_submit  = $("#post_materiel");
+		var mat_nom    = $("#nom").val();
+		var mat_serial = $('#serial').val();
+		var mat_modele = $("#modele_selectionne").val();
 		
 	
 		if (mat_nom == "" || mat_serial == "" || mat_modele == "") {
-			bt_submit.disabled = true;
+			bt_submit.prop('disabled',true);
 		} else {
-			bt_submit.disabled = false;
+			bt_submit.prop('disabled',false);
 		}
 	}
 	
@@ -403,7 +388,7 @@
 			$('#filt').focus();
 		</script>
 		
-		<form action="gestion_inventaire/post_materiels.php?action=add" method="post" name="post_form" id="post_form2">
+		<form action="gestion_inventaire/post_materiels.php?action=add" method="post" name="post_form" id="formulaire">
 			
 				<!--
 
@@ -415,14 +400,9 @@
 				
 					<center>
 				
-					<table width="500" align="center" cellpadding="10">
-						<tr>
-							<td>Choisir un modèle * :</td>
-							<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"> </input></td>
-						</tr>
-					</table>
+					<td>Choisir un modèle * : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'corr_table');" type="text"> </input>
 				
-					<br>
+					<br><br>
 					
 					<?PHP
 					// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
@@ -430,7 +410,7 @@
 					?>
 					
 					<!-- s'affiche si il n'y a pas de résultat -->
-					<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez d'abord créer le modèle manuellement.</div>
+					<div id="pasderesultat" style='display:none; color:red;'>Pas de résultat, vous devez d'abord créer le modèle manuellement.</div>
 					
 					<table id="corr_table" class='alternate smalltable'>
 
@@ -458,7 +438,7 @@
 					</table>
 				</div>	
 				
-				<table width="500" align="center" cellpadding="10" style='display:none' id="table_modele_selectionne">
+				<table width="500" align="center" cellpadding="10" style='display:none;' id="table_modele_selectionne">
 					<tr>
 						<td>Modèle sélectionné *</td>
 						<td><input type=hidden name=marque_id id=marque_id> <input type="text" id="modele_selectionne"> </td>
@@ -466,8 +446,10 @@
 					</tr>
 				 </table>
 				<br>
+				
 				<center>
-				<table width=500>
+					
+				<table width=500 style='text-align:left;display:none;' id='proprietes'>
 				
 				<tr>
 					<TD>Nom du materiel *</TD>
@@ -530,11 +512,13 @@
 						</select>
 					</TD>
 				</tr>
-				
+				<tr>
+					<td colspan=2><br><center><input type=submit value='Ajouter un materiel' id="post_materiel" disabled></center></td>
+				</tr>
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter un materiel' id="post_materiel" disabled>
+			
 
 			</center>
 

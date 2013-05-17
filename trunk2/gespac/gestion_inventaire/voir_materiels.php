@@ -441,7 +441,7 @@
 		//--------------------------------------- Fait apparaitre l'aide pour le filtre
 		
 		$('#searchtaskshelp_bt').click(function() {
-			$('#searchtaskshelp').dialog({title:'Aide de la barre de recherche',width:'740',height:'390'}); 
+			$('#searchtaskshelp').dialog({title:'Aide de la barre de recherche',width:'740',height:'460'}); 
 		});
 	
 		
