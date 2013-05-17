@@ -69,7 +69,7 @@ session_start();
 	
 // *********************************************************************************
 //
-//					SUPPRIMER UN MATERIEL
+//			SUPPRIMER UN MATERIEL
 //
 // *********************************************************************************	
 	
@@ -114,10 +114,6 @@ session_start();
 		$salle  	= addslashes($_POST ['salle']);
 		$origine 	= addslashes($_POST ['origine']);
 		
-		$message_pret_ok = "";
-		$message_pret_ko = "";
-
-		
 		$lot_array = explode(";", $lot);
 		
 		foreach ($lot_array as $item) {
@@ -154,8 +150,6 @@ session_start();
 						$req_modif_materiel = "UPDATE materiels SET " . $sql_etat . $sql_origine . $sql_salle . " WHERE mat_id=$item ;";
 						$con_gespac->Execute ( $req_modif_materiel );
 						
-						$message_pret_ok = "La modification des matériels sélectionnés a été effectuée.<br>";
-						
 						//on récupére le nom et le serial de chaque item
 						$req_nom_serial_materiel = $con_gespac->QueryRow ("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
 						$liste_noms_serial   .=  '<b>'.$req_nom_serial_materiel[0].' ('.$req_nom_serial_materiel[1].')</b>, ';
@@ -165,16 +159,14 @@ session_start();
 					}
 				} else { // la machine est prêtée ; on récupére le nom
 					$mat_nom = $con_gespac->QueryOne ( "SELECT mat_nom FROM materiels WHERE mat_id=$item" );
-					$message_pret_ko .= "Le matériel <b>$mat_nom</b> est prêté. Merci de le rendre avant réaffectation !<br>";
+					echo "<br>Le matériel <b>$mat_nom</b> est prêté. Merci de le rendre avant réaffectation !<br>";
 				}
 		} 
 	}
 	
 	//Insertion d'un log
-	//on supprime les caractères en fin de chaine
 	$liste_noms_serial = trim ($liste_noms_serial, ", ");
 	echo $log_texte = "Les materiels $liste_noms_serial ont été modifiés.";
-	echo $message_pret_ko;
 
 	$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
 	$con_gespac->Execute ( $req_log_modif_mat );

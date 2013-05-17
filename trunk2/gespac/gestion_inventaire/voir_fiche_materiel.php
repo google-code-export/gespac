@@ -345,11 +345,11 @@ echo "</form>";
 ?>
 
 <script type="text/javascript">	
-	
-	function choix_mac(mat_id, mac) {
-		// Submit le formulaire après clic du bouton radio
-		$('target').load("gestion_inventaire/post_materiels.php?action=mod_mac&mat_id=" + mat_id + "&mac=" + mac);
 
+
+	// Submit le formulaire après clic du bouton radio
+	function choix_mac(mat_id, mac) {	
+		$('#target').load("gestion_inventaire/post_materiels.php?action=mod_mac&mat_id=" + mat_id + "&mac=" + mac);
 	}
 
 </script>
