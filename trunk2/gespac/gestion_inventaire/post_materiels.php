@@ -1,4 +1,4 @@
-﻿<?PHP
+<?PHP
 session_start();
 
 
@@ -23,7 +23,13 @@ session_start();
 	$id 		= $_GET['id'];
 	
 
-	/**************** SAUVEGARDE de l'ETAT des Entetes dans les sessions ********************/
+
+
+// *********************************************************************************
+//
+//				SAUVEGARDE de l'ETAT des Entetes dans les sessions
+//
+// *********************************************************************************	
 	
 	if ( $action == 'entetes' ) {	
 		$_SESSION['entetes'] = $_GET['value'];
@@ -31,14 +37,12 @@ session_start();
 	
 	
 	
-	/*********************************************
-	*
-	*		ACTIONS SUR MATERIELS
-	*
-	**********************************************/
 	
-	
-	/**************** CHOIX ADRESSE MAC ********************/
+// *********************************************************************************
+//
+//					CHOIX ADRESSE MAC (FICHE MATERIEL)
+//
+// *********************************************************************************		
 	
 	if ( $action == 'mod_mac' ) {	
 	
@@ -63,9 +67,11 @@ session_start();
 	}
 	
 	
-
-	/**************** SUPPRESSION ********************/
-
+// *********************************************************************************
+//
+//					SUPPRIMER UN MATERIEL
+//
+// *********************************************************************************	
 	
 	if ( $action == 'suppr' ) {	
 		
@@ -93,22 +99,24 @@ session_start();
 	}
 
 		
-	/**************** MODIFICATION D'UN LOT ********************/
+		
+		
+// *********************************************************************************
+//
+//			MODIFIER LA SÉLECTION
+//
+// *********************************************************************************	
 		
 	if ( $action == 'modlot' ) {
 		
 		$lot		= addslashes($_POST ['lot']);
 		$etat   	= addslashes($_POST ['etat']);
 		$salle  	= addslashes($_POST ['salle']);
-		$type   	= addslashes($_POST ['type']);
-		$modele 	= addslashes($_POST ['modele']);
 		$origine 	= addslashes($_POST ['origine']);
 		
 		$message_pret_ok = "";
 		$message_pret_ko = "";
-	
-		//$liste_noms   = "";
-		//$liste_serial = "";
+
 		
 		$lot_array = explode(";", $lot);
 		
@@ -142,23 +150,15 @@ session_start();
 
 						} else { $sql_salle = ""; }
 						
-						if ( $type <> "" ) {
-							// on récupére le numéro d'id de marque que l'on veut modifier dans la table materiels avec comme clause WHERE le type, le sous type, la marque et le modele de marque
-							$marque_id = $con_gespac->QueryOne ( "SELECT marque_id FROM marques WHERE marque_type='$type' AND marque_stype='$stype' AND marque_marque='$marque' AND marque_model='$modele'" );
-							
-							if ( $sql_origine == "" && $sql_etat == "" && $sql_salle == "" ) $sql_marque = " mat_salle=$marque_id";
-							else $sql_marque = " , marque_id=$marque_id" ;
-							
-						} else { $sql_marque = ""; }
-						
-						$req_modif_materiel = "UPDATE materiels SET " . $sql_etat . $sql_origine . $sql_salle . $sql_marque . " WHERE mat_id=$item ;";
+
+						$req_modif_materiel = "UPDATE materiels SET " . $sql_etat . $sql_origine . $sql_salle . " WHERE mat_id=$item ;";
 						$con_gespac->Execute ( $req_modif_materiel );
 						
 						$message_pret_ok = "La modification des matériels sélectionnés a été effectuée.<br>";
 						
 						//on récupére le nom et le serial de chaque item
 						$req_nom_serial_materiel = $con_gespac->QueryRow ("SELECT mat_nom, mat_serial FROM materiels WHERE mat_id=$item");
-						$liste_noms_serial   .=  '<br><b>'.$req_nom_serial_materiel[0].' (</b>serial : <b>'.$req_nom_serial_materiel[1].')</b>, ';
+						$liste_noms_serial   .=  '<b>'.$req_nom_serial_materiel[0].' ('.$req_nom_serial_materiel[1].')</b>, ';
 						
 						// On log la requête SQL
 						$log->Insert( $req_modif_materiel );
@@ -167,23 +167,28 @@ session_start();
 					$mat_nom = $con_gespac->QueryOne ( "SELECT mat_nom FROM materiels WHERE mat_id=$item" );
 					$message_pret_ko .= "Le matériel <b>$mat_nom</b> est prêté. Merci de le rendre avant réaffectation !<br>";
 				}
-				
-			//Insertion d'un log
-			//on supprime les caractères en fin de chaine
-			$liste_noms_serial = trim ($liste_noms_serial, ", ");
-			echo $log_texte = "Les materiels $liste_noms_serial ont été modifiés.";
-
-			$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
-			$con_gespac->Execute ( $req_log_modif_mat );
-
 		} 
 	}
-	echo $message_pret_ok.$message_pret_ko;
+	
+	//Insertion d'un log
+	//on supprime les caractères en fin de chaine
+	$liste_noms_serial = trim ($liste_noms_serial, ", ");
+	echo $log_texte = "Les materiels $liste_noms_serial ont été modifiés.";
+	echo $message_pret_ko;
+
+	$req_log_modif_mat = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification matériel', '$log_texte' );";
+	$con_gespac->Execute ( $req_log_modif_mat );
 }
 	
 	
-	/**************** RENOMMAGE D'UN LOT ********************/
-		
+	
+	
+// *********************************************************************************
+//
+//			RENOMMER LA SÉLECTION
+//
+// *********************************************************************************		
+			
 	if ( $action == 'renomlot' ) {
 		
 		$lot		= addslashes($_POST ['lot']);
@@ -228,8 +233,15 @@ session_start();
 
 	}
 	
-	/**************** MODIFICATION ********************/
-		
+	
+	
+	
+// *********************************************************************************
+//
+//			MODIFICATION
+//
+// *********************************************************************************
+			
 	if ( $action == 'mod' ) {
 	
 		$id			= $_POST ['materiel_id'];
@@ -274,7 +286,14 @@ session_start();
 	
 	}	
 	
-	/**************** INSERTION ********************/
+
+
+
+// *********************************************************************************
+//
+//			AJOUTER UN MATERIEL
+//
+// *********************************************************************************
 	
 	if ( $action == 'add' ) {
 		$marque_id	= $_POST['marque_id'];
@@ -312,7 +331,14 @@ session_start();
 		$con_gespac->Execute ( $req_log_modif_mat );
 	}
 	
-	/********** INSERTION D'UN MATERIEL PAR UNE MARQUE ***********/
+	
+	
+	
+// *********************************************************************************
+//
+//			AJOUTER UN MATERIEL PAR LES MARQUES
+//
+// *********************************************************************************
 	
 	if ( $action == 'add_mat_marque' ) {
 		
@@ -346,7 +372,13 @@ session_start();
 	}
 	
 
-	/********** AFFECTATION DE SALLE ***********/
+
+	
+// *********************************************************************************
+//
+//			AFFECTER UN MATERIEL A UNE SALLE
+//
+// *********************************************************************************
 	
 	if ( $action == 'affect' ) {
 	

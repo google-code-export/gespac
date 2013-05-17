@@ -550,31 +550,23 @@
 
 	// *********************************************************************************
 	//
-	//			Formulaire modification par lot non prérempli
+	//			Formulaire de modification de la sélection
 	//
 	// *********************************************************************************		
 		
 	
 	if ($action == 'modlot') {
-		
-		
-		echo "<h2>formulaire de modification d'un lot</h2><br>";
 			
 		?>
-		
-		<script>
-			// Donne le focus au premier champ du formulaire
-			$('origine').focus();
-		</script>
 
-		<form action="gestion_inventaire/post_materiels.php?action=modlot" method="post" name="post_form" id="post_form2">
+		<form action="gestion_inventaire/post_materiels.php?action=modlot" method="post" name="post_form" id="formulaire">
 			<center>
 			
 			<input type=hidden name=lot id=lot>
 			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
-			<script>$("lot").value = $('materiel_a_poster').value;</script>
+			<script>$("#lot").val( $('#materiel_a_poster').val() );</script>
 
-			<table width=500>
+			<table>
 				
 				<tr>
 					<TD>Origine</TD> 
@@ -603,8 +595,7 @@
 						<select name="salle" >
 							<option value="">Ne pas modifier</option>
 							<?PHP
-								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT salle_nom FROM salles" );	// [AMELIORATION] DISTINCT ? PK DISTINCT ?
+								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT salle_nom FROM salles" );
 								foreach ( $req_salles_disponibles as $record) { 
 								
 									$salle_nom = $record['salle_nom'];
@@ -617,58 +608,12 @@
 						</select>
 					</TD>
 				</tr>
-
-		<!--------------------------------------------	TYPES	------------------------------------------------------------->
-				<tr style="display:none<?PHP echo $show_type;?>">	<!-- J'ai masqué cette ligne histoire de ne pas utiliser le chainage pour la modif par lot pour le moment -->			
-					<TD>Famille</TD>
-					<TD>
-						<select id="type" name="type" onChange="chainage(this, 'type','', 'stype', 'tr_stype'); " >
-							<option value=""> >>> Choisir une valeur <<< </option>
-							<?PHP
-								// requête qui va afficher dans le menu déroulant les types saisies dans la table 'marques'
-								$req_types_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT marque_type FROM marques" );
-								foreach ( $req_types_disponibles as $record) { 
-									$marque_type = $record['marque_type']; 
-									echo "<option value='$marque_type'>$marque_type</option>";								
-								}
-							?>
-						</select>
-					</TD>
-				</tr>
-				
-		<!--------------------------------------------	SOUS TYPES	------------------------------------------------------------->
-				<tr id="tr_stype" style="display:none">
-					<td>Sous-famille</td>
-					<td>
-						<select id="stype" name="stype" onChange="chainage(this, 'type', '', 'marque', 'tr_marque'); " >
-						</select>
-					</td>
-				</tr>				
-				
-		<!--------------------------------------------	MARQUES	------------------------------------------------------------->
-				<tr id="tr_marque" style="display:none">
-					<td>Marque</td>
-					<td>
-						<select id="marque" name="marque" onChange="chainage(this, 'type', 'stype', 'modele', 'tr_modele'); " >
-						</select>
-					</td>
-				</tr>	
-				
-		<!--------------------------------------------	MODELES	------------------------------------------------------------->		
-				<tr id="tr_modele" style="display:none">
-					<TD>Modèle</TD>
-					<TD>
-						<select id="modele" name="modele" >
-						</select>
-					</TD>
-				</tr>
-				
-				
+								
 			</table>
 
 			<br>
-			<input type=submit value='Modifier le lot' >
-			<input type=button value='sortir sans modifier' onclick="SexyLightbox.close();" >
+			<input type=submit value='Modifier le lot' id='post_form'>
+			<input type=button value='sortir sans modifier' onclick="$('#dialog').dialog('close');" >
 
 			</center>
 
@@ -918,7 +863,7 @@
 	
 	// *********************************************************************************
 	//
-	//			Formulaire de renommage par lot de la selection
+	//			Formulaire de renommage de la selection
 	//
 	// *********************************************************************************	
 	
