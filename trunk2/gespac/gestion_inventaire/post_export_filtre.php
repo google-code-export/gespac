@@ -110,6 +110,10 @@ $con_gespac->Close();
 
 ?>
 
+<div id='downloadcsv'>
+	<a href='dump/export_filtre.csv'><center><h2>Télécharger le fichier</h2><br><img src='img/icons/csv.png'></center></a>
+</div>
+
 <script>
-	window.open('dump/export_filtre.csv', 'export du filtre');
+	$('#downloadcsv').dialog({title:'export du filtre',width:'320',height:'250'}); 
 </script>
