@@ -100,11 +100,12 @@
 	
 	function annuler_choix_modele (marqueid, modele) {
 		
-		$('choix_modele').style.display = 'none';
-		$('table_modele_selectionne').style.display = '';
+		$('#choix_modele').hide();
+		$('#table_modele_selectionne').show();
+		$('#proprietes').show();
 		
-		$('marque_id').value = marqueid;
-		$('modele_selectionne').value = modele;
+		$('#marque_id').val(marqueid);
+		$('#modele_selectionne').val(modele);
 	}	
 	
 	// *********************************************************************************
@@ -166,7 +167,7 @@
 	
 	function validation () {
 
-		var bt_submit  = $("#post_materiel");
+		var bt_submit  = $("#post_form");
 		var mat_nom    = $("#nom").val();
 		var mat_serial = $('#serial').val();
 		var mat_modele = $("#modele_selectionne").val();
@@ -180,57 +181,6 @@
 	}
 	
 
-	// serveur AJAX mootools pour le chainage des combobox type et sous type
-	// Beaucoup de redondances dans les paramètres. Je corrige ça un de ces jours
-	
-	function chainage( select_src, select_type, select_stype, select_dst, div_id ) {
-	
-		// select_src : c'est le select contenant le trigger et la valeur qui fait le lien
-		// select_dst : select à remplir
-		// div_id : div à afficher
-
-		
-		if (div_id == "tr_stype" ) {
-			$("tr_marque").style.display = 'none';
-			$("tr_modele").style.display = 'none';
-		}
-		
-		if (div_id == "tr_marque" ) {
-			$("tr_modele").style.display = 'none';
-		}
-		
-	
-		if ( select_type )
-			var type_value = document.getElementById(select_type).value;
-		if ( select_stype )	
-			var stype_value = document.getElementById(select_stype).value;
-
-	
-		if ( select_src.options[0].value == '' ) {
-			select_src.options[0] = null;
-		}
-	
-		var myRequest = new Request(
-		{
-			url: 'gestion_inventaire/chainage.php', 
-			method: 'get',
-			evalResponse: true,
-			
-			onRequest: function() {
-				$(div_id).style.display = 'none';
-			},
-
-			onFailure: function(xhr) {
-				window.alert("Erreur !");
-			},
-
-			onComplete: function(response) { 
-				$(div_id).style.display = '';
-			}
-		}
-		).send('value='+select_src.value+'&id_to_modify='+select_dst+'&div_id='+div_id+'&type='+type_value+'&stype='+stype_value);
-	}
-	
 	
 	/******************************************
 	*
@@ -251,14 +201,12 @@
 	
 	function SSN_modifier () {
 		
-		if ($('serial').readOnly == true) {
-			$('serial').readOnly = false;
-			$('img_cadenas_ferme').style.display = '';
-			$('img_cadenas_ouvert').style.display = 'none';
-		} else if ($('serial').readOnly == false ) {
-			$('serial').readOnly = true;
-			$('img_cadenas_ferme').style.display = 'none';
-			$('img_cadenas_ouvert').style.display = '';
+		if ( $('#serial').prop("readonly") == true ) {
+			$('#serial').prop("readonly",false);
+			$('#img_cadenas_ferme').show();	$('#img_cadenas_ouvert').hide();
+		} else {
+			$('#serial').prop("readonly",true);
+			$('#img_cadenas_ferme').hide();	$('#img_cadenas_ouvert').show();
 		}
 	}
 	
@@ -268,71 +216,32 @@
 	*
 	*******************************************/
 	
+	$("#post_form").click(function(event) {
+
+		/* stop form from submitting normally */
+		event.preventDefault(); 
 	
-		//-------------------------------------------------- POST AJAX FORMULAIRES
-		$("#post_form").click(function(event) {
-
-			/* stop form from submitting normally */
-			event.preventDefault(); 
+		// Permet d'avoir les données à envoyer
+		var dataString = $("#formulaire").serialize();
 		
-			// Permet d'avoir les données à envoyer
-			var dataString = $("#formulaire").serialize();
-			
-			// action du formulaire
-			var url = $("#formulaire").attr( 'action' );
-			
-			var request = $.ajax({
-				type: "POST",
-				url: url,
-				data: dataString,
-				dataType: "html"
-			 });
-			 
-			 request.done(function(msg) {
-				$('#dialog').dialog('close');
-				$('#targetback').show(); $('#target').show();
-				$('#target').html(msg);
-				window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('#filt').val() + "'", 2000);
-			 });
-			 
-		});	
-	/*
-	window.addEvent('domready', function(){
+		// action du formulaire
+		var url = $("#formulaire").attr( 'action' );
 		
-		$('post_form2').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=materiels&filter=" +encodeURIComponent($('filt').value) + "'", 1500);
-				}
-			
-			}).send(this.toQueryString());
-		});	
-		
-		
-
-		// Fait apparaitre le numéro GIGN dans le cas d'un ETAT particulier
-		if ($('CB_etat')) {
-			$('CB_etat').addEvent('change', function(e) {
-				new Event(e).stop();
-				
-				if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} ) {	$('tr_gign').style.display = ""; }
-				else { $('tr_gign').style.display = "none";	}
-			});
-		}
-
-	
-	});
-	*/
-	
+		var request = $.ajax({
+			type: "POST",
+			url: url,
+			data: dataString,
+			dataType: "html"
+		 });
+		 
+		 request.done(function(msg) {
+			$('#dialog').dialog('close');
+			$('#targetback').show(); $('#target').show();
+			$('#target').html(msg);
+			window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('#filt').val() + "'", 2000);
+		 });
+		 
+	});	
 
 </script>
 
@@ -365,10 +274,10 @@
 	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 	
 	// Requête qui va récupérer les origines des dotations ...
-	$liste_origines = $con_gespac->QueryAll ( "SELECT origine FROM origines ORDER BY origine" );
+	$liste_origines = $con_gespac->QueryAll ( "SELECT DISTINCT origine FROM origines ORDER BY origine" );
 	
 	// Requête qui va récupérer les états des matériels ...
-	$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
+	$liste_etats = $con_gespac->QueryAll ( "SELECT DISTINCT etat FROM etats ORDER BY etat" );
 	
 
 	
@@ -400,7 +309,7 @@
 				
 					<center>
 				
-					<td>Choisir un modèle * : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'corr_table');" type="text"> </input>
+					Choisir un modèle * : <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'corr_table');" type="text"> </input>
 				
 					<br><br>
 					
@@ -453,7 +362,7 @@
 				
 				<tr>
 					<TD>Nom du materiel *</TD>
-					<TD><input type=text id=nom name=nom onkeyup="validation();"/></TD>
+					<TD><input type=text id=nom name=nom required onkeyup="validation();"/></TD>
 				</tr>
 				
 				<tr>
@@ -463,7 +372,7 @@
 				
 				<tr>
 					<TD>Numéro de série *</TD> 
-					<TD><input type=text id=serial name=serial onkeyup="validation();"/> <input type=button value="générer" onclick="SSNgenerator(); validation();"><input type=button value="activer" onclick=""></TD>
+					<TD><input required type=text id=serial name=serial onkeyup="validation();"/> <input type=button value="générer" onclick="SSNgenerator(); validation();"></TD>
 				</tr>
 				
 				<tr>
@@ -513,7 +422,7 @@
 					</TD>
 				</tr>
 				<tr>
-					<td colspan=2><br><center><input type=submit value='Ajouter un materiel' id="post_materiel" disabled></center></td>
+					<td colspan=2><br><center><input type=submit value='Ajouter un materiel' id="post_form" disabled></center></td>
 				</tr>
 			</table>
 
@@ -623,10 +532,7 @@
 	if ($action == 'mod') {
 	
 		$id = $_GET['id'];	// Id du matériel à modifier
-	
-		echo "<h2>formulaire de modification d'un matériel</h2><br>";
-		
-		
+			
 		// Requete pour récupérer les données des champs pour le matériel à modifier
 		$materiel_a_modifier = $con_gespac->QueryRow ( "SELECT mat_id, mat_nom, mat_dsit, mat_serial, mat_etat, salle_nom, marque_type, marque_model, mat_origine, marque_stype, marque_marque, mat_mac, materiels.marque_id, user_id FROM materiels, marques, salles WHERE mat_id=$id AND materiels.marque_id = marques.marque_id AND materiels.salle_id = salles.salle_id" );		
 		
@@ -651,10 +557,10 @@
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('nom').focus();
+			$('#nom').focus();
 		</script>
 		
-		<form action="gestion_inventaire/post_materiels.php?action=mod" method="post" name="post_form" id="post_form2">
+		<form action="gestion_inventaire/post_materiels.php?action=mod" method="post" name="post_form" id="formulaire">
 			<input type=hidden name=materiel_id value=<?PHP echo $id;?> >
 			
 				<!--
@@ -676,15 +582,10 @@
 				
 					<center>
 				
-					<table width="500" align="center" cellpadding="10">
-						<tr>
-							<td>Choisir un modèle * :</td>
-							<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'corr_table');" type="text"> </input></td>
-							<td><a href='#' onclick="annuler_choix_modele(<?PHP echo $marque_id;?>, '<?PHP echo $materiel_marque.' '.$materiel_modele; ?>');">annuler</a></td>
-						</tr>
-					</table>
-				
-					<br>
+					Choisir un modèle * :<input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'corr_table');" type="text"> </input>
+					<a href='#' onclick="annuler_choix_modele(<?PHP echo $marque_id;?>, '<?PHP echo $materiel_marque.' '.$materiel_modele; ?>');">annuler</a>
+						
+					<br><br>
 					
 					<?PHP
 					// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
@@ -692,9 +593,9 @@
 					?>
 					
 					<!-- s'affiche si il n'y a pas de résultat -->
-					<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez d'abord créer le modèle manuellement.</div>
+					<div id="pasderesultat" style='display:none; color:red;'>Pas de résultat, vous devez d'abord créer le modèle manuellement.</div>
 					
-					<table id="corr_table" class='tablehover'>
+					<table id="corr_table" class='alternate smalltable'>
 
 						<?PHP
 							foreach ( $liste_marques as $marque) {
@@ -721,7 +622,7 @@
 				</div>	 
 			<br>
 			<center>
-			<table width=500>
+			<table width=500 id='proprietes' style='text-align:left;'>
 			
 				<tr>
 					<TD>Nom du materiel</TD>
@@ -737,8 +638,8 @@
 					<TD>Numéro de série</TD>
 					<TD><input type="text" name="serial" id="serial" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
 						<a href='#' onclick='SSN_modifier();' onkeyup='validation();'>
-							<img src='./img/cadenas_ferme.png' id="img_cadenas_ouvert" style="display" title="Passer en écriture">
-							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ferme" style="display:none" title="Passer en Read only">
+							<img src='./img/cadenas_ferme.png' id="img_cadenas_ouvert" title="Passer en écriture">
+							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ferme" style="display:none;" title="Passer en Read only">
 						</a><!--<input type=button value="Passer en écriture" id="activer_ssn" onclick="SSN_modifier ();">-->
 					</TD>
 				</tr>
@@ -834,7 +735,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Modifier ce matériel' >
+			<input type=submit value='Modifier ce matériel' id="post_form" >
 
 			</center>
 
