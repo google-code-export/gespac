@@ -116,44 +116,35 @@
 	
 	function change_combo_mac() {
 		
-		var inputbox = $("mac_input");
-		var tr_inputbox = $("textbox_type");
+		if ($("#mac_input").is(':visible')) {
 		
-		if (inputbox.style.display == "") {
-
-			inputbox.style.display = 'none';
-			tr_inputbox.style.display = 'none';
+			$("#mac_input").hide();
+			$("#textbox_type").hide();
 			
 			// On vide le champ inputbox
-			inputbox.value = "";
+			$("#mac_input").val("");
 			
-			tr_inputbox.style.display = 'none';
+			$("#textbox_type").hide();
 			
 			// On affiche chaque ligne contenant un radio button
-			$$(".combo_type").each ( function (e) {
-				e.style.display = "";	
-			})
+			$(".combo_type").show();
 			
 			// On change l'intitulé du message à côté du +
-			$('change_mac').innerHTML = "Adresse MAC manuelle";
+			$('#change_mac').html("Adresse MAC manuelle");
 				
 		} else {
-
-			inputbox.style.display = '';
-			tr_inputbox.style.display = '';
+			
+			$("#textbox_type").show();
+			$("#mac_input").show();
 			
 			// On masque chaque ligne contenant un radio button
-			$$(".combo_type").each ( function (e) {
-				e.style.display = "none";	
-			})
+			$(".combo_type").hide();
 			
 			// On unckeck tous les radio buttons
-			$$(".mac_radio").each ( function (e) {
-				e.checked = false;	
-			})
+			$(".mac_radio").prop("checked", false);
 			
 			// On change l'intitulé du message à côté du +
-			$('change_mac').innerHTML = "Choix des adresses MAC";
+			$('#change_mac').html ("Choix des adresses MAC");
 		}
 		
 	}
@@ -181,7 +172,7 @@
 	}
 	
 
-	
+
 	/******************************************
 	*
 	*		Générateur de ssn aléatoire
