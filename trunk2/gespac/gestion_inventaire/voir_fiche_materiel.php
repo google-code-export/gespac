@@ -26,16 +26,15 @@
 	********************************************/
 	
 	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
-	$link_bases = mysql_pconnect('localhost', 'root', $pass);//connexion à la base de donnée	
-	if(!mysql_select_db($ocsweb, $link_bases)) { }
-	else {
-		// cnx ocs
-		$con_ocs = new Sql($host, $user, $pass, $ocsweb);
+	
+	$con_ocs = new Sql($host, $user, $pass, $ocsweb);
+
+	if( $con_ocs->Exists() ){
 		
 		// RQ POUR INFO OCS
 		$materiel_ocs    = $con_ocs->QueryRow ( "SELECT NAME, USERDOMAIN, OSNAME, OSCOMMENTS, PROCESSORT, MEMORY, FIDELITY, USERID, SMANUFACTURER, SMODEL, SSN, networks.HARDWARE_ID as hid, hardware.ID as id FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
 		$materiel_ocs_id = $materiel_ocs[12];
-		
+	
 		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
 			// RQ POUR INFO cartes rzo
 			$rq_cartes_reseaux = $con_ocs->QueryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[11] );
@@ -65,15 +64,13 @@
 	********************************************/
 	
 	//On vérifie l'existance de la base FOG même souci que OCS plantage de la page.
-	if(!mysql_select_db($fog, $link_bases)) {$message_fog = "Base FOG non présente";}
-	else {
+	$con_fog = new Sql($host, $user, $pass, $fog);
 	
-		// cnx fog
-		$con_fog = new Sql($host, $user, $pass, $fog);
+	if($con_fog->Exists()) {
 	
 		$host_id = $con_fog->QueryOne ( "SELECT hostID FROM hosts, inventory WHERE hosts.hostID = inventory.iHostID AND inventory.iSysserial='$mat_ssn';" );	
 		$host_nom_id = $con_fog->QueryOne ( "SELECT hostID FROM hosts WHERE hosts.hostName='$mat_nom';" );
-			
+		
 
 		if ( $host_id ) { 
 			
@@ -104,11 +101,11 @@
 			$message_fog = "Ce matériel n'existe pas dans FOG.";
 		}
 	}
+	else {$message_fog = "Base FOG non présente";}
 	
 
 	// OCS
-	if(!mysql_select_db('ocsweb', $link_bases)) {$message_ocs = "Base OCS non présente";}//Base OCS absente on affiche ce message dans la liste
-	else {
+	if($con_ocs->Exists()) {	
 		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
 			$NAME 			= $materiel_ocs[0]; 
 			$USERDOMAIN 	= $materiel_ocs[1];  
@@ -125,7 +122,7 @@
 		} else {
 			$message_ocs = "Ce matériel n'existe pas dans OCS.";//Base OCS existe mais materiel non
 		}
-	}
+	} else {$message_ocs = "Base OCS non présente";}//Base OCS absente on affiche ce message dans la liste
 
 
 	////////////////////////////////////
