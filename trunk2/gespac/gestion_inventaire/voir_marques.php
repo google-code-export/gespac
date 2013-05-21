@@ -87,10 +87,10 @@
 					$afficher_modifier = $quadruplet <> "" ? "none" : "" ;
 						
 					
-					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?maxheight=650&marque_type=$type' class='editbox' title='Liste des matériels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?maxheight=650&marque_stype=$soustype' class='editbox' title='Liste des matériels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_marque.php?maxheight=650&marque_marque=$marque' class='editbox' title='Liste des matériels de marque $marque'>" . $marque . "</a> [" . $nb_matos_de_cette_marque . "] </td>";
-					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?maxheight=650&marque_model=$model' class='editbox' title='Liste des matériels de modèle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
+					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?maxheight=650&marque_type=$type' class='infobox' title='Liste des matériels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?maxheight=650&marque_stype=$soustype' class='infobox' title='Liste des matériels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_marque.php?maxheight=650&marque_marque=$marque' class='infobox' title='Liste des matériels de marque $marque'>" . $marque . "</a> [" . $nb_matos_de_cette_marque . "] </td>";
+					echo "<td><a href='gestion_inventaire/voir_membres-marque_model.php?maxheight=650&marque_model=$model' class='infobox' title='Liste des matériels de modèle $model'>" . $model . "</a> [" . $nb_matos_de_ce_modele ."] </td>";
 					
 					if ($E_chk) {
 						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?id=$id' class='editbox' title='Ajouter un matériel à $marque $model'><img src='" . ICONSPATH . "add3.png'> </a></td>";

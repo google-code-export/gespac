@@ -359,17 +359,17 @@
 				echo "<tr id=tr_id$id>";
 				
 					/*	chckbox	*/	if ( $E_chk ) echo "<td> <input type=checkbox name=chk indexed=true value='$id' class='chk_line' id='$id'> </td>";	
-					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?maxheight=650&mat_nom=$nom&mat_ssn=$serial' class='editbox' title='Fiche du matériel $nom'>$nom</a> </td>";
+					/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?maxheight=650&mat_nom=$nom&mat_ssn=$serial' class='infobox' title='Fiche du matériel $nom'>$nom</a> </td>";
 					/*	pret	*/	echo "<td class='td_pret' style='display:none'><font color=$font_color> $pret </font></td>";
 					/*	dsit	*/	echo "<td class='td_dsit'> $dsit </td>";
 					/*	serial	*/	echo "<td class='td_serial'> $serial </td>";
-					/*	etat	*/	echo "<td class='td_etat'> <a href='gestion_inventaire/voir_membres_etat.php?maxheight=650&etat=$etat' class='editbox' title='Liste des materiels $etat'>$etat</a> </td>";
-					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?maxheight=650&marque_type=$type' class='editbox' title='Liste de la famille $type'>$type</a></td>";
-					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?maxheight=650&marque_stype=$stype' class='editbox' title='Liste de la sous famille $stype'>$stype</a></td>";
-					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?maxheight=650&marque_marque=$marque' class='editbox' title='Liste de la marque $marque'>$marque</a></td>";
-					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?maxheight=650&marque_model=$model' class='editbox' title='Liste du modèle $model'>$model</a></td>";
-					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?maxheight=650&salle_id=$salle_id' class='editbox' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
-					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?maxheight=650&origine=$origine' class='editbox' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
+					/*	etat	*/	echo "<td class='td_etat'> <a href='gestion_inventaire/voir_membres_etat.php?maxheight=650&etat=$etat' class='infobox' title='Liste des materiels $etat'>$etat</a> </td>";
+					/*	type	*/	echo "<td class='td_type' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_type.php?maxheight=650&marque_type=$type' class='infobox' title='Liste de la famille $type'>$type</a></td>";
+					/*	stype	*/	echo "<td class='td_stype' style='display:none'> <a href='gestion_inventaire/voir_membres-marque_stype.php?maxheight=650&marque_stype=$stype' class='infobox' title='Liste de la sous famille $stype'>$stype</a></td>";
+					/*	marque	*/	echo "<td class='td_marque'> <a href='gestion_inventaire/voir_membres-marque_marque.php?maxheight=650&marque_marque=$marque' class='infobox' title='Liste de la marque $marque'>$marque</a></td>";
+					/*	modele	*/	echo "<td class='td_modele' > <a href='gestion_inventaire/voir_membres-marque_model.php?maxheight=650&marque_model=$model' class='infobox' title='Liste du modèle $model'>$model</a></td>";
+					/*	salle	*/	echo "<td class='td_salle'> <a href='gestion_inventaire/voir_membres_salle.php?maxheight=650&salle_id=$salle_id' class='infobox' title='Liste du matériel dans la salle $salle'>$salle</a> </td>";
+					/*	origine	*/	echo "<td class='td_origine'> <a href='gestion_inventaire/voir_membres_origine.php?maxheight=650&origine=$origine' class='infobox' title='Liste du matériel ayant pour origine $origine'>$origine</a> </td>";
 					
 					if ( $E_chk ) {
 						/*	modif	*/	echo "<td class='buttons'><a href='gestion_inventaire/form_materiels.php?action=mod&id=$id&mat_ssn=$serial' class='editbox' title='Formulaire de modification du matériel $nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";

@@ -168,6 +168,40 @@ $(function () {
 		return false;	//on ne suit pas le lien cliquable
 		
 	});
+	
+	
+	// **************************************************************** CREATION / EDITION DANS UNE DIALOGBOX
+	$('a.infobox').click(function(){
+
+		var url = this.href;
+		var title = this.title;
+		
+		var width = "auto";
+		var height = "auto";
+		var maxheight = "auto";
+		var modal = false;
+		
+		if (url.match(/[&|?]width=([^&]+)/)) width = url.match(/[&|?]width=([^&]+)/)[1];
+		if (url.match(/[&|?]height=([^&]+)/)) height = url.match(/[&|?]height=([^&]+)/)[1];
+		if (url.match(/[&|?]maxheight=([^&]+)/)) maxheight = url.match(/[&|?]maxheight=([^&]+)/)[1];
+		if (url.match(/[&|?]modal=([^&]+)/)) modal = url.match(/[&|?]modal=([^&]+)/)[1];
+							
+		var infobox = $("#infobox");
+		if ($("#infobox").length == 0) {	infobox = $('<div id="infobox" style="display:hidden"></div>').appendTo('body');	} 
+
+		// load remote content
+		infobox.load(
+			url,
+			{},
+			function(responseText, textStatus, XMLHttpRequest) {
+				infobox.dialog({	title:title, width:width, height:height, modal:modal, stack: false});
+				infobox.css('maxHeight', maxheight + "px"); //on applique une hauteur maximum
+			}
+		);
+		
+		return false;	//on ne suit pas le lien cliquable
+		
+	});
 
 	
 	
