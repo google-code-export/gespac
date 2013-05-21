@@ -249,26 +249,6 @@
 	
 	// action à executer
 	$action	 = $_GET['action'];
-	$mat_ssn = $_GET['mat_ssn'];		//le SSN va nous servir pour récupérer les adresses MAC d'OCS
-	
-	
-	// On regarde si la base OCS existe car dans le cas de sa non existance la page ne s'affiche pas
-	$link_bases = mysql_pconnect('localhost', $user, $pass);//connexion à la base de donnée
-	if(!mysql_select_db('ocsweb', $link_bases)) {}
-	else {
-	
-		// Connexion à la base de données ocsweb
-		$con_ocs 	= new Sql ( $host, $user, $pass, $ocsweb );
-		
-		// RQ POUR INFO OCS
-		$materiel_ocs    = $con_ocs->QueryRow ( "SELECT networks.HARDWARE_ID as hid, hardware.ID as id FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
-		$materiel_ocs_id = $materiel_ocs[1];
-		
-		if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
-			// RQ POUR INFO cartes rzo
-			$rq_cartes_reseaux = $con_ocs->QueryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[0] );
-		}
-	}
 	
 	// Connexion à la base de données GESPAC
 	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
@@ -552,7 +532,7 @@
 		$marque_id				= $materiel_a_modifier[12];
 		$user_id				= $materiel_a_modifier[13];
 
-		$disabled = $user_id <> 1 ? " style='display:none;'": "";
+		$disabled = $user_id <> 1 ? " style='display:none;'": "";	// Si le matériel est prêté on vire la possibilité de modifier la salle
 		?>
 		
 		<script>
@@ -626,7 +606,7 @@
 			
 				<tr>
 					<TD>Nom du materiel</TD>
-					<TD><input type=text name=nom id=nom value= "<?PHP echo $materiel_nom; ?>" 	/></TD>
+					<TD><input type=text name=nom id=nom required value= "<?PHP echo $materiel_nom; ?>" 	/></TD>
 				</tr>
 				
 				<tr>
@@ -646,14 +626,27 @@
 				
 				<?PHP
 				
+				// Adresse MAC dans OCS
+				
+				$mat_ssn = $_GET['mat_ssn'];
+				
+				$con_ocs = new Sql ( $host, $user, $pass, $ocsweb );
+				
+				if ( $con_ocs->Exists() ) {
+					// RQ POUR INFO OCS
+					$materiel_ocs    = $con_ocs->QueryRow ( "SELECT networks.HARDWARE_ID as hid, hardware.ID as id FROM hardware, bios, networks WHERE bios.SSN = '$mat_ssn' AND bios.HARDWARE_ID = hardware.id AND networks.HARDWARE_ID = hardware.id;" );
+					$materiel_ocs_id = $materiel_ocs[1];
+				}
 				
 				
 				if ( $materiel_ocs_id ) {	// si le matériel existe dans ocs
+					
+					$rq_cartes_reseaux = $con_ocs->QueryAll ( "SELECT MACADDR, SPEED FROM networks WHERE HARDWARE_ID = " . $materiel_ocs[0] );
 				
 					// Liste des boutons radion à remplacer
 					foreach ($rq_cartes_reseaux as $record) {
-						$SPEED   = $record[1];
-						$MACADDR = $record[0];
+						$SPEED   = $record['SPEED'];
+						$MACADDR = $record['MACADDR'];
 						
 						$select = ($materiel_mac == $MACADDR) ? "checked" : "";
 						
@@ -664,6 +657,8 @@
 					}
 					
 					
+					
+					
 					// Le inputbox de remplacement quand on clique sur le plus
 					echo "<TR id='textbox_type' style='display:none;'>
 							<TD>Adresse MAC</TD>
@@ -672,8 +667,6 @@
 						
 					// Le bouton + pour switcher entre le input et les radio buttons	
 					echo "<tr><td>&nbsp</td><td align=center><a href=# onclick=\"change_combo_mac();\"> <img src='./img/add.png' style='float:top;'> <span id='change_mac'>Adresse MAC manuelle</span></a></td></tr>";
-					
-					
 						
 				} 
 				else {	// Le matériel n'existe pas, on ne propose qu'un input
@@ -682,6 +675,8 @@
 							<TD><input name='mac_input' id='mac_input' size=17 maxlength=17 type='text' value='$materiel_mac'></TD>
 						</TR>";
 				}
+				
+				$con_ocs->Close();
 				
 				?>
 								
@@ -712,15 +707,17 @@
 				</tr>
 				
 			
-				<tr <?PHP echo $disabled; ?>>
+				<tr <?PHP echo $disabled; ?> >
+				
 					<TD>Salle où se trouve le matériel</TD> 
 					<TD>
 						<select name="salle" >
 							<?PHP
+							$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
-								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT salle_nom FROM salles" );
-								foreach ( $req_salles_disponibles as $record) { 
-									$salle_nom = $record['salle_nom'];
+								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT salle_nom FROM salles" );
+								foreach ( $req_salles_disponibles as $salle) { 
+									$salle_nom = $salle['salle_nom'];
 									$selected = $salle_nom == $materiel_salle ? "selected" : "";
 									
 									echo "<option $selected value='$salle_nom'>$salle_nom</option>";
@@ -730,12 +727,14 @@
 					</TD>
 				</tr>
 				
-				
+				<tr>
+					<td colspan=2><br><center><input type='submit' value='Modifier ce matériel' id="post_form" ></center></td>
+				</tr>
 
 			</table>
 
 			<br>
-			<input type=submit value='Modifier ce matériel' id="post_form" >
+			
 
 			</center>
 
