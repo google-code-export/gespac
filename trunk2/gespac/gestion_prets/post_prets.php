@@ -35,8 +35,8 @@
 	
 	if ( $action == 'preter' ) {
 	
-		$matid 		= $_GET['matid'];
-		$userid		= $_GET['userid'];
+		$matid 		= $_POST['mat_id'];
+		$userid		= $_POST['user_id'];
 			
 		$req_preter_materiel = "UPDATE materiels SET user_id = $userid WHERE mat_id =$matid ;";
 		$con_gespac->Execute ( $req_preter_materiel );
@@ -71,10 +71,9 @@
 	/**************** RENDRE ********************/	
 	if ( $action == 'rendre' ) {
 	
-		$matid 		= $_GET['matid'];
-		$userid		= $_GET['userid'];
-	
-		
+		$matid 		= $_POST['mat_id'];
+		$userid		= $_POST['user_id'];
+				
 		// On récupère le nom de l'utilisateur en fonction du user_id
 		$user_nom = $con_gespac->QueryOne ( "SELECT user_nom FROM users WHERE user_id = $userid" );
 		

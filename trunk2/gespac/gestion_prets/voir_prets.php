@@ -28,10 +28,9 @@
 				if ( $E_chk ) {
 				?>
 				
-				<input type=hidden name=pret_a_poster id=pret_a_poster value=''>	<!--	ID du pret à poster	-->
-				<input type=hidden name=row_table id=row_table value=''>			<!--	ROW du pret à poster	-->
-				<input type=hidden name=select_user id=select_user value=''>		<!--	USER_ID du pret à poster	-->
 				
+				<!--	ID du pret à poster	-->
+				<input type=hidden name=pret_a_poster id=pret_a_poster value=''>					
 				
 				
 				
@@ -62,7 +61,7 @@
 					
 					</select>
 					
-					<?PHP echo "<input type=button value='PRETER LE MATERIEL' onclick=\"javascript:validation_preter_materiel(pret_a_poster.value, user_select.value, row_table.value);\"> "; ?>
+					<?PHP echo "<a id='preter_bt' href='gestion_prets/form_prets.php?action=pret&mat=0&user=0' class='editbox' title='PRETER le matériel'><img src='" . ICONSPATH . "refresh.png'></a> "; ?>
 					
 				</div>
 				
@@ -72,7 +71,7 @@
 				--------------------------------------------------------------------->
 				
 				<div id="rendre" style="display:none; text-align:center">		
-					<?PHP echo "<input type=button value='RENDRE LE MATERIEL' onclick=\"javascript:validation_rendre_materiel(pret_a_poster.value, select_user.value, row_table.value);\"> "; ?>
+					<?PHP echo "<a id='rendre_bt' href='gestion_prets/form_prets.php?action=rendre&mat=0' class='editbox' title='RENDRE le matériel'><img src='" . ICONSPATH . "refresh.png'></a>"; ?>
 				</div>				
 				<?PHP } // fin test de droit sur le prêt ?>
 				
@@ -81,8 +80,8 @@
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> 
-				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'prets_table');" type="text" value=<?PHP echo $_GET['filter'];?>> 
-				<span id="nb_filtre" title='nombre de matériels affichés'></span>
+				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'prets_table');" type="text" value=<?PHP echo $_GET['filter'];?>> 
+				<span id="filtercount" title="Nombre de lignes filtrées"></span>
 			</form>
 			
 		</span>
@@ -106,7 +105,7 @@
 	
 	<center>
 	
-	<table class="tablehover" id="prets_table">
+	<table class="bigtable alternate hover" id="prets_table">
 	
 	<?PHP
 		if ($E_chk) echo "<th> &nbsp </th>";
@@ -120,30 +119,23 @@
 		<th style="display:none"></th>
 	
 		<?PHP	
-			
-			$compteur = 0;
+
 			// On parcourt le tableau
 			foreach ( $liste_des_prets as $record ) {
-				// On écrit les lignes en brut dans la page html
-
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-						
-				echo "<tr class=$tr_class>";
-						
-					$mat 		= $record['mat_nom'];
-					$serial 	= $record['mat_serial'];
-					$type 		= $record['marque_type'];
-					$model 		= $record['marque_model'];
-					$salle 		= $record['salle_nom'];
-					$user	 	= $record['user_nom'];
-					$mat_id		= $record['mat_id'];
-					$salle_id	= $record['salle_id'];
-					$user_id	= $record['user_id'];
-					$inventaire	= $record['mat_dsit'];
-					$etat		= $record['mat_etat'];
-					
-					
+								
+				$mat 		= $record['mat_nom'];
+				$serial 	= $record['mat_serial'];
+				$type 		= $record['marque_type'];
+				$model 		= $record['marque_model'];
+				$salle 		= $record['salle_nom'];
+				$user	 	= $record['user_nom'];
+				$mat_id		= $record['mat_id'];
+				$salle_id	= $record['salle_id'];
+				$user_id	= $record['user_id'];
+				$inventaire	= $record['mat_dsit'];
+				$etat		= $record['mat_etat'];
+				
+				echo "<tr id='tr$mat_id'>";			
 						
 					// couleurs et noms					
 					if ( $user_id == 1 ) {
@@ -152,23 +144,21 @@
 					} else { $apreter_color = "#F57236"; }
 					
 					if ( $E_chk ) {
-						echo "<td> <input type=radio name=radio value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $user_id, this.parentNode.parentNode.rowIndex);\"> </td>";
+						echo "<td> <input type='radio' name='radio' class='radio' value='$mat_id'> </td>";
 					}
 					
-					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' rel='slb_prets title='Caractéristiques de $mat'>$mat</a> </td>";
+					echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$mat&mat_ssn=$serial' class='infobox' title='Fiche du matériel $mat'>$mat</a> </td>";
 					
-					//echo "<td> $serial </td>";
-					echo "<td> $inventaire </td>";
-					echo "<td> $type </td>";
-					echo "<td> $model </td>";
-					echo "<td> $etat </td>";
+					echo "<td class='inventaire'> $inventaire </td>";
+					echo "<td class='type'> $type </td>";
+					echo "<td class='model'> $model </td>";
+					echo "<td class='etat'> $etat </td>";
 					echo "<td bgcolor=$apreter_color><a href='gestion_prets/convention_pret.php?matid=$mat_id&userid=$user_id' target=_blank> $user </a></td>";
 					
-					echo "<td style=display:none>$mat</td>"; //permet de récupérer juste le nom de la machine pour les fonctions JS de prêt et rendu des machines
+					echo "<td style='display:none' class='nom'>$mat</td>"; //permet de récupérer juste le nom de la machine pour les fonctions JS de prêt et rendu des machines
+					echo "<td style='display:none' class='user' id='user$mat_id'>$user</td>"; //permet de récupérer juste le nom de l'utilisateur
 		
 				echo "</tr>";
-				
-				$compteur++;
 			}
 		?>		
 
@@ -186,127 +176,59 @@
 
 <script type="text/javascript">
 
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_prets'});
-	});
 	
 	// Filtre rémanent
-	filter ( $('filt'), 'prets_table' );
+	filter ( $('#filt').val(), 'prets_table' );
 	
 	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = $(_id);
-		var ele;
-		var compteur = 0;
-			
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-					compteur++;
-				} 
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;
-			
-			$('nb_filtre').innerHTML = "<small>" + compteur + "</small>";
-		}
-	}
-	
-	
-	
-	// *********************************************************************************
-	//
-	//				Ajout des index pour postage sur clic de la radiobox
-	//
-	// *********************************************************************************	
-	 
-	function select_cette_ligne( id, userid, row ) {
-
-		$('pret_a_poster').value = id;		
-		$('row_table').value = row;	// row du tableau à modifier
-		$('select_user').value = userid;	// userid du matos à modifier
+	$(function() {	
 		
-		if ( userid == 1 ) {	// On se base sur la valeur USER_ID de root
-			$('rendre').setStyle("display", "none");
-			$('preter').setStyle("display", "inline");
+		// ----------------------------------------------- Sur modification du combobox des users
+		
+		$('#user_select').change(function(){
+				
+			$('#preter_bt').attr("href", function(i,a){			
+				var str = a.replace( /(mat=)[0-9]+/ig, '$1'+ $('#pret_a_poster').val() );
+				var str = str.replace( /(user=)[0-9]+/ig, '$1'+ $('#user_select').val() );
+				return str;
+			});	
+		});
+		
+		
+		
+		// ----------------------------------------------- Sur choix d'une ligne de matériel
+		
+		$('.radio').click(function(e){
 			
-		} else {
-			
-			$('rendre').setStyle("display", "block");
-			$('preter').setStyle("display", "none");
-		}			
-
-	}
-	
-	
-	
-	// *********************************************************************************
-	//
-	//				PRETER UN MATERIEL
-	//
-	// *********************************************************************************	
-	 
-	function validation_preter_materiel( matid, userid, row ) {
+			$('#pret_a_poster').val($(this).val());	// ID du matériel à prêter
+				
 		
-		var mat_nom = $('prets_table').rows[row].cells[7].innerHTML;
-		var mat_etat = $('prets_table').rows[row].cells[5].innerHTML;
-		
-		var user_selected_id = $('user_select').selectedIndex;
-		var user_selected_text = $('user_select').options[user_selected_id].text;	
-		
-		var valida = confirm('Voulez-vous vraiment prêter le matériel ' + mat_nom + ' qui est en état '+ mat_etat + ' à ' + user_selected_text + " ?");
-		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
-		if (valida) {
-			//	poste la page en ajax	
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("gestion_prets/post_prets.php?action=preter&matid=" + matid + "&userid=" + userid);
-			window.setTimeout("document.location.href='index.php?page=prets&filter=" + $('filt').value + "'", 2000);
-		}
-	}
-
-
+			// On se base sur la valeur du champ caché 'user' pour afficher PRETER ou RENDRE
+			if ( $('#user' + $(this).val()).html() == 'DISPONIBLE' ) {	
+				$('#rendre').hide();
+				$('#preter').show();
+				
+				$('#preter_bt').attr("href", function(i,a){			
+					var str = a.replace( /(mat=)[0-9]+/ig, '$1'+ $('#pret_a_poster').val() );
+					var str = str.replace( /(user=)[0-9]+/ig, '$1'+ $('#user_select').val() );
+					return str;
+				});	
+				
+			} else {
+				$('#rendre').show();
+				$('#preter').hide();
+				
+				$('#rendre_bt').attr("href", function(i,a){			
+					var str = a.replace( /(mat=)[0-9]+/ig, '$1'+ $('#pret_a_poster').val() );
+					return str;
+				});	
+				
+			}	
 	
+		});
 	
-	// *********************************************************************************
-	//
-	//				RENDRE UN MATERIEL
-	//
-	// *********************************************************************************	
-	 
-	function validation_rendre_materiel( matid, userid, row ) {
-		
-		var mat_nom = $('prets_table').rows[row].cells[7].innerHTML;
+	});
 	
-		var valida = confirm('Voulez-vous vraiment rendre le matériel ' + mat_nom + " ?");
-		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
-		if (valida) {
-					
-			//	poste la page en ajax
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("gestion_prets/post_prets.php?action=rendre&matid=" + matid + "&userid=" + userid);
-			window.setTimeout("document.location.href='index.php?page=prets&filter=" + $('filt').value + "'", 2000);
-		}
-	}
 	
 </script>
 
