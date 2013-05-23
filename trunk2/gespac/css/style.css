@@ -91,8 +91,8 @@ img {border:0px; vertical-align:middle;}
 
 
 /*	Entetes des pages (avec les options dedans)	*/
-.entetes { font-size:14px; font-weight:700; padding:6px 15px; border-bottom:solid #B8B8B8 1px; float:top; left:0; position:fixed; width:100%; z-index:10; background-color:#fff; /*box-shadow:1px 1px 5px #888;*/}
-.entetes-titre 		{float:left; font-size:100%; /*text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;*/}
+.entetes { opacity:1; font-size:14px; font-weight:700; padding:6px 15px; border-bottom:solid #B8B8B8 1px; float:top; left:0; position:fixed; width:100%; z-index:10; background-color:#fff; /*box-shadow:1px 1px 5px #888;*/}
+.entetes-titre 		{float:left; font-size:100%; opacity:1;/*text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;*/}
 .entetes-titre img 	{height:24px; margin-left:10px; cursor:pointer;}
 .entetes-options 	{float:right; font-size:12px; margin-right:20px;}
 .entetes-options .option {float:left; padding:0 3px;}

@@ -24,47 +24,12 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_logs.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("gestion_donnees/post_logs.php");
+			$('#targetback').show(); $('#target').show();
+			$('#target').load("gestion_donnees/post_logs.php");
 			window.setTimeout("document.location.href='index.php?page=logs'", 1500);			
 		}
 	}		
-	
-	
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-			
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				} 
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;
-		}
-	}
-	
+		
 </script>	
 
 
@@ -81,7 +46,7 @@
 		
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'log_prets_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'log_prets_table');" type="text" value=<?PHP echo $_GET['filter'];?>><span id="filtercount" title="Nombre de lignes filtrées"></span></form>
 		</span>
 	</span>
 
@@ -99,7 +64,7 @@
 
 ?>
 	
-	<table id="log_prets_table" class='tablehover'>
+	<table id="log_prets_table" class='alternate hover bigtable'>
 	
 		<th>Type</th>
 		<th>Date</th>
@@ -107,7 +72,6 @@
 	
 		<?PHP	
 
-			$compteur = 0;
 			// On parcourt le tableau
 			foreach ( $liste_des_logs as $record ) {
 	
@@ -115,8 +79,6 @@
 				$type 		= $record['log_type'];
 				$texte		= urldecode($record['log_texte']);
 
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
 						
 				// couleur operation
 				switch ($type) {
@@ -148,13 +110,12 @@
 				}
 				
 					
-				echo "<tr class='$tr_class'>";									
+				echo "<tr class='ligne'>";									
 					echo "<td bgcolor=$td_color> $type </td>";
 					echo "<td>$date</td>";
 					echo "<td align=left>$texte</td>";
 				echo "</tr>";
-				
-				$compteur++;				
+			
 			}
 		?>	
 			
