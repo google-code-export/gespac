@@ -84,9 +84,13 @@ $(function () {
 	toggleAffichage(1100);
 
 
-	/////////////////////////////////////////////////////////////
-	//	Change l'affichage en fonction de la taille de la fenetre
-	/////////////////////////////////////////////////////////////
+	/*
+	* @name: toggleAffichage
+	* @param : int:size
+	* @return : rien
+	* @description : Change l'affichage en fonction de la taille de la fenetre (fait disparaitre le menu)
+	* @reference : index
+	*/
 	function toggleAffichage(size) {
 		if ($(window).width() < size ) {
 			$('#menu').hide();
@@ -111,26 +115,20 @@ $(function () {
 		
 	}
 	
-	
-	///////////////////////////////////////////
-	//		AFFICHE L'AIDE EN LIGNE
-	///////////////////////////////////////////
+
+	// **************************************************************** AFFICHE L'AIDE EN LIGNE
 	$('.help-button').click( function(e)  {
 		$(".helpbox").toggle("fade");
 	});
 	
 	
-	///////////////////////////////////////////
-	//	Si la taille de la page est trop juste
-	///////////////////////////////////////////
+	// **************************************************************** Si la taille de la page est trop juste
 	$(window).resize( function(){	
 		toggleAffichage(1100);
 	});
 	
 	
-	///////////////////////////////////////////
-	//	toggle du menu quand la page est trop petite
-	///////////////////////////////////////////
+	// **************************************************************** toggle du menu quand la page est trop petite
 	$('#toggle-menu').click( function()  {
 		$('#menu').toggle("slide");
 	});
