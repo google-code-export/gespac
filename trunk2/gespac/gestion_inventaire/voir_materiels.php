@@ -450,7 +450,6 @@
 		
 		$('.chk_line').click(function(){
 			
-			var poster = $('#materiel_a_poster').val();
 			var id = $(this).attr('id');
 			
 			if ( $(this).is(':checked') ){		

@@ -63,7 +63,7 @@
 			// On parcourt le tableau
 			foreach ($liste_des_marques as $record ) {
 
-				echo "<tr id=tr_id$id class=$tr_class>";
+				echo "<tr id='tr_id$id'>";
 						
 					$id		 	= $record['marque_id'];
 					$type 		= $record['marque_type'];
