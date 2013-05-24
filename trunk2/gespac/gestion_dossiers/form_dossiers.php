@@ -22,8 +22,8 @@
 	include_once ('../config/databases.php');
 	include_once ('../../class/Sql.class.php');
 
-	$dossierid = $_GET["id"];
-
+	$action = $_GET["action"];
+	
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 			
@@ -37,16 +37,15 @@
 *
 *****************************************************************************/		
 		
-if ( $dossierid == -1 ) {
+if ( $action == "add" ) {
 
 
 	$liste_materiels = $con_gespac->QueryAll ('Select mat_id, mat_nom, marque_type, salle_nom FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id;');
 	//$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
 	$liste_salles 	 = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
 	$liste_etats 	 = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
-	$liste_types 	 = $con_gespac->QueryAll ( "SELECT type FROM dossiers_types" );
+	$liste_types 	 = $con_gespac->QueryAll ( "SELECT DISTINCT type FROM dossiers_types" );
 
-	echo "<h3>FORMULAIRE DE CREATION D'UN DOSSIER</h3>";
 	
 	/*	LA LISTE DES FILTRES */
 	
@@ -119,9 +118,7 @@ if ( $dossierid == -1 ) {
 
 
 	echo "<div class='liste_section'>";
-		echo "<table id='dossiers_mat_table' width=100%>";
-		
-		$compteur = 0;
+		echo "<table id='dossiers_mat_table' class='smalltable hover alternate' width=600 >";
 
 		foreach ($liste_materiels as $record) {
 			
@@ -129,19 +126,15 @@ if ( $dossierid == -1 ) {
 			$nom 	= $record['mat_nom'];
 			$type 	= $record['marque_type'];
 			$salle 	= $record['salle_nom'];
+
+			echo "<tr id='tr_id$mat_id' >
 			
-			// alternance des couleurs
-			$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-			
-			echo "<tr id=tr_id$mat_id  class=$tr_class>
-			
-				<td> <input class=chkbx type=checkbox name=chk indexed=true value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $compteur); \"> </td>
+				<td> <input class='chk_line' id='$mat_id' type='checkbox' name='chk' indexed=true value='$mat_id'> </td>
 				<td>$nom</td>
 				<td>$type</td>
 				<td>$salle</td>
 			</tr>";
 			
-			$compteur++;
 		}
 		
 		echo "</table>";	
@@ -196,7 +189,7 @@ if ( $dossierid == -1 ) {
 
 		<br>
 			<span id='nb_selectionnes'></span><br><br>
-			<input type='hidden' name='liste_mat' id='liste_mat'>	
+			<input type='text' name='liste_mat' id='liste_mat'>	
 			<input type='submit' value='Créer le dossier' id='post_dossier' disabled>
 		
 	</form>
@@ -213,9 +206,9 @@ if ( $dossierid == -1 ) {
 *
 *****************************************************************************/		
 
-if ( $dossierid <> -1 ) {
+if ( $action == "mod" ) {
 
-	echo "<h3>FORMULAIRE DE MODIFICATION D'UN DOSSIER</h3>";
+	$dossierid = $_GET["id"];
 	
 	$dossier_courant 	 = $con_gespac->QueryRow ("SELECT * FROM dossiers WHERE dossier_id = $dossierid");
 	
@@ -268,13 +261,13 @@ if ( $dossierid <> -1 ) {
 	// Liste du matériel concerné par le dossier
 	echo "<p>";
 	
-		echo "<center><h4><a href='#' onclick='toggleMateriels();'>LISTE DU MATERIEL CONCERNE</a></h4>";
+		echo "<center><h4><a href='#' id='togglemateriels'>LISTE DU MATERIEL CONCERNE</a></h4>";
 	
 		$arr_dossier_courant_mat = explode(";", $dossier_courant_mat);
 		
-		echo "<div class='dossier_section' id='listemateriels' style='display:none;'>";
+		echo "<div id='listemateriels' style='display:none;'>";
 		
-			echo "<table width=100%>";
+			echo "<table width=600 class='smalltable alternate'>";
 				echo "<th>Matériel</th>";
 				echo "<th>Type</th>";
 				echo "<th>Salle</th>";
@@ -308,12 +301,7 @@ if ( $dossierid <> -1 ) {
 	
 	$page_dossier = $con_gespac->QueryAll ("SELECT txt_id, txt_date, txt_texte, txt_etat, users.user_nom FROM dossiers_textes, users WHERE dossier_id=$dossierid AND txt_user=user_id");
 
-		echo "<table width=750px>";
-			echo "<th>date</th>";
-			echo "<th>Utilisateur</th>";
-			echo "<th>etat</th>";
-		
-			$compteur = 0;
+		echo "<table width=600 class='smalltable' >";
 			
 			foreach ( $page_dossier as $page) {
 				
@@ -328,22 +316,16 @@ if ( $dossierid <> -1 ) {
 					$user_nom 	= 'Anonyme';
 				}
 			
-			
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-				
-				echo "<tr class=$tr_class>";
-					echo "<td width=60px>$txt_date</td>";
-					echo "<td width='60px'>$user_nom</td>";
-					echo "<td width=60px>$txt_etat</td>";
+				echo "<tr>";
+					echo "<td class='td_$txt_etat' width=60px>$txt_date</td>";
+					echo "<td class='td_$txt_etat' width='60px'>$user_nom</td>";
+					echo "<td class='td_$txt_etat' width=60px>$txt_etat</td>";
 				echo "</tr>";
 				
 				echo "<tr class=$tr_class>";
 					echo "<td colspan=3>$txt_texte</td>";
 				echo "</tr>";
-				
-				$compteur++;
-				
+
 			}
 		echo "</table>";
 		
@@ -357,7 +339,43 @@ if ( $dossierid <> -1 ) {
 
 <script type="text/javascript">
 	
+	$(function(){
+		
+		//--------------------------------------- Selection d'une ligne
+		$('.chk_line').click(function(){
+
+			var id = $(this).attr('id');
+			
+			if ( $(this).is(':checked') ){		
+				$('#liste_mat').val( $('#liste_mat').val() + ";" + id );
+				$("#tr_id" + id).addClass("selected");
+			}
+			else {
+				$('#liste_mat').val( $('#liste_mat').val().replace(";" + id + ";", ";") );	// Supprime la valeur au milieu de la chaine
+				var re = new RegExp(";" + id + "$", "g"); $('#liste_mat').val( $('#liste_mat').val().replace(re, "") );			// Supprime la valeur en fin de la chaine
+				$("#tr_id" + id).removeClass("selected");
+				$('#checkall').prop("checked", false);
+			}
+			
+			// On affiche les boutons
+			if ( $('#liste_mat').val() != "" ) {				
+				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+			} else { 
+				$('#nb_selectionnes').hide();
+			}
+			
+		});	
+		
+		//--------------------------------------- Fait apparaitre la partie matériels concernés dans la modification d'un dossier
+		$('#togglemateriels').click(function(){
+			$('#listemateriels').toggle();
+		});
+		
+	});
 	
+	
+	
+/*	
 	  window.addEvent('domready', function() {
 
 		// AJAX		
@@ -430,14 +448,14 @@ if ( $dossierid <> -1 ) {
 		
 		
     });
-	
+	*/
 	
 	// *********************************************************************************
 	//
 	//				Fonction de filtrage des tables
 	//
 	// *********************************************************************************
-
+/*
 	function filter (phrase, _id, col){
 		
 		if ( phrase == "---") phrase = "";
@@ -466,7 +484,7 @@ if ( $dossierid <> -1 ) {
 			table.rows[r].style.display = displayStyle;	
 		}
 	}
-	
+	*/
 	
 	
 	// *********************************************************************************
@@ -474,7 +492,7 @@ if ( $dossierid <> -1 ) {
 	//				selectionne une ligne du tableau pour postage
 	//
 	// *********************************************************************************
-
+/*
 	function select_cette_ligne( tr_id, num_ligne, check ) {
 
 		var chaine_id = $('liste_mat').value;
@@ -527,18 +545,18 @@ if ( $dossierid <> -1 ) {
 			$('liste_mat').value = table_id.join(";");
 		}
 	}
-	
+	*/
 	// *********************************************************************************
 	//
 	//	Show / Hide la partie MATERIELS dans le formulaire de modification des dossiers
 	//
 	// *********************************************************************************
 
-	function toggleMateriels () {
+	/*function toggleMateriels () {
 		if ( $('listemateriels').getStyle("display") == "none" ) 
 			$('listemateriels').setStyle("display", 'block');
 		else $('listemateriels').setStyle("display", 'none');		
-	}
+	}*/
 	
 	
 	// *********************************************************************************
