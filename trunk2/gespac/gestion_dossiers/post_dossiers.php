@@ -26,7 +26,7 @@
 		$add_inter		= $_POST ['add_inter'];
 		$active_mailing	= $_POST ['active_mailing']; 
 		$mailing = $active_mailing == "on" ? 1 : 0;
-		$mat_hs			= $_POST ['mat_hs'];
+		$matetat = addslashes($_POST ['etat']);
 		$current_user	= $con_gespac->QueryOne("SELECT user_id FROM users WHERE user_logon = '" . $_SESSION['login'] . "'");
 		
 		// On créé le dossier
@@ -50,24 +50,18 @@
 		
 		
 		// Si on veut changer l'état du matériel
-		if ( $mat_hs == "on" ) {
+		if ($matetat <> "") {
+			
+			$gign = $_POST ['gign'];
 			$tab_liste_mat = explode(";", $liste_mat);
 			
-			$etat = addslashes($_POST ['CB_etats']);
-			
-			if ($etat <> "") {
+			foreach ($tab_liste_mat as $mat) {
 				
-				$gign = $_POST ['gign'];
+				if ($gign <> "") $espace = " ";
 				
-				foreach ($tab_liste_mat as $mat) {
-					
-					if ($gign <> "") $espace = " ";
-					
-					$rq = "UPDATE materiels SET mat_etat='$etat $espace $gign' WHERE mat_id=$mat";
-					$con_gespac->Execute($rq);
-					$log->Insert($rq);
-					
-				}
+				$rq = "UPDATE materiels SET mat_etat='$matetat $espace $gign' WHERE mat_id=$mat";
+				$con_gespac->Execute($rq);
+				$log->Insert($rq);	
 			}
 		}
 		
@@ -75,7 +69,6 @@
 		// Si on active le mailing
 		if ( $mailing == 1) {
 			
-			echo $_SESSION['login'];
 			//Récupération du mail du compte ati (root)
 			$mail_root = $con_gespac->QueryOne("SELECT clg_ati_mail FROM college");
 
@@ -88,7 +81,7 @@
 			$mail_demandeur     = $req_mail_demandeur[0];
 			$nom_demandeur      = $req_mail_demandeur[1];
 			
-			echo '<br>'.$nom_demandeur.'<br>'.$mail_demandeur.'<br><br>';
+			//echo '<br>'.$nom_demandeur.'<br>'.$mail_demandeur.'<br><br>';
 			
 			// CORPS DU MAIL
 			$corps_mail = "Le dossier <b>$dossier</b> a été créé. Vous pouvez le suivre en consultant la liste de vos dossiers sur votre interface GESPAC.<br><br>";
@@ -130,7 +123,7 @@
 			// On reconstruit notre string à partir du tableau dédoublonné
 			$mail_destinataire = implode(",", $verif_doublon_mail_destinataire);
 			
-			echo $mail_destinataire;
+			//echo $mail_destinataire;
 			
 			$headers ='From: '.$mail_root."\n"; //c'est toujours le compte root qui envoie le mail
 			$headers .='Reply-To: '.$mail_root."\n"; 
@@ -138,9 +131,9 @@
 			$headers .='Content-Transfer-Encoding: 8bit'; 
 					
 			if (mail($mail_destinataire, $sujet_mail, $message, $headers)) 
-				echo 'Le(s) mail(s) a (ont) bien été envoyé(s) !<br>'; 
+				echo '<br>Le(s) mail(s) a (ont) bien été envoyé(s) !'; 
 			else 
-				echo 'Le(s) mail(s) n\'a (ont) pas été envoyé(s) !<br>'; 
+				echo '<br>Le(s) mail(s) n\'a (ont) pas été envoyé(s) !'; 
 		
 		}
 	}
@@ -157,7 +150,9 @@
 		// On créé une page dans le dossier
 		$rq = "INSERT INTO dossiers_textes (dossier_id, txt_user, txt_texte, txt_etat) VALUES ($dossierid, '$current_user', '$commentaire', '$etat');";
 		$con_gespac->Execute($rq);
-		$log->Insert($rq);
+		$log->Insert($rq);	
+		
+		echo "Le dossier $dossierid a été modifié.";
 		
 		
 		// Si on active le mailing
@@ -235,21 +230,19 @@
 			$headers .='Content-Transfer-Encoding: 8bit'; 
 					
 			if (mail($mail_destinataire, $sujet_mail, $message, $headers)) 
-				echo 'Le(s) mail(s) a (ont) bien été envoyé(s) !'; 
+				echo '<br>Le(s) mail(s) a (ont) bien été envoyé(s) !'; 
 			else 
-				echo 'Le(s) mail(s) n\'a (ont) pas été envoyé(s) !'; 
+				echo '<br>Le(s) mail(s) n\'a (ont) pas été envoyé(s) !'; 
 			
 		}
-		
-		echo "Le dossier $dossierid a été modifié.";
 	
 	}
 	
 		
 	/**************** SUPPRESSION ********************/
-	if ( $action == 'suppr' ) {
+	if ( $action == 'del' ) {
 	
-		$id 	= $_GET['id'];
+		$id 	= $_POST['id'];
 		
 		// Suppression des pages du dossier
 		$req_suppr_pages = "DELETE FROM dossiers_textes WHERE dossier_id=$id";

@@ -29,6 +29,12 @@
 			
 	// gestion des droits particuliers (clore des dossiers, changer l'état d'un dossier ...)
 	$droits_supp = ($_SESSION['grade'] == 'root') ? true : preg_match ("#L-03-04#", $_SESSION['droits']);
+
+	$liste_etats 	 = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
+
+	//$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
+	//$liste_salles 	 = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
+	//$liste_types 	 = $con_gespac->QueryAll ( "SELECT DISTINCT type FROM dossiers_types" );
 	
 
 /*****************************************************************************
@@ -40,16 +46,11 @@
 if ( $action == "add" ) {
 
 
-	$liste_materiels = $con_gespac->QueryAll ('Select mat_id, mat_nom, marque_type, salle_nom FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id;');
-	//$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
-	$liste_salles 	 = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
-	$liste_etats 	 = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
-	$liste_types 	 = $con_gespac->QueryAll ( "SELECT DISTINCT type FROM dossiers_types" );
-
+	$liste_materiels = $con_gespac->QueryAll ('Select mat_id, mat_nom, marque_type, salle_nom, mat_dsit FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id;');
 	
 	/*	LA LISTE DES FILTRES */
 	
-	echo "<div class='dossier_section'>";
+	echo "<center><div>";
 	
 ?>
 	<!--*************************************
@@ -59,11 +60,9 @@ if ( $action == "add" ) {
 	**************************************-->
 
 	<span>
-		Nom <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'dossiers_mat_table', 1);" type="text" >
+		Filtrer les matériels <input width=65 name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'dossiers_mat_table');" type="text" >
 	</span>
 	
-	Ou
-
 <?PHP
 
 	
@@ -72,10 +71,10 @@ if ( $action == "add" ) {
 	*		COMBOBOX des SALLES
 	*
 	**************************************/
-
-		echo "<span>";
+/*
+		echo "<span> Ou ";
 		echo "Salle ";
-		echo "<SELECT id='CB_salles' onchange=\"filter(this.options[selectedIndex].text, 'dossiers_mat_table', 3);\">";
+		echo "<SELECT id='CB_salles' onchange=\"filter($('#CB_salles option:selected').text(), 'dossiers_mat_table');\">";
 			echo "<option>---</option>";
 			foreach ($liste_salles as $record) {
 				$salle_nom 	= stripcslashes(utf8_encode($record['salle_nom']));
@@ -84,7 +83,7 @@ if ( $action == "add" ) {
 			}
 		echo "</SELECT>";
 		echo "</span>";
-		
+	*/	
 	
 	/*************************************
 	*
@@ -126,11 +125,13 @@ if ( $action == "add" ) {
 			$nom 	= $record['mat_nom'];
 			$type 	= $record['marque_type'];
 			$salle 	= $record['salle_nom'];
+			$tag 	= $record['mat_dsit'];
 
 			echo "<tr id='tr_id$mat_id' >
 			
 				<td> <input class='chk_line' id='$mat_id' type='checkbox' name='chk' indexed=true value='$mat_id'> </td>
 				<td>$nom</td>
+				<td>$tag</td>
 				<td>$type</td>
 				<td>$salle</td>
 			</tr>";
@@ -143,7 +144,7 @@ if ( $action == "add" ) {
 	
 	?>
 	<center>
-	<form action="gestion_dossiers/post_dossiers.php?action=add" method="post" name="post_form" id="post_form" onsubmit="$('post_dossier').disabled=true;">
+	<form action="gestion_dossiers/post_dossiers.php?action=add" method="post" name="post_form" id="formulaire">
 		
 		<div>
 			Type :
@@ -167,9 +168,9 @@ if ( $action == "add" ) {
 
 			<span class='chk_span'><label for='add_inter'>Intervention Directe <label><input type='checkbox' name='add_inter'></span>
 			<span class='chk_span'><label for='active_mailing'>Activer le Mailing <label><input type='checkbox' name='active_mailing' checked ></span>
-			<span class='chk_span' id='mat_hs_label' style='display:none;'><label for='mat_hs'>Changer l'état du matériel <label><input type='checkbox' name='mat_hs' id='mat_hs'></span>
-			<span class='chk_span'>
-				<select name="etat" id="CB_etats" style="display:none;">
+			<span class='chk_span' id='change_etat' style="display:none;">
+				<br>Changer l'état du matériel en : 
+				<select name="etat" id="CB_etats">
 					<option selected><?PHP echo $materiel_etat; ?></option>
 					<?PHP	foreach ($liste_etats as $etat) {	echo "<option value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
 				</select>
@@ -189,8 +190,8 @@ if ( $action == "add" ) {
 
 		<br>
 			<span id='nb_selectionnes'></span><br><br>
-			<input type='text' name='liste_mat' id='liste_mat'>	
-			<input type='submit' value='Créer le dossier' id='post_dossier' disabled>
+			<input type='hidden' name='liste_mat' id='liste_mat'>	
+			<input type='submit' value='Créer le dossier' id='post_form' disabled>
 		
 	</form>
 	</center>
@@ -202,7 +203,7 @@ if ( $action == "add" ) {
 
 /*****************************************************************************
 *
-*					Formulaire AJOUT PAGE au DOSSIER
+*					Formulaire MODIFICATION DU DOSSIER
 *
 *****************************************************************************/		
 
@@ -225,7 +226,7 @@ if ( $action == "mod" ) {
 	
 
 	
-	echo "<form action='gestion_dossiers/post_dossiers.php?action=modif' method='post' name='post_form' id='post_form' onsubmit=$('post_modif').disabled=true>";
+	echo "<form action='gestion_dossiers/post_dossiers.php?action=modif' method='post' name='post_form' id='formulaire'>";
 	
 		// Id du dossier
 		echo "<input type=hidden name='dossierid' value='$dossierid'>";
@@ -250,7 +251,7 @@ if ( $action == "mod" ) {
 		echo "<br>";
 		
 		// Bouton pour poster le formulaire
-		echo "<input type='submit' name='bt_submit' value='Modifier le dossier' id='post_modif' disabled>";
+		echo "<center><br><input type='submit' name='bt_submit' value='Modifier le dossier' id='post_form' disabled></center>";
 	
 	echo "</form>";
 	
@@ -259,7 +260,7 @@ if ( $action == "mod" ) {
 	
 		
 	// Liste du matériel concerné par le dossier
-	echo "<p>";
+	echo "<br><p>";
 	
 		echo "<center><h4><a href='#' id='togglemateriels'>LISTE DU MATERIEL CONCERNE</a></h4>";
 	
@@ -317,18 +318,45 @@ if ( $action == "mod" ) {
 				}
 			
 				echo "<tr>";
-					echo "<td class='td_$txt_etat' width=60px>$txt_date</td>";
+					echo "<td class='td_$txt_etat' width='60px'>$txt_date</td>";
 					echo "<td class='td_$txt_etat' width='60px'>$user_nom</td>";
-					echo "<td class='td_$txt_etat' width=60px>$txt_etat</td>";
+					echo "<td class='td_$txt_etat' width='60px'>$txt_etat</td>";
 				echo "</tr>";
 				
-				echo "<tr class=$tr_class>";
+				echo "<tr>";
 					echo "<td colspan=3>$txt_texte</td>";
 				echo "</tr>";
 
 			}
 		echo "</table>";
 		
+}	// Fin if mod dossier
+
+
+
+/*****************************************************************************
+*
+*					Formulaire SUPPRESSION DU DOSSIER
+*
+*****************************************************************************/		
+
+if ( $action == "del" ) {
+	
+	$dossierid = $_GET["id"];
+	
+	echo "Voulez-vous vraiment supprimer le dossier <b>$dossierid</b> ? <br><br>ATTENTION, toutes les pages du dossier seront détruites !";
+	
+		?>	
+		<center><br><br>
+		<form action="gestion_dossiers/post_dossiers.php?action=del" method="post" name="post_form" id='formulaire'>
+			<input type=hidden value="<?PHP echo $dossierid;?>" name="id">
+			<input type=submit value='Supprimer' id="post_form">
+			<input type=button onclick="$('#dialog').dialog('close');" value='Annuler'>
+		</form>
+		</center>
+		
+	<?PHP
+	
 }
 
 
@@ -359,12 +387,56 @@ if ( $action == "mod" ) {
 			
 			// On affiche les boutons
 			if ( $('#liste_mat').val() != "" ) {				
-				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)'); $('#change_etat').show();
 			} else { 
-				$('#nb_selectionnes').hide();
+				$('#nb_selectionnes').hide(); $('#change_etat').hide();
 			}
 			
 		});	
+		
+		//--------------------------------------- Sur changement d'état d'un matériel
+		$('#CB_etats').change(function(){
+			
+			var nbmat = $('#liste_mat').val().split(';').length -1;
+			var etat = $('#CB_etats option:selected').text();
+			var arr = [ 'CASSE', 'VOLE', 'PANNE', 'PERDU' ];
+			
+			if (jQuery.inArray(etat, arr) != -1 && nbmat == 1) $('#gign').show();
+			else $('#gign').hide();
+			
+		});
+		
+		
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+			
+			// On désactive le bouton de post, histoire de ne pas poster 2 fois le formulaire
+			$(this).prop('disabled',true);
+		
+			// Permet d'avoir les données à envoyer
+			var dataString = $("#formulaire").serialize();
+			
+			// action du formulaire
+			var url = $("#formulaire").attr( 'action' );
+			
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=dossiers&filter=" + $('#filt').val() + "'", 2500);
+			 });		 
+		});	
+		
 		
 		//--------------------------------------- Fait apparaitre la partie matériels concernés dans la modification d'un dossier
 		$('#togglemateriels').click(function(){
@@ -373,192 +445,7 @@ if ( $action == "mod" ) {
 		
 	});
 	
-	
-	
-/*	
-	  window.addEvent('domready', function() {
-
-		// AJAX		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=dossiers'", 1500);					
-				}
-			
-			}).send(this.toQueryString());
-		}); 
 		
-		if ($('mat_hs')) {
-			$('mat_hs').addEvent('change', function(e) {
-						
-				if ( $('mat_hs').checked) {
-					$('CB_etats').style.display = "";
-				} 
-				else {
-					$('CB_etats').style.display = "none";
-					$('gign').style.display = "none";
-				}
-				
-			});
-		}
-		
-		if ($('CB_etats')) {
-			$('CB_etats').addEvent('change', function(e) {
-					new Event(e).stop();
-					
-					var mystr = $('liste_mat').value;
-					
-					// On vérifie si l'état est cassé, volé ... et surtout si on a seulement un matériel sélectionné pour gign
-					if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} && mystr.split(';').length == 2) {	$('gign').style.display = ""; }
-					else { $('gign').style.display = "none";	}
-			});
-		}
-		
-		$$('.chkbx').addEvent('click', function(e) {
-			var mystr = $('liste_mat').value;
-			
-			if (mystr.split(';').length > 1) {
-				$('mat_hs_label').style.display = "";
-				
-				// On vire le gign si il y a 0 ou plus de 1 matériel sélectionné
-				if ( mystr.split(';').length > 2) {
-					$('gign_txt').value = "";
-					$('gign').style.display = "none";
-				}
-								
-			}
-			else {
-				$('mat_hs').checked = false;
-				$('gign_txt').value = "";
-				$('CB_etats').value = "";
-				
-				$('mat_hs_label').style.display = "none";
-				$('CB_etats').style.display = "none";
-				$('gign').style.display = "none";
-			}
-		});	
-		
-		
-    });
-	*/
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-/*
-	function filter (phrase, _id, col){
-		
-		if ( phrase == "---") phrase = "";
-		
-		var words = phrase.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-				
-		for (var r = 0; r < table.rows.length; r++){
-			
-			ele = table.rows[r].cells[col].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-		}
-	}
-	*/
-	
-	
-	// *********************************************************************************
-	//
-	//				selectionne une ligne du tableau pour postage
-	//
-	// *********************************************************************************
-/*
-	function select_cette_ligne( tr_id, num_ligne, check ) {
-
-		var chaine_id = $('liste_mat').value;
-		var table_id = chaine_id.split(";");
-
-		var nb_selectionnes = $('nb_selectionnes');
-		
-		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
-		var li = document.getElementById(ligne);
-		
-		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
-		
-			switch (check) {
-				case 1: // On force la selection si la ligne n'est pas déjà cochée
-					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
-						table_id.push(tr_id);
-						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]  matériel(s) dans la sélection</small>";	// On entre le nombre de machines sélectionnées	
-					}
-				break;
-				
-				case 0: // On force la déselection
-					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
-						table_id.erase(tr_id);
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]  matériel(s) dans la sélection</small>";	 // On entre le nombre de machines sélectionnées			
-						// alternance des couleurs calculée avec la parité
-						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-					}
-				break;
-				
-				
-				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
-					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
-						table_id.erase(tr_id);
-						
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]  matériel(s) dans la sélection</small>";	 // On entre le nombre de machines sélectionnées			
-
-						// alternance des couleurs calculée avec la parité
-						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-					
-					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
-						table_id.push(tr_id);
-						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]  matériel(s) dans la sélection</small>";	// On entre le nombre de machines sélectionnées	
-					}
-				break;			
-			}
-	
-			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
-			$('liste_mat').value = table_id.join(";");
-		}
-	}
-	*/
-	// *********************************************************************************
-	//
-	//	Show / Hide la partie MATERIELS dans le formulaire de modification des dossiers
-	//
-	// *********************************************************************************
-
-	/*function toggleMateriels () {
-		if ( $('listemateriels').getStyle("display") == "none" ) 
-			$('listemateriels').setStyle("display", 'block');
-		else $('listemateriels').setStyle("display", 'none');		
-	}*/
-	
-	
 	// *********************************************************************************
 	//
 	// 		vérouille l'accès au bouton submit si les conditions ne sont pas remplies
@@ -566,27 +453,20 @@ if ( $action == "mod" ) {
 	// *********************************************************************************
 	
 	function validation () {
-
-		var bt_submit  	= $("post_dossier");
-		var commentaire	= $("commentaire").value;
+		var bt_submit  	= $("#post_form");
+		var commentaire	= $("#commentaire").val();
 		
-		if (commentaire == "") {
-				bt_submit.disabled = true;
-			} else {
-				bt_submit.disabled = false;
-		}
+		if (commentaire == "") bt_submit.prop('disabled', true);
+		else bt_submit.prop('disabled', false);
 	}
 	
 	function validation_modif () {
 
-		var bt_submit  	= $("post_modif");
+		var bt_submit  	= $("#post_form");
 		var commentaire	= $("commentaire").value;
 		
-		if (commentaire == "") {
-				bt_submit.disabled = true;
-			} else {
-				bt_submit.disabled = false;
-		}
+		if (commentaire == "") bt_submit.prop('disabled', true);
+		else bt_submit.prop('disabled', false);
 	}
 	
 	

@@ -72,7 +72,7 @@ img {border:0px; vertical-align:middle;}
 #page {background-color:white; margin-left:auto; margin-right:auto;}
 
 /*	Conteneur où on dessine les matériels, salles, ...	*/
-#contenu {background-color : white;	float:left;	width:auto;	overflow:auto; margin-left:230px;}
+#contenu {float:left;	width:auto;	overflow:auto; margin-left:230px;}
 
 /*	menu de gauche	*/
 #menu { width:225px; margin-top:80px; position:fixed; background-color:#fff; z-index:12; overflow:auto;}
@@ -210,7 +210,7 @@ img {border:0px; vertical-align:middle;}
 .td_ouverture {background-color:#5AC8FF;}
 .td_clos {background-color:#46FF80;}
 .td_intervention {background-color:#FF464A;}
-.td_precision {background-color:#FF9B46;}
+.td_precisions {background-color:#B9B9B9;}
 
 /*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
 .tr_doublon {	background-color : #29C920;}

@@ -85,7 +85,7 @@
 					echo "<td width=20px><a href='gestion_dossiers/liste_materiels.php?maxheight=600&dossier=$dossier_id' class='editbox' title='Liste des matériels du dossier $dossier_id'><img src='" . ICONSPATH . "list.png'></a></td>";
 					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='gestion_dossiers/form_dossiers.php?id=$dossier_id&action=mod' class='editbox' title='Modifier le dossier $dossier_id'> <img src='" . ICONSPATH . "edit.png'> </a></td>";
 					else echo "<td>&nbsp;</td>";
-					if ( $E_chk && $last_etat<>"clos") echo "<td width=20px><a href='#' title='Supprimer le dossier $dossier_id' onclick=\"validation_suppr_dossier('$dossier_id');\"> <img src='" . ICONSPATH . "delete.png'> </a></td>";
+					if ( $E_chk ) echo "<td width=20px><a href='gestion_dossiers/form_dossiers.php?action=del&id=$dossier_id' class='editbox' title='Supprimer un dossier'> <img src='" . ICONSPATH . "delete.png'> </a></td>";
 					else echo "<td>&nbsp;</td>";
 				
 				echo "</tr>";
@@ -97,23 +97,9 @@
 	
 ?>
 
+<script type="text/javascript">
 
-<script>
-		
-	// Fonction de validation de la suppression d'une marque
-	function validation_suppr_dossier (id) {
-	
-		var valida = confirm('Voulez-vous vraiment supprimer le dossier ' + id + ' ?\n ATTENTION, toutes les pages du dossier seront détruites !');
-		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
-		if (valida) {
-			$('#targetback').show(); $('#target').show();
-			$('#target').load("gestion_dossiers/post_dossiers.php?action=suppr&id=" + id);
-			window.setTimeout("document.location.href='index.php?page=dossiers'", 2000);				
-		}
-	
-	}
-	
-	
+	// Filtre rémanent	
+	filter ( $('#filt').val(), 'dossiers_table' );
 	
 </script>
