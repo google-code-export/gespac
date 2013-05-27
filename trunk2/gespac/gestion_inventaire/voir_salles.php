@@ -40,7 +40,7 @@ session_start();
 
 ?>
 	
-	<table class="alternate hover bigtable" id='salle_table'>
+	<table class="hover bigtable" id='salle_table'>
 		<th>Nom</th>
 		<th>VLAN</th>
 		<th>Etage</th>

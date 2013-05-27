@@ -105,7 +105,7 @@
 	
 	<center>
 	
-	<table class="bigtable alternate hover" id="prets_table">
+	<table class="bigtable hover" id="prets_table">
 	
 	<?PHP
 		if ($E_chk) echo "<th> &nbsp </th>";

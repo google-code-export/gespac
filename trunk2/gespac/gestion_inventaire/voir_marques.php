@@ -45,7 +45,7 @@
 ?>
 
 
-	<table  class="alternate hover bigtable" id='marque_table' >
+	<table  class="hover bigtable" id='marque_table' >
 	
 		<th>Famille</th>
 		<th>Sous-famille</th>

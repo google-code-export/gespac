@@ -47,7 +47,7 @@
 <?PHP 
 	$liste_dossiers = $con_gespac->QueryAll ("SELECT dossiers.dossier_id as dossier_id, dossier_type, dossier_mat, txt_date, txt_etat, txt_texte FROM dossiers, dossiers_textes WHERE dossiers.dossier_id=dossiers_textes.dossier_id GROUP BY dossiers.dossier_id ORDER BY dossier_id DESC;");
 		
-	echo "<table id='dossiers_table' class='bigtable hover alternate'>";
+	echo "<table id='dossiers_table' class='bigtable hover'>";
 	
 		echo "<th>dossier</th>";
 		echo "<th>date</th>";

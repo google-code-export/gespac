@@ -259,7 +259,7 @@
 	
 	
 
-	<table class="bigtable alternate hover" id="mat_table">
+	<table class="bigtable hover" id="mat_table">
 		<!-- Entêtes du tableau des matériels. On gère ici le tri.-->
 		<?PHP if ( $E_chk ) echo "<th> <input type='checkbox' id='checkall'> </th>"; ?>
 		

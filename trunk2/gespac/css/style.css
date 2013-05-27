@@ -138,7 +138,7 @@ img {border:0px; vertical-align:middle;}
 
 /*	Les grandes tables, comme les salles, marques ...	*/
 .bigtable {min-width:950px;}
-.bigtable td{padding:2px 4px; font-size:11px;}
+.bigtable td{padding:2px 4px; font-size:11px;border-bottom:1px solid #DCDCDB;}
 .bigtable th{font-size:12px ;}
 
 /*	Les tables, comme les membres des salles ...	*/
