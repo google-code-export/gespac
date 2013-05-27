@@ -51,11 +51,6 @@ img {border:0px; vertical-align:middle;}
 
 .tablehover tr:hover {background-color:#DE87AD; padding:2px 0px;}
 
-/*	pour les dossiers	*/
-.innertable {background-color:#D9DBDC; border:none ;}
-.innertable th{background-color:green;}
-.inner_tr {background-color:white; border:0px solid blue;}
-
 
 /*	Pour la couleur des dossiers	*/
 .td_ouverture {background-color:#5AC8FF;}

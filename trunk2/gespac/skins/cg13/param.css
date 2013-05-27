@@ -152,13 +152,6 @@ img {border:0px; vertical-align:middle;}
 #corr_table {min-width:380px;}
 #corr_table  tr:hover{background-color:#FFD769;}
 
-/*	pour les dossiers	*/
-.innertable {float:right; width:90%; background-color:#D9DBDC; border:none ;}
-.innertable td{padding:2px 4px; font-size:10px; border:1px grey solid ;}
-.innertable th{font-size:10px; background-color:green; padding:0px ;}
-.inner_tr {background-color:white; border:0px solid blue; border-top:none;}
-.inner_td {padding:10px;}
-
 .dossier_section {
 	float : top;
 	width : auto;
