@@ -27,7 +27,7 @@
 		<meta http-equiv=Content-Type content="text/html; charset=utf-8" /> 
 		
 		<!--	FAVICON	-->
-		<link rel="SHORTCUT ICON" href="img/favicon.ico"/>
+		<link rel="SHORTCUT ICON" href="img/favicon.png"/>
 		
 		<!--	CSS	-->
 		<link rel="stylesheet" href="css/chart.css" type="text/css" media="screen" />
@@ -46,7 +46,7 @@
 		
 		
 		
-		<title>GESPAC -> GEStion du PArc des Collèges</title>
+		<title> .: GESPAC :. </title>
 	
 	</head>
 

@@ -29,30 +29,41 @@
 	
 	/******************************************
 	*
-	*				AJAX
+	*		AJAX
 	*
 	*******************************************/
+
 	
-	window.addEvent('domready', function(){
+	$(function() {	
+	
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
 		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=utilisateurs&filter=" + $('filt').value + "'", 1500);				
-				}
+			// Permet d'avoir les données à envoyer
+			var dataString = $("#formulaire").serialize();
 			
-			}).send(this.toQueryString());
-		});			
+			// action du formulaire
+			var url = $("#formulaire").attr( 'action' );
+			
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=utilisateurs&filter=" + $('#filt').val() + "'", 2500);
+			 });
+			 
+		});	
 	});
-	
 </script>
 
 <?PHP
@@ -60,27 +71,25 @@
 	// connexion à la base de données GESPAC
 	$con_gespac 	= new Sql ($host, $user,$pass, $gespac);
 	
-	$id 	= $_GET['id'];
 	$action = $_GET['action'];
 
 	
+	
+	
 	#***************************************************************************
-	# 				CREATION de l'utilisateur
+	# 				@@ CREATION de l'utilisateur
 	#***************************************************************************
 	
-	
-	if ( $id == '-1' ) {	// Formulaire vierge de création
-	
-		echo "<h2>Formulaire de création d'un nouvel utilisateur</h2><br>";
-		
+	if ( $action == 'add' ) {	// Formulaire vierge de création
+
 		?>
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('nom').focus();
+			$('#nom').focus();
 		</script>
 
-		<form action="gestion_utilisateurs/post_utilisateurs.php?action=add" method="post" name="post_form" id="post_form">
+		<form action="gestion_utilisateurs/post_utilisateurs.php?action=add" method="post" name="post_form" id="formulaire">
 			<center>
 			<table width=500>
 			
@@ -183,7 +192,7 @@
 			</table>
 
 			<br>
-			<input id='post_user' type=submit value='Ajouter utilisateur' disabled>
+			<input id='post_form' type=submit value='Ajouter utilisateur' disabled>
 			</center>
 
 		</FORM>
@@ -193,13 +202,14 @@
 		
 	} 
 	
-	if ($action == 'mod') {
 	
 	#***************************************************************************
-	# 				MODIFICATION de l'utilisateur
+	# 				@@ MODIFICATION de l'utilisateur
 	#***************************************************************************
-		
-		
+	
+	if ($action == 'mod') {
+			
+		$id 	= $_GET['id'];
 		
 		// formulaire de modification prérempli
 	
@@ -312,13 +322,10 @@
 		<?PHP
 	}	
 
-	
-	// *********************************************************************************
-	//
-	//			Formulaire modification par lot non prérempli
-	//
-	// *********************************************************************************		
-		
+			
+	#***************************************************************************
+	# 				@@ MODIFICATION PAR LOT non prérempli
+	#***************************************************************************	
 	
 	if ($action == 'modlot') {
 		
@@ -337,7 +344,7 @@
 			<input type=hidden name='lot_users' id='lot_users'>
 			
 			<!-- Ici on récupère la valeur du champ users_a_poster de la page voir_utilisateurs.php -->
-			<script>$("lot_users").value = $('users_a_poster').value;</script>
+			<script>$("lot_users").value = $('id_a_poster').value;</script>
 			
 
 			<table width=500>
@@ -406,4 +413,36 @@
 
 		<?PHP	
 	}
+	
+		
+	#***************************************************************************
+	# 				@@ SUPPRESSION de l'utilisateur
+	#***************************************************************************
+	
+	if ($action == 'del') {
+
+		$id = $_GET['id'];
+		$user = $con_gespac->QueryRow ( "SELECT user_nom FROM users WHERE user_id=$id" );
+
+		$nom = $user[0];
+		$grade = $user[1];
+		
+		$nb_prets = $con_gespac->QueryOne ( "SELECT COUNT(mat_id) FROM materiels WHERE user_id=$id" );
+
+		if ($nb_prets > 0) {echo "<h3>Vous ne pouvez pas supprimer l'utilisateur <u>$nom</u> : <br>Rendez d'abord les matériels prêtés !</h3>"; exit();}
+
+		echo "Voulez vous vraiment supprimer l'utilisateur $nom ?";
+	?>	
+		<center><br><br>
+		<form action="gestion_utilisateurs/post_utilisateurs.php?action=del" method="post" name="post_form" id='formulaire'>
+			<input type=hidden value="<?PHP echo $id;?>" name="id">
+			<input type=submit value='Supprimer' id="post_form">
+			<input type=button onclick="$('#dialog').dialog('close');" value='Annuler'>
+		</form>
+		</center>
+		
+	<?PHP	
+	}
+	
+	
 ?>		

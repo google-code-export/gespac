@@ -24,20 +24,13 @@
 	
 	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
-	$id 		= $_GET['id'];
-	
-	
-	/*********************************************
-	*
-	*		ACTIONS SUR UTILISATEUR
-	*
-	**********************************************/
-	
-	
-	
+		
+
 	/**************** SUPPRESSION ********************/
 	
-	if ( $action == 'suppr' ) {
+	if ( $action == 'del' ) {
+		
+		$id = $_POST['id'];
 
         //Insertion d'un log
 		
@@ -48,9 +41,7 @@
 	    $pret_existe = $con_gespac->QueryOne ( "SELECT mat_id FROM materiels WHERE user_id=$id" );
 	    
 	    if ( $pret_existe )	{
-			
 			echo "Le compte ne peut être supprimé, un matériel est prêté.";
-		
 		}
 		
 		else {

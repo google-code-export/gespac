@@ -313,8 +313,6 @@
 	}
 	
 		
-
-			$compteur = 0;
 			// On parcourt le tableau
 			foreach ( $liste_des_materiels as $record ) {
 
@@ -377,8 +375,6 @@
 					}
 					
 				echo "</tr>";
-				
-				$compteur++;
 			}
 		?>		
 		
