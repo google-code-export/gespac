@@ -400,7 +400,7 @@
 					
 					<?PHP
 					// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-					$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques GROUP BY marque_model ORDER BY marque_model" );
+					$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques ORDER BY marque_model" );
 					?>
 					
 					<!-- s'affiche si il n'y a pas de résultat -->
@@ -733,7 +733,7 @@
 					
 					<?PHP
 					// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-					$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques GROUP BY marque_model ORDER BY marque_model" );
+					$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques ORDER BY marque_model" );
 					?>
 					
 					<!-- s'affiche si il n'y a pas de résultat -->
