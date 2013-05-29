@@ -24,6 +24,7 @@
 	<span class="entetes-options">
 		
 		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_marques.php?maxheight=450&width=550&action=add' class='editbox' title='Ajouter une marque'><img src='" . ICONSPATH . "add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='#' id='show-edit' title='Montrer/Cacher Editer une marque'><img src='" . ICONSPATH . "17.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'marque_table');" type="text" value=<?PHP echo $_GET['filter'];?>><span id="filtercount" title="Nombre de lignes filtrées"></span></form>
@@ -84,8 +85,9 @@
 					
 					// On teste si le quadruplet famille/sfamille/marque/modele existe dans la table des correspondances. Si c'est le cas, on interdit la modification.
 					$quadruplet	= $con_gespac->QueryOne ( "SELECT corr_id FROM correspondances WHERE corr_type = '$type' AND corr_stype='$soustype' AND corr_marque='$marque' AND corr_modele='$model' " );
-					$afficher_modifier = $quadruplet <> "" ? "none" : "" ;
-						
+
+					if ($quadruplet) { $afficher_modifier = "none";	$afficher_class = "modification"; }
+					else {$afficher_modifier = ""; $afficher_class = ""; }
 					
 					echo "<td><input type=hidden class='nbmodel' value=$nb_matos_de_ce_modele><a href='gestion_inventaire/voir_membres-marque_type.php?maxheight=650&marque_type=$type' class='infobox' title='Liste des matériels de famille $type'>" . $type . "</a> [" . $nb_matos_de_ce_type ."] </td>";
 					echo "<td><a href='gestion_inventaire/voir_membres-marque_stype.php?maxheight=650&marque_stype=$soustype' class='infobox' title='Liste des matériels de sous famille $soustype'>" . $soustype . "</a> [" . $nb_matos_de_ce_soustype . "] </td>";
@@ -94,7 +96,7 @@
 					
 					if ($E_chk) {
 						echo "<td><a href='gestion_inventaire/form_ajout_materiel_par_marque.php?id=$id' class='editbox' title='Ajouter un matériel à $marque $model'><img src='" . ICONSPATH . "add3.png'> </a></td>";
-						echo "<td><a href='gestion_inventaire/form_marques.php?maxheight=450&width=550&action=mod&id=$id' class='editbox' title='Modifier la marque $marque $model'><img src='" . ICONSPATH . "edit.png' style='display:$afficher_modifier'></a></td>";
+						echo "<td><a href='gestion_inventaire/form_marques.php?maxheight=450&width=550&action=mod&id=$id' class='editbox' title='Modifier la marque $marque $model'><img src='" . ICONSPATH . "edit.png' class='$afficher_class' style='display:$afficher_modifier'></a></td>";
 						echo "<td width=20 align=center> <a href='gestion_inventaire/form_marques.php?action=del&id=$id' class='editbox' title='Supprimer une marque'>	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
 					}
 					
@@ -111,6 +113,13 @@
 
 	// Filtre rémanent	
 	filter ( $('#filt').val(), 'marque_table' );
+	
+	$(function(){
+		$('#show-edit').click(function(){
+			$('.modification').toggle();
+		});
+	});
+	
 	
 </script>
 
