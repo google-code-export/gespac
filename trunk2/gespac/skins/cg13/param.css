@@ -92,10 +92,10 @@ img {border:0px; vertical-align:middle;}
 .entetes-options img {height:24px; cursor:pointer;}
 .entetes-options form {margin:0; }
 
-#entete-materiels, #entete-salles, #entete-marques {background-color:#83E684;}
+#entete-materiels, #entete-salles, #entete-marques {background-color:#759AFF;}
 #entete-dossiers {background-color:#8683E6;}
 #entete-prets {background-color:#FFAF75;}
-#entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#759AFF;}
+#entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#83E684;}
 #entete-college, #entete-statbat, #entete-infoserveur, #entete-statparc {background-color:#FAEF7D;}
 #entete-aic, #entete-recapfog, #entete-modportail, #entete-geninventaire, #entete-gestfichiers, #entete-migdossiers, #entete-migfog, #entete-migusers, #entete-wol, #entete-exportperso, #entete-taginventaire {background-color:#AA83E6;}
 #entete-importcsv, #entete-logs, #entete-dumpocs, #entete-dumpgespac, #entete-exports, #entete-importocs {background-color:#FF7A7A;}

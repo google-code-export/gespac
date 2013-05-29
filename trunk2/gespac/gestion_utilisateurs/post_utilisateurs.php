@@ -26,7 +26,7 @@
 	$action 	= $_GET['action'];
 		
 
-	/**************** SUPPRESSION ********************/
+	/**************** @@SUPPRESSION ********************/
 	
 	if ( $action == 'del' ) {
 		
@@ -68,7 +68,7 @@
 
 	}
 
-	/**************** MODIFICATION ********************/	
+	/**************** @@MODIFICATION ********************/	
 	if ( $action == 'mod' ) {
 	
 		$id     	= $_POST ['id'];
@@ -112,7 +112,7 @@
 		echo "L'utilisateur <b>$nom</b> a bien été modifié...";
 	}
 	
-	/**************** INSERTION ********************/
+	/**************** @@INSERTION ********************/
 	if ( $action == 'add' ) {
 	
 		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
@@ -145,7 +145,7 @@
 	}
 	
 	
-	/**************** MODIFICATION D'UN LOT ********************/
+	/**************** @@MODIFICATION D'UN LOT ********************/
 		
 	if ( $action == 'modlot' ) {
 		

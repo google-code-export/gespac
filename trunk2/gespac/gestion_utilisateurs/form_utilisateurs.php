@@ -9,11 +9,12 @@
 	
 ?>
 
+<script type="text/javascript" src="js/main.js"></script>
 
 <script type="text/javascript"> 
 	
 	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
-	function validation () {
+	/*function validation () {
 
 		var bt_submit = $("post_user");
 		var user_nom = $("nom").value;
@@ -26,7 +27,7 @@
 			bt_submit.disabled = false;
 		}
 	}
-	
+	*/
 	/******************************************
 	*
 	*		AJAX
@@ -35,33 +36,36 @@
 
 	
 	$(function() {	
-	
+				
+
 		// **************************************************************** POST AJAX FORMULAIRES
 		$("#post_form").click(function(event) {
 
 			/* stop form from submitting normally */
 			event.preventDefault(); 
-		
-			// Permet d'avoir les données à envoyer
-			var dataString = $("#formulaire").serialize();
 			
-			// action du formulaire
-			var url = $("#formulaire").attr( 'action' );
+			if ( validForm() == true) {
 			
-			var request = $.ajax({
-				type: "POST",
-				url: url,
-				data: dataString,
-				dataType: "html"
-			 });
-			 
-			 request.done(function(msg) {
-				$('#dialog').dialog('close');
-				$('#targetback').show(); $('#target').show();
-				$('#target').html(msg);
-				window.setTimeout("document.location.href='index.php?page=utilisateurs&filter=" + $('#filt').val() + "'", 2500);
-			 });
-			 
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#dialog').dialog('close');
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=utilisateurs&filter=" + $('#filt').val() + "'", 2500);
+				 });
+			}			 
 		});	
 	});
 </script>
@@ -91,21 +95,21 @@
 
 		<form action="gestion_utilisateurs/post_utilisateurs.php?action=add" method="post" name="post_form" id="formulaire">
 			<center>
-			<table width=500>
+			<table style='text-align:left;' >
 			
 				<tr>
 					<TD>Nom *</TD>
-					<TD><input type=text name=nom id=nom onkeyup="validation();"/></TD>
+					<TD><input type=text name=nom id=nom class='valid'></TD>
 				</tr>
 				
 				<tr>
 					<TD>Login *</TD>
-					<TD><input type=text name=login id=login onkeyup="validation();" /></TD>
+					<TD><input type=text name=login id=login class='valid'></TD>
 				</tr>
 				
 				<tr>
 					<TD>Password *</TD> 
-					<TD><input type=password name=password id=password onkeyup="validation();"	/></TD>
+					<TD><input type=password name=password id=password class='valid'></TD>
 				</tr>
 				
 				<tr>
@@ -192,7 +196,7 @@
 			</table>
 
 			<br>
-			<input id='post_form' type=submit value='Ajouter utilisateur' disabled>
+			<input id='post_form' type=submit value='Ajouter utilisateur'>
 			</center>
 
 		</FORM>

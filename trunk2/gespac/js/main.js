@@ -76,12 +76,41 @@ function filter (phrase, tableid){
 	
 	if ($("#filtercount")) $("#filtercount").html( $("#" + tableid + " tr:visible").length -1 );
 }	
+
+
+/*
+* @name: validation
+* @param : queud
+* @return : true si le formulaire est valide, sinon ... false
+* @description : Permet de valider les input ayant la classe "valid" dans un formulaire
+* @reference : Presque toutes les pages formulaires
+*/
+
+function validForm () {
+	
+	var valid = true;
+	
+	$('.valid').each (function(a){
+		
+		if ( $(this).val() == "" ) {
+			valid=false;
+			$(this).addClass("notvalid");
+		}
+		else {
+			$(this).removeClass("notvalid");
+		}
+	});
+	
+	return valid;	
+}
+
 	
 	
 $(function () {
 	
 	// init l'affichage
 	toggleAffichage(1100);
+
 
 
 	/*
