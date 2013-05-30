@@ -19,14 +19,7 @@
 <script type="text/javascript"> 
 	
 
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des marques pour correspondance
-	//
-	// *********************************************************************************
-
-
+	// **************************************************************** Fonction de filtrage des marques pour correspondance
 	function filter_marque (phrase, tableid){
 		
 		var data = phrase.split(" ");
@@ -55,12 +48,7 @@
 	
 	
 		
-	// *********************************************************************************
-	//
-	//			AJOUT d'un MARQUE par sa CORRESPONDANCE
-	//
-	// *********************************************************************************
-	
+	// **************************************************************** AJOUT d'un MARQUE par sa CORRESPONDANCE
 	function validation_choisir_marque (marque_id, marque) {
 			
 		var valida = confirm('Voulez-vous vraiment choisir la marque ' + marque + ' ?');
@@ -76,12 +64,8 @@
 	}
 	
 	
-	// *********************************************************************************
-	//
-	//			FAIT REAPPARAITRE LE CHOIX DE SELECTION DE LA MARQUE
-	//
-	// *********************************************************************************
-	
+
+	// **************************************************************** FAIT REAPPARAITRE LE CHOIX DE SELECTION DE LA MARQUE
 	function choisir_modele () {
 		
 		$('#choix_modele').show();
@@ -92,12 +76,8 @@
 	}
 	
 	
-	// *********************************************************************************
-	//
-	//			FAIT REAPPARAITRE LE MODELE DU MATERIEL
-	//
-	// *********************************************************************************
-	
+
+	// **************************************************************** FAIT REAPPARAITRE LE MODELE DU MATERIEL
 	function annuler_choix_modele (marqueid, modele) {
 		
 		$('#choix_modele').hide();
@@ -108,12 +88,9 @@
 		$('#modele_selectionne').val(modele);
 	}	
 	
-	// *********************************************************************************
-	//
-	//			masque le combo pour afficher le input et vis-versa
-	//
-	// *********************************************************************************
-	
+
+
+	// **************************************************************** masque le combo pour afficher le input et vis-versa
 	function change_combo_mac() {
 		
 		if ($("#mac_input").is(':visible')) {
@@ -150,46 +127,16 @@
 	}
 	
 	
-	// *********************************************************************************
-	//
-	// 		vérouille l'accès au bouton submit si les conditions ne sont pas remplies
-	//
-	// *********************************************************************************
-	
-	function validation () {
 
-		var bt_submit  = $("#post_form");
-		var mat_nom    = $("#nom").val();
-		var mat_serial = $('#serial').val();
-		var mat_modele = $("#modele_selectionne").val();
-		
-	
-		if (mat_nom == "" || mat_serial == "" || mat_modele == "") {
-			bt_submit.prop('disabled',true);
-		} else {
-			bt_submit.prop('disabled',false);
-		}
-	}
-	
-
-
-	/******************************************
-	*
-	*		Générateur de ssn aléatoire
-	*
-	*******************************************/
-	
+	// **************************************************************** Générateur de ssn aléatoire
 	function SSNgenerator () {
 		var number = Math.floor(Math.random() * 100000);
 		$('#serial').val("NC" + number);
 	}
 	
-	/******************************************
-	*
-	*		Activer le changement du SSN
-	*
-	*******************************************/
-	
+
+
+	// **************************************************************** Activer le changement du SSN
 	function SSN_modifier () {
 		
 		if ( $('#serial').prop("readonly") == true ) {
@@ -201,37 +148,35 @@
 		}
 	}
 	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
-	
+
+
+	// **************************************************************** POST AJAX FORMULAIRES
 	$("#post_form").click(function(event) {
 
 		/* stop form from submitting normally */
 		event.preventDefault(); 
-	
-		// Permet d'avoir les données à envoyer
-		var dataString = $("#formulaire").serialize();
-		
-		// action du formulaire
-		var url = $("#formulaire").attr( 'action' );
-		
-		var request = $.ajax({
-			type: "POST",
-			url: url,
-			data: dataString,
-			dataType: "html"
-		 });
-		 
-		 request.done(function(msg) {
-			$('#dialog').dialog('close');
-			$('#targetback').show(); $('#target').show();
-			$('#target').html(msg);
-			window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('#filt').val() + "'", 2000);
-		 });
-		 
+
+		if ( validForm() == true) {
+			// Permet d'avoir les données à envoyer
+			var dataString = $("#formulaire").serialize();
+			
+			// action du formulaire
+			var url = $("#formulaire").attr( 'action' );
+			
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=materiels&filter=" + $('#filt').val() + "'", 2000);
+			 });
+		}	 
 	});	
 
 </script>
@@ -333,7 +278,7 @@
 				
 				<tr>
 					<TD>Nom du materiel *</TD>
-					<TD><input type=text id=nom name=nom required onkeyup="validation();"/></TD>
+					<TD><input type=text id=nom name=nom required class="valid"></TD>
 				</tr>
 				
 				<tr>
@@ -343,7 +288,7 @@
 				
 				<tr>
 					<TD>Numéro de série *</TD> 
-					<TD><input required type=text id=serial name=serial onkeyup="validation();"/> <input type=button value="générer" onclick="SSNgenerator(); validation();"></TD>
+					<TD><input required type=text id=serial name=serial  class="valid"> <input type=button value="générer" onclick="SSNgenerator();"></TD>
 				</tr>
 				
 				<tr>
@@ -393,7 +338,7 @@
 					</TD>
 				</tr>
 				<tr>
-					<td colspan=2><br><center><input type=submit value='Ajouter un materiel' id="post_form" disabled></center></td>
+					<td colspan=2><br><center><input type=submit value='Ajouter un materiel' id="post_form"></center></td>
 				</tr>
 			</table>
 
@@ -596,8 +541,8 @@
 			<table width=500 id='proprietes' style='text-align:left;'>
 			
 				<tr>
-					<TD>Nom du materiel</TD>
-					<TD><input type=text name=nom id=nom required value= "<?PHP echo $materiel_nom; ?>" 	/></TD>
+					<TD>Nom du materiel *</TD>
+					<TD><input type=text name=nom id=nom required class="valid" value= "<?PHP echo $materiel_nom; ?>" 	/></TD>
 				</tr>
 				
 				<tr>
@@ -606,9 +551,9 @@
 				</tr>
 				
 				<tr>
-					<TD>Numéro de série</TD>
-					<TD><input type="text" name="serial" id="serial" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
-						<a href='#' onclick='SSN_modifier();' onkeyup='validation();'>
+					<TD>Numéro de série *</TD>
+					<TD><input type="text" name="serial" id="serial" class="valid" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
+						<a href='#' onclick='SSN_modifier();'>
 							<img src='./img/cadenas_ferme.png' id="img_cadenas_ouvert" title="Passer en écriture">
 							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ferme" style="display:none;" title="Passer en Read only">
 						</a><!--<input type=button value="Passer en écriture" id="activer_ssn" onclick="SSN_modifier ();">-->
@@ -757,9 +702,9 @@
 			<table>
 				
 				<tr>
-					<TD>Préfixe du lot</TD> 
+					<TD>Préfixe du lot *</TD> 
 					<TD>
-						<input type=text name=prefixe id=prefixe />
+						<input type="text" name="prefixe" id="prefixe" class="valid" />
 					</TD>
 				</tr>
 				
