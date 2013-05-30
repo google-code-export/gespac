@@ -571,11 +571,6 @@
 		$('#modif_modele').hide();
 	}
 	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
 
 	
 	$(function() {	
@@ -585,7 +580,6 @@
 
 			/* stop form from submitting normally */
 			event.preventDefault(); 
-		
 			// Permet d'avoir les données à envoyer
 			var dataString = $("#formulaire").serialize();
 			
@@ -605,7 +599,6 @@
 				$('#target').html(msg);
 				window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('#filt').val() + "'", 1500);
 			 });
-			 
 		});	
 	});
 	

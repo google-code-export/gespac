@@ -9,35 +9,13 @@
 	
 ?>
 
-<script type="text/javascript" src="js/main.js"></script>
+
 
 <script type="text/javascript"> 
-	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
-	/*function validation () {
 
-		var bt_submit = $("post_user");
-		var user_nom = $("nom").value;
-		var user_login = $("login").value;
-		var user_password = $("password").value;
-		
-		if (user_nom == "" || user_login == "" || user_password == "") {
-			bt_submit.disabled = true;
-		} else {
-			bt_submit.disabled = false;
-		}
-	}
-	*/
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
 
-	
 	$(function() {	
 				
-
 		// **************************************************************** POST AJAX FORMULAIRES
 		$("#post_form").click(function(event) {
 

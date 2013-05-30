@@ -17,19 +17,6 @@
 
 <script type="text/javascript"> 
 	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
-	function validation () {
-
-		var bt_submit = document.getElementById("post_form");
-		var salle_nom = document.getElementById("nom").value;
-		
-		if (salle_nom == "") {
-			bt_submit.disabled = true;
-		} else {
-			bt_submit.disabled = false;
-		}
-	}
-	
 	
 	/******************************************
 	*
@@ -44,27 +31,28 @@
 
 			/* stop form from submitting normally */
 			event.preventDefault(); 
-		
-			// Permet d'avoir les données à envoyer
-			var dataString = $("#formulaire").serialize();
-			
-			// action du formulaire
-			var url = $("#formulaire").attr( 'action' );
-			
-			var request = $.ajax({
-				type: "POST",
-				url: url,
-				data: dataString,
-				dataType: "html"
-			 });
-			 
-			 request.done(function(msg) {
-				$('#dialog').dialog('close');
-				$('#targetback').show(); $('#target').show();
-				$('#target').html(msg);
-				window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('#filt').val() + "'", 1500);
-			 });
-			 
+
+			if ( validForm() == true) {
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#dialog').dialog('close');
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('#filt').val() + "'", 1500);
+				 });
+			}	 
 		});	
 	});
 		
@@ -82,7 +70,7 @@
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('nom').focus();
+			$('#nom').focus();
 		</script>
 		
 		<form action="gestion_inventaire/post_salles.php?action=add" method="post" name="post_form" id='formulaire'>
@@ -92,7 +80,7 @@
 			
 				<tr>
 					<TD>Nom salle *</TD>
-					<TD><input type=text name=nom id=nom onkeyup="validation();" required/></TD>
+					<TD><input type=text name=nom id=nom class="valid" required></TD>
 				</tr>
 				
 				<tr>
@@ -121,7 +109,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter une salle' id="post_form" disabled>
+			<input type=submit value='Ajouter une salle' id="post_form">
 
 			</center>
 
@@ -151,7 +139,7 @@
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('nom').focus();
+			$('#nom').focus();
 		</script>
 
 		<form action="gestion_inventaire/post_salles.php?action=mod" method="post" name="post_form" id='formulaire'>
@@ -162,7 +150,7 @@
 			
 				<tr>
 					<TD>Nom salle</TD>
-					<TD><input type=text name=nom id=nom value= "<?PHP echo $salle_nom; ?>" required />
+					<TD><input type=text name=nom id=nom class="valid" value= "<?PHP echo $salle_nom; ?>" required >
 				</tr>
 				
 				<tr>
