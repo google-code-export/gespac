@@ -263,7 +263,7 @@
 					</table>
 				</div>	
 				
-				<table width="500" align="center" cellpadding="10" style='display:none;' id="table_modele_selectionne">
+				<table class="formtable" style='display:none;' id="table_modele_selectionne">
 					<tr>
 						<td>Modèle sélectionné *</td>
 						<td><input type=hidden name=marque_id id=marque_id> <input type="text" id="modele_selectionne"> </td>
@@ -375,7 +375,7 @@
 			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
 			<script>$("#lot").val( $('#materiel_a_poster').val() );</script>
 
-			<table>
+			<table class="formtable">
 				
 				<tr>
 					<TD>Origine</TD> 
@@ -538,7 +538,7 @@
 				</div>	 
 			<br>
 			<center>
-			<table width=500 id='proprietes' style='text-align:left;'>
+			<table class="formtable" id='proprietes'>
 			
 				<tr>
 					<TD>Nom du materiel *</TD>
@@ -699,7 +699,7 @@
 			<!-- Ici on récupère la valeur du champ materiels_a_poster de la page voir_materiels_table.php -->
 			<script>$("#lot").val( $('#materiel_a_poster').val() );</script>
 
-			<table>
+			<table class="formtable">
 				
 				<tr>
 					<TD>Préfixe du lot *</TD> 

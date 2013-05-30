@@ -22,7 +22,7 @@
 
 		<span class="option"><?PHP if ( $E_chk ) { echo "<span id='nb_selectionnes' title=\"nombre d'utilisateurs sélectionnés\"></span>"; echo "<span id='modif_selection' style='display:none;'> <a href='gestion_utilisateurs/form_utilisateurs.php?height=200&width=640&action=modlot' rel='slb_users' title='modifier selection'> <img src='" . ICONSPATH . "modif1.png'></a></span>"; }?>  </span>
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_utilisateurs/form_utilisateurs.php?maxheight=650&action=add' class='editbox' title='Ajouter un utilisateur'><img src='" . ICONSPATH . "add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_utilisateurs/form_utilisateurs.php?action=add' class='editbox' title='Ajouter un utilisateur'><img src='" . ICONSPATH . "add.png'></a>";?></span>
 		
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
@@ -106,12 +106,12 @@
 				echo "<td> $nom </td>";
 				echo "<td> $logon </td>";
 				echo "<td> $grade </td>";
-				echo "<td> $mail </td>";
 				echo "<td> $skin </td>";
+				echo "<td> $mail </td>";
 				echo "<td> $mailing_chk </td>";
 				
 				if ( $E_chk && $est_modifiable) {
-					echo "<td><a href='gestion_utilisateurs/form_utilisateurs.php?maxheight=650&id=$id&action=mod' class='editbox' title='Modifier un utilisateur'><img src='" . ICONSPATH . "edit.png'> </a></td>";
+					echo "<td><a href='gestion_utilisateurs/form_utilisateurs.php?id=$id&action=mod' class='editbox' title='Modifier un utilisateur'><img src='" . ICONSPATH . "edit.png'> </a></td>";
 					echo "<td width=20 align=center> <a href='gestion_utilisateurs/form_utilisateurs.php?action=del&id=$id' class='editbox' title='Supprimer un utilisateur'>	<img src='" . ICONSPATH . "delete.png' title='supprimer $nom'>	</a> </td>";
 				} else {
 					echo "<td>&nbsp</td>";

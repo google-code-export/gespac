@@ -73,7 +73,7 @@
 
 		<form action="gestion_utilisateurs/post_utilisateurs.php?action=add" method="post" name="post_form" id="formulaire">
 			<center>
-			<table style='text-align:left;' >
+			<table class="formtable" >
 			
 				<tr>
 					<TD>Nom *</TD>
@@ -192,11 +192,7 @@
 	if ($action == 'mod') {
 			
 		$id 	= $_GET['id'];
-		
-		// formulaire de modification prérempli
-	
-		echo "<h2>formulaire de modification d'un utilisateur</h2><br>";
-		
+				
 		// Requete pour récupérer les données des champs pour le user à modifier
 		$user_a_modifier = $con_gespac->QueryRow ( "SELECT user_id, user_nom, user_logon, user_password, users.grade_id, user_mail, user_skin, user_accueil, grade_nom, user_mailing FROM users, grades WHERE users.grade_id=grades.grade_id AND user_id=$id" );		
 		
@@ -218,37 +214,37 @@
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('nom').focus();
+			$('#nom').focus();
 		</script>
 		
-		<form action="gestion_utilisateurs/post_utilisateurs.php?action=mod" method="post" name="post_form" id="post_form">
+		<form action="gestion_utilisateurs/post_utilisateurs.php?action=mod" method="post" name="post_form" id="formulaire">
 			<input type=hidden name=id value=<?PHP echo $user_id;?> >
 			<center>
-			<table width=500>
+			<table class="formtable">
 			
 				<tr>
-					<TD>Nom</TD>
-					<TD><input type=text name=nom id=nom value= "<?PHP echo $user_nom; ?>" 	/></TD>
+					<TD>Nom *</TD>
+					<TD><input type="text" name="nom" class="valid" id="nom" value= "<?PHP echo $user_nom; ?>" 	/></TD>
 				</tr>
 				
 				<tr>
-					<TD>log In</TD>
-					<TD><input type=text name=login value= "<?PHP echo $user_logon; ?>"	/></TD>
+					<TD>log In *</TD>
+					<TD><input type="text" name="login" class="valid" value= "<?PHP echo $user_logon; ?>"	/></TD>
 				</tr>
 				
 				<tr>
-					<TD>Password</TD> 
-					<TD><input type=password name=password value= "<?PHP echo $user_password; ?>"	/></TD>
+					<TD>Password *</TD> 
+					<TD><input type="password" name="password" class="valid" value= "<?PHP echo $user_password; ?>"	/></TD>
 				</tr>
 								
 				<tr>
 					<TD>Mail</TD> 
-					<TD><input type=text name=mail value= "<?PHP echo $user_mail; ?>"	/></TD>
+					<TD><input type="text" name="mail" value= "<?PHP echo $user_mail; ?>"	/></TD>
 				</tr>
 				
 				<tr>
 					<TD>Mailing</TD> 
-					<TD><input type=checkbox name=mailing <?PHP echo $checked;?>	/></TD>
+					<TD><input type="checkbox" name="mailing" <?PHP echo $checked;?>	/></TD>
 				</tr>
 				
 				
@@ -295,7 +291,7 @@
 			</table>
 			
 			<br>
-			<input type=submit value='Modifier cet utilisateur'>
+			<input type=submit value='Modifier cet utilisateur' id="post_form">
 
 			</center>
 

@@ -70,7 +70,7 @@
 		<form action="gestion_inventaire/post_salles.php?action=add" method="post" name="post_form" id='formulaire'>
 		
 			<center>
-			<table width=500>
+			<table class="formtable">
 			
 				<tr>
 					<TD>Nom salle *</TD>
@@ -140,7 +140,7 @@
 			
 			<input type=hidden name=salleid value=<?PHP echo $id;?> >
 			<center>
-			<table width=500>
+			<table class="formtable">
 			
 				<tr>
 					<TD>Nom salle</TD>
