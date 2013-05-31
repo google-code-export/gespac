@@ -77,22 +77,22 @@
 			
 				<tr>
 					<TD>Nom *</TD>
-					<TD><input type=text name=nom id=nom class='valid'></TD>
+					<TD><input type=text name=nom id=nom class='valid nonvide'></TD>
 				</tr>
 				
 				<tr>
 					<TD>Login *</TD>
-					<TD><input type=text name=login id=login class='valid'></TD>
+					<TD><input type=text name=login id=login class='valid nonvide'></TD>
 				</tr>
 				
 				<tr>
 					<TD>Password *</TD> 
-					<TD><input type=password name=password id=password class='valid'></TD>
+					<TD><input type=password name=password id=password class='valid nonvide'></TD>
 				</tr>
 				
 				<tr>
 					<TD>Mail</TD> 
-					<TD><input type=text name=mail 	/></TD>
+					<TD><input type=text name=mail class='valid mail'></TD>
 				</tr>
 				
 				<tr>
