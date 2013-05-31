@@ -136,6 +136,7 @@ img {border:0px; vertical-align:middle;}
 
 /*	champ invalide dans un formulaire */
 .notvalid {background-color:#FFB4A5;}
+.validInfo {font-size:70%;color:red;}
 
 /*	Les grandes tables, comme les salles, marques ...	*/
 .bigtable {min-width:950px;}

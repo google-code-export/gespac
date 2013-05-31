@@ -89,16 +89,50 @@ function filter (phrase, tableid){
 function validForm () {
 	
 	var valid = true;
+	$('.validInfo').html("");
 	
-	$('.valid').each (function(a){
+	$('.valid').each (function(){
 		
-		if ( $(this).val() == "" ) {
-			valid=false;
-			$(this).addClass("notvalid");
+		// test sur champ vide
+		if ($(this).hasClass("nonvide")) {	
+			if ( $(this).val() == "" ) {
+				valid=false;
+				$(this).after("<span class='validInfo'>*non vide </span>");
+			}
 		}
-		else {
-			$(this).removeClass("notvalid");
+		
+		
+		// test sur uai
+		if ($(this).hasClass("uai") && $(this).val() != "") {	
+			if ( $(this).val().match(/^[0-9]{7}[A-Z]{1}$/) == null ) {
+				valid=false;
+				$(this).after("<span class='validInfo'>*uai en majuscules </span>");
+			}
 		}
+		
+		// test sur majuscules
+		if ($(this).hasClass("caps") && $(this).val() != "") {	
+			if ( $(this).val().match(/[A-Z0-9]/) == null ) {
+				valid=false;
+				$(this).after("<span class='validInfo'>*en majuscules </span>");
+			}
+		}
+		
+		// test sur mail
+		if ($(this).hasClass("mail") && $(this).val() != "") {	
+			if ( $(this).val().match(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/) == null ) {
+				valid=false;
+				$(this).after("<span class='validInfo'>*mail invalide </span>");
+			}
+		}		
+		
+		// test sur url
+		if ($(this).hasClass("url") && $(this).val() != "") {	
+			if ( $(this).val().match(/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-=?]*)*\/?/) == null ) {
+				valid=false;
+				$(this).after("<span class='validInfo'>*url invalide </span>");
+			}
+		}			
 	});
 	
 	return valid;	
