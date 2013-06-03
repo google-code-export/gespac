@@ -18,12 +18,6 @@
 
 <script type="text/javascript"> 
 	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
-	function validation () {
-		if ($("#nom").val() == "" || $("#serial").val() == "" ) $("#post_form").attr('disabled', 'disabled');	
-		else $("#post_form").removeAttr('disabled');
-	}
-	
 	
 	/******************************************
 	*		Générateur de ssn aléatoire
@@ -47,27 +41,28 @@
 
 			/* stop form from submitting normally */
 			event.preventDefault(); 
-		
-			// Permet d'avoir les données à envoyer
-			var dataString = $("#formulaire").serialize();
 			
-			// action du formulaire
-			var url = $("#formulaire").attr( 'action' );
-			
-			var request = $.ajax({
-				type: "POST",
-				url: url,
-				data: dataString,
-				dataType: "html"
-			 });
-			 
-			 request.done(function(msg) {
-				$('#dialog').dialog('close');
-				$('#targetback').show(); $('#target').show();
-				$('#target').html(msg);
-				window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('#filt').val() + "'", 1500);
-			 });
-			 
+			if ( validForm() == true) {
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#dialog').dialog('close');
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('#filt').val() + "'", 1500);
+				 });
+			}	 
 		});	
 	});
 
@@ -122,7 +117,7 @@
 			
 				<tr>
 					<TD>Nom du materiel *</TD>
-					<TD><input type=text id=nom name=nom required onkeyup="validation();" /></TD>
+					<TD><input type=text id=nom name=nom required class="valid nonvide" ></TD>
 				</tr>
 				
 				<tr>
@@ -132,12 +127,12 @@
 				
 				<tr>
 					<TD>Numéro de série *</TD> 
-					<TD><input type=text id=serial name=serial required onkeyup="validation();" /> <input type=button value="générer" onclick="SSNgenerator(); validation();"> </TD>
+					<TD><input type=text id=serial name=serial required class="valid nonvide"> <input type=button value="générer" onclick="SSNgenerator();"> </TD>
 				</tr>
 				
 				<tr>
 					<TD>Adresse MAC</TD> 
-					<TD><input type=text id=mac name=mac size=17 maxlength=17 /></TD>
+					<TD><input type=text id=mac name=mac size=17 maxlength=17 class="valid mac"></TD>
 				</tr>
 								
 				<tr>
@@ -183,6 +178,6 @@
 
 			<br>
 			<br>
-			<center><input type=submit value='Ajouter le materiel' id="post_form" disabled></center>
+			<center><input type=submit value='Ajouter le materiel' id="post_form"></center>
 
 		</FORM>
