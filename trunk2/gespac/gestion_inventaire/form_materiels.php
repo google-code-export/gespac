@@ -266,7 +266,7 @@
 				<table class="formtable" style='display:none;' id="table_modele_selectionne">
 					<tr>
 						<td>Modèle sélectionné *</td>
-						<td><input type=hidden name=marque_id id=marque_id> <input type="text" id="modele_selectionne"> </td>
+						<td><input type=hidden name=marque_id id=marque_id> <input type="text" readonly id="modele_selectionne"> </td>
 						<td><a href='#' onclick="choisir_modele();">changer</a></td>
 					</tr>
 				 </table>
@@ -293,7 +293,7 @@
 				
 				<tr>
 					<TD>Adresse MAC</TD> 
-					<TD><input type=text id=mac name=mac size=17 maxlength=17 /></TD>
+					<TD><input type=text id=mac name=mac size=17 maxlength=17 class="valid mac"></TD>
 				</tr>
 				
 				<tr>
@@ -488,7 +488,7 @@
 				<table width="500" align="center" cellpadding="10" id="table_modele_selectionne">
 					<tr>
 						<td>Modèle sélectionné *</td>
-						<td><input type="hidden" name="marque_id" id="marque_id" value=<?PHP echo $marque_id;?> > <input type="text" id="modele_selectionne" value="<?PHP echo $materiel_marque.' '.$materiel_modele; ?>" > </td>
+						<td><input type="hidden" name="marque_id" id="marque_id" value=<?PHP echo $marque_id;?> > <input type="text" readonly id="modele_selectionne" value="<?PHP echo $materiel_marque.' '.$materiel_modele; ?>" > </td>
 						<td><a href='#' onclick="choisir_modele();">changer</a></td>
 					</tr>
 				 </table>
@@ -598,7 +598,7 @@
 					// Le inputbox de remplacement quand on clique sur le plus
 					echo "<TR id='textbox_type' style='display:none;'>
 							<TD>Adresse MAC</TD>
-							<TD><input name='mac_input' id='mac_input' size=17 maxlength=17 type='text' value='$materiel_mac' style='display:none;'></TD>
+							<TD><input name='mac_input' id='mac_input' size=17 maxlength=17 type='text' class='valid mac' value='$materiel_mac' style='display:none;'></TD>
 						</TR>";
 						
 					// Le bouton + pour switcher entre le input et les radio buttons	

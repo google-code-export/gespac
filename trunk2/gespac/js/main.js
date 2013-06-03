@@ -132,7 +132,15 @@ function validForm () {
 				valid=false;
 				$(this).after("<span class='validInfo'>*url invalide </span>");
 			}
-		}			
+		}	
+		
+		// test sur mac
+		if ($(this).hasClass("mac") && $(this).val() != "") {	
+			if ( $(this).val().match(/^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i) == null ) {
+				valid=false;
+				$(this).after("<span class='validInfo'>*mac invalide </span>");
+			}
+		}		
 	});
 	
 	return valid;	

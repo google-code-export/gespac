@@ -72,7 +72,7 @@
 	if ( $action == 'mod' ) {
 	
 		$id     	= $_POST ['id'];
-		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
+		$nom 		= addslashes($_POST ['nom']);
 		$login 		= $_POST ['login'];
 		$password	= $_POST ['password'];
 		$grade   	= $_POST ['grade'];
