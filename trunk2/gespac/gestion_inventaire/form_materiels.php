@@ -278,7 +278,7 @@
 				
 				<tr>
 					<TD>Nom du materiel *</TD>
-					<TD><input type=text id=nom name=nom required class="valid"></TD>
+					<TD><input type=text id=nom name=nom required class="valid nonvide"></TD>
 				</tr>
 				
 				<tr>
@@ -288,7 +288,7 @@
 				
 				<tr>
 					<TD>Numéro de série *</TD> 
-					<TD><input required type=text id=serial name=serial  class="valid"> <input type=button value="générer" onclick="SSNgenerator();"></TD>
+					<TD><input required type=text id=serial name=serial  class="valid nonvide"> <input type=button value="générer" onclick="SSNgenerator();"></TD>
 				</tr>
 				
 				<tr>
@@ -542,7 +542,7 @@
 			
 				<tr>
 					<TD>Nom du materiel *</TD>
-					<TD><input type=text name=nom id=nom required class="valid" value= "<?PHP echo $materiel_nom; ?>" 	/></TD>
+					<TD><input type=text name=nom id=nom required class="valid nonvide" value= "<?PHP echo $materiel_nom; ?>" 	/></TD>
 				</tr>
 				
 				<tr>
@@ -552,7 +552,7 @@
 				
 				<tr>
 					<TD>Numéro de série *</TD>
-					<TD><input type="text" name="serial" id="serial" class="valid" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
+					<TD><input type="text" name="serial" id="serial" class="valid nonvide" value= "<?PHP echo $materiel_serial; ?>" readOnly='true'	/>
 						<a href='#' onclick='SSN_modifier();'>
 							<img src='./img/cadenas_ferme.png' id="img_cadenas_ouvert" title="Passer en écriture">
 							<img src='./img/cadenas_ouvert.png' id="img_cadenas_ferme" style="display:none;" title="Passer en Read only">
@@ -704,7 +704,7 @@
 				<tr>
 					<TD>Préfixe du lot *</TD> 
 					<TD>
-						<input type="text" name="prefixe" id="prefixe" class="valid" />
+						<input type="text" name="prefixe" id="prefixe" class="valid nonvide" />
 					</TD>
 				</tr>
 				

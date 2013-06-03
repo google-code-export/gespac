@@ -135,8 +135,7 @@ img {border:0px; vertical-align:middle;}
 #filtercount, #marquescount {font-size:9px;}
 
 /*	champ invalide dans un formulaire */
-.notvalid {background-color:#FFB4A5;}
-.validInfo {font-size:9px;color:red;}
+.validInfo {font-size:9px; color:red;}
 
 /*	Les grandes tables, comme les salles, marques ...	*/
 .bigtable {min-width:950px;}
@@ -215,6 +214,9 @@ img {border:0px; vertical-align:middle;}
 .tr_doublon {	background-color : #29C920;}
 /*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
 .tr_doublon_ocs {	background-color : yellow;}
+
+/*	Style des tooltips	*/
+.ui-tooltip {font-size:12px; padding:5px 10px; color:white; border-radius:5px; border:1px solid white; background:#000; box-shadow:1px 1px 5px #888;}
 
 	
 /*************************************** 	COMBOBOX  *******************************************/

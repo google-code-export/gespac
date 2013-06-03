@@ -74,7 +74,7 @@
 			
 				<tr>
 					<TD>Nom salle *</TD>
-					<TD><input type=text name=nom id=nom class="valid" required></TD>
+					<TD><input type=text name=nom id=nom class="valid nonvide" required></TD>
 				</tr>
 				
 				<tr>
@@ -144,7 +144,7 @@
 			
 				<tr>
 					<TD>Nom salle</TD>
-					<TD><input type=text name=nom id=nom class="valid" value= "<?PHP echo $salle_nom; ?>" required >
+					<TD><input type=text name=nom id=nom class="valid nonvide" value= "<?PHP echo $salle_nom; ?>" required >
 				</tr>
 				
 				<tr>

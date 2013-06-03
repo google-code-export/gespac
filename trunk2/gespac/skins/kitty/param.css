@@ -49,8 +49,32 @@ img {border:0px; vertical-align:middle;}
 /* la boite d'aide */
 .helpbox {font-size:11px; border:1px grey solid; background-color:#E6E6E6;}
 
-.tablehover tr:hover {background-color:#DE87AD; padding:2px 0px;}
+/*	Le nombre de lignes selectionnées	*/
+#nb_selectionnes {display:none; font-size:10px; margin-left:10px;}
 
+
+/*	Le nombre de lignes filtrées	*/
+#filtercount, #marquescount {font-size:9px;}
+
+/*	champ invalide dans un formulaire */
+.validInfo {font-size:9px; color:#BE008B;}
+
+/*	Les grandes tables, comme les salles, marques ...	*/
+.bigtable {min-width:950px;}
+.bigtable td{padding:2px 4px; font-size:11px;border-bottom:1px solid #DCDCDB;}
+.bigtable th{font-size:12px ;}
+
+/*	Les tables comme les membres des salles ...	*/
+.smalltable {min-width:400px; border:1px solid grey;}
+.smalltable td{padding:2px 4px; font-size:11px; border-bottom:1px solid grey;}
+.smalltable th{font-size:11px ;}
+
+/*	Les tables des formulaires de création, modif ...	*/
+.formtable {text-align:left;}
+.formtable td{padding:2px 20px; font-size:11px;}
+
+/*	couleur d'une ligne selectionnée	*/
+.selected {	background-color : #7EEF9F !important;}
 
 /*	Pour la couleur des dossiers	*/
 .td_ouverture {background-color:#5AC8FF;}
@@ -59,25 +83,14 @@ img {border:0px; vertical-align:middle;}
 .td_precision {background-color:#FF9B46;}
 
 
-/*	Pour les lignes selectionnées	*/
-.selected {	background-color : #7EEF9F;}
-/*	Pour les lignes paires	*/
-.tr1 {	background-color : #D9DBDC;}
-/*	Pour les lignes impaires	*/
-.tr2 {	background-color : #fff;}
-/*	Pour les lignes paires surlignées	*/
-.tr1:hover {	background-color : #FFD769;}
-/*	Pour les lignes impaires surlignées */
-.tr2:hover {	background-color : #FFD769;}
-
-/*	Pour les lignes paires sans rollover	*/
-.tr3 {	background-color : #D9DBDC;}
-/*	Pour les lignes impaires sans rollover	*/
-.tr4 {	background-color : #fff;}
 /*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
 .tr_doublon {	background-color : #29C920;}
 /*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
 .tr_doublon_ocs {	background-color : yellow;}
+
+/*	Style des tooltips	*/
+.ui-tooltip {font-size:12px; padding:5px 10px; color:white; border-radius:5px; border:1px solid white; background:#BE008B; box-shadow:1px 1px 5px #888;}
+
 
 	
 /******************************************* 	RSS / ATOM  *******************************************/

@@ -40,7 +40,6 @@
 		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui.js"></script>	
 		<script type="text/javascript" src="js/jquery.ui.widget.js"></script>	
-		<script type="text/javascript" src="js/jquery.ui.tooltip.js"></script>			
 		<script type="text/javascript" src="js/jquery.ui.dialog.js"></script>	
 		<script type="text/javascript" src="js/main.js"></script>
 		
