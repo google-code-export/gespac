@@ -20,7 +20,7 @@
 
 	<span class="entetes-options">
 
-		<span class="option"><?PHP if ( $E_chk ) { echo "<span id='nb_selectionnes' title=\"nombre d'utilisateurs sélectionnés\"></span>"; echo "<span id='modif_selection' style='display:none;'> <a href='gestion_utilisateurs/form_utilisateurs.php?height=200&width=640&action=modlot' rel='slb_users' title='modifier selection'> <img src='" . ICONSPATH . "modif1.png'></a></span>"; }?>  </span>
+		<span class="option"><?PHP if ( $E_chk ) { echo "<span id='nb_selectionnes' title=\"nombre d'utilisateurs sélectionnés\"></span>"; echo "<span id='modif_selection' style='display:none;'> <a href='gestion_utilisateurs/form_utilisateurs.php?action=modlot' class='editbox' title='modifier sélection'> <img src='" . ICONSPATH . "modif1.png'></a></span>"; }?>  </span>
 		
 		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_utilisateurs/form_utilisateurs.php?action=add' class='editbox' title='Ajouter un utilisateur'><img src='" . ICONSPATH . "add.png'></a>";?></span>
 		
@@ -57,8 +57,8 @@
 		<th>Nom</th>
 		<th>Logon</th>
 		<th>Grade</th>
-		<th>Mail</th>
 		<th>Skin</th>
+		<th>Mail</th>
 		<th>Mailing</th>
 		
 		<?PHP	
@@ -76,6 +76,7 @@
 				$skin			= $record['user_skin'];
 				$mailing		= $record['user_mailing'];
 				$est_modifiable	= $record['est_modifiable'];
+				$mat_pret		= $id <> 1 ? "[" . $con_gespac->QueryOne("SELECT count(*) FROM materiels WHERE user_id=$id") . "]" : "";
 				
 				$mailing_chk = $mailing == 1 ? "<img src='img/ok.png' height=16px width=16px>" : "";
 					
@@ -84,7 +85,7 @@
 				$rq_machine_pretee = $con_gespac->QueryAll ( "SELECT mat_id FROM materiels WHERE user_id=$id AND user_id<>1" );
 				$mat_id = @$rq_machine_pretee['mat_id'];	// crado : le @ permet de ne pas afficher d'erreur si la requete ne renvoie rien. A modifier, évidement
 				
-				// TODO : Virer la partie check des machines prêtées
+				// TODO: Virer la partie check des machines prêtées
 				if ( !isset($mat_id) ) {	// la machine n'est pas prêtée ($mat_id n'existe pas)
 						$id_pret = 0;
 					} else {	// la machine est prêtée ($mat_id existe)
@@ -103,7 +104,7 @@
 				
 				
 				echo $chk_box;
-				echo "<td> $nom </td>";
+				echo "<td> $nom <span title='matériels prêtés'>$mat_pret</span></td>";
 				echo "<td> $logon </td>";
 				echo "<td> $grade </td>";
 				echo "<td> $skin </td>";

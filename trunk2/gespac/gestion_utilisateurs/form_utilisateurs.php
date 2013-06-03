@@ -306,26 +306,24 @@
 	#***************************************************************************	
 	
 	if ($action == 'modlot') {
-		
-		echo "<h2>Formulaire de modification d'un lot</h2><br>";
-			
+
 		?>
 		
 		<script>
 			// Donne le focus au premier champ du formulaire
-			$('mailing').focus();
+			$('#mailing').focus();
 		</script>
 
-		<form action="gestion_utilisateurs/post_utilisateurs.php?action=modlot" method="post" name="post_form" id="post_form">
+		<form action="gestion_utilisateurs/post_utilisateurs.php?action=modlot" method="post" name="post_form" id="formulaire">
 			<center>
 			
 			<input type=hidden name='lot_users' id='lot_users'>
 			
 			<!-- Ici on récupère la valeur du champ users_a_poster de la page voir_utilisateurs.php -->
-			<script>$("lot_users").value = $('id_a_poster').value;</script>
+			<script>$("#lot_users").val($('#id_a_poster').val());</script>
 			
 
-			<table width=500>
+			<table class='formtable'>
 				<tr>
 					<TD> Activer le mailing</TD> 
 						<TD><select name="mailing" id="mailing">
@@ -381,8 +379,8 @@
 			</table>
 
 			<br>
-			<input type=submit value='Modifier le lot' >
-			<input type=button value='Sortir sans modifier' onclick="SexyLightbox.close();" >
+			<input type=submit value='Modifier le lot' id="post_form" >
+			<input type=button onclick="$('#dialog').dialog('close');" value='Annuler'>
 
 			</center>
 		
