@@ -49,7 +49,7 @@
 	
 	
 
-	
+	/*
 	window.addEvent('domready', function(){
 		
 		// MOTEUR AJAX
@@ -97,7 +97,7 @@
 		});
 		
 	});
-	
+	*/
 </script>
 
 
@@ -119,11 +119,11 @@
 
 	?>
 	
-	<form action="gestion_utilisateurs/post_droits.php?gradeid=<?PHP echo $grade_id; ?>" method="post" name="post_form" id="post_form">
+	<form action="gestion_utilisateurs/post_droits.php?gradeid=<?PHP echo $grade_id; ?>" method="post" name="post_form" id="formulaire">
 	
 		<center>
 		
-		<table width=500 >
+		<table class='smalltable hover' >
 			
 			<th>Item</th>
 			<th>Lecture <input type=checkbox id=L_CheckAll> </th>
@@ -131,7 +131,7 @@
 
 			<?PHP
 				$menu_precedent = "00"; // J'initialise le menu pour la gestion des groupes d'items
-				$tr_class = "tr1";
+				$background = "#C2C2C2";
 
 				$liste_items = $con_gespac->QueryAll ( "SELECT * FROM droits order by droit_index" );		
 	
@@ -151,7 +151,7 @@
 
 					// Si jamais on change de bloc d'items
 					if ( $menu <> $menu_precedent ) {
-						$tr_class = $tr_class == "tr1" ? "tr2" : "tr1" ;					
+						$background = $background == "#C2C2C2" ? "#FFF" : "#C2C2C2" ;					
 						$menu_precedent = $menu;	
 					}
 					
@@ -168,7 +168,7 @@
 					if ($droit_etendue == 1) $E_check = $E_value == 1 ? "checked" : "" ;
 					
 					
-					echo "<tr class='$tr_class' title='$droit_description'>";
+					echo "<tr style='background:$background;' title='$droit_description'>";
 						echo "<TD>$droit_titre</TD>";
 						echo "<TD><input type=checkbox id='L-$droit_index' class='Lchk' name='L-$droit_index' $L_check onclick=\"decocher_ecriture('$droit_index'); \"/></TD>";
 						if ($droit_etendue == 1) echo "<TD><input type=checkbox id='E-$droit_index' class='Echk' name='E-$droit_index' $E_check onclick=\"cocher_lecture('$droit_index'); \"/></TD>";
@@ -182,7 +182,7 @@
 		</table>
 		
 		<br>
-		<input type=submit value='Modifier les droits' />
+		<input type=submit value='Modifier les droits' id='post_form'>
 
 		</center>
 
