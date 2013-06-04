@@ -23,7 +23,6 @@
 		
 	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
-	$id 		= $_GET['id'];
 	
 	
 	/*********************************************
@@ -36,7 +35,9 @@
 	
 	/**************** SUPPRESSION ********************/
 	
-	if ( $action == 'suppr' ) {
+	if ( $action == 'del' ) {
+
+		$id	= $_POST['id'];
 
         //Insertion d'un log
 		
@@ -84,7 +85,7 @@
 	if ( $action == 'mod' ) {
 	
 		$id     	= $_POST ['id'];
-		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
+		$nom 		= addslashes($_POST ['nom']);
 
 		$req_modif_grade = "UPDATE grades SET grade_nom='$nom' WHERE grade_id=$id";
 		$con_gespac->Execute ( $req_modif_grade );
@@ -105,7 +106,7 @@
 	/**************** INSERTION ********************/
 	if ( $action == 'add' ) {
 	
-		$nom 		= addslashes(utf8_decode(urldecode($_POST ['nom'])));
+		$nom = addslashes($_POST ['nom']);
 		
 		$req_add_grade = "INSERT INTO grades ( grade_nom, grade_menu) VALUES ( '$nom', '' )";
 		$con_gespac->Execute ( $req_add_grade );

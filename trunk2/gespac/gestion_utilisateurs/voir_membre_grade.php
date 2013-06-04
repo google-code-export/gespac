@@ -1,29 +1,24 @@
 	<!-- 
 
-
-
 		Liste des membres du grade 
-
-
-
-
 	-->
 
 
 <?PHP
 
-	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
-
-	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	// lib
+	include_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
 	
 	
-	// id ocs du matériel à afficher
+	// id ocs du matÃ©riel Ã  afficher
 	$grade_id = $_GET ['grade_id'];
 
-	// cnx à la base de données GESPAC
+	// cnx Ã  la base de donnÃ©es GESPAC
 	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
-	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
+	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© avec originalitÃ© "array" (mais "tableau" peut aussi marcher)
 	$liste_des_users = $con_gespac->QueryAll ( "SELECT user_nom, user_logon, user_mail, user_skin, user_accueil, user_mailing FROM users WHERE grade_id=$grade_id" );
 
 	echo "<p><small>" . count($liste_des_users) . " utilisateur(s) dans ce grade.</small></p>";
@@ -36,7 +31,7 @@
 
 <center>
 	
-	<table id="myTable" width=620>
+	<table id="myTable" class="smalltable alternate">
 		<th>Nom</th>
 		<th>Login</th>
 		<th>Mail</th>
@@ -49,7 +44,7 @@
 			$compteur = 0;
 			// On parcourt le tableau
 			foreach ($liste_des_users as $record ) {
-				// On écrit les lignes en brut dans la page html
+				// On Ã©crit les lignes en brut dans la page html
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
@@ -65,10 +60,10 @@
 					
 					
 					if ($mailing == 1) {
-						$mailing_nom   = "Activé";
+						$mailing_nom   = "ActivÃ©";
 						$mailing_color = "#00DE00";
 					} else {
-						$mailing_nom   = "Désactivé";
+						$mailing_nom   = "DÃ©sactivÃ©";
 						$mailing_color = "#EE0000";
 					}
 					
@@ -97,7 +92,7 @@
 	
 <?PHP
 
-	// On se déconnecte de la db
+	// On se dÃ©connecte de la db
 	$con_gespac->Close();
 
 

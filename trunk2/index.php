@@ -11,7 +11,7 @@
 		<meta http-equiv=Content-Type content="text/html; charset=utf-8" /> 
 		
 		<!--	FAVICON	-->
-		<link rel="SHORTCUT ICON" href="./gespac/img/favicon.ico"/>
+		<link rel="SHORTCUT ICON" href="./gespac/img/favicon.png"/>
 				
 		<!--	CSS	-->
 		<link rel="stylesheet" href="./gespac/css/style.css" type="text/css" media="screen" />
