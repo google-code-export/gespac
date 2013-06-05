@@ -12,7 +12,7 @@
 
 
 <script type="text/javascript"> 
-	
+	/*
 	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
@@ -45,9 +45,33 @@
 		 
 		 if ( item_L.checked == false )
 			item_E.checked = false;
-	}
+	}*/
 	
-	
+	$(function(){
+		
+		
+		//-------------------------------------------- DECOCHE l'écriture quand on DECOCHE la lecture 
+		$(".Lchk").click(function(a){
+			
+			var lid = $(this).prop("id");
+			var eid = $(this).prop("id").replace("L-", "E-");
+			
+			if ( $("#" + lid).prop("checked") == false ) $("#" + eid).prop("checked", false);
+			
+		});
+
+		//-------------------------------------------- COCHE la lecture quand on COCHE l'écriture
+		$(".Echk").click(function(a){
+			
+			var eid = $(this).prop("id");
+			var lid = $(this).prop("id").replace("E-", "L-");
+			
+			if ( $("#" + eid).prop("checked") == true ) $("#" + lid).prop("checked", true);
+			
+		});
+		
+		
+	});
 
 	/*
 	window.addEvent('domready', function(){
@@ -170,8 +194,10 @@
 					
 					echo "<tr style='background:$background;' title='$droit_description'>";
 						echo "<TD>$droit_titre</TD>";
-						echo "<TD><input type=checkbox id='L-$droit_index' class='Lchk' name='L-$droit_index' $L_check onclick=\"decocher_ecriture('$droit_index'); \"/></TD>";
-						if ($droit_etendue == 1) echo "<TD><input type=checkbox id='E-$droit_index' class='Echk' name='E-$droit_index' $E_check onclick=\"cocher_lecture('$droit_index'); \"/></TD>";
+						//echo "<TD><input type=checkbox id='L-$droit_index' class='Lchk' name='L-$droit_index' $L_check onclick=\"decocher_ecriture('$droit_index'); \"/></TD>";
+						//if ($droit_etendue == 1) echo "<TD><input type=checkbox id='E-$droit_index' class='Echk' name='E-$droit_index' $E_check onclick=\"cocher_lecture('$droit_index'); \"/></TD>";
+						echo "<TD><input type=checkbox id='L-$droit_index' class='Lchk' name='L-$droit_index' $L_check></TD>";
+						if ($droit_etendue == 1) echo "<TD><input type=checkbox id='E-$droit_index' class='Echk' name='E-$droit_index' $E_check></TD>";
 						else echo "<TD>&nbsp;</TD>";
 					echo "</tr>";
 					
