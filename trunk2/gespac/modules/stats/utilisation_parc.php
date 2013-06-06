@@ -2,9 +2,9 @@
 
 	// filtrer les stats
 	function filtrer_stat (pc, datedebut, datefin) {
-		var pc_value = $('pc').value
-		var datedebut_value = $('datedebut').value
-		var datefin_value = $('datefin').value
+		var pc_value = $('#pc').val();
+		var datedebut_value = $('#datedebut').val();
+		var datefin_value = $('#datefin').val();
 		/*
 		(datedebut_value == '') ? ();
 		? ();
@@ -21,6 +21,13 @@
 	
 </script>
 
+<?PHP
+	
+	$pc = $_GET['pc'];
+	$datedebut = $_GET['datedebut'];
+	$datefin = $_GET['datefin'];
+
+?>
 
 <div class="entetes" id="entete-statparc">	
 	<span class="entetes-titre">UTILISATION DU PARC<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
@@ -28,9 +35,9 @@
 
 	<span class="entetes-options">
 
-		<span class="option"><input type=text id=pc placeholder="nom machine"></span>
-		<span class="option"><input type=text id=datedebut placeholder="début (aaaa-mm-jj)"></span>
-		<span class="option"><input type=text id=datefin placeholder="fin (aaaa-mm-jj)"></span>
+		<span class="option"><input type=text id=pc placeholder="nom machine" value='<?PHP echo $pc; ?>'></span>
+		<span class="option"><input type=text id=datedebut placeholder="début (aaaa-mm-jj)" value='<?PHP echo $datedebut; ?>'></span>
+		<span class="option"><input type=text id=datefin placeholder="fin (aaaa-mm-jj)" value='<?PHP echo $datefin; ?>'></span>
 		<span class="option"><input type=button value=Filtrer onclick="filtrer_stat(pc, datedebut, datefin);" ></span>
 		
 	</span>
@@ -44,10 +51,6 @@
 
 	// cnx à fog
 	$con_fog = new Sql($host, $user, $pass, $fog);
-	
-	$pc = $_GET['pc'];
-	$datedebut = $_GET['datedebut'];
-	$datefin = $_GET['datefin'];
 	
 	if ( !isset($pc) && !isset($datedebut) && !isset($datefin) ) {
 		$sql = "select hostName, count(*) as compte from userTracking, hosts WHERE utHostID=hostID group by utHostID order by hostName";
@@ -90,7 +93,7 @@
 		
 			echo "<li>";
 				// label
-				echo "<a>$mat</a>";
+				echo "<a href='gestion_inventaire/voir_fiche_materiel.php?maxheight=650&mat_nom=$mat&mat_ssn=' class='infobox' title='Fiche du matériel $mat'>$mat</a>";
 				// nb d'éléments
 				echo "<span class='count'>$val</span>";
 				// row coloriée
