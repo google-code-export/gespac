@@ -1,6 +1,3 @@
-
-
-
 <div class="entetes" id="entete-importusers">	
 
 	<span class="entetes-titre">IMPORT IACA<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
@@ -10,19 +7,16 @@
 
 <div class="spacer"></div>
 
-
-<form method="POST" action="gestion_utilisateurs/post_comptes_iaca.php" target=_blank enctype="multipart/form-data">
-<!--<form method="POST" action="gestion_utilisateurs/post_comptes_iaca.php" enctype="multipart/form-data">-->
-	 <!-- On limite le fichier à 10000Ko -->
+<form enctype="multipart/form-data">
      <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
 	 <center>
 	 <table width=400 align=center cellpadding=10px>
 		<tr>
 			<td>Fichier IACA</td>
-			<td><input type="file" name="myfile"></td>
+			<td><input type="file" name="myfile">  </td>
 		</tr>
 		<tr>
-			<td colspan=2><input type="submit" name="envoyer" value="Envoyer le fichier"></td>
+			<td colspan=2><input type="button" name="envoyer" value="Envoyer le fichier"></td>
 		</tr>
 	 </table>
 	 </center>
@@ -31,7 +25,7 @@
 
 <br>
 
-<center>Aide <a href="javascript:$('aide1').toggle();"><b>Infra non migrée</b></a> - <a href="javascript:$('aide2').toggle();"><b>Infra migrée</b></a></center>
+<center>Aide <a href="javascript:$('#aide1').toggle('fast');"><b>Infra non migrée</b></a> - <a href="javascript:$('#aide2').toggle('fast');"><b>Infra migrée</b></a></center>
 
 
 
@@ -69,3 +63,32 @@
 		 - N`importez que le groupe des profs
 	</small>
 </div>
+
+
+<script>
+	
+//---------------------------------------- Post file par Ajax (fonction par olanod : http://stackoverflow.com/users/931340/olanod)
+$(':button').click(function(){
+    var formData = new FormData($('form')[0]);
+    $.ajax({
+        url: 'gestion_utilisateurs/post_comptes_iaca.php',  //server script to process data
+        type: 'POST',
+        xhr: function() {  // custom xhr
+            var myXhr = $.ajaxSettings.xhr();
+            return myXhr;
+        },
+		// Data du formulaire
+        data: formData,
+        //Options to tell JQuery not to process data or worry about content-type
+        cache: false,
+        contentType: false,
+        processData: false,
+        complete : function(res) {
+			$('#targetback').show(); $('#target').show();
+			$('#target').html(res.responseText);
+			window.setTimeout("document.location.href='index.php?page=utilisateurs'", 2500);
+		}
+    });
+});
+
+</script>
