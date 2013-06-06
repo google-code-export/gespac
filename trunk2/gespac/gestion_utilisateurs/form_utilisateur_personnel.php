@@ -53,26 +53,26 @@
 			
 			<script>
 				// Donne le focus au premier champ du formulaire
-				$('nom').focus();
+				$('#nom').focus();
 			</script>
 			
-			<form action="gestion_utilisateurs/post_utilisateur_personnel.php" method="post" name="post_form" id="post_form">
+			<form action="gestion_utilisateurs/post_utilisateur_personnel.php" method="post" name="post_form" id="formulaire">
 				<center>
-				<table width=500>
+				<table class="formtable">
 				
 					<tr>
 						<TD>Nom</TD>
-						<TD><input type=text size=30 name=nom id=nom value= "<?PHP echo $user_nom; ?>" 	/></TD>
+						<TD><input type=text size=30 name=nom id=nom value= "<?PHP echo $user_nom; ?>" class="valid nonvide"></TD>
 					</tr>
 					
 					<tr>
 						<TD>Password</TD> 
-						<TD><input type=password size=30 name=password value= "<?PHP echo $user_password; ?>"	/></TD>
+						<TD><input type=password size=30 name=password value= "<?PHP echo $user_password; ?>" class="valid nonvide"></TD>
 					</tr>
 									
 					<tr>
 						<TD>Mail</TD> 
-						<TD><input type=text name=mail size=30 value= "<?PHP echo $user_mail; ?>"	/></TD>
+						<TD><input type=text name=mail size=30 value= "<?PHP echo $user_mail; ?>" class="valid mail"></TD>
 					</tr>
 					
 					<tr>
@@ -138,7 +138,7 @@
 				</table>
 				
 				<br><br>
-				<input type=submit value='Modifier mon compte' >
+				<input type="submit" value="Modifier mon compte" id="post_form" >
 
 				</center>
 
@@ -154,44 +154,37 @@
 
 <script type="text/javascript"> 
 	
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
-	function validation () {
+	$(function() {	
+				
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
 
-		var bt_submit 	  = $("post_user");
-		var user_nom 	  = $("nom").value;
-		var user_password = $("password").value;
-		
-		if (user_nom == "" || user_password == "") {
-			bt_submit.disabled = true;
-		} else {
-			bt_submit.disabled = false;
-		}
-	}
-	
-	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
-	
-	window.addEvent('domready', function(){
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					window.setTimeout("document.location.href='index.php?page=moncompte'", 2500);	
-				}
+			/* stop form from submitting normally */
+			event.preventDefault(); 
 			
-			}).send(this.toQueryString());
-		});			
+			if ( validForm() == true) {
+			
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=moncompte'", 2500);
+				 });
+			}			 
+		});	
 	});
-	
+
+
 </script>
