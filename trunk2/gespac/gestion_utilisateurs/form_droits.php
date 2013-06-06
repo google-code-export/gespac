@@ -12,46 +12,12 @@
 
 
 <script type="text/javascript"> 
-	/*
-	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
-	function validation () {
-
-		var bt_submit = $("post_user");
-		var grade_nom = $("nom").value;
-		
-		if (grade_nom == "") {
-			bt_submit.disabled = true;
-		} else {
-			bt_submit.disabled = false;
-		}
-	};
-	
-	
-	// si on coche en écriture, la lecture s'active aussi
-	function cocher_lecture (item) {
-		
-		var item_E = $("E-" + item);
-		var item_L = $("L-" + item);
-		
-		if ( item_E.checked == true)
-			item_L.checked = true;	
-	}
-	
-	//si on décoche la lecture, c'est l'écriture qui se désactive
-	function decocher_ecriture (item) {
-		 
-		var item_E = $("E-" + item);
-		var item_L = $("L-" + item);
-		 
-		 if ( item_L.checked == false )
-			item_E.checked = false;
-	}*/
 	
 	$(function(){
 		
 		
 		//-------------------------------------------- DECOCHE l'écriture quand on DECOCHE la lecture 
-		$(".Lchk").click(function(a){
+		$(".Lchk").click(function(){
 			
 			var lid = $(this).prop("id");
 			var eid = $(this).prop("id").replace("L-", "E-");
@@ -61,7 +27,7 @@
 		});
 
 		//-------------------------------------------- COCHE la lecture quand on COCHE l'écriture
-		$(".Echk").click(function(a){
+		$(".Echk").click(function(){
 			
 			var eid = $(this).prop("id");
 			var lid = $(this).prop("id").replace("E-", "L-");
@@ -71,57 +37,64 @@
 		});
 		
 		
-	});
-
-	/*
-	window.addEvent('domready', function(){
-		
-		// MOTEUR AJAX
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('filt').value + "'", 2500);	
-					
-				}
+		//--------------------------------------------  Pour checker toutes les cases en lecture
+		$('#L_CheckAll').click(function(){
 			
-			}).send(this.toQueryString());
-		});		
-		
-		
-		// Pour checker toutes les cases en lecture
-		$('L_CheckAll').addEvent ('click', function(e) {
-			
-			if ( $('L_CheckAll').checked == true ) {			
-				$$('.Lchk').each(function (item) {	item.checked = true; }) // on coche tout
+			if ( $('#L_CheckAll').prop("checked") == true ) {			
+				$('.Lchk').prop("checked", true); // on coche tout
 			} else {
-				$$('.Lchk').each(function (item) {	item.checked = false; }) // on decoche toutes les lectures
-				$$('.Echk').each(function (item) {	item.checked = false; }) // on decoche toutes les écritures (parce que si on a pas la lecture, ey, ça sert à rien de pouvoir écrire)
-				$('E_CheckAll').checked = false;
+				$('.Lchk').prop("checked", false); // on decoche toutes les lectures
+				$('.Echk').prop("checked", false); // on decoche toutes les écritures (parce que si on a pas la lecture, ey, ça sert à rien de pouvoir écrire)
+				$('#E_CheckAll').prop("checked", false);
 			}	
 		});
 		
-		// Pour checker toutes les cases en écriture
-		$('E_CheckAll').addEvent ('click', function(e) {
+		//--------------------------------------------  Pour checker toutes les cases en écriture
+		$('#E_CheckAll').click(function(){
 			
-			if ( $('E_CheckAll').checked == true ) {			
-				$$('.Echk').each(function (item) {	item.checked = true; }) // on coche toutes les écritures
-				$$('.Lchk').each(function (item) {	item.checked = true; }) // on coche toutes les lectures parce que si on peut écrire, on doit pouvoir lire aussi
-				$('L_CheckAll').checked = true;
+			if ( $('#E_CheckAll').prop("checked") == true ) {			
+				$('.Echk').prop("checked", true); // on coche toutes les écritures
+				$('.Lchk').prop("checked", true); // on coche toutes les lectures parce que si on peut écrire, on doit pouvoir lire aussi
+				$('#L_CheckAll').prop("checked", true);
 			} else {
-				$$('.Echk').each(function (item) {	item.checked = false; }) // on decoche toutes les écritures
+				$('.Echk').prop("checked", false); // on decoche toutes les écritures
 			}	
 		});
 		
+		
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+			
+			if ( validForm() == true) {
+			
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#dialog').dialog('close');
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('#filt').val() + "'", 2500);
+				 });
+			}			 
+		});	
+		
+		
 	});
-	*/
+
 </script>
 
 
