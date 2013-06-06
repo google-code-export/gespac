@@ -13,26 +13,33 @@
 
 <script type="text/javascript"> 
 
-	window.addEvent('domready', function(){
-		
-		// MOTEUR AJAX
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
+	$(function() {	
+	
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
 
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('filt').value + "'", 2500);	
-				}
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+			// Permet d'avoir les données à envoyer
+			var dataString = $("#formulaire").serialize();
 			
-			}).send(this.toQueryString());
-		});		
-		
+			// action du formulaire
+			var url = $("#formulaire").attr( 'action' );
+			
+			var request = $.ajax({
+				type: "POST",
+				url: url,
+				data: dataString,
+				dataType: "html"
+			 });
+			 
+			 request.done(function(msg) {
+				$('#dialog').dialog('close');
+				$('#targetback').show(); $('#target').show();
+				$('#target').html(msg);
+				window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('#filt').val() + "'", 2500);
+			 });
+		});	
 	});
 	
 </script>
@@ -57,13 +64,13 @@
 
 ?>
 
-<FORM action="gestion_utilisateurs/post_menu_portail.php?gradeid=<?PHP echo $grade_id; ?>" method="post" name="post_form" id="post_form">
+<FORM action="gestion_utilisateurs/post_menu_portail.php?gradeid=<?PHP echo $grade_id; ?>" method="post" name="post_form" id="formulaire">
 	
 	<center>
 	
 	</br>
 	
-	<table width=500 id='portail_table'>
+	<table class="smalltable alternate hover" id='portail_table'>
 		
 		<th>&nbsp;</th>
 		<th>Icone</th>
@@ -74,25 +81,20 @@
 				
 		
 		<?PHP	
-
-			$compteur = 0; // Pour alternance des couleurs
 			
 			// On parcourt le tableau
 			foreach ($liste_des_icones as $record ) {
-							
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-						
-				echo "<tr class=$tr_class>";
+		
+				echo "<tr>";
 					
 					$mp_id		 	= $record['mp_id'];	
-					$mp_icone	 	= "./img/" . $record['mp_icone'];
+					$mp_icone	 	= "img/" . $record['mp_icone'];
 					$mp_nom 		= $record['mp_nom'];
 					$mp_lien		= $record['mp_url'];	
 					
 					$menu_portail_exist = preg_match ("#item$mp_id#", $droits_menu_portail);
 					$check = $menu_portail_exist == 1 ? "checked" : "" ;	
-					
+
 					echo "<td><input type=checkbox id='item$mp_id' class='Lchk' name='item$mp_id' $check \"/></td>";
 					echo "<td width=40><img height=30 src=$mp_icone></td>";
 					echo "<td>" . $mp_nom . "</td>";
@@ -102,14 +104,13 @@
 
 				echo "</tr>";
 				
-				$compteur++;
 			}
 		?>	
 
 	</table>
 		
 	<br>
-	<input type="submit" value='Modifier le menu du portail' />
+	<input type="submit" value='Modifier le menu du portail' id="post_form">
 	
 	</center>
 	
