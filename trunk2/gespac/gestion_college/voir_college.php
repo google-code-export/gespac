@@ -1,7 +1,7 @@
 <?PHP
 session_start();
 
-	#fichier de creation / modif / du college
+	#fichier de modif du college
 
 	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
@@ -35,7 +35,7 @@ session_start();
 	<div class="helpbox">C'est la fiche d'identité du collège.</div>
 
 	<span class="entetes-options">
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_college/form_college.php?height=450&width=640&id=$clg_uai' rel='slb_college' title=\"Modifier la fiche collège\"><img src='" . ICONSPATH . "modif1.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_college/form_college.php?maxheight=650&id=$clg_uai' class='editbox' title='Modifier la fiche collège'><img src='" . ICONSPATH . "modif1.png'></a>";?></span>
 	</span>
 
 </div>
@@ -47,7 +47,7 @@ session_start();
 		
 echo "
 	<center>
-			<table class='tablehover'>
+			<table class='smalltable alternate'>
 
 				<tr class='tr1'>
 					<TD><B>UAI</B></TD>
@@ -108,11 +108,3 @@ echo "
 		</center>";
 			
 ?>
-
-
-<script type="text/javascript">
-	
-	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_college'});
-	});
-</script>

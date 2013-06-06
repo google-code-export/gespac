@@ -124,6 +124,14 @@ function validForm () {
 				valid=false;
 				$(this).after("<span class='validInfo'>*mail invalide </span>");
 			}
+		}	
+		
+		// test sur mail non cg13
+		if ($(this).hasClass("mailnoncg13") && $(this).val() != "") {	
+			if ( $(this).val().match(/^[A-Za-z0-9._%+-]+@cg13\.fr$/) != null ) {
+				valid=false;
+				$(this).after("<span class='validInfo'>*mail non cg13 </span>");
+			}
 		}		
 		
 		// test sur url
