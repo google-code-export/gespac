@@ -2,8 +2,6 @@
 
 	$action = $_GET['action'];
 
-
-
 	if ( $action == "add" ) {
 	
 		$nom = $_POST ['nom'];

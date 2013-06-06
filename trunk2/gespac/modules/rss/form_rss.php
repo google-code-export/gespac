@@ -3,29 +3,28 @@
 	$action = $_GET['action'];
 
 	if ( $action == 'ajout' ) {
-		
-		echo "<h2>Ajouter un flux RSS ou ATOM</h2><br>";
+
 ?>	
 	
-		<form action="modules/rss/post_rss.php?action=add" method="post" name="post_add_flux_rss" id="post_add_flux_rss">
+		<form action="modules/rss/post_rss.php?action=add" method="post" name="post_add_flux_rss" id="formulaire">
 		
 			<center>
-			<table width=500 class="form_table">
+			<table class="formtable">
 			
 				<tr>
 					<TD>Nom du flux *</TD>
-					<TD><input type="text" name="nom" id="nom" onkeyup="validation();"/></TD>
+					<TD><input type="text" name="nom" id="nom" class="valid nonvide"></TD>
 				</tr>
 				
 				<tr>
 					<TD>URL du flux *</TD>
-					<TD><input type="text" name="url" id="url" onkeyup="validation();"/></TD>
+					<TD><input type="text" name="url" id="url" class="valid nonvide url"></TD>
 				</tr>
 				
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter le flux' id="post_flux" disabled>
+			<input type=submit value='Ajouter le flux' id="post_form">
 
 			</center>
 
@@ -42,23 +41,9 @@
 
 	<script>
 		// Donne le focus au premier champ du formulaire
-		$('nom').focus();
-		
-		
-		// Validation du formulaire
-		function validation () {
+		$('#nom').focus();
 
-			var bt_submit = $("post_flux");
-			var rss_nom = $("nom").value;
-			var rss_url = $("url").value;
-
-			if (rss_nom == "" || rss_url == "") {
-				bt_submit.disabled = true;
-			} else {
-				bt_submit.disabled = false;
-			}
-		};
-		
+	/*	
 		// ferme la smoothbox et rafraichis la page
 		function refresh_quit () {
 			// lance la fonction avec un délais de 1500ms
@@ -80,6 +65,37 @@
 				}
 			}).send(this.toQueryString());
 		});	
+*/
+	$(function() {	
+				
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
 
-		
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+			
+			if ( validForm() == true) {
+			
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#dialog').dialog('close');
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=rss'", 2500);
+				 });
+			}			 
+		});	
+	});
 	</script>

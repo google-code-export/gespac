@@ -6,13 +6,6 @@
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-08-02#", $_SESSION['droits']);
 ?>
 
-<script type="text/javascript"> 
-
-	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_rss'});
-	}); 
-</script>
-
 
 <div class="entetes" id="entete-statparc">	
 	<span class="entetes-titre">FLUX RSS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
@@ -49,7 +42,7 @@
 			// si le fichier flux n'existe pas, on ne permet pas la suppression (et la suppression de quoi d'abord ?)
 			if ( $row > 0 )	echo "<span class='option'><a href='#' onclick='supprimer_flux( $(\"select_flux\").value);' title='Supprimer le flux'><img src='" . ICONSPATH . "minus.png'></a></span>";
 			
-			echo "<span class='option'><a href='modules/rss/form_rss.php?height=210&width=640&action=ajout' rel='slb_rss' title='Ajouter un flux'><img src='" . ICONSPATH . "add.png'></a></span>";
+			echo "<span class='option'><a href='modules/rss/form_rss.php?action=ajout' class='editbox' title='Ajouter un flux'><img src='" . ICONSPATH . "add.png'></a></span>";
 		}
 		
 		?>
@@ -74,9 +67,9 @@
 		var valida = confirm('Voulez-vous vraiment supprimer ce flux ?');
 		
 		if ( valida ) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("modules/rss/post_rss.php?action=suppr&id=" + ligne);
-			window.setTimeout("document.location.href='index.php?page=rss'", 1500);		
+			$('#targetback').show(); $('#target').show();
+			$('#target').load("modules/rss/post_rss.php?action=suppr&id=" + ligne);
+			window.setTimeout("document.location.href='index.php?page=rss'", 2500);		
 		}
 	};
 	
