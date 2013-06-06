@@ -87,7 +87,7 @@
 			<a href="index.php?page=college"><div class="menu-item" id='college'>Fiche collège</div></a>
 			<a href="index.php?page=rss"><div class="menu-item" id='rss'>Flux RSS</div></a>
 			<a href="index.php?page=statbat"><div class="menu-item" id='statbat'>Stats bâtons</div></a>
-			<a href="index.php?page=statpie"><div class="menu-item" id='statbat'>Stats camemberts</div></a>
+			<a href="index.php?page=statpie"><div class="menu-item" id='statpie'>Stats camemberts</div></a>
 			<a href="index.php?page=statparc"><div class="menu-item" id='statparc'>Stats utilisation du parc</div></a>
 			<a href="index.php?page=infoserveur"><div class="menu-item" id='infoserveur'>Info serveur</div></a>
 		</div>
