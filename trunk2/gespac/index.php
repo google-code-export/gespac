@@ -51,7 +51,7 @@
 
 	
 	<BODY>
-	
+	<div id="back"></div>
 	<!--	DIV target pour Ajax	-->
 	<div id="targetback"></div><div id="target"></div>
 

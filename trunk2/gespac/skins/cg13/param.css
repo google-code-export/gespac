@@ -65,10 +65,10 @@ img {border:0px; vertical-align:middle;}
 #page {background-color:white; margin-left:auto; margin-right:auto;}
 
 /*	Conteneur où on dessine les matériels, salles, ...	*/
-#contenu {background-color : white;	float:left;	width:auto;	overflow:auto; margin-left:230px;}
+#contenu {float:left; width:auto; overflow:auto; margin-left:230px;}
 
 /*	menu de gauche	*/
-#menu { width:225px; margin-top:80px; position:fixed; background-color:#fff; z-index:12; overflow:auto;}
+#menu { width:225px; margin-top:80px; position:fixed; z-index:12; overflow:auto;}
 #menu  img{ width:24px; margin-right:4px;}
 #menu-global {}
 .menu-block {margin-bottom:15px;}

@@ -61,21 +61,23 @@ img {border:0px; vertical-align:middle;}
 	border-radius	: 5px;
 }
 
+/*	Pour mettre un fond d'écran	*/
+#back {width:100%; height:100%; position:fixed; top:0; left:0px; background-color:white; opacity:1; z-index:-2; text-align:center;}
 
 /*	On execute tous les post dans ce div	*/
 #target {width:100%; position:fixed;	top:50%; left:0px; background-color:red; color:white; padding:5px; display:none; z-index:13; text-align:center;}
 #targetback {width:100%; height:100%; position:fixed; top:0; left:0px; background-color:black; opacity:.75; color:white; padding:5px; display:none; z-index:13; text-align:center;}
 
-.spacer { clear:both; height:50px; min-width:500px;}
+.spacer {clear:both; height:50px; min-width:500px;}
 
 /*	Le conteneur principal où on dessine le contenu et les menus	*/
-#page {background-color:white; margin-left:auto; margin-right:auto;}
+#page {margin-left:auto; margin-right:auto;}
 
 /*	Conteneur où on dessine les matériels, salles, ...	*/
-#contenu {float:left;	width:auto;	overflow:auto; margin-left:230px;}
+#contenu {float:left; width:auto; overflow:auto; margin-left:230px;}
 
 /*	menu de gauche	*/
-#menu { width:225px; margin-top:80px; position:fixed; background-color:#fff; z-index:12; overflow:auto;}
+#menu { width:225px; margin-top:80px; position:fixed; z-index:12; overflow:auto;}
 #menu  img{ width:24px; margin-right:4px;}
 #menu-global {}
 .menu-block {margin-bottom:15px;}
@@ -138,7 +140,7 @@ img {border:0px; vertical-align:middle;}
 .validInfo {font-size:9px; color:red;}
 
 /*	Les grandes tables, comme les salles, marques ...	*/
-.bigtable {min-width:950px;}
+.bigtable {min-width:950px; background-color:#fff; opacity:1;}
 .bigtable td{padding:2px 4px; font-size:11px;border-bottom:1px solid #DCDCDB;}
 .bigtable th{font-size:12px ;}
 
