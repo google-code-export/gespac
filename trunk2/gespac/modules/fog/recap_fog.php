@@ -25,8 +25,7 @@
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform">
-				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'table_recap_fog');" type="text"> 
-				<span id="nb_filtre" title="nombre de machines affichées"></span>
+				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'table_recap_fog');" type="text"> <span id="filtercount" title="Nombre de lignes filtrées"></span>
 			</form>
 		</span>
 	</span>
@@ -35,46 +34,6 @@
 
 <div class="spacer"></div>
 
-<script type="text/javascript">	
-
-
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var compteur = 0;
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-					compteur++;
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-			
-			$('nb_filtre').innerHTML = "<small>" + compteur + "</small>";
-		}
-	}	
-	
-</script>
 
 <?PHP
 
@@ -86,7 +45,7 @@
 	
 	<center>
 	
-	<table class="tablehover" id="table_recap_fog">
+	<table class="bigtable alternate hover" id="table_recap_fog">
 	
 		<th>Nom matériel FOG</th>
 		<th>Adresse MAC</th>
