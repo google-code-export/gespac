@@ -26,7 +26,7 @@
 		if (valida) {
 			$('#targetback').show(); $('#target').show();
 			$('#target').load("gestion_donnees/post_logs.php");
-			window.setTimeout("document.location.href='index.php?page=logs'", 1500);			
+			window.setTimeout("document.location.href='index.php?page=logs'", 2500);			
 		}
 	}		
 		
@@ -64,11 +64,11 @@
 
 ?>
 	
-	<table id="log_prets_table" class='alternate hover bigtable'>
+	<table id="log_prets_table" class='hover bigtable'>
 	
 		<th>Type</th>
 		<th>Date</th>
-		<th>Objet du log</th>
+		<th>Objet</th>
 	
 		<?PHP	
 
@@ -110,7 +110,7 @@
 				}
 				
 					
-				echo "<tr class='ligne'>";									
+				echo "<tr>";									
 					echo "<td bgcolor=$td_color> $type </td>";
 					echo "<td>$date</td>";
 					echo "<td align=left>$texte</td>";
