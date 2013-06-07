@@ -24,7 +24,7 @@
 		<span class="option"><?PHP
 			echo "
 			<form action='modules/wol/post_wol.php' method='post' name='post_form' id='post_form'>
-				<input type=hidden name=materiel_a_poster id=materiel_a_poster value=''>	
+				<input type=text name='materiel_a_poster' id='id_a_poster' value=''>	
 				
 				<span id='nb_selectionnes' title=\"nombre de machines sélectionnées\"></span>
 				<span id='wakethem' style='display:none;'> <input type=submit value='Réveiller la selection'></span>					
@@ -35,8 +35,8 @@
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform">
-				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'wol_table');" type="text" value=<?PHP echo $_GET['filter'];?>> 
-				<span id="nb_filtre" title="nombre de machines affichés"></span>
+				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'wol_table');" type="text" value=<?PHP echo $_GET['filter'];?>> 
+				<span id="filtercount" title="Nombre de lignes filtrées"></span>
 			</form>
 		</span>
 	</span>
@@ -55,9 +55,9 @@
 
 	<center>
 		
-	<table class="tablehover" id="wol_table">
+	<table class="bigtable alternate hover" id="wol_table">
 	
-		<th> <input type=checkbox id=checkall onclick="checkall('wol_table');" > </th>
+		<th> <input type=checkbox id='checkall'> </th>
 		<th>Nom</th>
 		<th>Serial</th>
 		<th>Etat</th>
@@ -66,15 +66,9 @@
 		
 		<?PHP	
 			
-	
-		
-			$compteur = 0;
 			// On parcourt le tableau
 			foreach ( $liste_des_materiels as $record ) {
 				// On écrit les lignes en brut dans la page html
-
-				// alternance des couleurs
-				$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
 
 				$nom 		= $record['mat_nom'];
 				$dsit 		= $record['mat_dsit'];
@@ -93,17 +87,16 @@
 				$mac_valide = preg_match("#([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}#", $mac);
 			
 				if ($mac_valide) {
-					echo "<tr id=tr_id$id class=$tr_class>";
-						/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' onclick=\"select_cette_ligne('$id', $compteur) ; \"> </td>";	
-						/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?height=500&width=640&mat_nom=$nom' rel='slb_wol' title='Caractéristiques de $nom'>$nom</a> </td>";
+					echo "<tr id='tr_id$id' class='tr_modif'>";
+						/*	chckbox	*/	echo "<td> <input type=checkbox name=chk indexed=true value='$id' id='$id' class='chk_line'> </td>";	
+						/*	nom		*/	echo "<td> <a href='gestion_inventaire/voir_fiche_materiel.php?maxheight=650&mat_nom=$nom' class='infobox' title='Caractéristiques de $nom'>$nom</a> </td>";
 						/*	serial	*/	echo "<td> $serial </td>";
 						/*	etat	*/	echo "<td> $etat </td>";
-						/*	salle	*/	echo "<td> <a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$salle_id' rel='slb_wol' title='Membres de la salle $salle'>$salle</a> </td>";
+						/*	salle	*/	echo "<td> <a href='gestion_inventaire/voir_membres_salle.php?maxheight=650&salle_id=$salle_id' class='infobox' title='Membres de la salle $salle'>$salle</a> </td>";
 						/*	macaddr	*/	echo "<td> $mac </td>";
 
 					echo "</tr>";
 					
-					$compteur++;
 				}
 			}
 		?>		
@@ -119,10 +112,73 @@
 
 <script type="text/javascript">
 	
+	// Filtre rémanent
+	filter ( $('#filt').val(), 'wol_table' );
+	
+		$(function(){
+	
+	
+		//--------------------------------------- Selection d'une ligne
+		
+		$('.chk_line').click(function(){
+			
+			var id = $(this).attr('id');
+			
+			if ( $(this).is(':checked') ){		
+				$('#id_a_poster').val( $('#id_a_poster').val() + ";" + id );
+				$("#tr_id" + id).addClass("selected");
+			}
+			else {
+				$('#id_a_poster').val( $('#id_a_poster').val().replace(";" + id + ";", ";") );	// Supprime la valeur au milieu de la chaine
+				var re = new RegExp(";" + id + "$", "g"); $('#id_a_poster').val( $('#id_a_poster').val().replace(re, "") );			// Supprime la valeur en fin de la chaine
+				$("#tr_id" + id).removeClass("selected");
+				$('#checkall').prop("checked", false);
+			}
+			
+			// On affiche les boutons
+			if ( $('#id_a_poster').val() != "" ) {
+				$('#modif_selection').show();	$('#affect_selection').show();				
+				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+			} else { 
+				$('#modif_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
+			}
+			
+		});
+		
+		
+		
+		//--------------------------------------- Selection de toutes les lignes
+		
+		$('#checkall').click(function(){
+			
+			if ( $('#checkall').is(':checked') ){		
+				
+				$('.chk_line:visible').prop("checked", true);	// On coche toutes les cases visibles
+
+				$('#id_a_poster').val("");	// On vide les matos à poster
+				$('.chk_line:visible').each (function(){$('#id_a_poster').val( $('#id_a_poster').val() + ";" + $(this).attr('id') );	});	// On alimente le input à poster
+				
+				$('#modif_selection').show(); $('#affect_selection').show();		// On fait apparaitre les boutons
+				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+				$('.tr_modif:visible').addClass("selected");	// On colorie toutes les lignes	visibles
+			}
+			else {
+				$('#id_a_poster').val("");	// On vide les matos à poster
+				$('.chk_line').prop("checked", false);	// On décoche toutes les cases
+				$('.tr_modif').removeClass("selected");	// On vire le coloriage de toutes les lignes	
+				$('#modif_selection').hide();	$('#rename_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
+			}			
+		});	
+		
+		
+	});
+	
+	
+	
 	/******************************************
 	*		AJAX
 	*******************************************/
-	
+	/*
 	window.addEvent('domready', function(){
 		
 		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_wol'});
@@ -267,5 +323,5 @@
 			$('nb_filtre').innerHTML = "<small>" + compteur + "</small>";
 		}
 	}	
-		
+		*/
 </script>
