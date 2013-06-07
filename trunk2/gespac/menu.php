@@ -2,16 +2,8 @@
 
 
 /*
-
-	menu en haut de l'écran
-	La gestion des droits est activée de cette façon :
-	On a stocké dans un variable de session la liste des pages autorisées en lecture et écriture
-	chaque page est identifiée par un code par exemple 02-01 ou 03-02.
-	Les codes sont gérés par le fichier menu.txt.
-	les fonctions checkdroit et checkalldroits permettent respectivement de tester si un item ou une
-	liste d'items est en lecture ou pas.
-	On dessine ou pas l'item en fonction de la valeur retournée
-
+	menu en haut à gauche
+	TODO: faire disparaitre les menus si l'utilisateur n'a pas les droits.
 */
 
 ?>
