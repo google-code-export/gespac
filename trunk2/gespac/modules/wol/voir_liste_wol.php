@@ -117,9 +117,7 @@
 	
 	$(function(){
 	
-	
-		//--------------------------------------- Selection d'une ligne
-		
+		//--------------------------------------- Selection d'une ligne	
 		$('.chk_line').click(function(){
 			
 			var id = $(this).attr('id');
@@ -148,7 +146,6 @@
 		
 		
 		//--------------------------------------- Selection de toutes les lignes
-		
 		$('#checkall').click(function(){
 			
 			if ( $('#checkall').is(':checked') ){		

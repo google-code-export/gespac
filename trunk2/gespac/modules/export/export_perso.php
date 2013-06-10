@@ -1,30 +1,34 @@
 <script type="text/javascript"> 
 
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
-	
-	window.addEvent('domready', function(){
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
 
-				method: this.method,
-				url: this.action,
+	$(function(){
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
 
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					//window.setTimeout("document.location.href='index.php?page=wol'", 2500);	
-				}
+			/* stop form from submitting normally */
+			event.preventDefault(); 
 			
-			}).send(this.toQueryString());
-		});			
+			if ( validForm() == true) {
+			
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#target').html(msg);
+				 });
+			}			 
+		});	
 	});
-
 
 </script>
 
@@ -39,7 +43,7 @@
 
 <div class="spacer"></div>
 
-<form action="modules/export/post_export_perso.php" method="post" name="post_form" id="post_form">
+<form action="modules/export/post_export_perso.php" method="post" name="post_form" id="formulaire">
 
 	<input type=checkbox class=chkbox id=mat_nom> Nom du matériel <br>
 	<input type=checkbox class=chkbox id=mat_dsit> Numéro d'inventaire <br>
@@ -62,8 +66,8 @@
 
 	<div id="log"></div>
 
-	<input type=hidden name=rqsql id=rqsql />
-	<input type=submit onclick="add_field()" value="Lancer l'export personnalisé">
+	<input type=hidden name=rqsql id=rqsql size=150>
+	<input type="submit" onclick="add_field()" value="Lancer l'export personnalisé" id="post_form">
 </form>
 
 
@@ -79,25 +83,25 @@
 		var thereis_users = false;
 		var nb_champs = 0;
 		
-		$$('.chkbox').each(function (item) {
+		$('.chkbox').each(function (item) {
 		
 			// Si la case en question est cochée
-			if ( $(item.id).checked ) {
+			if ( $(this).prop("checked") == true  ) {
 			
 				// On incrémente le nombre de champs
 				nb_champs++;
 				
 				// On rajoute à la partie query le champ courant
-				query_select += item.id + ",";
+				query_select += $(this).prop("id") + ",";
 				
 				// si c'est un champ de la table "salles"
-				if ( item.id == "salle_nom" ) {	thereis_salles = true; }
+				if ( $(this).prop("id") == "salle_nom" ) {	thereis_salles = true; }
 				
 				// si c'est un champ de la table "marques"
-				if ( item.id == "marque_type" || item.id == "marque_stype" || item.id == "marque_marque" || item.id == "marque_model") { thereis_marques = true; }
+				if ( $(this).prop("id") == "marque_type" || $(this).prop("id") == "marque_stype" || $(this).prop("id") == "marque_marque" || $(this).prop("id") == "marque_model") { thereis_marques = true; }
 				
 				// si c'est un champ de la table "users"
-				if ( item.id == "user_nom" ) {	thereis_users = true;	}
+				if ( $(this).prop("id") == "user_nom" ) {	thereis_users = true;	}
 			} 
 
 		})
@@ -139,8 +143,8 @@
 		}
 		
 		// On affiche
-		if ( nb_champs > 0)	$('rqsql').value = query_select + query_from + query_where;
-		else $('log').innerHTML = "Faudrait au moins cocher une case";
+		if ( nb_champs > 0)	$('#rqsql').val(query_select + query_from + query_where);
+		else $('#log').html("Faudrait au moins cocher une case");
 
 	}
 	
