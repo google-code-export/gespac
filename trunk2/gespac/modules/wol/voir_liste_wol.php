@@ -23,11 +23,11 @@
 
 		<span class="option"><?PHP
 			echo "
-			<form action='modules/wol/post_wol.php' method='post' name='post_form' id='post_form'>
-				<input type=text name='materiel_a_poster' id='id_a_poster' value=''>	
+			<form action='modules/wol/post_wol.php' method='post' id='formulaire'>
+				<input type=hidden name='materiel_a_poster' id='id_a_poster' value=''>	
 				
-				<span id='nb_selectionnes' title=\"nombre de machines sélectionnées\"></span>
-				<span id='wakethem' style='display:none;'> <input type=submit value='Réveiller la selection'></span>					
+				<span id='nb_selectionnes' title='nombre de machines sélectionnées'></span>
+				<span id='wakethem' style='display:none;'> <input type='submit' id='post_form' value='Réveiller la selection'></span>					
 				
 			</form>";?>
 		</span>
@@ -115,7 +115,7 @@
 	// Filtre rémanent
 	filter ( $('#filt').val(), 'wol_table' );
 	
-		$(function(){
+	$(function(){
 	
 	
 		//--------------------------------------- Selection d'une ligne
@@ -138,9 +138,9 @@
 			// On affiche les boutons
 			if ( $('#id_a_poster').val() != "" ) {
 				$('#modif_selection').show();	$('#affect_selection').show();				
-				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+				$('#nb_selectionnes').show(); $('#wakethem').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
 			} else { 
-				$('#modif_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
+				$('#modif_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide(); $('#wakethem').hide();
 			}
 			
 		});
@@ -158,7 +158,7 @@
 				$('#id_a_poster').val("");	// On vide les matos à poster
 				$('.chk_line:visible').each (function(){$('#id_a_poster').val( $('#id_a_poster').val() + ";" + $(this).attr('id') );	});	// On alimente le input à poster
 				
-				$('#modif_selection').show(); $('#affect_selection').show();		// On fait apparaitre les boutons
+				$('#wakethem').show();		// On fait apparaitre les boutons
 				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
 				$('.tr_modif:visible').addClass("selected");	// On colorie toutes les lignes	visibles
 			}
@@ -166,162 +166,39 @@
 				$('#id_a_poster').val("");	// On vide les matos à poster
 				$('.chk_line').prop("checked", false);	// On décoche toutes les cases
 				$('.tr_modif').removeClass("selected");	// On vire le coloriage de toutes les lignes	
-				$('#modif_selection').hide();	$('#rename_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
+				$('#wakethem').hide(); $('#nb_selectionnes').hide();
 			}			
 		});	
 		
-		
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+			
+			if ( validForm() == true) {
+			
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=wol&filter=" + $('#filt').val() + "'", 2500);
+				 });
+			}			 
+		});	
 	});
 	
 	
-	
-	/******************************************
-	*		AJAX
-	*******************************************/
-	/*
-	window.addEvent('domready', function(){
-		
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_wol'});
-		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-		
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					window.setTimeout("document.location.href='index.php?page=wol'", 2500);	
-				}
-			
-			}).send(this.toQueryString());
-		});			
-	});
-	
-
-	
-	// *********************************************************************************
-	//
-	//				Selection/déselection de toutes les rows
-	//
-	// *********************************************************************************	
-	
-	function checkall(_table) {
-		var table = document.getElementById(_table);	// le tableau du matériel
-		var checkall_box = document.getElementById('checkall');	// la checkbox "checkall"
-		
-		for ( var i = 1 ; i < table.rows.length ; i++ ) {
-
-			var lg = table.rows[i].id					// le tr_id (genre tr115)
-			
-			if (checkall_box.checked == true) {
-				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
-			} else {
-				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
-			}
-		}
-	}
-	
-	
-	// *********************************************************************************
-	//
-	//				Ajout des index pour postage sur clic de la checkbox
-	//
-	// *********************************************************************************	
-	 
-	function select_cette_ligne( tr_id, num_ligne, check ) {
-
-		var chaine_id = document.getElementById('materiel_a_poster').value;
-		var table_id = chaine_id.split(";");
-		
-		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
-		var li = document.getElementById(ligne);	
-		
-		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
-		
-			switch (check) {
-				case 1: // On force la selection si la ligne n'est pas déjà cochée
-					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
-						table_id.push(tr_id);
-						li.className = "selected";
-					}
-				break;
-				
-				case 0: // On force la déselection
-					table_id.erase(tr_id);
-					// alternance des couleurs calculée avec la parité
-					if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-				break;
-				
-				
-				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
-					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
-						table_id.erase(tr_id);
-						
-						// alternance des couleurs calculée avec la parité
-						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-					
-					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
-						table_id.push(tr_id);
-						li.className = "selected";
-					}
-				break;			
-			}
-	
-			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
-			$('materiel_a_poster').value = table_id.join(";");
-			
-			
-			if ( $('materiel_a_poster').value != "" ) {
-				$('wakethem').setStyle("display", "inline");
-				$('nb_selectionnes').innerHTML = "->" + table_id.length-1;	// On entre le nombre de machines sélectionnées
-			}
-			else 
-				$('wakethem').setStyle("display", "none");
-		}
-	}
-	
-	
-		
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var compteur = 0;
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-					compteur++;
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-			
-			$('nb_filtre').innerHTML = "<small>" + compteur + "</small>";
-		}
-	}	
-		*/
 </script>
