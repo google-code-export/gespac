@@ -6,27 +6,27 @@
 </div>
 
 <div class="spacer"></div>
-		
-<form method="POST" action="modules/ssn_dsit/post_import_csv.php" target=_blank enctype="multipart/form-data">
-	<center>
-	
+
+
+
+<form enctype="multipart/form-data">
+     <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+	 <center>
 	 <table width=400 align=center cellpadding=10px>
 		<tr>
 			<td>Fichier CSV</td>
-			<td><input type="file" name="myfile"></td>
+			<td><input type="file" name="myfile">  </td>
+		</tr>
+		<tr>
+			<td colspan=2><input type="button" name="envoyer" value="Envoyer le fichier"></td>
 		</tr>
 	 </table>
-	
-	<br>
-	
-	<input type="submit" name="envoyer" value="Envoyer le fichier" onclick="refresh_quit();">
-
-	</center>
-
-</FORM>
+	 </center>
+      
+</form>
 
 <br>
-<br>
+
 <center>
 	
 	<b>Formalisme du fichier à constituer :</b><br>
@@ -38,4 +38,32 @@
 	
 	
 </center>
+
+
+<script>
 	
+//---------------------------------------- Post file par Ajax (fonction par olanod : http://stackoverflow.com/users/931340/olanod)
+$(':button').click(function(){
+    var formData = new FormData($('form')[0]);
+    $.ajax({
+        url: 'modules/ssn_dsit/post_import_csv.php',  //server script to process data
+        type: 'POST',
+        xhr: function() {  // custom xhr
+            var myXhr = $.ajaxSettings.xhr();
+            return myXhr;
+        },
+		// Data du formulaire
+        data: formData,
+        //Options to tell JQuery not to process data or worry about content-type
+        cache: false,
+        contentType: false,
+        processData: false,
+        complete : function(res) {
+			$('#targetback').show(); $('#target').show();
+			$('#target').html(res.responseText);
+			window.setTimeout("document.location.href='index.php?page=taginventaire'", 2500);
+		}
+    });
+});
+
+</script>

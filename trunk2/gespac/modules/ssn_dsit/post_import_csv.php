@@ -6,41 +6,35 @@
 	*
 	********************************************************/
 		
-	// lib
-	require_once ('../../fonctions.php');
-	include_once ('../../config/databases.php');
-	include_once ('../../../class/Sql.class.php');
-
-	// on ouvre un fichier en écriture pour les log sql
-	$fp = fopen('../../dump/log_sql.sql', 'a+');
-	
-	// cnx à gespac
-	$con_gespac = new Sql($host, $user, $pass, $gespac);
-				
 	$dossier = '../../dump/'; 		// dossier où sera déplacé le fichier
-
-	$fichier 	= basename($_FILES['myfile']['name']);
+	
 	$extensions = array('.txt', '.csv');
-	$extension 	= strrchr($_FILES['myfile']['name'], '.'); 
+	$extension = strrchr($_FILES['myfile']['name'], '.'); 
 	
 	//Si l'extension n'est pas dans le tableau
 	if ( !in_array($extension, $extensions) )
 		 $erreur = 'Vous devez uploader un fichier de txt ou csv...';
 
-	if (!isset($erreur)) {	//S'il n'y a pas d'erreur, on upload, on créé la marque ...
-	
-		//On formate le nom du fichier ici...
-		$fichier = strtr($fichier, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
-		$fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
+	if (!isset($erreur)) {	//S'il n'y a pas d'erreur, on upload
 		 
 		//On upload et on teste si la fonction renvoie TRUE
-		if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . $fichier) ) {
-			echo $fichier . " envoyé avec succès !";
-			
-			
+		if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . "maj_tag.csv") ) {
+					
 			// ************ Traitement du fichier uploadé *****************
-		
-			$chemin_import = $dossier . $fichier;
+	
+			// Libs
+			require_once ('../../fonctions.php');
+			include_once ('../../config/databases.php');
+			include_once ('../../../class/Sql.class.php');
+			include_once ('../../../class/Log.class.php');
+			
+			// connexion à la base de données GESPAC
+			$con_gespac = new Sql($host, $user, $pass, $gespac);
+			
+			//Log SQL
+			$log = new Log ("../../dump/log_sql.sql");
+	
+			$chemin_import = $dossier . "maj_tag.csv";
 			
 			$handle = fopen($chemin_import, "r");
 
@@ -61,7 +55,7 @@
 			}
 
 			//Insertion d'un log
-			$log_texte = "Mise à jour des tags DSIT par fichier CSV.";
+			echo $log_texte = "Mise à jour des tags DSIT par fichier CSV.";
 
 			$req_log_import_csv = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Import CSV', '$log_texte' )";
 			$result = $con_gespac->Execute ( $req_log_import_csv );
@@ -69,21 +63,12 @@
 
 			// On se déconnecte de la db
 			$con_gespac->Close();	
-			?>
-			
-			<script>window.close();</script>
-			
-			<?PHP
-		}
-		else	// En cas d'échec d'upload
-			echo 'Echec de l\'upload du fichier ' . $fichier;
+
+		} else	// En cas d'échec d'upload
+			echo "Echec de l'upload !";
 			  
-	} else	// En cas d'erreur dans l'extension
+	} else // En cas d'erreur
 		 echo $erreur;
 
-		 
-	// Je ferme le fichier  de log sql
-	fclose($fp);
-	
-	
 ?>
+
