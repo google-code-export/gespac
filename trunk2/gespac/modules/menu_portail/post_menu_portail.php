@@ -1,6 +1,5 @@
 <?PHP
 
-
 	/* fichier de creation / modif / suppr des items du portail */
 	
 
@@ -19,7 +18,6 @@
 		
 	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
-	$id 		= $_GET['id'];
 	
 	
 	/*********************************************
@@ -32,15 +30,15 @@
 	
 	/**************** SUPPRESSION ********************/
 	
-	if ( $action == 'suppr' ) {
-
-        //Insertion d'un log
-
+	if ( $action == 'del' ) {
+		
+		$id	= $_POST['id'];
+		
 		//On récupère les valeurs de l'item en fonction de son id
-	    $row = $con_gespac->queryRow ( "SELECT mp_nom, mp_icone FROM menu_portail WHERE mp_id=$id" );
+	    $row = $con_gespac->QueryRow ( "SELECT mp_nom, mp_icone FROM menu_portail WHERE mp_id=$id" );
 
-		$mp_nom = $row[0];
-		$mp_icone = $row[1];
+		$mp_nom = $row['mp_nom'];
+		$mp_icone = $row['mp_icone'];
 
 	    $log_texte = "L'item $mp_nom a été supprimé.";
 	    $req_log_suppr_grade = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression item', '$log_texte');";
@@ -50,6 +48,23 @@
 		// Suppression du grade de la base
 		$req_suppr_item = "DELETE FROM menu_portail WHERE mp_id=$id;";
 		$result = $con_gespac->Execute ( $req_suppr_item );
+		
+		// On supprime ce point de menu pour tous les utilisateurs
+		$menus = $con_gespac->QueryAll("SELECT grade_id, grade_menu_portail FROM grades");
+		
+		foreach ($menus as $menu) {
+
+			$gradeid = $menu["grade_id"];
+			$old = $menu["grade_menu_portail"];
+			$new = preg_replace("/\"item$id\":\"on\",?/", "", $old);
+			
+			$rq_grade_menu = "UPDATE grades SET grade_menu_portail='$new' WHERE grade_id=$gradeid;";
+			$con_gespac->Execute ( $rq_grade_menu );
+			
+			fwrite($fp, date("Ymd His") . " " . $rq_grade_menu."\n");
+			
+		}
+		
 		
 		//Suppression de l'icone
 		unlink('../../img/' . $mp_icone);
@@ -64,6 +79,7 @@
 	/**************** MODIFICATION ********************/	
 	if ( $action == 'mod' ) {
 	
+		$id	= $_POST['id'];
 		$mp_nom 	= $_POST ['mp_nom'];
 		$mp_url 	= $_POST ['mp_url'];
 
@@ -83,9 +99,9 @@
 	
 	/**************** INSERTION ********************/
 	if ( $action == 'add' ) {
-			
-		$dossier = '../../img/'; 		// dossier où sera déplacé le fichier
 		
+		$dossier = '../../img/'; 		// dossier où sera déplacé le fichier
+
 		$fichier 	= basename($_FILES['myfile']['name']);
 		$extensions = array('.png', '.jpg');
 		$extension 	= strrchr($_FILES['myfile']['name'], '.'); 
@@ -110,8 +126,7 @@
 			 
 			//On upload et on teste si la fonction renvoie TRUE
 			if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . $fichier)) {
-				echo $fichier . " envoyé avec succès !";
-
+				
 				$req_add_item = "INSERT INTO menu_portail (mp_nom, mp_url, mp_icone) VALUES ('$mp_nom', '$mp_url', '$fichier' );";
 				$result = $con_gespac->Execute ( $req_add_item );
 				
@@ -125,11 +140,9 @@
 
 				// On se déconnecte de la db
 				$con_gespac->Close();	
-?>
 				
-				<script>window.close();</script>
-				
-<?PHP
+				echo "Le raccourci <b>$mp_nom</b> a été ajouté.";
+
 			}
 			else	// En cas d'échec d'upload
 				echo 'Echec de l\'upload du fichier <b>' . $fichier . '</b> dans le dossier <b>' . $dossier . '</b>';

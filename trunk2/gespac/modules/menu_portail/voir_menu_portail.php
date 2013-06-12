@@ -25,10 +25,10 @@
 	<span class="entetes-options">
 		
 		<span class="option"><?PHP if ( $E_chk ) echo "<a href='index.php?page=grades' title='Aller à la page de gestion des grades'><img src='" . ICONSPATH . "accueil.png'></a>";?></span>
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'><img src='" . ICONSPATH . "add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?maxheight=650&action=add' class='editbox' title='Ajouter un item au portail'><img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'portail_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'portail_table');" type="text" value=<?PHP echo $_GET['filter'];?>><span id="filtercount" title="Nombre de lignes filtrées"></span></form>
 		</span>
 	</span>
 
@@ -51,42 +51,7 @@
 			window.setTimeout("document.location.href='index.php?page=modportail'", 1500);		
 		}
 	}
-	
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
 
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-		}
-	}	
-	
-	
 	
 </script>
 
@@ -102,7 +67,7 @@
 ?>
 	
 	<center>
-	<table class="tablehover" id='portail_table'>
+	<table class="bigtable hover alternate" id='portail_table'>
 		<th>Icone</th>
 		<th>Nom</th>
 		<th>Url</th>
@@ -135,11 +100,11 @@
 					echo "<td>" . $mp_lien . "</td>";
 					
 					if ( $E_chk && $est_modifiable) {
-						echo "<td width=20><a href='modules/menu_portail/form_menu_portail.php?height=180&width=640&id=$mp_id' rel='slb_menu_portail' title='Formulaire de modification de l`item $mp_nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
-						echo "<td width=20> <a href='#' onclick=\"javascript:validation_suppr_item($mp_id, '$mp_nom');\">	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
+						echo "<td width=20><a href='modules/menu_portail/form_menu_portail.php?maxheight=650&id=$mp_id&action=mod' class='editbox' title='modification de l`item $mp_nom'><img src='img/write.png' style='display:$display_mod;'> </a></td>";
+						echo "<td width=20> <a href='modules/menu_portail/form_menu_portail.php?maxheight=650&id=$mp_id&action=del'class='editbox' title='Suppression de l`item $mp_nom' >	<img src='img/delete.png' style='display:$display_del;'>	</a> </td>";
 					} else {
-						echo "<td width=20></td>";
-						echo "<td width=20></td>";
+						echo "<td width=20>&nbsp;</td>";
+						echo "<td width=20>&nbsp;</td>";
 					}
 					
 				echo "</tr>";
@@ -157,12 +122,7 @@
 
 <script type="text/javascript">
 	
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_menu_portail'});
-	});
-
-
 	// Filtre rémanent
-	//filter ( $('filt'), 'portail_table' );	
+	filter ( $('#filt').val(), 'portail_table' );
 
 </script>
