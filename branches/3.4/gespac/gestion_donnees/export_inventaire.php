@@ -25,7 +25,7 @@
 
 
 		
-	$filename = "inv_" . $liste_export[0][1] . "_" . $liste_export[0][3] . "_" . $liste_export[0][0] . "_gespac_".$version.".csv";
+	$filename = "inv_" . $liste_export[0]["clg_nom"] . "_" . $liste_export[0]["clg_ville"] . "_" . $liste_export[0]["clg_uai"] . "_gespac_".$version.".csv";
 	//On formate le nom du fichier ici histoire de pas avoir de caractères zarb'
 	$filename = strtr($filename, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 	$filename = preg_replace('/([^.a-z0-9]+)/i', '_', $filename);
