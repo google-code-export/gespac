@@ -23,7 +23,7 @@
 		marques.marque_id = materiels.marque_id
 	" );
 
-
+$con_gespac->Close();
 		
 	$filename = "inv_" . $liste_export[0]["clg_nom"] . "_" . $liste_export[0]["clg_ville"] . "_" . $liste_export[0]["clg_uai"] . "_gespac_".$version.".csv";
 	//On formate le nom du fichier ici histoire de pas avoir de caractères zarb'
@@ -62,19 +62,20 @@
 
 		// Connexion à la base de données GESPAC
 		$con_ocsweb = new Sql ( $host, $user, $pass, $ocsweb );
-
-		$liste_export_ocs = $con_ocsweb->QueryAll ("select LASTCOME, FIDELITY from hardware, bios where bios.HARDWARE_ID=hardware.ID AND bios.SSN = '$serial'");
-		if (!$liste_export_ocs) {
-			$last='matériel non présent dans OCS'; $fidele='0';
-		}//du fait du MAX(LASTCOME) cette ligne ne marche pas...
-		else {
-			foreach ($liste_export_ocs as $record_ocs) {
-				$last = ($record_ocs['LASTCOME']);
-				$fidele =($record_ocs['FIDELITY']);
+		
+		if ($con_ocsweb->Exists()) {
+			$liste_export_ocs = $con_ocsweb->QueryAll ("select LASTCOME, FIDELITY from hardware, bios where bios.HARDWARE_ID=hardware.ID AND bios.SSN = '$serial'");
+			if (!$liste_export_ocs) {
+				$last='matériel non présent dans OCS'; $fidele='0';
+			}//du fait du MAX(LASTCOME) cette ligne ne marche pas...
+			else {
+				foreach ($liste_export_ocs as $record_ocs) {
+					$last = ($record_ocs['LASTCOME']);
+					$fidele =($record_ocs['FIDELITY']);
+				}				
 			}
-			
 		}
-
+		
 		//demande etude imprimante reseaux ou pas
 		if ($type == 'IMPRIMANTE') { 
 			if ($modele[strlen($modele)-1] == 'N') {$stype = $stype.'_RX';}//si le modèle imprimante contient à la fin un N est bien c'est une imprimante RX normalement et on ajout _RX à la fin du sous type

@@ -57,7 +57,12 @@
 		
 		
 		# Méthodes
+				
 		
+		public function Exists () {
+			if($basetest = mysql_select_db($this->db, $this->link)) return true;
+			else return false;
+		}
 		
 		/*
 		* @name: close
