@@ -41,7 +41,11 @@
 	<span class="entetes-options">
 		
 		<span class="option">		
-			<input type=button value="vider les logs" onClick="validation_suppr_logs();">
+			<?PHP echo "<span><a href='dump/log_sql.sql' target=_blank title='Télécharger les logs SQL'> <img src='" . ICONSPATH . "sql.png'></a></span>";	?>
+		</span>
+		
+		<span class="option">	
+			<?PHP echo "<span><a href='#' target=_blank title='Vider les logs'  onClick=\"validation_suppr_logs();\"> <img src='" . ICONSPATH . "minus.png'></a></span>";	?>	
 		</span>
 		
 		<span class="option">
