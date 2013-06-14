@@ -82,7 +82,7 @@
 		$id	= $_POST['id'];
 		$mp_nom 	= $_POST ['mp_nom'];
 		$mp_url 	= $_POST ['mp_url'];
-
+		
 		$req_modif_item = "UPDATE menu_portail SET mp_nom='$mp_nom', mp_url='$mp_url' WHERE mp_id=$id";
 		$result = $con_gespac->Execute ( $req_modif_item );
 		

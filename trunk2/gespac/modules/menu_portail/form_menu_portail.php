@@ -29,10 +29,12 @@
 		
 ?>		
 	
-		<form action="modules/menu_portail/post_menu_portail.php?action=mod&id=<?PHP echo $id; ?>" method="post" name="post_form" id="formulaire">
+		<form action="modules/menu_portail/post_menu_portail.php?action=mod" method="post" name="post_form" id="formulaire">
 			<center>
+				
+				<input type=hidden name=id value="<?PHP echo $id; ?>">
 					
-			<table width=400 align=center cellpadding=10px>
+			<table class="formtable">
 
 				<tr>
 					<TD>nom</TD> 
