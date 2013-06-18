@@ -23,9 +23,9 @@
 
 
 
-if ( $action == 'suppr') {
+if ( $action == 'del') {
 	
-	$id = $_GET ["id"];
+	$id = $_POST ["id"];
 	
 	// Le fichier à dégommer
 	$fichier = $con_gespac->QueryOne ("SELECT fichier_chemin FROM fichiers WHERE fichier_id=$id");

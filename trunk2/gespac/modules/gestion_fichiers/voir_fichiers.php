@@ -24,10 +24,10 @@
 
 	<span class="entetes-options">
 		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?height=350&width=640&id=-1' rel='slb_fichiers' title='Ajout fichier'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
+		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?maxheight=650&action=add' class='editbox' title='Ajout fichier'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'fichiers_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'fichiers_table');" type="text" value=<?PHP echo $_GET['filter'];?>><span id="filtercount" title="Nombre de lignes filtrées"></span></form>
 		</span>
 	</span>
 
@@ -40,7 +40,7 @@
 
 	$liste_fichiers = $con_gespac->QueryAll ("SELECT * FROM fichiers;");
 	
-	echo "<table id='fichiers_table' class='tablehover'>";
+	echo "<table id='fichiers_table' class='bigtable hover'>";
 	
 		echo "<th>fichier</th>";
 		echo "<th>description</th>";
@@ -119,8 +119,8 @@
 					echo "<td>$proprio_nom</td>";
 					
 					if ( $ecriture && $E_chk ) { // Il faut avoir les droits en écriture sur le fichier ET les droits d'écriture par l'administrateur
-						echo "<td width=20px><a href='modules/gestion_fichiers/form_fichiers.php?height=320&width=640&id=$fichier_id' rel='slb_fichiers' title='Modifier fichier'> <img src='img/write.png'> </a></td>";
-						echo "<td width=20px><a href='#' onclick=\"validation_suppr_fichier($fichier_id, '$fichier_chemin');\"> <img src='img/delete.png'> </a></td>";
+						echo "<td width=20px><a href='modules/gestion_fichiers/form_fichiers.php?action=mod&id=$fichier_id' class='editbox' title='Modifier un fichier'> <img src='img/write.png'> </a></td>";
+						echo "<td width=20px><a href='modules/gestion_fichiers/form_fichiers.php?action=del&id=$fichier_id' class='editbox' title='Supprimer un fichier'> <img src='img/delete.png'> </a></td>";
 					} else {
 						echo "<td>&nbsp;</td>";
 						echo "<td>&nbsp;</td>";
@@ -140,12 +140,7 @@
 
 
 <script>
-	
-	window.addEvent('domready', function(){
-	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_fichiers'});
-	});
-	
-	
+		
 	
 	// *********************************************************************************
 	//
