@@ -1,7 +1,11 @@
 <?PHP
 
-	$action = $_GET['action'];
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
+	$action = $_GET['action'];
+	
+	
+	
 	if ( $action == 'ajout' ) {
 		
 		echo "<h2>Ajouter un flux RSS ou ATOM</h2><br>";
@@ -25,7 +29,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter le flux' id="post_flux" disabled>
+			<input type=submit value='Ajouter le flux' onclick="refresh_quit();" id="post_flux" disabled>
 
 			</center>
 
@@ -61,9 +65,9 @@
 		
 		// ferme la smoothbox et rafraichis la page
 		function refresh_quit () {
-			// lance la fonction avec un dÃ©lais de 1500ms
+			// lance la fonction avec un délais de 1500ms
 			window.setTimeout("$('conteneur').load('modules/rss/rss.php');", 1500);
-
+			//TB_remove();
 		};
 		
 		// On soumet le formulaire pour l'ajout d'un flux RSS
@@ -73,10 +77,8 @@
 				method: this.method,
 				url: this.action,
 				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=rss'", 2500);						
+					window.setTimeout("$('conteneur').load('modules/rss/rss.php');", 1500);
 				}
 			}).send(this.toQueryString());
 		});	

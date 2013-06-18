@@ -4,7 +4,7 @@
 	/* fichier de creation / modif / suppr d'un utilisateur
 	
 	Si j'ai un ID c'est une modification
-	Si j'en ai pas c'est une crÃ©ation
+	Si j'en ai pas c'est une création
 	
 	
 	*/
@@ -17,12 +17,12 @@
 	
 	
 	
-	// Cnx ÃƒÂ  la base
+	// Cnx à la base
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	$log = new Log ("../dump/log_sql.sql");
 	
 	
-	// on rÃ©cupÃ¨re les paramÃ¨tres de l'url	
+	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
 	$id 		= $_GET['id'];
 	
@@ -41,36 +41,36 @@
 
         //Insertion d'un log
 		
-		//On rÃ©cupÃ¨re le nom de l'utilisateur en fonction du user_id
+		//On récupère le nom de l'utilisateur en fonction du user_id
 	    $user_nom = $con_gespac->QueryOne ( "SELECT user_nom FROM users WHERE user_id=$id" );
 	    
-	    // On teste si un matÃ©riel est prÃªtÃ© ÃƒÂ  l'utilisateur
+	    // On teste si un matériel est prêté à l'utilisateur
 	    $pret_existe = $con_gespac->QueryOne ( "SELECT mat_id FROM materiels WHERE user_id=$id" );
 	    
 	    if ( $pret_existe )	{
 			
-			echo "Le compte ne peut Ãªtre supprimÃ©, un matÃ©riel est prÃªtÃ©.";
+			echo "Le compte ne peut être supprimé, un matériel est prêté.";
 		
 		}
 		
 		else {
 			
-			$log_texte = "Le compte <b>$user_nom</b> a Ã©tÃ© supprimÃ©.";
+			$log_texte = "Le compte <b>$user_nom</b> a été supprimé.";
 
 			$req_log_suppr_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression compte', '$log_texte');";
 			$con_gespac->Execute ( $req_log_suppr_user );
 					
-			//on log la requÃªte
+			//on log la requête
 			$log->Insert( $req_log_suppr_user );
 			
 			// Suppression de l'utilisateur de la base
 			$req_suppr_user = "DELETE FROM users WHERE user_id=$id;";
 			$con_gespac->Execute ( $req_suppr_user );
 			
-			// On log la requÃªte SQL
+			// On log la requête SQL
 			$log->Insert( $req_suppr_user );
 			
-			echo "L'utilisateur <b>$user_nom</b> a Ã©tÃ© supprimÃ© !";				
+			echo "<br><small>L'utilisateur <b>$user_nom</b> a été supprimé !</small>";				
 		}    
 	    
 
@@ -92,13 +92,13 @@
 		
 		$mailing = $mailing == "on" ? 1 : 0 ;
 
-		// si on modifie le grade, la page de dÃ©marrage devient la page de bienvenue
+		// si on modifie le grade, la page de démarrage devient la page de bienvenue
 		$ancien_grade = $con_gespac->QueryOne("SELECT grade_id FROM users WHERE user_id=$id");
 		
 		if ($grade <> $ancien_grade) $page="bienvenue.php";
 
 
-		// on rÃ©cupÃ©re les anciennes valeurs du compte pour les logs
+		// on récupére les anciennes valeurs du compte pour les logs
 		$req_infos_compte_old = $con_gespac->QueryRow("SELECT user_nom FROM users WHERE user_id=$id");
 		$nom_old = $req_infos_compte_old[0];
 		
@@ -106,19 +106,19 @@
 		$req_modif_user = "UPDATE users SET user_nom='$nom', user_logon='$login', user_password='$password', grade_id=$grade, user_mail='$mail', user_skin='$skin', user_accueil='$page', user_mailing=$mailing WHERE user_id=$id";
 		$con_gespac->Execute ( $req_modif_user );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_modif_user );
 		
 		//Insertion d'un log
-		$log_texte = "Le compte (anciennement <b>$nom_old</b>) a Ã©tÃ© modifiÃ© en <b>$nom</b>.";
+		$log_texte = "Le compte (anciennement <b>$nom_old</b>) a été modifié en <b>$nom</b>.";
 		
 	    $req_log_modif_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification compte', '$log_texte' );";
 	    $con_gespac->Execute ( $req_log_modif_user );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_log_modif_user );
 		
-		echo "L'utilisateur <b>$nom</b> a bien Ã©tÃ© modifiÃ©...";
+		echo "<br><small>L'utilisateur <b>$nom</b> a bien été modifié...</small>";
 	}
 	
 	/**************** INSERTION ********************/
@@ -138,19 +138,19 @@
 		$req_add_user = "INSERT INTO users ( user_nom, user_logon, user_password, grade_id, user_mail, user_skin, user_accueil, user_mailing) VALUES ( '$nom', '$login', '$password', $grade, '$mail', '$skin', '$page', $mailing)";
 		$con_gespac->Execute ( $req_add_user );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_add_user );
 		
 		//Insertion d'un log
-		$log_texte = "Le compte <b>$nom</b> a Ã©tÃ© crÃ©Ã©.";
+		$log_texte = "Le compte <b>$nom</b> a été créé.";
 
-	    $req_log_creation_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'CrÃ©ation compte', '$log_texte' );";
+	    $req_log_creation_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création compte', '$log_texte' );";
 	    $con_gespac->Execute ( $req_log_creation_user );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_log_creation_user );
 		
-		echo "L'utilisateur <b>$nom</b> a bien Ã©tÃ© ajoutÃ©...";
+		echo "<br><small>L'utilisateur <b>$nom</b> a bien été ajouté...</small>";
 	}
 	
 	
@@ -166,9 +166,9 @@
 		$lot_array = explode(";", $lot);
 		
 		foreach ($lot_array as $item) {
-			if ( $item <> "" ) {	// permet de virer les Ã©lÃ©ments vides
+			if ( $item <> "" ) {	// permet de virer les éléments vides
 			
-				// si on modifie le grade, la page de dÃ©marrage devient la page de bienvenue
+				// si on modifie le grade, la page de démarrage devient la page de bienvenue
 				$ancien_grade = $con_gespac->QueryOne("SELECT grade_id FROM users WHERE user_id=$item");
 		
 				if ($grade <> $ancien_grade) 
@@ -177,23 +177,23 @@
 					$page = $con_gespac->QueryOne("SELECT user_accueil FROM users WHERE user_id=$item");
 				
 				
-				//$skin est le 1er champ ÃƒÂ  UPDATER (ou pas)
+				//$skin est le 1er champ à UPDATER (ou pas)
 				$sql_skin = $skin == "" ? "" : " user_skin='$skin' ";
 				
 				
-				//$grade est le 2eme champ Ã  UPDATER (ou pas)
+				//$grade est le 2eme champ à UPDATER (ou pas)
 				if ( $grade <> "" ) {
 					
-					// met on ou non la virgule avant en fonction de l'existence de la variable prÃ©cÃ©dente (oula, dur Ã  comprendre lÃ  ...). Si $sql_skin est vide, Ca signifie qu'on ne modifie pas cette valeur donc pas de virgule avant $sql_grade
+					// met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...). Si $sql_skin est vide, ça signifie qu'on ne modifie pas cette valeur donc pas de virgule avant $sql_grade
 					$sql_grade = $sql_skin == "" ? " grade_id=$grade " : ", grade_id=$grade " ;
 					
 				} else { $sql_grade = ""; }
 				
 				
-				//$mailing est le 3eme champ Ã Â  UPDATER (ou pas)
+				//$mailing est le 3eme champ à UPDATER (ou pas)
 				if ( $mailing <> 2 ) {
 
-					// dans la rq sql, met on ou non la virgule avant en fonction de l'existence de la variable prÃ©cÃ©dente (oula, dure ÃƒÂ  comprendre ÃƒÂ§a ...)					
+					// dans la rq sql, met on ou non la virgule avant en fonction de l'existence de la variable précédente (oula, dure à comprendre ça ...)					
 					if ( $sql_skin == "" && $sql_grade == "" ) $sql_mailing = " user_mailing=$mailing";
 					else $sql_mailing = " , user_mailing=$mailing" ;
 
@@ -205,27 +205,25 @@
 				$req_modif_user = "UPDATE users SET " . $sql_skin . $sql_grade . $sql_mailing . ", user_accueil='$page' WHERE user_id=$item ;";
 				$con_gespac->Execute ( $req_modif_user );
 				
-				//on rÃ©cupÃ©rer le nom et l'id du user de chaque item pour les logs
+				//on récupérer le nom et l'id du user de chaque item pour les logs
 				$req_nom_id_user = $con_gespac->QueryRow ("SELECT user_nom, user_id FROM users WHERE user_id=$item");
 				$liste_noms_id   .=  '<b>'.$req_nom_id_user[0].' (</b>serial : <b>'.$req_nom_id_user[1].')</b>, ';
 				
-				// On log la requÃªte SQL
+				// On log la requête SQL
 				$log->Insert( $req_modif_user );
 			}
 
 		}
 	
 		//Insertion d'un log
-		//on supprime les caractÃ¨res en fin de chaine
+		//on supprime les caractères en fin de chaine
 		$liste_noms_id = trim ($liste_noms_id, ", ");
-		$log_texte = "Les utilisateurs $liste_noms_id ont Ã©tÃ© modifiÃ©s.";
-
-		echo "Le lot a Ã©tÃ© modifiÃ©.";
+		$log_texte = "Les utilisateurs $liste_noms_id ont été modifiés.";
 
 		$req_log_modif_user = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification compte', '$log_texte' );";
 		$con_gespac->Execute ( $req_log_modif_user );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_log_modif_user );
 	}
 

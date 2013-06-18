@@ -6,49 +6,50 @@
 		vue de la db gespac avec tous les grades du parc
 	*/
 	
-
-	// si le grade du compte est root, on donne automatiquement les droits d'accÃ¨s en Ã©criture. Sinon, on teste si le compte a accÃ¨s Ã  la page.
+	
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	
+	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-06-02#", $_SESSION['droits']);
 	
 
 ?>
 
-<div class="entetes" id="entete-grades">	
 
-	<span class="entetes-titre">LES GRADES<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Les grades sont des groupes d'utilisateurs.<br>A chaque grade on peut affecter une liste de droits en lecture/Ã©criture sur les pages ainsi que le contenu du portail.</div>
+<h3>Visualisation des grades</h3>
 
-	<span class="entetes-options">
 
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='slb_grades' title=\"ajouter un grade\"><img src='" . ICONSPATH . "add.png'></a>";?></span>
-		
-		<span class="option">
-			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform">
-				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'grades_table');" type="text" value=<?PHP echo $_GET['filter'];?>> 
-				<span id="nb_filtre" title="nombre d'utilisateurs affichÃ©s"></span>
-			</form>
-		</span>
-	</span>
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
 
-</div>
-
-<div class="spacer"></div>
 
 
 <?PHP 
 
-	// cnx Ã  la base de donnÃ©es GESPAC
+	// cnx à la base de données GESPAC
 	$con_gespac 	= new Sql ( $host, $user, $pass, $gespac );
 
-	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© liste_des_materiels
+	// stockage des lignes retournées par sql dans un tableau nommé liste_des_materiels
 	$liste_des_grades = $con_gespac->QueryAll ( "SELECT grade_id, grade_nom, grade_menu, est_modifiable FROM grades ORDER BY grade_nom" );
 
 ?>
 	
+	<!-- 	bouton pour le filtrage du tableau	-->
+	<form>
+		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'grades_table', '1')" type="text"></center>
+	</form>
+	
+<?PHP
+	// Ajout d'un grade
+	if ( $E_chk )
+		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='slb_grades' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
+?>
+
 	<center>
 	<br>
-	<table class="tablehover" id="grades_table">
+	<table class="tablehover" id="grades_table" width=450>
 		<th>Nom</th>
 		
 		<?PHP	
@@ -74,10 +75,10 @@
 					echo "<td><a href='gestion_utilisateurs/voir_membre_grade.php?height=480&width=640&grade_id=$grade_id' rel='slb_grades' title='membres du grade $grade_nom'>$grade_nom</a> [" . $nb_users_du_grade ."] </td>";
 				
 					if ( $E_chk && $est_modifiable ) {
-						echo "<td width=20><a href='gestion_utilisateurs/form_menu_portail.php?height=450&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du menu portail du grade $grade_nom'><img src='" . ICONSPATH . "home.png'> </a></td>";
-						echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification des droits du grade $grade_nom'><img src='" . ICONSPATH . "unlocked.png'> </a></td>";
-						echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du grade $grade_nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
-						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom');\">	<img src='" . ICONSPATH . "delete.png' title='supprimer $grade_nom'>	</a> </td>";
+						echo "<td width=20><a href='gestion_utilisateurs/form_menu_portail.php?height=450&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du menu portail du grade $grade_nom'><img src='img/home.png'> </a></td>";
+						echo "<td width=20><a href='gestion_utilisateurs/form_droits.php?height=650&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification des droits du grade $grade_nom'><img src='img/key.png'> </a></td>";
+						echo "<td width=20><a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=$grade_id' rel='slb_grades' title='Formulaire de modification du grade $grade_nom'><img src='img/write.png'> </a></td>";
+						echo "<td width=20 align=center> <a href='#' onclick=\"javascript:validation_suppr_grade($grade_id, '$grade_nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png' title='supprimer $grade_nom'>	</a> </td>";
 					} else {
 						echo"<td width=20>&nbsp</td>
 						<td width=20>&nbsp</td>
@@ -97,7 +98,12 @@
 	
 	
 <?PHP
-	// On se dÃ©connecte de la db
+
+	// Ajout d'un grade
+	if ( $E_chk )
+		echo "<a href='gestion_utilisateurs/form_grades.php?height=200&width=640&id=-1' rel='slb_grades' title='ajouter un grade'> <img src='img/add.png'>Ajouter un grade </a>";
+	
+	// On se déconnecte de la db
 	$con_gespac->Close ();
 ?>
 
@@ -119,15 +125,16 @@
 	//
 	// *********************************************************************************
 	
-	function validation_suppr_grade (id, nom) {
+	function validation_suppr_grade (id, nom, row) {
 	
 		var valida = confirm('Voulez-vous vraiment supprimer le grade "' + nom + '" ?');
-		// si la rÃ©ponse est TRUE ==> on lance la page post_grades.php
+		// si la réponse est TRUE ==> on lance la page post_grades.php
 		if (valida) {		
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
+			/*	supprimer la ligne du tableau	*/
+			$('grades_table').deleteRow(row);
+			/*	poste la page en ajax	*/
 			$('target').load("gestion_utilisateurs/post_grades.php?action=suppr&id=" + id);
-			window.setTimeout("document.location.href='index.php?page=grades&filter=" + $('filt').value + "'", 2500);
-			
+			window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_grades.php');", 1500);
 		}
 	}	
 

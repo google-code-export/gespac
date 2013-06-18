@@ -1,18 +1,23 @@
 <script type="text/javascript"> 
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit () {
-		// On route le site vers la page d'affectation des comptes
-		window.setTimeout("document.location.href='index.php?page=migusers2'", 1500);
+		// lance la fonction avec un délais de 1000ms
+		SexyLightbox.close();
+		window.setTimeout("$('conteneur').load('modules/migration_users/form_migration_users.php');", 1500);
 	}
 </script>
 
+<h3>Migration des comptes utilisateurs sur l'architecture AD 2008</h3>
+<small><i>Les logins et mots de passe iaca sont mis à jour dans l'architecture AD2008. Ce module permet de mettre à jour les comptes dans Gespac.
+<br>Il faut un fichier CSV comportant le nom, le prénom, le login et le mot de passe, séparés par des points-virgules et encadrés de double-quotes. Par exemple "LECHAT";"RAOUL";"rlechat";"4511932"
+<br>
+</i></small>
+	
+<br>
+<br>
 
-<div class="entetes" id="entete-migusers">	
-	<span class="entetes-titre">MIGRATION DES UTILISATEURS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Script permettant de migrer les anciens comptes utilisateurs sur l'architecture AD2008.<br>Il faut un fichier CSV comportant le nom, le prénom, le login et le mot de passe, séparés par des points-virgules et encadrés de double-quotes.<br>Par exemple "LECHAT";"RAOUL";"rlechat";"4511932"</div>
-</div>
-
-<div class="spacer"></div>
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
 
 
 <form method="POST" action="modules/migration_users/post_extract.php" target=_blank enctype="multipart/form-data">

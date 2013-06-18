@@ -77,7 +77,7 @@
 		// On log la requête SQL
 		$log->Insert( $req_suppr_grade );
 		
-		echo "Le grade <b>$grade_nom</b> a été supprimé et les utilisateurs affectés sont désormais du grade \"invité\"";
+		echo "<br><small>Le grade <b>$grade_nom</b> a été supprimé et les utilisateurs affectés sont désormais du grade \"invité\"</small>";
 	}
 
 	/**************** MODIFICATION ********************/	
@@ -99,7 +99,7 @@
 	    $con_gespac->Execute ( $req_log_modif_grade );
 		$log->Insert( $req_log_modif_grade );
 		
-		echo "Le grade <b>$nom</b> a été modifié...";
+		echo "<br><small>Le grade <b>$nom</b> a été modifié...</small>";
 	}
 	
 	/**************** INSERTION ********************/
@@ -120,7 +120,7 @@
 	    $con_gespac->Execute ( $req_log_creation_user );
 	    $log->Insert( $req_log_creation_user );
 		
-		echo "Le grade <b>$nom</b> a été ajouté...";
+		echo "<br><small>Le grade <b>$nom</b> a été ajouté...</small>";
 	}
 
 ?>

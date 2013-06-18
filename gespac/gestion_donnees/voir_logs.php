@@ -7,11 +7,26 @@
 	*/
 	
 	
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
+	
 ?>
+
+
+<h3>Suivi des logs</h3>
+
+<br>
+
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
 
 <script type="text/javascript">	
 	
-
+	// init de la couleur de fond
+	$('conteneur').style.backgroundColor = "#fff";
+	
 	// *********************************************************************************
 	//
 	//				Fonction de validation de la suppression des logs
@@ -20,13 +35,13 @@
 	
 	function validation_suppr_logs () {
 
-		var valida = confirm ("La suppression des logs va exécuter un dump automatique dans le fichier DUMP_LOGS.CSV du gestionnaire de fichiers.\n\nMERCI DE VÉRIFIER QUE VOTRE FICHIER DUMP_LOGS.CSV N'EST PAS OUVERT !");
+		var valida = confirm ("La suppression des logs va exécuter un dump automatique dans le fichier DUMP_LOGS.CSV. MERCI DE VÉRIFIER QUE VOTRE FICHIER DUMP_LOGS.CSV N'EST PAS OUVERT !");
 		
 		// si la réponse est TRUE ==> on lance la page post_logs.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("gestion_donnees/post_logs.php");
-			window.setTimeout("document.location.href='index.php?page=logs'", 1500);			
+			//	poste la page en ajax	
+			$("target").load("gestion_donnees/post_logs.php");
+			window.setTimeout("$('conteneur').load('gestion_donnees/voir_logs.php');", 1000);
 		}
 	}		
 	
@@ -68,38 +83,27 @@
 </script>	
 
 
-<div class="entetes" id="entete-logs">	
-
-	<span class="entetes-titre">LES LOGS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Toutes les opérations importantes laissent une trace dans les logs.<br>Vider les logs créé automatiquement un fichier dans le gestionnaire de fichiers.</div>
-
-	<span class="entetes-options">
-		
-		<span class="option">		
-			<input type=button value="vider les logs" onClick="validation_suppr_logs();">
-		</span>
-		
-		<span class="option">
-			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'log_prets_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
-		</span>
-	</span>
-
-</div>
-
-<div class="spacer"></div>
-
-
 <?PHP
 	
 	// cnx gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
-	$liste_des_logs = $con_gespac->QueryAll ( "SELECT log_date, log_type, log_texte FROM logs ORDER BY log_date DESC" );	
+	// stockage des lignes retournées par sql dans un tableau nommé liste_des_prets 
+	// SAlle_id = 3 (à la fin de la rq) parce que 3 correspond à la salle "PRETS"
+	$liste_des_prets = $con_gespac->QueryAll ( "SELECT log_date, log_type, log_texte FROM logs ORDER BY log_date DESC" );	
 
 ?>
 	
-	<table id="log_prets_table" class='tablehover'>
+	
+	<!-- 	bouton pour le filtrage du tableau	-->
+	<form>
+		<center><small>Filtrer :</small> <input name="filt" onkeyup="filter(this, 'log_prets_table', '1')" type="text"></center>
+	</form>
+	
+	
+	<center>
+	
+	<table id="log_prets_table" width=850>
 	
 		<th>Type</th>
 		<th>Date</th>
@@ -109,11 +113,11 @@
 
 			$compteur = 0;
 			// On parcourt le tableau
-			foreach ( $liste_des_logs as $record ) {
+			foreach ( $liste_des_prets as $record ) {
 	
 				$date 		= $record['log_date'];
 				$type 		= $record['log_type'];
-				$texte		= urldecode($record['log_texte']);
+				$texte		= urldecode(utf8_encode($record['log_texte']));
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
@@ -148,14 +152,23 @@
 				}
 				
 					
-				echo "<tr class='$tr_class'>";									
+				echo "<tr class=$tr_class>";									
 					echo "<td bgcolor=$td_color> $type </td>";
-					echo "<td>$date</td>";
-					echo "<td align=left>$texte</td>";
+					echo "<td> $date </td>";
+					echo "<td align=left>&nbsp $texte </td>";
 				echo "</tr>";
 				
 				$compteur++;				
 			}
-		?>	
-			
+		?>		
+
 	</table>
+	
+	<form>
+		<br>
+		<input type=button value="vider les logs" onClick="validation_suppr_logs();">
+	</form>
+	
+	</center>
+	
+	<br>

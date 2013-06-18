@@ -8,6 +8,9 @@
 -->
 
 
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
 <script>
 	// Fonction de validation de la suppression d'une marque
 	function validation_suppr(id, nom) {
@@ -16,98 +19,47 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
+			/*	poste la page en ajax	*/
 			$('target').load("modules/snapin_aic/post_snapin_aic.php?action=suppr&id=" + id);
-			window.setTimeout("document.location.href='index.php?page=aic'", 1500);		
+			/*	on recharge la page au bout de 1000ms	*/
+			window.setTimeout("$('conteneur').load('modules/snapin_aic/voir_snapin_aic.php');", 1000);
 		}
 	}
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var compteur = 0;
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-					compteur++;
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-			
-			$('nb_filtre').innerHTML = "<small>" + compteur + "</small>";
-		}
-	}	
-
 
 </script>
 
 
 <?PHP
+
+	// lib
+	require_once ('../../fonctions.php');
+	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
+
 	
 	// gestion des droits
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-13#", $_SESSION['droits']);
 
-?>
 
-
-<div class="entetes" id="entete-aic">	
-
-	<span class="entetes-titre">SNAPINS FOG pour AIC<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Afin d'éviter de créer un fichier AIC par OU de l'AD, on peut déployer le même fichier AIC.EXE avec des paramètres.<br>Cette page permet de créer dans fog un snapin paramétré pour intégrer les machines au domaine.</div>
-
-	<span class="entetes-options">
-		
-		<span class="option">
-			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform">
-				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'association_uo');" type="text"> 
-				<span id="nb_filtre" title="nombre de machines affichés"></span>
-			</form>
-		</span>
-	</span>
-
-</div>
-
-<div class="spacer"></div>
-
-<?PHP
-
-	echo "<center>";
+	echo "<h3>Création des snapins pour intégration dans le domaine via client iaca</h3>";
+	echo "<br><br><br><br><center>";
 	
 	if ($E_chk) {
 		
 		if (file_exists("/opt/fog/snapins/aic.exe")) {
-			echo "<a href='index.php?page=aicform'>Gérer les snapins AIC</a>";
+			echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/snapin_aic/form_snapin_aic.php');\" >Gérer les snapins AIC</a>";
 		} else {
-			echo "Le fichier <b>aic.exe</b> (attention à la casse) n'existe pas. Merci de créer un snapin avec ce fichier dans FOG.<br>";
-			echo "<a href='index.php?page=aicform'>Je posterai mon snapin aic.exe plus tard.</a><br>";
+			echo "Le fichier <b>aic.exe</b> (attention à la casse) n'existe pas. Merci de créer un snapin avec ce fichier dans FOG.";
+			echo "<br><br>";
+			echo "<a href='#' onclick=\"javascript:AffichePage('conteneur', 'modules/snapin_aic/form_snapin_aic.php');\" >Je posterai mon snapin aic.exe plus tard.</a>";
 		}
 		
 	} else {
-		echo "Vous n'avez pas les droits suffisants.";
+		echo "vous n'avez pas les droits suffisants.";
 	}
 	
-	echo "<br><br></center>";
+	echo "<br><br><br><br></center>";
+	
 	
 	
 	// cnx à fog
@@ -123,7 +75,7 @@
 	*
 	**************************************/
 
-	echo "<table id='association_uo'>";
+	echo "<table id='association_uo' width=100%>";
 	
 	$compteur = 0;
 	

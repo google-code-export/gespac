@@ -5,19 +5,16 @@
 
 
 
-	// lib
-	include_once ('../fonctions.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Sql.class.php');
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...	
 	
-	// Connexion Ã  la base de donnÃ©es GESPAC
+	// Connexion à la base de données GESPAC
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
 ?>
 
 <script type="text/javascript"> 
 	
-	// vÃ©rouille l'accÃ¨s au bouton submit si les conditions ne sont pas remplies
+	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
 		var bt_submit = document.getElementById("post_salle");
@@ -30,6 +27,13 @@
 		}
 	}
 	
+	// ferme la smoothbox et rafraichis la page
+	function refresh_quit (filt) {
+
+		// lance la fonction avec un délais de 1500ms
+		
+		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php?filter=" + filt + "');", 1500);
+	}
 	
 	/******************************************
 	*
@@ -47,10 +51,9 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
 					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('filt').value + "'", 1500);
 				}
 			
 			}).send(this.toQueryString());
@@ -63,9 +66,9 @@
 
 	$id = $_GET['id'];
 
-	if ( $id == '-1' ) {	// Formulaire vierge de crÃ©ation
+	if ( $id == '-1' ) {	// Formulaire vierge de création
 	
-		echo "<h2>formulaire de crÃ©ation d'une salle</h2><br>";
+		echo "<h2>formulaire de création d'une salle</h2><br>";
 		
 		?>
 		
@@ -81,7 +84,7 @@
 			
 				<tr>
 					<TD>Nom salle *</TD>
-					<TD><input type=text name=nom id=nom onkeyup="validation();" required/></TD>
+					<TD><input type=text name=nom id=nom onkeyup="validation();"/></TD>
 				</tr>
 				
 				<tr>
@@ -110,7 +113,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter une salle' id="post_salle" disabled>
+			<input type=submit value='Ajouter une salle' onclick="refresh_quit( $('filt').value );" id="post_salle" disabled>
 
 			</center>
 
@@ -119,15 +122,15 @@
 
 		<?PHP
 	} 
-	else {	// formulaire de modification prÃ©rempli
+	else {	// formulaire de modification prérempli
 	
 		echo "<h2>formulaire de modification d'une salle</h2><br>";
 		
 
-		// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© avec originalitÃ© "array" (mais "tableau" peut aussi marcher)
+		// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 		$salle_a_modifier = $con_gespac->QueryRow ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment FROM salles WHERE salle_id=$id" );
 
-		// valeur Ã  affecter aux champs
+		// valeur à affecter aux champs
 		$salle_id 		= $salle_a_modifier[0];
 		$salle_nom 		= $salle_a_modifier[1];
 		$salle_vlan 	= $salle_a_modifier[2];
@@ -149,7 +152,7 @@
 			
 				<tr>
 					<TD>Nom salle</TD>
-					<TD><input type=text name=nom id=nom value= "<?PHP echo $salle_nom; ?>" required />
+					<TD><input type=text name=nom id=nom value= "<?PHP echo $salle_nom; ?>"	/>
 				</tr>
 				
 				<tr>
@@ -178,7 +181,7 @@
 			</table>
 
 			<br>
-			<input type=submit value='Modifier cette salle'>
+			<input type=submit value='Modifier cette salle' onclick="refresh_quit( $('filt').value );" >
 
 			</center>
 
@@ -187,3 +190,6 @@
 	<?PHP
 	}	
 ?>
+
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>

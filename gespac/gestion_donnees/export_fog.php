@@ -1,33 +1,29 @@
 <?PHP
 
-	// Connexion √† la base de donn√©es GESPAC
-	$con_ocs = new Sql ($host, $user, $pass, $ocsweb);
-	
+	// lib
+	require_once ('../config/databases.php');
+	require_once ('../fonctions.php');
+	include_once ('../../class/Sql.class.php');	
 
-	if ($con_ocs->Exists()) {
-		// stockage des lignes retourn√©es par sql dans un tableau (je ne r√©cup√®re que le matos associ√© √† une marque)
-		$liste_hardware = $con_ocs->QueryAll ( "SELECT macaddr, name FROM hardware, networks WHERE hardware.id = networks.hardware_id;" );
+	// Connexion ‡ la base de donnÈes GESPAC
+	$con_ocs = new Sql ( $host, $user, $pass, $ocsweb );
 
-		$fp = fopen('dump/ocs_vers_fog.csv', 'w+');
+	// stockage des lignes retournÈes par sql dans un tableau (je ne rÈcupËre que le matos associÈ ‡ une marque)
+	$liste_hardware = $con_ocs->queryAll ( "SELECT macaddr, name FROM hardware, networks WHERE hardware.id = networks.hardware_id;" );
 
-		foreach ($liste_hardware as $record) {
-			$mac 	= $record['macaddr'];
-			$name 	= $record['name'];
-			
-			fputcsv($fp, array($mac, $name), ',' );	// les delimiters et "encloseurs" par defaut ne marchent pas ? tant pis
-		}
+	$fp = fopen('../dump/ocs_vers_fog.csv', 'w+');
 
-		fclose($fp);
-		$con_ocs->Close();
-
-
-		?>
-
-		<center><h1><a href="dump/ocs_vers_fog.csv">Fichier CSV OCS pour FOG</a></h1></center>
-
-<?PHP
+	foreach ($liste_hardware as $record) {
+		$mac 	= $record['macaddr'];
+		$name 	= $record['name'];
+		
+		fputcsv($fp, array($mac, $name), ',' );	// les delimiters et "encloseurs" par defaut ne marchent pas ? tant pis
 	}
-	else {
-		echo "<center><h2 style='color:red;'>La base OCS ne semble pas joignable. Impossible de cr√©er le fichier d'export pour FOG.</h2></center>";
-	}
+
+	fclose($fp);
+	$con_ocs->Close();
+
+
 ?>
+
+<center><h1><a href="./dump/ocs_vers_fog.csv">Fichier CSV OCS pour FOG</a></h1></center>

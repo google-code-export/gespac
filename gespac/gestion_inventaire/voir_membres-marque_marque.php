@@ -1,30 +1,28 @@
 	<!-- 
 
-		Liste des membres d'une MARQUE particuliÃ¨re
+		Liste des membres d'une MARQUE particulière
 
 	-->
 
 
 <?PHP
 
-	// lib
-	require_once ('../fonctions.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Log.class.php');	
-	include_once ('../../class/Sql.class.php');	
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+
+	include ('../includes.php');
 
 	
-	// libellÃ© du type de marque rÃ©cupÃ©rÃ© de la page voir_marques.php
+	// libellé du type de marque récupéré de la page voir_marques.php
 	$marque_marque = $_GET ['marque_marque'];
 
-	// cnx Ã  la base de donnÃ©es GESPAC
+	// cnx à la base de données GESPAC
 	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 
-	// stockage des lignes retournÃ©es par sql dans un tableau nommÃ© avec originalitÃ© "array" (mais "tableau" peut aussi marcher)
+	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$liste_des_materiels = $con_gespac->QueryAll ( "SELECT mat_nom, mat_dsit, mat_serial, mat_etat, marque_marque, marque_model, marque_type, marque_stype, mat_id FROM materiels, marques WHERE materiels.marque_id = marques.marque_id AND marque_marque='$marque_marque' order by mat_nom" );
 
-	echo "<p><small>" . count($liste_des_materiels) . " matÃ©riel(s)</small></p>";
+	echo "<p><small>" . count($liste_des_materiels) . " matériel(s)</small></p>";
 	
 	$fp = fopen('../dump/extraction.csv', 'w+');	//Ouverture du fichier
 	fputcsv($fp, array('nom', 'dsit', 'serial', 'etat', 'modele', 'type', 'stype'), ',' );	// ENTETES
@@ -40,7 +38,7 @@
 		<th>dsit</th>
 		<th>serial</th>
 		<th>etat</th>
-		<th>modÃ¨le</th>
+		<th>modèle</th>
 		<th>type</th>
 		<th>s/type</th>
 		
@@ -49,7 +47,7 @@
 			$compteur = 0;	
 			// On parcourt le tableau
 			foreach ($liste_des_materiels as $record ) {
-				// On Ã©crit les lignes en brut dans la page html
+				// On écrit les lignes en brut dans la page html
 
 				// alternance des couleurs
 				$tr_class = ($compteur % 2) == 0 ? "tr3" : "tr4";
@@ -91,7 +89,7 @@
 	<br>
 	
 <?PHP
-	// On se dÃ©connecte de la db
+	// On se déconnecte de la db
 	$con_gespac->Close();
 
 ?>

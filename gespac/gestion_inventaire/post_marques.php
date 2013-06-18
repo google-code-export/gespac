@@ -52,6 +52,7 @@
 		
 		if ( $test_existence_dans_table_marques[0] ) {
 			echo "La marque <b>$marque $modele</b> existe déjà.";
+			echo "<script>alert('La marque $marque $modele existe déjà.');</script>";
 		}
 		else {
 		
@@ -83,7 +84,7 @@
 		//On récupère le nom de la marque en fonction du marque_id avant sa suppression
 		$marque_model = $con_gespac->QueryOne ( "SELECT marque_model FROM marques WHERE marque_id = $id" );
 
-		echo $log_texte = "Le modèle $marque_model a été supprimé";
+		$log_texte = "Le modèle $marque_model a été supprimé";
 
 		$req_log_suppr_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression marque', '$log_texte' );";
 		$con_gespac->Execute ( $req_log_suppr_marque );
@@ -188,7 +189,8 @@
 			$marque_dep 	= $marque_de_depart[0];
 			$modele_dep 	= $marque_de_depart[1];
 			
-			echo "La marque $marque $modele existe déjà. Réaffectation du matériel de $marque_dep $modele_dep vers $marque $modele";
+			echo "Le matériel est transféré de la marque $marque_dep $modele_dep vers $marque $modele";
+			echo "<script>alert('La marque $marque $modele existe déjà. Réaffectation du matériel de $marque_dep $modele_dep vers $marque $modele');</script>";
 			
 			// On transvase les mat de l'ancienne marque vers la marque avec correspondance.
 
@@ -255,15 +257,17 @@
 		$req_verifie_existence_marque = $con_gespac->QueryRow("SELECT * FROM marques WHERE marque_type = '$type' AND marque_stype = '$stype' AND marque_marque = '$marque' AND marque_model = '$modele'; ");
 		
 		if ( $req_verifie_existence_marque[0] ) { // alors la marque existe
-					
+			echo "<script>alert('La marque existe déjà !');</script>";
+			
 			//Insertion d'un log
-			echo $log_texte = "La marque $marque $modele de type $type $stype existe déjà !";
+			$log_texte = "La marque $marque $modele de type $type $stype existe déjà !";
 			$req_log_non_add_marque = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création marque', '$log_texte' );";
 			$con_gespac->Execute ( $req_log_non_add_marque );
 			
 			// On log la requête SQL
 			$log->Insert ( $req_log_non_add_marque );
 
+			
 		}
 		else {	
 			$req_add_marque = "INSERT INTO marques ( marque_type, marque_stype, marque_marque, marque_model) VALUES ( '$type', '$stype', '$marque', '$modele' )";
@@ -273,7 +277,7 @@
 			$log->Insert ( $req_add_marque );
 
 				
-			echo "Ajout de la marque <b>$marque $modele</b> de type <b>$stype / $stype</b>.";
+			echo "<small>Ajout de la marque <b>$marque $modele</b> de type <b>$stype / $stype</b>.</small>";
 				
 			//Insertion d'un log
 			$log_texte = "La marque $marque $modele de type $type $stype a été créée";

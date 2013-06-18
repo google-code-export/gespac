@@ -1,17 +1,38 @@
 <?PHP
 session_start();
 
-	#fichier de creation / modif / du college
+	/* 
+		fichier de creation / modif / du college
+
+	*/
+
+
+?>
+
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
+<script type="text/javascript">	
+	// init de la couleur de fond
+	$('conteneur').style.backgroundColor = "#fff";
+	
+</script>
 
 	
-	// si le grade du compte est root, on donne automatiquement les droits d'acc√®s en √©criture. Sinon, on teste si le compte a acc√®s √† la page.
+<?PHP
+
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// rËgle le problËme d'encodage des caractËres
+	
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+
+	// si le grade du compte est root, on donne automatiquement les droits d'accËs en Ècriture. Sinon, on teste si le compte a accËs ‡ la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-08-01#", $_SESSION['droits']);
-
-
-	// cnx √† la base de donn√©es GESPAC
+	
+	
+	// cnx ‡ la base de donnÈes GESPAC
 	$con_gespac 	= new Sql ($host, $user, $pass, $gespac);
 	
-	// stockage des lignes retourn√©es par sql dans un tableau nomm√© avec originalit√© "array" (mais "tableau" peut aussi marcher)
+	// stockage des lignes retournÈes par sql dans un tableau nommÈ avec originalitÈ "array" (mais "tableau" peut aussi marcher)
 	$college_info = $con_gespac->QueryRow ( "SELECT clg_uai, clg_nom, clg_ati, clg_ati_mail, clg_adresse, clg_cp, clg_ville, clg_tel, clg_fax, clg_site_web, clg_site_grr FROM college;" );
 
 	$clg_uai 		= stripslashes($college_info [0]);
@@ -25,29 +46,11 @@ session_start();
 	$clg_fax 		= $college_info [8];
 	$clg_site_web 	= stripslashes($college_info [9]);
 	$clg_site_grr 	= stripslashes($college_info [10]);
-
-?>
-
-
-<div class="entetes" id="entete-college">	
-
-	<span class="entetes-titre">FICHE COLLEGE<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">C'est la fiche d'identit√© du coll√®ge.</div>
-
-	<span class="entetes-options">
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_college/form_college.php?height=450&width=640&id=$clg_uai' rel='slb_college' title=\"Modifier la fiche coll√®ge\"><img src='" . ICONSPATH . "modif1.png'></a>";?></span>
-	</span>
-
-</div>
-
-<div class="spacer"></div>
-
 	
-<?PHP
-		
-echo "
+	
+echo "<h3>Fiche d'informations du collËge $clg_nom</h3><br>
 	<center>
-			<table class='tablehover'>
+			<table class='tablehover' width=450>
 
 				<tr class='tr1'>
 					<TD><B>UAI</B></TD>
@@ -55,7 +58,7 @@ echo "
 				</tr>
 			
 				<tr class='tr2'>
-					<TD><B>Nom du coll√®ge</B></TD>
+					<TD><B>Nom du collËge</B></TD>
 					<TD>$clg_nom</TD>
 				</tr>
 			
@@ -70,7 +73,7 @@ echo "
 				</tr>
 			
 				<tr class='tr1'>
-					<TD><B>Adresse du coll√®ge</B></TD>
+					<TD><B>Adresse du collËge</B></TD>
 					<TD>$clg_adresse</TD>
 				</tr>
 			
@@ -85,7 +88,7 @@ echo "
 				</tr>
 				
 				<tr class='tr2'>
-					<TD><B>T√©l√©phone</B></TD>
+					<TD><B>TÈlÈphone</B></TD>
 					<TD>$clg_tel</TD>
 				</tr>
 			
@@ -95,24 +98,19 @@ echo "
 				</tr>
 			
 				<tr class='tr2'>
-					<TD><B>Site web du coll√®ge</B></TD>
+					<TD><B>Site web du collËge</B></TD>
 					<TD><a href='http://$clg_site_web' target=_blank>http://$clg_site_web</a></TD>
 				</tr>				
 			
 				<tr class='tr1'>
-					<TD><B>Acc√®s GRR</B></TD>
+					<TD><B>AccËs GRR</B></TD>
 					<TD><a href='http://$clg_site_grr' target=_blank>http://$clg_site_grr</a></TD>
 				</tr>	
 				
 			</table>
 		</center>";
 			
+if ($E_chk)	
+	echo "<br><center><a href='#&id=$clg_uai' onclick=\"$('conteneur').load('gestion_college/form_college.php?id=$clg_uai');\" ><img src='img/write.png' title='Modifier les informations du collËge'></a></center>";
+
 ?>
-
-
-<script type="text/javascript">
-	
-	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_college'});
-	});
-</script>

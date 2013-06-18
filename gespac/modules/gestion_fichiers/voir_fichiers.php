@@ -9,6 +9,16 @@
 
 */
 
+
+	// lib
+	require_once ('../../fonctions.php');
+	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
+
+
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+	
+
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
@@ -17,30 +27,26 @@
 ?>
 
 
-<div class="entetes" id="entete-gestfichiers">	
+<h3>Visualisation des fichiers</h3>
 
-	<span class="entetes-titre">GESTIONNAIRE DE FICHIERS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Le gestionnaire de fichier permet de poster et partager des fichiers entre utilisateurs.</div>
+<br>
 
-	<span class="entetes-options">
-		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?height=350&width=640&id=-1' rel='slb_fichiers' title='Ajout fichier'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
-		<span class="option">
-			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'fichiers_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
-		</span>
-	</span>
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
 
-</div>
 
-<div class="spacer"></div>
+<!-- 	bouton pour le filtrage du tableau	-->
+<form id="filterform">
+	<center><small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'fichiers_table');" type="text" value=<?PHP echo $_GET['filter'];?> ></center>
+</form>
 
 
 <?PHP 
-
+	if ( $E_chk ) echo "<a href='modules/gestion_fichiers/form_fichiers.php?height=320&width=640&id=-1' rel='slb_fichiers' title='Ajout fichier'>	Ajouter un fichier	</a>"; 
+		
 	$liste_fichiers = $con_gespac->QueryAll ("SELECT * FROM fichiers;");
 	
-	echo "<table id='fichiers_table' class='tablehover'>";
+	echo "<table id='fichiers_table' width='900px'>";
 	
 		echo "<th>fichier</th>";
 		echo "<th>description</th>";
@@ -160,9 +166,12 @@
 		// si la réponse est TRUE ==> on lance la page post_materiels.php
 		if (valida) {
 			
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
+			//	poste la page en ajax
 			$('target').load("modules/gestion_fichiers/post_fichiers.php?action=suppr&id=" + id);
-			window.setTimeout("document.location.href='index.php?page=gestfichiers'", 1500);		
+			
+			// lance la fonction avec un délais de 1500ms
+			window.setTimeout("$('conteneur').load('modules/gestion_fichiers/voir_fichiers.php');", 1500);
+	
 		}
 	}
 	

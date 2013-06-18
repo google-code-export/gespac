@@ -2,24 +2,28 @@
 
 	/*
 		formulaire d'ajout et de modification des materiels !
-		permet de crÃ©er un nouveau matos,
+		permet de créer un nouveau matos,
 		de modifier un matos particulier
-		de modifier par lot des matÃ©riels
+		de modifier par lot des matériels
 	*/
+	
+	
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
 
-
-	// lib
-	require_once ('../fonctions.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Log.class.php');	
-	include_once ('../../class/Sql.class.php');		
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
 
 ?>
+
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
+<!--  SERVEUR AJAX -->
+<script type="text/javascript" src="server.php?client=all"></script>
 
 
 <script type="text/javascript"> 
 	
-	// vÃ©rouille l'accÃ¨s au bouton submit si les conditions ne sont pas remplies
+	// vérouille l'accès au bouton submit si les conditions ne sont pas remplies
 	function validation () {
 
 		var bt_submit 	= $("post_materiel");
@@ -33,9 +37,15 @@
 		}
 	}
 	
+	// Ferme la smoothbox et rafraichit la page
+	function refresh_quit (filt) {
+		// lance la fonction avec un délais de 1000ms
+		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1000);
+	}
+	
 	
 /******************************************
-	*		GÃ©nÃ©rateur de ssn alÃ©atoire
+	*		Générateur de ssn aléatoire
 	*******************************************/
 	function SSNgenerator () {
 		
@@ -59,10 +69,9 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
 					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
 				}
 			
 			}).send(this.toQueryString());
@@ -73,7 +82,7 @@
 
 <?PHP
 
-	// cnx Ã  la base de donnÃ©es GESPAC
+	// cnx à la base de données GESPAC
 	$con_gespac	= new Sql ($host, $user, $pass, $gespac);
 	
 	
@@ -83,29 +92,29 @@
 	
 	// *********************************************************************************
 	//
-	//			Formulaire ajout Ã  partir d'une marque (champs de marque prÃ©remplis)
+	//			Formulaire ajout à partir d'une marque (champs de marque préremplis)
 	//
 	// *********************************************************************************	
 		
 		
-		// RequÃªte qui va rÃ©cupÃ©rer les champs Ã  partir de la marque
+		// Requête qui va récupérer les champs à partir de la marque
 		$ajout_materiel_de_marque = $con_gespac->QueryRow ( "SELECT marque_id, marque_type, marque_stype, marque_marque, marque_model FROM marques WHERE marque_id=$id" );
 	
 		
-		// valeurs Ã  affecter aux champs
+		// valeurs à affecter aux champs
 		$materiel_id 			= $ajout_materiel_de_marque[0];
 		$materiel_type 			= $ajout_materiel_de_marque[1];
 		$materiel_stype			= $ajout_materiel_de_marque[2];
 		$materiel_marque		= $ajout_materiel_de_marque[3];
 		$materiel_modele		= $ajout_materiel_de_marque[4];		
 		
-		// RequÃªte qui va rÃ©cupÃ©rer les origines des dotations ...
+		// Requête qui va récupérer les origines des dotations ...
 		$liste_origines = $con_gespac->QueryAll ( "SELECT origine FROM origines ORDER BY origine" );
 	
-		// RequÃªte qui va rÃ©cupÃ©rer les Ã©tats des matÃ©riels ...
+		// Requête qui va récupérer les états des matériels ...
 		$liste_etats = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
 		
-		echo "<h2><center>Formulaire d'ajout d'un nouveau matÃ©riel de marque $materiel_marque et de modÃ¨le $materiel_modele</center></h2><br>";
+		echo "<h2><center>Formulaire d'ajout d'un nouveau matériel de marque $materiel_marque et de modèle $materiel_modele</center></h2><br>";
 		
 		?>
 		
@@ -126,13 +135,13 @@
 				</tr>
 				
 				<tr>
-					<TD>RÃ©fÃ©rence DSIT</TD>
+					<TD>Référence DSIT</TD>
 					<TD><input type=text id=dsit name=dsit 	/></TD>
 				</tr>
 				
 				<tr>
-					<TD>NumÃ©ro de sÃ©rie *</TD> 
-					<TD><input type=text id=serial name=serial onkeyup="validation();" /> <input type=button value="gÃ©nÃ©rer" onclick="SSNgenerator(); validation();"> </TD>
+					<TD>Numéro de série *</TD> 
+					<TD><input type=text id=serial name=serial onkeyup="validation();" /> <input type=button value="générer" onclick="SSNgenerator(); validation();"> </TD>
 				</tr>
 				
 				<tr>
@@ -152,7 +161,7 @@
 				</tr>
 				
 				<tr>
-					<TD>Etat du matÃ©riel</TD> 
+					<TD>Etat du matériel</TD> 
 					<TD>
 						<select name="etat">
 							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
@@ -162,11 +171,11 @@
 				
 			
 				<tr>
-					<TD>Salle oÃ¹ se trouve le matÃ©riel</TD> 
+					<TD>Salle où se trouve le matériel</TD> 
 					<TD>
 						<select name="salle" >
 							<?PHP
-								// requÃªte qui va afficher dans le menu dÃ©roulant les salles saisies dans la table 'salles'
+								// requête qui va afficher dans le menu déroulant les salles saisies dans la table 'salles'
 								$req_salles_disponibles = $con_gespac->QueryAll ( "SELECT DISTINCT salle_nom FROM salles" );
 								foreach ( $req_salles_disponibles as $record) { 
 									$salle_nom = $record['salle_nom'];
@@ -182,6 +191,6 @@
 			</table>
 
 			<br>
-			<input type=submit value='Ajouter un materiel' id="post_materiel" disabled />
+			<input type=submit value='Ajouter un materiel' onclick="refresh_quit( $('filt').value );" id="post_materiel" disabled />
 			</center>
 		</FORM>

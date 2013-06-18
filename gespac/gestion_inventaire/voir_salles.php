@@ -6,16 +6,37 @@ session_start();
 	
 		Visualisation des salles
 		
+		bouton ajouter une salle
+		
+		sur chaque salle possibilité de la modifier
+		
+		de la supprimer en faisant gaffe à bien rebalancer TOUTES les machines dans la salle de stockage
+	
+	
 	*/
 
+
+	// lib
+	require_once ('../fonctions.php');
+	include_once ('../config/databases.php');
+	include_once ('../../class/Sql.class.php');
+	
 	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-02-03#", $_SESSION['droits']);
 
 ?>
 
+<h3>Visualisation des salles</h3>
+<br>
+
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
 <script type="text/javascript">	
 
+	// init de la couleur de fond
+	$('conteneur').style.backgroundColor = "#fff";
 
 	// Fonction de validation de la suppression d'une marque
 	function validation_suppr_salle (id, salle, row) {
@@ -28,12 +49,14 @@ session_start();
 			
 			// si la réponse est TRUE ==> on lance la page post_marques.php
 			if (valida) {
-				$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
+				/*	poste la page en ajax	*/
 				$('target').load("gestion_inventaire/post_salles.php?action=suppr&id=" + id);
-				window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('filt').value + "'", 1500);			
+				/*	on recharge la page au bout de 1000ms	*/
+				window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php');", 1000);
 			}
 		}
 	}
+	
 	
 	// Fonction de validation pour vider la salle d3e
 	function validation_suppr_d3e () {
@@ -42,12 +65,14 @@ session_start();
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
+			/*	poste la page en ajax	*/
 			$('target').load("gestion_inventaire/post_salles.php?action=vider_d3e");
-			window.setTimeout("document.location.href='index.php?page=salles&filter=" + $('filt').value + "'", 1500);
+			/*	on recharge la page au bout de 1000ms	*/
+			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_salles.php');", 1000);
 		}
 
 	}	
+	
 	
 	
 	// *********************************************************************************
@@ -88,24 +113,12 @@ session_start();
 </script>
 
 
-<div class="entetes" id="entete-salles">	
 
-	<span class="entetes-titre">LES SALLES<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des salles du parc.<br>Certaines salles, comme PRETS ou STOCK sont bloquées car elles ont un rôle particulier.</div>
+<!-- 	bouton pour le filtrage du tableau	-->
+<form id="filterform">
+	<center><small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'salle_table');" type="text" value=<?PHP echo $_GET['filter'];?> ></center>
+</form>
 
-	<span class="entetes-options">
-		
-		<span class="option" id="viderd3e"><?PHP if ( $E_chk ) echo "<a href='#' onclick=\"javascript:validation_suppr_d3e();\" title='Vider la salle D3E'><img src='" . ICONSPATH . "refresh.png'></a>"; ?></span>
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
-		<span class="option">
-			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'salle_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
-		</span>
-	</span>
-
-</div>
-
-<div class="spacer"></div>
 
 <?PHP 
 
@@ -115,11 +128,15 @@ session_start();
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$liste_des_salles = $con_gespac->QueryAll ( "SELECT salle_id, salle_nom, salle_vlan, salle_etage, salle_batiment, est_modifiable FROM salles ORDER BY salle_nom" );
 
+	if ( $E_chk ) {
+		echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
+		echo "<a id='viderd3e' href='#' onclick=\"javascript:validation_suppr_d3e();\" title='Vider la salle D3E'> <img src='img/delete.png'>Vider la salle D3E</a>";	
+	}
 ?>
 	
 	<center>
 	<br>
-	<table class="tablehover" id='salle_table'>
+	<table class="tablehover" width=800 id='salle_table'>
 		<th>Nom</th>
 		<th>VLAN</th>
 		<th>Etage</th>
@@ -157,7 +174,7 @@ session_start();
 					
 					// On affiche le bouton pour vider le D3E que si la salle contient du matos
 					if ($nom == "D3E" && $nb_matos_dans_cette_salle <= 0) echo "<script>$('viderd3e').hide();</script>";
-					
+
 					echo "<td><a href='gestion_inventaire/voir_membres_salle.php?height=480&width=640&salle_id=$id' rel='slb_salles' title='membres de la salle $nom'>$nom</a> [" . $nb_matos_dans_cette_salle ."] </td>";
 					echo "<td>" . $vlan . "</td>";
 					echo "<td>" . $etage . "</td>";
@@ -165,8 +182,8 @@ session_start();
 					
 					
 					if ( $E_chk && $est_modifiable ) {
-						echo "<td class='buttons'><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='" . ICONSPATH . "edit.png'> </a></td>";
-						echo "<td class='buttons'><a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='" . ICONSPATH . "delete.png'>	</a> </td>";
+						echo "<td><a href='gestion_inventaire/form_salles.php?height=250&width=640&id=$id' rel='slb_salles' title='Formulaire de modification de la salle $nom'><img src='img/write.png'> </a></td>";
+						echo "<td> <a href='#' onclick=\"javascript:validation_suppr_salle($id, '$nom', this.parentNode.parentNode.rowIndex);\">	<img src='img/delete.png'>	</a> </td>";
 							
 					} else {
 						echo "<td>&nbsp</td>	<td>&nbsp</td>";
@@ -185,6 +202,8 @@ session_start();
 	
 
 <?PHP
+if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='img/add.png'>Ajouter une salle</a>";
+
 	// On se déconnecte de la db
 	$con_gespac->Close();
 ?>
@@ -192,7 +211,7 @@ session_start();
 <script type="text/javascript">
 	
 	window.addEvent('domready', function(){
-		SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
+	  SexyLightbox = new SexyLightBox({color:'black', dir: 'img/sexyimages', find:'slb_salles'});
 	});
 
 

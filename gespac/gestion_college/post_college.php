@@ -4,27 +4,25 @@
 	/* fichier de creation / modif / du college
 	
 	Si j'ai un ID c'est une modification
-	Si j'en ai pas c'est une crÃ©ation
+	Si j'en ai pas c'est une création
 	
-	reste Ã  coder pour la suppression
+	reste à coder pour la suppression
 	
 	*/
 	
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// règle le problème d'encodage des caractères
+
 	// lib
-	require_once ('../fonctions.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Log.class.php');		
-	include_once ('../../class/Sql.class.php');	
-
-
-	// cnx Ã  la base de donnÃ©es GESPAC
+	include ('../includes.php');	// fichier contenant les fonctions, la config pear, les mdp databases ...
+	
+	// cnx à la base de données GESPAC
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
-	//Log des requÃªtes SQL
+	//Log des requêtes SQL
 	$log = new Log ("../dump/log_sql.sql");
 	
 		
-	// on rÃ©cupÃ¨re les paramÃ¨tres de l'url	
+	// on récupère les paramètres de l'url	
 	$action 	= $_GET['action'];
 	
 
@@ -43,6 +41,7 @@
 	
 	if ( $action == 'creat' ) {
 		
+		//la fonction addslashes() va permettre de rajouter un slash avant une apostrophe dans un string. Pas besoin d'utiliser cette fonction pour les champs uniquement numériques comme le téléphone, fax...
 		$clg_uai 		= $_POST['clg_uai'];
 		$clg_nom 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_nom']))));
 		$clg_ati 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_ati']))));
@@ -55,57 +54,57 @@
 		$clg_web 		= addslashes(utf8_decode(urldecode($_POST['clg_web'])));
 		$clg_grr 		= addslashes(utf8_decode(urldecode($_POST['clg_grr'])));
 	
-		// crÃ©ation du collÃ¨ge
+		// création du collège
 		$req_add_college = "INSERT INTO college VALUES ( '$clg_uai', '$clg_nom', '$clg_ati', '$clg_ati_mail', '$clg_adresse', '$clg_cp', '$clg_ville', '$clg_tel', '$clg_fax', '$clg_web', '$clg_grr')";
 		$con_gespac->Execute ( $req_add_college );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_add_college );
 		
-		echo "CrÃ©ation du collÃ¨ge <b>$clg_nom</b> !";
+		echo "<br><small>Création du collège <b>$clg_nom</b> !</small><br>";
 		
-		// Mise Ã  jour de l'adresse mail dans le compte ati
+		// Mise à jour de l'adresse mail dans le compte ati
 		$req_maj_mail_ati = "UPDATE users SET user_mail = '$clg_ati_mail' WHERE user_nom='ati'";
 		$con_gespac->Execute ( $req_maj_mail_ati );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_maj_mail_ati );
 		
-		echo "<br>Mise Ã  jour du mail du compte ATI !";
+		echo "<br><small>Mise à jour du mail du compte ATI !</small><br>";
 		
-		// CrÃ©ation de diverses salles
+		// Création de diverses salles
 		$req_add_salle_stock = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (1, 'STOCK', '$clg_uai', 0 )";
 		$con_gespac->Execute ( $req_add_salle_stock );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_add_salle_stock );
 		
-		echo "<br>CrÃ©ation de la salle <b>Stock</b> !";
+		echo "<small>Création de la salle <b>Stock</b> !</small><br>";
 		
 		$req_add_salle_d3e = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (2, 'D3E', '$clg_uai', 0 )";
 		$con_gespac->Execute ( $req_add_salle_d3e );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_add_salle_d3e );
 		
-		echo "<br>CrÃ©ation de la salle <b>D3E</b> !";
+		echo "<small>Création de la salle <b>D3E</b> !</small><br>";
 		
 		$req_add_salle_pret = "INSERT INTO salles (salle_id, salle_nom, clg_uai, est_modifiable) VALUES (3, 'PRETS', '$clg_uai', 0 )";
 		$con_gespac->Execute ( $req_add_salle_pret );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_add_salle_pret );
 		
-		echo "<br>CrÃ©ation de la salle <b>PRETS</b> !";
+		echo "<small>Création de la salle <b>PRETS</b> !</small><br>";
 
 		//Insertion d'un log
 		
-		$log_texte = "La fiche informative a Ã©tÃ© crÃ©Ã©e. Nom actuel : <b>$clg_nom</b>";
+		$log_texte = "La fiche informative a été créée. Nom actuel : <b>$clg_nom</b>";
 		
-		$req_log_creer_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'CrÃ©ation collÃ¨ge', '$log_texte');";
+		$req_log_creer_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Création collège', '$log_texte');";
 		$con_gespac->Execute ( $req_log_creer_college );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_log_creer_college );
 		
 	}
@@ -117,7 +116,7 @@
 	
 	if ( $action == 'mod' ) {
 		
-		//la fonction addslashes() va permettre de rajouter un slash avant une apostrophe dans un string. Pas besoin d'utiliser cette fonction pour les champs uniquement numÃ©riques comme le tÃ©lÃ©phone, fax...
+		//la fonction addslashes() va permettre de rajouter un slash avant une apostrophe dans un string. Pas besoin d'utiliser cette fonction pour les champs uniquement numériques comme le téléphone, fax...
 		$old_uai		= $_POST['old_uai'];
 		$clg_uai 		= $_POST['clg_uai'];
 		$clg_nom 		= strtoupper(addslashes(utf8_decode(urldecode($_POST['clg_nom']))));
@@ -136,30 +135,32 @@
 							  clg_site_web = '$clg_web', clg_site_grr = '$clg_grr' WHERE clg_uai='$old_uai'";
 		$con_gespac->Execute ( $req_modif_college );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_modif_college );
 		
-		// Mise Ã  jour de l'adresse mail dans le compte ati
+		// Mise à jour de l'adresse mail dans le compte ati
 		$req_maj_mail_ati = "UPDATE users SET user_mail = '$clg_ati_mail' WHERE user_nom='ati'";
 		$con_gespac->Execute ( $req_maj_mail_ati );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_maj_mail_ati );
+		
+		echo "<br><small>Mise à jour du mail du compte ATI !</small><br>";
 		
 		
 		//Insertion d'un log
 		
-		$log_texte = "La fiche informative a Ã©tÃ© modifiÃ©e. Nom actuel : <b>$clg_nom</b>";
+		$log_texte = "La fiche informative a été modifiée. Nom actuel : <b>$clg_nom</b>";
 		
-		$req_log_modif_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification collÃ¨ge', '$log_texte');";
+		$req_log_modif_college = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification collège', '$log_texte');";
 		$con_gespac->Execute ( $req_log_modif_college );
 		
-		// On log la requÃªte SQL
+		// On log la requête SQL
 		$log->Insert( $req_log_modif_college );
 		
 		$clg_nom = stripslashes($clg_nom);
 		
-		echo "Modification du collÃ¨ge <b>$clg_nom</b>";
+		echo "<small>Modification du collège <b>$clg_nom</b>.</small>";
 	
 	}
 	

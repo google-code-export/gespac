@@ -13,13 +13,13 @@
 		<!--	FAVICON	-->
 		<link rel="SHORTCUT ICON" href="./gespac/img/favicon.ico"/>
 		
-		<!--	JS	-->	
-		<script type="text/javascript" src="./gespac/js/mootools-core-1.4.5-full-compat-yc.js"></script>	
-		<script type="text/javascript" src="./gespac/js/mootools-more-1.4.0.1.js"></script>
-
+		<!--	JS	-->
+		<script type="text/javascript" src="./gespac/js/mootools-1.2.3-core-yc.js"></script>	
+		<script type="text/javascript" src="./gespac/js/mootools-1.2.3.1-more.js"></script>
+		<script type="text/javascript" src="./gespac/js/main.js"></script>
 		
 		<!--	CSS	-->
-		<link rel="stylesheet" href="./gespac/css/style.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="./gespac/css/style_ff.css" type="text/css" media="screen" />
 		
 		<!--Script de détection pour savoir si il y a un popup killer-->
 		<script type="text/JavaScript" language="javascript">
@@ -34,19 +34,30 @@
 </head>
 
 <body>
+	
+	
 
-	<script type="text/javascript" src="gespac/js/CFInstall.min.js"> </script>
-	 
-	<div id="placeholder"></div>
+<?PHP
+	$ping_google = EXEC('ping -c 1 www.google.com'); //on ping internet si ça ne ping pas on ne charge pas chrome frame
+	
+	if ($ping_google <> "") {
+	
+?>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"> </script>
+		 
+		<div id="placeholder"></div>
 
-	<script>
-	 CFInstall.check({
-		mode: "inline",
-		node: "placeholder",
-		destination: "cf:http://localhost/GESPAC3/"
-	  });
-	</script>
+		<script>
+		 CFInstall.check({
+			mode: "inline",
+			node: "placeholder",
+			destination: "cf:http://localhost/GESPAC3/"
+		  });
+		</script>
 
+<?PHP
+	}
+?>
 
 	<div id=portail-menu>
 	
@@ -70,7 +81,8 @@
 
 		// on vérifie la connectivité avec la base avant d'aller plus loin	
 		if(!mysql_select_db($gespac)) {
-			echo '<img src="./gespac/" . ICONSPATH . "info.png"> Vous devez installer au préalable la base de données en cliquant <a href="install_mysql/installation.php">ICI</a>';
+			echo '<img src="./gespac/img/info.png"><br>
+			vous devez installer au préalable la base de données en cliquant <a href="install_mysql/installation.php">ici</a>';
 			exit();
 		}	
 
@@ -138,8 +150,10 @@
 			
 			echo "<div style='float:right;' class=portail-menu-item><a href='logout.php'> 
 				<img src='./gespac/img/cancel.png' height=48><br>Déconnexion </a></div>";
-				
-			echo "<div style='clear:both;'></div>";			
+
+			echo "<div class='spacer'> </div>";
+	
+			
 		}
 	?>
 	
@@ -155,30 +169,15 @@
 	
 	<div id=portail-conteneur>
 		
-		<center>
-			<div style="font-size:60px;">GESPAC</div>
-			<div style="font-size:12px;">Gestion de Parc en Collectivité</div>
-		</center>
 		
-		<hr>
-		
-		<div style="font-size:14px;">
-			<b>SITE OFFICIEL : </b> <a href="http://gespac.free.fr" target=_blank>Cliquez ici</a> <br><br>
-			<b>LES PROCEDURES : </b> <a href="http://gespac.free.fr/doku/doku.php?id=gespacweb" target=_blank>Cliquez ici</a> <br><br>
-			<b>LES SOURCES : </b> <a href="http://code.google.com/p/gespac/" target=_blank>Cliquez ICI</a> <br><br>
-			<b>DECLARER UN BUG : </b> <a href="http://code.google.com/p/gespac/issues/list" target=_blank>Cliquez ICI</a> <br><br>
-		</div>
-		
-		<div style="font-size:14px;">
-			<b>COMPATIBILITE : </b>Gespac est compatible avec la plupart des navigateurs modernes comme Firefox, Chrome, Opéra et Safari. Internet Explorer présente quelques problèmes de présentation et de fonctionnalités (si vous utilisez IE, Gespac vous proposera d'installer <a href="http://code.google.com/intl/fr-FR/chrome/chromeframe/" target=_blank>Google Chrome Frame</a>).<br><br>
-		</div>
-		
-		<div style="font-size:14px;">
-			<b>LICENCE : </b>GESPAC est régi par la licence CeCILL V2 soumise au droit français et respectant les principes de diffusion des logiciels libres. Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA  sur le site <a href="http://www.cecill.info" target=_blank>http://www.cecill.info</a>.<br><br>
-		</div>
-		
-
-
+      <br/><br/>
+		<b><h3><center>GESPAC est régi par la licence CeCILL V2 soumise au droit français et respectant les principes de diffusion des logiciels libres.<br>
+								Vous pouvez utiliser, modifier et/ou redistribuer ce programme sous les conditions de la licence CeCILL telle que diffusée par le CEA, le CNRS et l'INRIA  sur le site "http://www.cecill.info".</b></h3></center><br><br>
+				<b>SITE OFFICIEL : </b><br/>
+					<a href="http://gespac.free.fr" target=_blank>GESPAC</a> (Les procédures et manuels validés)<br/><br/>
+		<b>NAVIGATEURS : </b><br/>
+			- Gespac marche mieux avec les navigateurs respectant la norme W3C (globalement si le navigateur gère le css3, pas de problème)<br/>
+        - Dans le cas ou vous utilisez Internet Explorer, Gespac tentera d'installer <a href="http://code.google.com/intl/fr-FR/chrome/chromeframe/" target=_blank>Google Frame</a><br/>
 	</div>
 
 

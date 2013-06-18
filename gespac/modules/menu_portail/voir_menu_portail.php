@@ -9,7 +9,11 @@
 	
 	*/
 
-
+	// lib
+	require_once ('../../fonctions.php');
+	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
+	
 	// si le grade du compte est root, on donne automatiquement les droits d'accès en écriture. Sinon, on teste si le compte a accès à la page.
 	$E_chk = ($_SESSION['grade'] == 'root') ? true : preg_match ("#E-07-06#", $_SESSION['droits']);
 
@@ -17,27 +21,17 @@
 ?>
 
 
-<div class="entetes" id="entete-modportail">	
 
-	<span class="entetes-titre">ICONES DU PORTAIL<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Cette page permet de gérer l'ajout, la modification et la suppression des raccourcis du portail.<br>L'affectation des raccourcis à un groupe d'utilisateurs se fait dans les <a href='index.php?page=grades'>GRADES</a>.</div>
+<h3>Visualisation des items du portail</h3>
+<br>
 
-	<span class="entetes-options">
-		
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='index.php?page=grades' title='Aller à la page de gestion des grades'><img src='" . ICONSPATH . "accueil.png'></a>";?></span>
-		<span class="option"><?PHP if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'><img src='" . ICONSPATH . "add.png'></a>";?></span>
-		<span class="option">
-			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'portail_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
-		</span>
-	</span>
-
-</div>
-
-<div class="spacer"></div>
-
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
 
 <script type="text/javascript">	
+
+	// init de la couleur de fond
+	$('conteneur').style.backgroundColor = "#fff";
 
 	// Fonction de validation de la suppression d'une marque
 	function validation_suppr_item (id, item) {
@@ -46,9 +40,10 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_menu_portail.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
+			/*	poste la page en ajax	*/
 			$('target').load("modules/menu_portail/post_menu_portail.php?action=suppr&id=" + id);
-			window.setTimeout("document.location.href='index.php?page=modportail'", 1500);		
+			/*	on recharge la page au bout de 1000ms	*/
+			window.setTimeout("$('conteneur').load('modules/menu_portail/voir_menu_portail.php');", 1000);
 		}
 	}
 	
@@ -91,6 +86,13 @@
 </script>
 
 
+
+<!-- 	bouton pour le filtrage du tableau	-->
+<form id="filterform">
+	<center><small>Filtrer :</small> <input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'portail_table');" type="text" value=<?PHP echo $_GET['filter'];?> ></center>
+</form>
+
+
 <?PHP 
 	
 	// cnx à gespac
@@ -99,10 +101,13 @@
 	// stockage des lignes retournées par sql dans un tableau nommé avec originalité "array" (mais "tableau" peut aussi marcher)
 	$liste_des_icones = $con_gespac->QueryAll ( "SELECT mp_id, mp_icone, mp_nom, mp_url, est_modifiable FROM menu_portail ORDER BY mp_nom" );
 
+
+	if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'> <img src='img/add.png'>Ajouter un item</a>";
 ?>
 	
 	<center>
-	<table class="tablehover" id='portail_table'>
+	<br>
+	<table class="tablehover" width=800 id='portail_table'>
 		<th>Icone</th>
 		<th>Nom</th>
 		<th>Url</th>
@@ -127,8 +132,6 @@
 					$mp_lien			= $record['mp_url'];
 					$est_modifiable		= $record['est_modifiable'];
 					
-					//Si l'icone n'existe pas
-					if (!file_exists($mp_icone)) $mp_icone="./img/cancel.png";
 					
 					echo "<td width=40><img height=30 src=$mp_icone></td>";
 					echo "<td>" . $mp_nom . "</td>";
@@ -151,7 +154,13 @@
 	</table>
 	</center>
 	
+	<br>
+	
+
 <?PHP
+	if ( $E_chk ) echo "<a href='modules/menu_portail/form_menu_portail.php?height=200&width=640&id=-1' rel='slb_menu_portail' title='Ajouter un item'> <img src='img/add.png'>Ajouter un item</a>";
+
+	// On se déconnecte de la db
 	$con_gespac->Close();
 ?>
 

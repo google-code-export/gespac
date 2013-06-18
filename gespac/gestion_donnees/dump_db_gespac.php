@@ -1,16 +1,18 @@
-<div class="entetes" id="entete-dumpgespac">	
-
-	<span class="entetes-titre">DUMP BASE GESPAC<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Permet la création d'un dump de la base GESPAC.</div>
-
-</div>
-
-<div class="spacer"></div>
+﻿<script type="text/javascript">	
+	// init de la couleur de fond
+	document.getElementById('conteneur').style.backgroundColor = "#fff";
+</script>
 
 <?php
+	
+	// lib
+	require_once ('../config/databases.php');
+	require_once ('../fonctions.php');
+	include_once ('../../class/Sql.class.php');	
 
 	// Connexion à la base de données GESPAC
 	$con_gespac = new Sql ( $host, $user, $pass, $gespac );
+	
 	
 	$base = "gespac";
 
@@ -18,7 +20,7 @@
 	$dumpfile = $base. "-sqldump-".date("Ymd-His").".sql"; 
 	
 	// création du fichier dump dans le dossier dump
-	file_put_contents( "dump/" . $dumpfile, dump_base($host, $user, $pass, $base) );
+	file_put_contents( "../dump/" . $dumpfile, dump_base($host, $user, $pass, $base) );
 	
 	// On écrit des choses interessantes ici ...
 	echo "<center><h2>Création du fichier dump de la base GESPAC dans le dossier dump du site ...";

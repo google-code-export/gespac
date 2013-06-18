@@ -10,10 +10,10 @@
 	include_once ('../../config/databases.php');
 	include_once ('../../../class/Sql.class.php');
 
-	// cnx Ã  gespac
+	// cnx à gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 
-	// stockage des lignes retournÃ©es par sql dans un tableau
+	// stockage des lignes retournées par sql dans un tableau
 	$liste_export = $con_gespac->QueryAll ( $rq_export );
 
 	$filename = "export_perso.csv";
@@ -32,6 +32,6 @@
 
 	fclose($fp);
 
-	echo "<center><a href='./dump/$filename' onclick=\"document.location.href='index.php?page=exportsperso'\">Fichier CSV Export Perso</a></center>";
+	echo "<center><h1><a href='./dump/$filename'>Fichier CSV Export Perso</a></h1></center>";
 
 ?>

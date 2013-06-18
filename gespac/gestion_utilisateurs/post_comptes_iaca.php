@@ -2,11 +2,11 @@
 
 	/*******************************************************
 	*
-	*		RequÃªtes pour Import des comptes IACA
+	*		Requêtes pour Import des comptes IACA
 	*
 	********************************************************/
 		
-	$dossier = '../dump/'; 		// dossier oÃ¹ sera dÃ©placÃ© le fichier
+	$dossier = '../dump/'; 		// dossier où sera déplacé le fichier
 	
 	$fichier = basename($_FILES['myfile']['name']);
 	$extensions = array('.txt', '.csv');
@@ -19,16 +19,16 @@
 	if (!isset($erreur)) {	//S'il n'y a pas d'erreur, on upload
 
 		//On formate le nom du fichier ici...
-		$fichier = strtr($fichier, 'Ã€ÃÃ‚ÃƒÃ„Ã…Ã‡ÃˆÃ‰ÃŠÃ‹ÃŒÃÃÃÃ’Ã“Ã”Ã•Ã–Ã™ÃšÃ›ÃœÃÃ Ã¡Ã¢Ã£Ã¤Ã¥Ã§Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã°Ã²Ã³Ã´ÃµÃ¶Ã¹ÃºÃ»Ã¼Ã½Ã¿', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
+		$fichier = strtr($fichier, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜİàáâãäåçèéêëìíîïğòóôõöùúûüıÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 		$fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
 	
 		 
 		//On upload et on teste si la fonction renvoie TRUE
 		if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . $fichier) ) {
-			echo $fichier . " envoi du fichier OK !<br><br>";
+			echo $fichier . " envoyé avec succès !";
 			
 			
-			// ************ Traitement du fichier uploadÃ© *****************
+			// ************ Traitement du fichier uploadé *****************
 	
 			// Libs
 			require_once ('../fonctions.php');
@@ -36,7 +36,7 @@
 			include_once ('../../class/Sql.class.php');
 			include_once ('../../class/Log.class.php');
 			
-			// connexion Ã  la base de donnÃ©es GESPAC
+			// connexion à la base de données GESPAC
 			$con_gespac = new Sql($host, $user, $pass, $gespac);
 			
 			//Log SQL
@@ -47,9 +47,9 @@
 			
 			$handle = fopen($chemin_import, "r");
 
-			$row = 0;	// [AMELIORATION] penser Ã  virer l'entÃªte
+			$row = 0;	// [AMELIORATION] penser à virer l'entête
 			
-			$grade = $con_gespac->QueryOne ( "SELECT grade_id FROM grades WHERE grade_nom='professeur';" );	// Le grade par dÃ©faut dans lequel nous allons ranger tous les utilisateurs.
+			$grade = $con_gespac->QueryOne ( "SELECT grade_id FROM grades WHERE grade_nom='professeur';" );	// Le grade par défaut dans lequel nous allons ranger tous les utilisateurs.
 
 			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
 				
@@ -61,8 +61,6 @@
 					$req_import_comptes = "INSERT INTO users (user_nom, user_logon, user_password) VALUES ('" . $line[$row][0] . "', '" . $line[$row][1] ."', '" . $line[$row][2] . "' );";
 					$con_gespac->Execute ( $req_import_comptes );
 					$log->Insert ( $req_import_comptes );
-					
-					echo "Import de : ". $line[$row][0] . "<br>";
 				}
 
 				$row++;
@@ -76,14 +74,14 @@
 			$con_gespac->Execute ( $req_log_import_iaca_gespac );
 			$log->Insert( $req_log_import_iaca_gespac );
 
-			// On se dÃ©connecte de la db
+			// On se déconnecte de la db
 			//$con_gespac->Close();	
 ?>
 			
-			<script>window.close();</script>
+			<script>//window.close();</script>
 			
 <?PHP
-		} else	// En cas d'Ã©chec d'upload
+		} else	// En cas d'échec d'upload
 			echo 'Echec de l\'upload !';
 			  
 	} else // En cas d'erreur

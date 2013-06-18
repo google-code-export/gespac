@@ -27,6 +27,6 @@
 	$con_gespac->Execute ( $req_log_modif_grade );
 	$log->Insert( $req_log_modif_grade );
 	
-	echo "Le menu portail du grade a été modifié...";
+	echo utf8_decode("<br><small>Le menu portail du grade a été modifié...</small>");
 	
 ?>

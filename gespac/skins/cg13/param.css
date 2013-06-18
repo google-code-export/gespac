@@ -1,240 +1,403 @@
-@font-face {
-	font-family: ubuntu;
-	src: url('Ubuntu-R.ttf');
-	/*src: url('SourceSansPro-Regular.ttf');*/
-	text-decoration : none;}
+body {
+	background-position : left top;
+	background-image	: url('fond.jpg');
+	background-color	: #003366;
+	background-repeat	: no-repeat;
+}
 
-	
-/*	GENERAL	*/	
-body {background-color:#fff; font-family:ubuntu, Verdana, Arial, Helvetica, sans-serif; margin:0; color:#000;}
-h3 {	margin : 0px;}
-input, textarea, select {border:1px solid #6E6F6A;}
-a { text-decoration:none; color:#003C9C;}
-table {border:0; padding:4px; text-align:center; font-size:small; border-collapse:collapse;}
-th {background-color:orange; font-size:10px; padding:5px 0px; color:#000;}
-img {border:0px; vertical-align:middle;}
+h3 {
+	margin : 0px;
+}
 
+input, textarea, select {
+	border: 1px solid #6E6F6A;
+}
 
 #portail-menu {
-	background		: #BFBFBF; 
+	background		: orange; 
 	border			: solid 1px black; 
 	width			: 94%;
 	padding			: 5px 10px 5px 10px; 
 	margin-left		: auto; 
 	margin-right	: auto;
-	margin-top : 10px;
-	border-radius	: 5px;
-	font-size : 9px;
-	padding-top : 15px;
-	padding-bottom : 15px;
+	position		: absolute;
+	-moz-border-radius		: 10px;
+	-webkit-border-radius 	: 10px;
+	-khtml-border-radius 	: 10px;
+	-opera-border-radius	: 10px;
 }
 
-.portail-menu-item {
+#portail-menu-item {
 	text-align		: center;
+	vertical-align	: middle;
 	width 			: auto;
 	float 			: left;
-	margin-right	: 0px;
-	padding : 0 12px;
-	-webkit-transition: all .1s ease-out; 
-	-moz-transition: all .1s ease-out; 
-	-o-transition: all .1s ease-out; 
-	transition: all .1s ease-out;
-}
-
-.portail-menu-item:hover {
-	-moz-transform: scale(1.5);
-	-webkit-transform: scale(1.5);
-	-o-transform: scale(1.5);
-	transform: scale(1.5);
-	-ms-transform: scale(1.5);
+	position		: relative;
+	margin-right	: 20px;
 }
 
 #portail-conteneur {
-	background		: #BFBFBF; 
+	background		: orange; 
 	border			: solid 1px black; 
 	padding			: 5px 10px; 
 	width			: 94%;
 	margin-left		: auto; 
 	margin-right	: auto;
+	position		: absolute;
 	top 			: 120px;
-	border-radius	: 5px;
+	-moz-border-radius		: 10px;
+	-webkit-border-radius 	: 10px;
+	-khtml-border-radius 	: 10px;
+	-opera-border-radius	: 10px;
+}
+
+#principal {
+	background-color 	: #005ea8;
+	width 				: 950px;
+	height 				: 97%;
+	left 				: 20px;
+	margin-left 		: auto;
+	margin-right 		: auto;
+	text-align			: left; 
+	padding 			: 10px;
+	float				: top;
+	-moz-border-radius		: 10px;
+	-webkit-border-radius 	: 10px;
+	-khtml-border-radius 	: 10px;
+	-opera-border-radius	: 10px;
+}
+
+#main_menu{
+	width 			: 96%;
+	height			: 48px;
+	margin			: auto;
+	text-align		: center; 
+	vertical-align	: middle;
+	padding			: 0px 10px 0px 10px;
+	background-color: #009bd5;
+	-moz-border-radius-topleft	: 10px;
+	-moz-border-radius-topright	: 10px;
+	-webkit-border-top-left-radius : 10px;
+	-webkit-border-top-right-radius : 10px;
+}
+
+#bandeau {
+	width 	: 98%;
+	height 	: 100px;
+	margin 	: auto;
+	padding : 10px;
+	overflow: hidden;
+}
+
+#bandeau-logo {
+	float	: left;
+	width	: 650px;
+	height : 100px;
+	background-image:url('bandeau.png');
+	background-repeat:no-repeat; 
+	-moz-border-radius-bottomleft	: 10px;
+	-moz-border-radius-topleft		: 10px;
+	-webkit-border-bottom-left-radius : 10px;
+	-webkit-border-top-left-radius : 10px;
+}
+
+#bandeau-identity {
+	float			: left;
+	background-color: #009bd5;
+	width			: 30%;
+	height			: 100%;
+	text-align		: center;
+	color			: white;
+	-moz-border-radius-topright		: 10px;
+	-moz-border-radius-bottomright	: 10px;
+	-webkit-border-top-right-radius : 10px;
+	-webkit-border-bottom-right-radius : 10px;
+}
+
+#bandeau-identity a{
+	color			: white;
+	text-decoration	: underline;
+	font-size		: 12px;
 }
 
 
-/*	On execute tous les post dans ce div	*/
-#target {width:100%; position:fixed;	top:50%; left:0px; background-color:red; color:white; padding:5px; display:none; z-index:13; text-align:center;}
-#targetback {width:100%; height:100%; position:fixed; top:0; left:0px; background-color:black; opacity:.75; color:white; padding:5px; display:none; z-index:13; text-align:center;}
+#conteneur {
+	background-color 	: #FFFFFF;
+	width 				: 96%;
+	height 				: 620px;
+	text-align			: left; 
+	margin				: auto;
+	padding 			: 10px;
+	overflow			: auto;
+	z-index				: 1;
+	-moz-border-radius-bottomleft	: 10px;
+	-moz-border-radius-bottomright	: 10px;
+	-webkit-border-bottom-left-radius : 10px;
+	-webkit-border-bottom-right-radius : 10px;
+}
 
-.spacer { clear:both; height:50px; min-width:500px;}
+#options_colonnes {
+	display : none;
+	font-size : small;
+	border : 1px grey solid;
+	padding : 5px;
+	margin-top : 5px;
+}
 
-/*	Le conteneur principal où on dessine le contenu et les menus	*/
-#page {background-color:white; margin-left:auto; margin-right:auto;}
-
-/*	Conteneur où on dessine les matériels, salles, ...	*/
-#contenu {background-color : white;	float:left;	width:auto;	overflow:auto; margin-left:230px;}
-
-/*	menu de gauche	*/
-#menu { width:225px; margin-top:80px; position:fixed; background-color:#fff; z-index:12; overflow:auto;}
-#menu  img{ width:24px; margin-right:4px;}
-#menu-global {}
-.menu-block {margin-bottom:15px;}
-.menu-titre {font-size:14px; padding:10px; padding-bottom:3px; font-weight:700; cursor:pointer;}
-.menu-items {display:none; }
-.menu-item {padding:2px 10px;font-size:11px; }
-.menu-item:hover {background-color:#E3E3E3;}
-.menu-current{padding:2px 10px 2px 20px; font-size:14px; background-color:#E3E3E3;}
-
-/*	Toggle menu	de gauche quand la taille de l'écran est trop juste*/
-#toggle-menu {position : fixed; top:42px; left:10px; display:none; cursor:pointer;}
-#toggle-menu img {width:20px; }
-
-
-/*	Entetes des pages (avec les options dedans)	*/
-.entetes { font-size:14px; font-weight:700; padding:6px 15px; border-bottom:solid #B8B8B8 1px; float:top; left:0; position:fixed; width:100%; z-index:10; background-color:#fff; /*box-shadow:1px 1px 5px #888;*/}
-.entetes-titre 		{float:left;}
-.entetes-titre img 	{height:24px; margin-left:10px; cursor:pointer;}
-.entetes-options 	{float:right; font-size:12px; margin-right:20px;}
-.entetes-options .option {float:left; padding:0 3px;}
-.entetes-options img {height:24px; cursor:pointer;}
-.entetes-options form {margin:0; }
-
-#entete-materiels, #entete-salles, #entete-marques {background-color:#83E684;}
-#entete-dossiers {background-color:#8683E6;}
-#entete-prets {background-color:#FFAF75;}
-#entete-utilisateurs, #entete-grades, #entete-importusers, #entete-moncompte {background-color:#759AFF;}
-#entete-college, #entete-statbat, #entete-infoserveur, #entete-statparc {background-color:#FAEF7D;}
-#entete-aic, #entete-recapfog, #entete-modportail, #entete-geninventaire, #entete-gestfichiers, #entete-migdossiers, #entete-migfog, #entete-migusers, #entete-wol, #entete-exportperso, #entete-taginventaire {background-color:#AA83E6;}
-#entete-importcsv, #entete-logs, #entete-dumpocs, #entete-dumpgespac, #entete-exports, #entete-importocs {background-color:#FF7A7A;}
-
-/*	bandeau pour la partie login, grade et déconnexion	*/
-#bandeau		{font-size:12px; color:black; padding:6px 15px; margin-bottom:15px;}
-#bandeau a		{font-size:12px; color:grey;}
-#bandeau a:hover	{text-decoration:underline;}
-#bandeau img		{width:24px; }
+a {
+	text-decoration : none;
+}
 
 
-/*	La boite de case à cocher pour les colonnes dans matériels	*/
-#options_colonnes {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-100px; position:absolute; background-color:#E6E6E6; overflow:auto; width:120px; /*box-shadow:1px 5px 10px #888;*/}
-
-/*	La boite pour l'affectation directe d'un matériel	*/
-#affect_box {display:none; font-size:small; border:1px grey solid; padding:5px; margin-top:6px; margin-left:-220px; position:absolute; background-color:#E6E6E6; overflow:auto; width:auto; /*box-shadow:1px 5px 10px #888;*/}
-
-/* la boite d'aide */
-.helpbox {display:none; font-size:11px; border:1px grey solid; padding:5px; position:fixed; top:30px; left:225px; background-color:#E6E6E6; z-index:11; /*box-shadow:1px 5px 10px #888;*/}
-
-/*	On masque par défaut le renommage et la modification par lot	*/
-#modif_selection {display:none; }
-#rename_selection {display:none; }
-#affect_selection {display:none; }
-
-/*	Le nombre de lignes selectionnées	*/
-#nb_selectionnes {display:none; font-size:10px; margin-left:10px;}
-
-
-
-
-
-.form_table {
+table {
 	border		: 1px solid #ccc;
 	padding		: 4px;
 	text-align	: center; 
 	font-size	: small;	
-	border-collapse : separate;
+	border-collapse:collapse;
+	-moz-border-radius		: 5px;
+	-webkit-border-radius 	: 5px;
+	-khtml-border-radius 	: 5px;
+	-opera-border-radius	: 5px;
+	font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 }
 
-/*	Les cases contenant les boutons supprimé, modifié, ...	*/
-.buttons {width:20px;}
-
-
-.tablehover {min-width:950px;}
-.tablehover tr:hover {background-color:#FFD769; padding:2px 0px;}
-.tablehover td {padding:2px 4px; font-size:11px ;}
-.tablehover th {font-size:12px ;}
-
-#log_prets_table {border-collapse:collapse; max-width:950px;}
-#log_prets_table td {min-width:110px; font-size:10px;}
-
-/*	table des correspondances pour l'ajout d'une marque	(toujours après tablehover) */
-#corr_table {min-width:380px;}
-#corr_table  tr:hover{background-color:#FFD769;}
-
-/*	pour les dossiers	*/
-.innertable {float:right; width:90%; background-color:#D9DBDC; border:none ;}
-.innertable td{padding:2px 4px; font-size:10px; border:1px grey solid ;}
-.innertable th{font-size:10px; background-color:green; padding:0px ;}
-.inner_tr {background-color:white; border:0px solid blue; border-top:none;}
-.inner_td {padding:10px;}
-
-.dossier_section {
-	float : top;
-	width : auto;
-	overflow : auto;
-	margin : 10px;
-	padding : 10px;
-	border : 1px dotted black;
+th {
+	background-color 	: orange;
+	background-image	: url('entetes.png');
+	background-repeat	: repeat-x;
+	font-size		 	: 10px;
+	padding			 	: 5px 0px;
 }
 
-.dossier_section span{
-	margin : 20px;
-	
+img { 
+	border:0px;
+	vertical-align:middle;
 }
 
-.liste_section {
-	float : top;
-	width : auto;
-	min-width : 65%;
-	height : 250px;
-	overflow : auto;
-	margin : 10px;
-	padding : 10px;
-	border : 1px dotted black;
+.tablehover tr:hover {
+	background-color : #FFD769;
+	padding : 2px 0px;
 }
 
-/*	Pour la couleur des dossiers	*/
-.chk_span {padding:10px;}
-.td_ouverture {background-color:#5AC8FF;}
-.td_clos {background-color:#46FF80;}
-.td_intervention {background-color:#FF464A;}
-.td_precision {background-color:#FF9B46;}
+.tablehover td {
+	padding: 2px 4px;
+	font-size: 11px;
+}
 
+.tablehover th {
+	font-size		 	: 12px;
+}
 
-/*	Pour les lignes selectionnées	*/
-.selected {	background-color : #7EEF9F;}
+/*	Pour les lignes selectionn�es	*/
+.selected {
+	background-color : #7EEF9F;}
 /*	Pour les lignes paires	*/
-.tr1 {	background-color : #D9DBDC;}
+.tr1 {
+	background-color : #D9DBDC;}
 /*	Pour les lignes impaires	*/
-.tr2 {	background-color : #fff;}
-/*	Pour les lignes paires surlignées	*/
-.tr1:hover {	background-color : #FFD769;}
-/*	Pour les lignes impaires surlignées */
-.tr2:hover {	background-color : #FFD769;}
+.tr2 {
+	background-color : #fff;}
+/*	Pour les lignes paires surlign�es	*/
+.tr1:hover {
+	background-color : #FFD769;}
+/*	Pour les lignes impaires surlign�es */
+.tr2:hover {
+	background-color : #FFD769;}
 
 /*	Pour les lignes paires sans rollover	*/
-.tr3 {	background-color : #D9DBDC;}
+.tr3 {
+	background-color : #D9DBDC;}
 /*	Pour les lignes impaires sans rollover	*/
-.tr4 {	background-color : #fff;}
+.tr4 {
+	background-color : #fff;}
 /*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
-.tr_doublon {	background-color : #29C920;}
+.tr_doublon {
+	background-color : #29C920;}
 /*	Pour les lignes sans rollover avec un ssn en doublon dans la base OCS / gespac	*/
-.tr_doublon_ocs {	background-color : yellow;}
+.tr_doublon_ocs {
+	background-color : yellow;}
 
 	
+	
+/*************************************** 	ICONES MENU  *******************************************/
+
+.accueil {	background-image:url('accueil-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.accueil-clicked {	background-image:url('accueil-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#accueil:hover {	background-image:url('accueil-01.png');}
+
+.inventaire {	background-image:url('inventaire-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.inventaire-clicked {	background-image:url('inventaire-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#inventaire:hover {	background-image:url('inventaire-01.png');}
+
+.demandes {	background-image:url('demandes-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.demandes-clicked {	background-image:url('demandes-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#demandes:hover {	background-image:url('demandes-01.png');}
+
+.donnees {	background-image:url('donnees-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.donnees-clicked {	background-image:url('donnees-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#donnees:hover {	background-image:url('donnees-01.png');}
+
+.prets {	background-image:url('prets-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.prets-clicked {	background-image:url('prets-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#prets:hover {	background-image:url('prets-01.png');}
+
+.utilisateurs {	background-image:url('utilisateurs-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.utilisateurs-clicked {	background-image:url('utilisateurs-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#utilisateurs:hover {	background-image:url('utilisateurs-01.png');}
+
+.plugins {	background-image:url('plugins-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.plugins-clicked {	background-image:url('plugins-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#plugins:hover {	background-image:url('plugins-01.png');}
+
+.college {	background-image:url('college-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.college-clicked {	background-image:url('college-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#college:hover {	background-image:url('college-01.png');}
+
+.info {	background-image:url('info-00.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+.info-clicked {	background-image:url('info-01.png'); width:100px; height:48px; float:left;	background-repeat:no-repeat; background-position : center top;}
+#info:hover {	background-image:url('info-01.png');}
+
+
+
 /*************************************** 	COMBOBOX  *******************************************/
 
-#combobox {width:auto; text-align:center; position:absolute;}
-#textbox {display:inline; z-index:1; top:0px; position:absolute; width:30px; left:0px;}
-#listbox {display:inline; z-index:0; top:0px; position:absolute; width:30px; left:90px;}
+#combobox {
+	width		: auto;
+	text-align	: center;
+	position	: absolute;
+}
 
-/******************************************* 	RSS / ATOM  *******************************************/
-.rss_content {font-size:13px; padding-bottom:5px;}
-.rss_date {font-size:10px;}
-.rss_title {font-size:16px; padding-bottom:5px;}
-.rss_title a{font-size:16px;}
-.rss_news {border:1px solid black; padding:5px 10px; margin:10px; background-color:#EDEDED; white-space:pre-wrap;}
+#textbox {
+	display:inline;
+	z-index:1;
+	top:0px;
+	position:absolute;
+	width:30px;
+	left:0px;
 
-/******************************************* 	SCROLLBAR pour WEBKIT uniquement  *******************************************/
-::-webkit-scrollbar {width:10px; height:10px;}
-::-webkit-scrollbar-track { border:0;}
-::-webkit-scrollbar-track:hover { border:1px solid grey;}
-::-webkit-scrollbar-thumb { background-color:#E6E6E6; border:1px solid grey;}
-::-webkit-scrollbar-thumb:hover { background-color:#B0B0B0; border:1px solid grey;}
+}
+
+#listbox {
+	display:inline;
+	z-index:0;
+	top:0px;
+	position:absolute;
+	width:30px;
+	left:90px;
+}
+
+
+/*************************************** 	MENU  *******************************************/
+
+
+/* this is the main UL element*/
+.dropdown{
+	margin:0;
+	padding:0;
+	list-style:none;
+	border-bottom:1px solid #444;
+}
+
+/* these are the inner menus	*/
+.dropdown ul{
+	margin:0;
+	padding:0;
+	border-top:1px solid #444;
+	list-style:none;	
+	width:auto;
+	min-width:80px;
+}
+
+.dropdown .sousmenu {
+	margin-top:48px;
+}
+
+/* tous les items du menu */
+.dropdown li{
+	margin:0;
+	padding:0;
+	width:auto;
+	min-width:100px;
+	/*background-color: orange;*/
+	cursor:pointer;
+}
+
+.dropdown li:hover{
+	/*border-right:1px solid #444;
+	border-left:1px solid #444;*/
+	/*background-color: #4FC9C5;*/
+}
+
+/*
+.dropdown li:hover{
+	background-color:#00254b;
+	color:white;
+}
+*/
+
+/* surlignage d'un lien dans le menu */
+.dropdown a:hover{
+	color:white;
+}
+
+/* lien dans le menu */
+.dropdown a{
+	text-decoration:none;
+	color:#000000;
+}
+
+/* items qui appartiennent � un sous menu mais qui n'en poss�dent pas*/
+.dropdown ul li{
+	border:1px solid #444;
+	border-top:0;
+	margin-left:-1px;
+	width:180px;
+	background-color: #009bd5;
+	margin-top:0px;
+}
+
+/* items qui possedent un sous menu*/
+.dropdown li.submenu{
+	/*background-image:url('../img/expand_down.gif');*/
+	background-position:center left;
+	background-repeat:no-repeat;
+	padding-left:0px;
+	width:auto;
+	min-width:100px;
+}
+
+/* items qui sont dans un sous menu et qui possedent un sous menu*/
+.dropdown ul li.submenu{
+	background-image:url('../img/expand_right.gif');
+	background-position:center right;
+	padding:5px;
+	width:180px;
+	background-color: #009bd5;
+}
+
+/*************************************** 	RSS / ATOM  *******************************************/
+
+#rss_title {
+	font: 14px Arial, Helvetica, sans-serif;
+}
+
+
+#rss_title a{
+	font: 14px Arial, Helvetica, sans-serif;
+}
+
+#rss_content {
+	font: 12px Arial, Helvetica, sans-serif;
+}
+
+#rss_news {
+	border : 1px solid black;
+	padding : 10px;
+	margin : 10px;
+	background-color : #C0FF96;
+	-moz-border-radius		: 5px;
+	-webkit-border-radius 	: 5px;
+	-khtml-border-radius 	: 5px;
+	-opera-border-radius	: 5px;
+}

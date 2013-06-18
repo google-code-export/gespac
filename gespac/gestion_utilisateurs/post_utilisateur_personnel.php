@@ -43,7 +43,7 @@
 	// On log la requête SQL
 	$log->Insert( $req_log_modif_user );
 	
-	echo "Votre compte a été modifié...";
+	echo "<br><small>L'utilisateur <b>$nom</b> a bien été modifié...</small>";
 
 
 ?>

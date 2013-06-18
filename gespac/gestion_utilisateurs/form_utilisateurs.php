@@ -43,10 +43,10 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('gestion_utilisateurs/voir_utilisateurs.php');", 1500);
 					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=utilisateurs&filter=" + $('filt').value + "'", 1500);				
 				}
 			
 			}).send(this.toQueryString());
@@ -406,4 +406,9 @@
 
 		<?PHP	
 	}
+		
+		
 ?>		
+
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>

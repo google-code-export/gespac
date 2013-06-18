@@ -15,6 +15,10 @@
 -->
 
 
+<!--	DIV target pour Ajax	-->
+<div id="target"></div>
+
+
 <?PHP
 
 	// lib
@@ -41,7 +45,7 @@ if ( $dossierid == -1 ) {
 
 
 	$liste_materiels = $con_gespac->QueryAll ('Select mat_id, mat_nom, marque_type, salle_nom FROM materiels, marques, salles WHERE materiels.marque_id=marques.marque_id AND materiels.salle_id=salles.salle_id;');
-	//$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
+	$liste_types 	 = $con_gespac->QueryAll ('Select DISTINCT marque_type, marque_id FROM marques GROUP BY marque_type;');
 	$liste_salles 	 = $con_gespac->QueryAll ('Select salle_nom, salle_id FROM salles;');
 	$liste_etats 	 = $con_gespac->QueryAll ( "SELECT etat FROM etats ORDER BY etat" );
 	$liste_types 	 = $con_gespac->QueryAll ( "SELECT type FROM dossiers_types" );
@@ -272,7 +276,7 @@ if ( $dossierid <> -1 ) {
 	
 		$arr_dossier_courant_mat = explode(";", $dossier_courant_mat);
 		
-		echo "<div class='dossier_section' id='listemateriels' style='display:none;'>";
+		echo "<div class='dossier_section' id='materiels' style='display:none;'>";
 		
 			echo "<table width=100%>";
 				echo "<th>Matériel</th>";
@@ -369,40 +373,37 @@ if ( $dossierid <> -1 ) {
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
-					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=dossiers'", 1500);					
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
+					window.setTimeout("$('conteneur').load('gestion_dossiers/voir_dossiers.php')", 1500);
 				}
 			
 			}).send(this.toQueryString());
 		}); 
 		
-		if ($('mat_hs')) {
-			$('mat_hs').addEvent('change', function(e) {
-						
-				if ( $('mat_hs').checked) {
-					$('CB_etats').style.display = "";
-				} 
-				else {
-					$('CB_etats').style.display = "none";
-					$('gign').style.display = "none";
-				}
-				
-			});
-		}
 		
-		if ($('CB_etats')) {
-			$('CB_etats').addEvent('change', function(e) {
-					new Event(e).stop();
+		$('mat_hs').addEvent('change', function(e) {
 					
-					var mystr = $('liste_mat').value;
-					
-					// On vérifie si l'état est cassé, volé ... et surtout si on a seulement un matériel sélectionné pour gign
-					if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} && mystr.split(';').length == 2) {	$('gign').style.display = ""; }
-					else { $('gign').style.display = "none";	}
-			});
-		}
+			if ( $('mat_hs').checked) {
+				$('CB_etats').style.display = "";
+			} 
+			else {
+				$('CB_etats').style.display = "none";
+				$('gign').style.display = "none";
+			}
+			
+		});
+		
+		$('CB_etats').addEvent('change', function(e) {
+				new Event(e).stop();
+				
+				var mystr = $('liste_mat').value;
+				
+				// On vérifie si l'état est cassé, volé ... et surtout si on a seulement un matériel sélectionné pour gign
+				if( this.value in {'CASSE':'', 'VOLE':'','PANNE':'','PERDU':''} && mystr.split(';').length == 2) {	$('gign').style.display = ""; }
+				else { $('gign').style.display = "none";	}
+		});
+		
 		
 		$$('.chkbx').addEvent('click', function(e) {
 			var mystr = $('liste_mat').value;
@@ -535,9 +536,10 @@ if ( $dossierid <> -1 ) {
 	// *********************************************************************************
 
 	function toggleMateriels () {
-		if ( $('listemateriels').getStyle("display") == "none" ) 
-			$('listemateriels').setStyle("display", 'block');
-		else $('listemateriels').setStyle("display", 'none');		
+		
+		if ( $('materiels').style.display == "none" ) $('materiels').style.display = "";
+		else $('materiels').style.display = "none";
+		
 	}
 	
 	

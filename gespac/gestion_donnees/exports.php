@@ -1,14 +1,10 @@
-<div class="entetes" id="entete-exports">	
 
-	<span class="entetes-titre">EXPORTS<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Permet la création d'exports de la base GESPAC.</div>
+	<!--	DIV target pour Ajax	-->
+	<div id="target"></div>
 
-</div>
-
-<div class="spacer"></div>
 
 	<?PHP
-		include_once ('gestion_donnees/export_fog.php');
-		include_once ('gestion_donnees/export_gespac_fog.php');
-		include_once ('gestion_donnees/export_inventaire.php');
+		include ('export_fog.php');
+		include ('export_gespac_fog.php');
+		include ('export_inventaire.php');
 	?>

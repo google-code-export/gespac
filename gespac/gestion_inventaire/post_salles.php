@@ -1,15 +1,16 @@
 <?PHP
 
 
-	/* 
-		fichier de creation / modif / suppr des salles
+	/* fichier de creation / modif / suppr des salles
+	
+	Si j'ai un ID c'est une modification
+	Si j'en ai pas c'est une création
+	
+	reste à coder pour la suppression
+	
 	*/
 	
-	// lib
-	require_once ('../fonctions.php');
-	include_once ('../config/databases.php');
-	include_once ('../../class/Log.class.php');		
-	include_once ('../../class/Sql.class.php');	
+	include ('../includes.php');
 	
 	// Connexion à la base GESPAC
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
@@ -40,7 +41,7 @@
 		//On récupère le nom de la salle en fonction du $salle_id
 		$salle_nom = $con_gespac->QueryOne ( "SELECT salle_nom FROM salles WHERE salle_id = $id" );
 
-		echo $log_texte = "La salle $salle_nom a été supprimée";
+		$log_texte = "La salle $salle_nom a été supprimée";
 
 		$req_log_suppr_salle = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Suppression salle', '$log_texte' );";
 		$con_gespac->Execute ( $req_log_suppr_salle );
@@ -158,10 +159,9 @@
 			//On log la requête
 			$log->Insert ( $req_log_modif_salle );
 			
-			echo "Modification de la salle <b>$nom</b> !";
+			echo "<small>Modification de la salle <b>$nom</b> !</small>";
 		}
 	}
-	
 	
 	
 	#**************** VIDER SALLE D3E ********************#
@@ -209,6 +209,8 @@
 		echo "La salle D3E est vidée de tout son matériel...";
 	
 	}
+	
+	
 	
 	
 ?>

@@ -511,3 +511,7 @@
 	
 	
 ?>
+
+<!--  SERVEUR AJAX -->
+<script type="text/javascript" src="server.php?client=all"></script>
+

@@ -17,7 +17,7 @@
 		}
 	}
  
-	$reqs = explode(";",$requetes);// on sépare les requêtes
+	$reqs = split(";",$requetes);// on sépare les requêtes
 	foreach($reqs as $req){	// et on les éxécute
 		if (!mysql_query($req,$ressource) && trim($req)!=""){
 			die("ERROR : ".$req); // stop si erreur 

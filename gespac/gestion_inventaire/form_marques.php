@@ -52,10 +52,10 @@
 				
 				<?PHP
 				// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
+				$liste_correspondances = $con_gespac->QueryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances ORDER BY corr_modele" );
 				?>
 				
-				<table id="corr_table">
+				<table id="corr_table" class='tablehover'>
 
 					<?PHP
 						foreach ( $liste_correspondances as $corr ) {
@@ -190,7 +190,7 @@
 				</table>
 
 				<br>
-				<input type=submit value='Ajouter une marque'>
+				<input type=submit value='Ajouter une marque' onclick="refresh_quit( $('filt').value );" >
 				
 				<br><br>
 				<a href='#' onclick="affiche_liste_modele();">Liste des modèles</a>
@@ -252,10 +252,10 @@
 				
 				<?PHP
 				// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
+				$liste_correspondances = $con_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances ORDER BY corr_modele" );
 				?>
 				
-				<table id="corr_table">
+				<table id="corr_table" class='tablehover'>
 
 					<?PHP
 						foreach ( $liste_correspondances as $corr ) {
@@ -395,7 +395,7 @@
 				</table>
 
 				<br>
-				<input type=submit value='Modifier cette marque' >
+				<input type=submit value='Modifier cette marque' onclick="refresh_quit( $('filt').value );" >
 
 				</center>
 
@@ -409,6 +409,12 @@
 
 
 <script type="text/javascript"> 
+	
+	// ferme la smoothbox et rafraichit la page
+	function refresh_quit (filt) {
+		// lance la fonction avec un délais de 1500ms
+		window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php?filter=" + filt + "');", 1500);
+	}
 	
 	// masque le combo pour afficher le input et vis-versa
 	function change_combo(select_tr_id, input_tr_id, select_id, input_id) {
@@ -469,6 +475,7 @@
 				// Affichage on / off en fonction de displayStyle
 				table.rows[r].style.display = displayStyle;	
 				
+				
 				if ($("creer_modele")) {
 					if (compte > 0) {$("creer_modele").setStyle("display", "none");}
 					else {$("creer_modele").setStyle("display", "block");}
@@ -478,10 +485,32 @@
 					if (compte > 0) {$("modif_modele").setStyle("display", "none");}
 					else {$("modif_modele").setStyle("display", "block");}
 				}
+				
+				
 			}
 		}
 	}	
-
+	
+	
+	// *********************************************************************************
+	//
+	//			AJOUT d'un MARQUE par sa CORRESPONDANCE
+	//
+	// *********************************************************************************
+	
+	function validation_ajout_marque (corr_id, marque) {
+			
+		var valida = confirm('Voulez-vous vraiment ajouter la marque ' + marque + ' ?');
+		
+		// si la réponse est TRUE ==> on lance la page post_marques.php
+		if (valida) {
+			//	poste la page en ajax
+			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
+			//	on recharge la page au bout de 1000ms
+			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
+			TB_remove();
+		}
+	}
 	
 	
 	// *********************************************************************************
@@ -509,25 +538,8 @@
 	}
 	
 	
-	// *********************************************************************************
-	//
-	//			AJOUT d'un MARQUE par sa CORRESPONDANCE
-	//
-	// *********************************************************************************
 	
-	function validation_ajout_marque (corr_id, marque) {
-			
-		var valida = confirm('Voulez-vous vraiment ajouter la marque ' + marque + ' ?');
-		
-		// si la réponse est TRUE ==> on lance la page post_marques.php
-		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("gestion_inventaire/post_marques.php?action=add_corr&corr_id=" + corr_id);
-			SexyLightbox.close();
-			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
-		}
-	}	
-		
+	
 	
 		
 	// *********************************************************************************
@@ -542,10 +554,11 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
+			//	poste la page en ajax
 			$('target').load("gestion_inventaire/post_marques.php?action=modif_corr&corr_id=" + corr_id + "&marque_id=" + marque_id);
+			//	on recharge la page au bout de 1000ms
+			window.setTimeout("$('conteneur').load('gestion_inventaire/voir_marques.php');", 1000);
 			SexyLightbox.close();
-			window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
 		}
 	}
 	
@@ -578,10 +591,9 @@
 				url: this.action,
 
 				onSuccess: function(responseText, responseXML, filt) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
 					$('target').set('html', responseText);
+					$('conteneur').set('load', {method: 'post'});	//On change la methode d'affichage de la page de GET à POST (en effet, avec GET il récupère la totalité du tableau get en paramètres et lorsqu'on poste la page formation on dépasse la taille maxi d'une url)
 					SexyLightbox.close();
-					window.setTimeout("document.location.href='index.php?page=marques&filter=" + $('filt').value + "'", 1500);
 				}
 			
 			}).send(this.toQueryString());

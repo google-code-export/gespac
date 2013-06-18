@@ -4,20 +4,18 @@
 
 -->
 		
-	
-	
-<div class="entetes" id="entete-migdossiers">	
-
-	<span class="entetes-titre">MIGRATION DES DEMANDES<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Script permettant de migrer les anciennes demandes vers le nouveau syst√®me de dossier.<br>A n'utiliser qu'une fois et seulement si vous avez utilis√© les anciennes demandes...</div>
-
-</div>
-
-<div class="spacer"></div>
 
 <?PHP
 
-	// cnx √† gespac
+	// lib
+	require_once ('../../fonctions.php');
+	include_once ('../../config/databases.php');
+	include_once ('../../../class/Sql.class.php');
+	
+	header("Content-Type:text/html; charset=iso-8859-1" ); 	// rËgle le problËme d'encodage des caractËres
+
+
+	// cnx ‡ gespac
 	$con_gespac = new Sql($host, $user, $pass, $gespac);
 	
 	// rq pour la liste des PC
@@ -35,11 +33,11 @@
 		$mat_id		= $demande ["mat_id"];
 		$salle_id	= $demande ["salle_id"];
 		
-		// On regarde si cette demande existe d√©j√†
+		// On regarde si cette demande existe dÈj‡
 		$demande_traitee = $con_gespac->QueryOne ("SELECT dossier_id FROM dossiers_textes WHERE txt_etat='ouverture' AND txt_date='$dem_date';");
 		
 		if ( $demande_traitee ) {
-			echo "La demande $dem_id a d√©j√† √©t√© trait√©e. <br>";
+			echo "Cette demande a dÈj‡ ÈtÈ traitÈe. <br>";
 		}
 		else {
 			
@@ -47,33 +45,33 @@
 			echo "<b>Traitement de la demande $dem_id</b><br>";
 
 			
-			 // je cr√©√© le dossier pour cette demande
+			 // je crÈÈ le dossier pour cette demande
 			$con_gespac->Execute("INSERT INTO dossiers (dossier_type) VALUES ('$dem_type')");
-			// On devrait v√©rifier l'existence de ce type de dossier dans dossiers_types
+			// On devrait vÈrifier l'existence de ce type de dossier dans dossiers_types
 			
-			//On r√©cup√®re l'id du dossier qu'on vient de cr√©er
+			//On rÈcupËre l'id du dossier qu'on vient de crÈer
 			$dossier_id = $con_gespac->GetLastID();
 			
-			// Ne pas oublier la premi√®re page du dossier
+			// Ne pas oublier la premiËre page du dossier
 			$con_gespac->Execute("INSERT INTO dossiers_textes (dossier_id, txt_user, txt_date, txt_etat, txt_texte) VALUES ($dossier_id, $dem_user, '$dem_date', 'ouverture', '$dem_text')");
 
 			// blabla
 			echo "<li>$dem_date : " . utf8_decode(stripcslashes($dem_text));
 			
-			// Si le mat_id <> 0 c'est qu'on a qu'un seul mat√©riel affect√© par 
+			// Si le mat_id <> 0 c'est qu'on a qu'un seul matÈriel affectÈ par 
 			if ( $mat_id <> 0 ) {
 				
-				// On met √† jour le dernier dossier cr√©√© avec le bon mat_id
+				// On met ‡ jour le dernier dossier crÈÈ avec le bon mat_id
 				$maj_mat_id = "UPDATE dossiers SET dossier_mat='$mat_id' WHERE dossier_id=$dossier_id;";
 				$con_gespac->Execute ($maj_mat_id);
 				
 			}
 			else {
 			
-				// On s√©lectionne tous les pc de la demandes.salle_id
+				// On sÈlectionne tous les pc de la demandes.salle_id
 				$liste_materiels_salle = $con_gespac->QueryAll("SELECT mat_id FROM materiels WHERE salle_id=$salle_id");
 
-				// On concat√®ne tous les mat√©riels de la salle dans une chaine
+				// On concatËne tous les matÈriels de la salle dans une chaine
 				foreach ($liste_materiels_salle as $mat) {
 					$concat_mat .= ";" . $mat['mat_id'];
 				}
@@ -81,7 +79,7 @@
 				// On supprime le dernier ;
 				$concat_mat = preg_replace("[^;]", "", $concat_mat);
 				
-				// On met √† jour le dernier dossier cr√©√© avec le bon mat_id
+				// On met ‡ jour le dernier dossier crÈÈ avec le bon mat_id
 				$maj_mat_id = "UPDATE dossiers SET dossier_mat='$concat_mat' WHERE dossier_id=$dossier_id;";
 				$con_gespac->Execute ($maj_mat_id);
 				
@@ -89,7 +87,7 @@
 			
 			
 			
-			// Pour chaque page suppl√©mentaire de la demande, on ins√®re une page au dossiers_textes
+			// Pour chaque page supplÈmentaire de la demande, on insËre une page au dossiers_textes
 			$liste_demandes_textes = $con_gespac->QueryAll ("SELECT * FROM demandes_textes WHERE dem_id=$dem_id");
 			
 			foreach ($liste_demandes_textes as $texte) {
@@ -107,6 +105,8 @@
 			}
 			
 		}
+	
+		echo "<hr>";
 			
 	}
 

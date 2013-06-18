@@ -1,11 +1,3 @@
-<div class="entetes" id="entete-infoserveur">	
-	<span class="entetes-titre">INFO SERVEUR<img class="help-button" src="<?PHP echo ICONSPATH . "info.png";?>"></span>
-	<div class="helpbox">Cette page permet un tas d'info sur la version des services et sur l'état du serveur.</div>
-</div>
-
-<div class="spacer"></div>
-
-
 <?php
 //Analyse des versions OCS et FOG
 	$file_ocs = '/usr/share/ocsinventory-reports/ocsreports/preferences.php';//fichier ou est stocké la version du GUI d'OCS
@@ -69,6 +61,7 @@
 		}
 ?>
 
+<b>Information sur le serveur</b><br>
 		<center><img src="./img/serpac.png" WIDTH=90 HEIGHT=90></center><br>
 		<table align="center">
 			<tr><th align="center" colspan="2">Paquets GESPAC</th></tr>

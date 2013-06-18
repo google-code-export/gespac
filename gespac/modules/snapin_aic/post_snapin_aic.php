@@ -22,8 +22,6 @@
 		
 		$sql = "DELETE FROM snapins WHERE sID = $id;";
 		$snapin = $con_fog->Execute ( $sql );
-		
-		echo "Le snapin a été supprimé dans FOG.";
 	
 	}
 	
