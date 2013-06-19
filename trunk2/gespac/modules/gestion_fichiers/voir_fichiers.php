@@ -47,8 +47,7 @@
 		echo "<th>proprietaire</th>";
 		echo "<th>&nbsp;</th>";	
 		echo "<th>&nbsp;</th>";	
-		
-		$compteur = 0;
+
 		
 		foreach ( $liste_fichiers as $fichier) {
 			
@@ -106,14 +105,10 @@
 	
 			}
 			
-					
-			// alternance des couleurs
-			$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-			
 			// Le dossier
 			
 			if ( $lecture ) {
-				echo "<tr class=$tr_class>";
+				echo "<tr>";
 					echo "<td width='200px'><a href='fichiers/$fichier_chemin' target=_blank>$fichier_chemin</a></td>";
 					echo "<td>$fichier_desc</td>";
 					echo "<td>$proprio_nom</td>";
@@ -130,8 +125,6 @@
 		
 			}
 
-			$compteur++;
-
 		}
 			
 		echo "</table>";
@@ -140,60 +133,5 @@
 
 
 <script>
-		
-	
-	// *********************************************************************************
-	//
-	//			Fonction de validation de la suppression d'un matériel
-	//
-	// *********************************************************************************
-
-	function validation_suppr_fichier (id, fichier) {
-			
-		var valida = confirm('Voulez vous supprimer le fichier ' + fichier + " ?");
-		
-		// si la réponse est TRUE ==> on lance la page post_materiels.php
-		if (valida) {
-			
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("modules/gestion_fichiers/post_fichiers.php?action=suppr&id=" + id);
-			window.setTimeout("document.location.href='index.php?page=gestfichiers'", 1500);		
-		}
-	}
-	
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-		}
-	}	
-
 			
 </script>

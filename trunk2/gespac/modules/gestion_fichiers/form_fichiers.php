@@ -230,7 +230,6 @@ if ( $action == "mod" ) {
 	
 	$fichier = $con_gespac->QueryRow ('SELECT * FROM fichiers WHERE fichier_id='.$id);
 	
-	$fic_id 	= $fichier[0];
 	$fic_chemin = $fichier[1];
 	$fic_desc 	= $fichier[2];
 	$fic_droits = $fichier[3];
@@ -242,10 +241,10 @@ if ( $action == "mod" ) {
 
 		<center>
 		<table class='formtable'>
-			
+			<input type=hidden value="<?PHP echo $id;?>" name="id">
 			<tr>
 				<td>Fichier</td>
-				<td><input type="text" disabled name="myfile" value=<?PHP echo $fic_chemin;?> size=27></td>
+				<td><input type="text" readonly name="myfile" value=<?PHP echo $fic_chemin;?> size=27></td>
 			</tr>
 			
 			<tr>

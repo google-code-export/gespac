@@ -17,7 +17,7 @@
 
 /*************************************************
  *
- *	 		SUPPRESSION DU FICHIER
+ *	 		@@SUPPRESSION DU FICHIER
  * 
  ************************************************/
 
@@ -63,7 +63,7 @@ if ( $action == 'del') {
 
 /*************************************************
  *
- * 				CREATION DU FICHIER
+ * 				@@CREATION DU FICHIER
  * 
  ************************************************/
 
@@ -129,26 +129,25 @@ if ($action == "creation") {
 
 /*************************************************
  *
- * 			MODIFICATION DU FICHIER 
+ * 			@@MODIFICATION DU FICHIER 
  * 
  ************************************************/
 
 
 if ($action == "mod") {
 	
-	$fichier_id 	= $_GET['id'];
-	
+	$fichier_id 	= $_POST['id'];
 	$fichier	 	= $_POST["myfile"];
 	$description 	= $_POST["description"];
 	$droits 		= $_POST["droits"];
-	
+
 	$rq_modif_fichier = "UPDATE fichiers SET fichier_description='$description', fichier_droits='$droits' WHERE fichier_id=$fichier_id";
 	$modif_fichier = $con_gespac->Execute ($rq_modif_fichier);
 	
 	// On log la requête SQL
 	$log->Insert( $rq_modif_fichier );
 	
-	echo $log_texte = "Le fichier $fichier a été modifié";
+	echo $log_texte = "Le fichier <b>$fichier</b> a été modifié";
 	
 	$req_log_modif_fichier = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Modification fichier', '$log_texte' );";
 	$con_gespac->Execute ( $req_log_modif_fichier );
