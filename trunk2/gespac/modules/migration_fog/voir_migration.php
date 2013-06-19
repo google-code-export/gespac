@@ -23,7 +23,7 @@
 		<span class="option">
 			<!-- Partie post de la sélection -->
 			<form name="post_form" id="post_form" action="modules/migration_fog/post_migration.php" method="post">
-				<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
+				<input type=hidden name='id_a_poster' id='id_a_poster' value=''>
 				<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration' style='display:none;'>
 				<input type=checkbox name='import_nom' id='import_nom'><label for='import_nom' title="Met à jour le champ description dans fog avec le nom du matériel. Ca simplifie la recherche dans fog...">Nom dans la description</label>
 			</form>
@@ -32,7 +32,7 @@
 		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'migration_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'migration_table');" type="text" value=<?PHP echo $_GET['filter'];?>><span id="filtercount" title="Nombre de lignes filtrées"></span></form>
 		</span>
 	</span>
 
@@ -40,9 +40,6 @@
 
 <div class="spacer"></div>
 	
-
-
-		
 	<?PHP
 	
 	// cnx à gespac
@@ -61,12 +58,10 @@
 	*
 	**************************************/
 
-	echo "<table id='migration_table' class='tablehover'>";
-	
-	$compteur = 0;
+	echo "<table id='migration_table' class='bigtable hover'>";
 	
 	echo "
-		<th> <input type=checkbox id=checkall onclick=\"checkall('migration_table');\" > </th>
+		<th> <input type=checkbox id='checkall' > </th>
 		<th>Nom gespac</th>
 		<th>Inventaire</th>
 		<th>Serial Gespac</th>
@@ -76,7 +71,7 @@
 
 	foreach ($liste_materiels_gespac as $record) {
 		
-		$gespac_mat_id	= $record['mat_id'];
+		$id	= $record['mat_id'];
 		$gespac_nom 	= $record['mat_nom'];
 		$gespac_dsit 	= $record['mat_dsit'];
 		$gespac_serial	= $record['mat_serial'];
@@ -84,10 +79,7 @@
 		$liste_materiels_fog = $con_fog->QueryRow ("SELECT hostName, iSysserial FROM hosts, inventory WHERE hosts.hostID=inventory.ihostID AND iSysserial='$gespac_serial'");
 		$fog_nom 	= $liste_materiels_fog[0];
 		$fog_serial = $liste_materiels_fog[1];
-				
-		// alternance des couleurs
-		$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-		
+
 		// On affiche la case à cocher seulement si on a un numéro d'inventaire et si on a une correspondance avec fog par le ssn
 
 		if ( $gespac_dsit == "" || $fog_nom == $gespac_dsit || $fog_serial == "") 
@@ -95,9 +87,9 @@
 		else $affiche=true;	// Si la migration a déjà été faite (même num dsit et nom dans fog)
 		
 		if ( $affiche ) {
-			echo "<tr id=tr_id$gespac_mat_id  class=$tr_class>";
+			echo "<tr id='tr_id$id' class='tr_modif'>";
 				
-				echo "<td> <input class=chkbx type=checkbox name=chk indexed=true value='$gespac_mat_id' onclick=\"select_cette_ligne('$gespac_mat_id', $compteur); \"> </td>";
+				echo "<td> <input type=checkbox name=chk indexed=true id='$id' value='$id' class='chk_line'> </td>";
 				
 				echo "<td>$gespac_nom</td>
 				<td>$gespac_dsit</td>
@@ -106,11 +98,7 @@
 				<td>$fog_serial</td>
 				<td>$fog_nom</td>
 			</tr>";
-
-			$compteur++;
-
-		}
-		
+		}	
 	}
 	
 	echo "</table>";	
@@ -122,7 +110,71 @@
 
 <script type="text/javascript">
 	
+		$(function(){
 	
+	
+		//--------------------------------------- Selection d'une ligne
+		
+		$('.chk_line').click(function(){
+			
+			var id = $(this).attr('id');
+			
+			if ( $(this).is(':checked') ){		
+				$('#id_a_poster').val( $('#id_a_poster').val() + ";" + id );
+				$("#tr_id" + id).addClass("selected");
+			}
+			else {
+				$('#id_a_poster').val( $('#id_a_poster').val().replace(";" + id + ";", ";") );	// Supprime la valeur au milieu de la chaine
+				var re = new RegExp(";" + id + "$", "g"); $('#id_a_poster').val( $('#id_a_poster').val().replace(re, "") );			// Supprime la valeur en fin de la chaine
+				$("#tr_id" + id).removeClass("selected");
+				$('#checkall').prop("checked", false);
+			}
+			
+			// On affiche les boutons
+			if ( $('#id_a_poster').val() != "" ) {
+				$('#post_selection').show();
+				$('#post_selection').val("Migration " + ($('.chk_line:checked').length) + " PC");
+				
+			} else { 
+				$('#post_selection').hide();
+			}
+			
+		});
+		
+		
+		
+		//--------------------------------------- Selection de toutes les lignes
+		
+		$('#checkall').click(function(){
+			
+			if ( $('#checkall').is(':checked') ){		
+				
+				$('.chk_line:visible').prop("checked", true);	// On coche toutes les cases visibles
+
+				$('#id_a_poster').val("");	// On vide les matos à poster
+				$('.chk_line:visible').each (function(){$('#id_a_poster').val( $('#id_a_poster').val() + ";" + $(this).attr('id') );	});	// On alimente le input à poster
+				
+				$('#modif_selection').show(); $('#affect_selection').show();		// On fait apparaitre les boutons
+				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+				$('.tr_modif:visible').addClass("selected");	// On colorie toutes les lignes	visibles
+			}
+			else {
+				$('#id_a_poster').val("");	// On vide les matos à poster
+				$('.chk_line').prop("checked", false);	// On décoche toutes les cases
+				$('.tr_modif').removeClass("selected");	// On vire le coloriage de toutes les lignes	
+				$('#modif_selection').hide();	$('#rename_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
+			}			
+		});	
+		
+		
+	});
+	
+	
+
+	// Filtre rémanent
+	filter ( $('#filt').val(), 'migration_table' );
+	
+	/*
 	window.addEvent('domready', function() {
 
 		// AJAX		
@@ -146,39 +198,6 @@
 	
     });
 	
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-		}
-	}	
 	
 	
 	
@@ -269,7 +288,7 @@
 
 		}
 	}
-	
+	*/
 	
 	
 	
