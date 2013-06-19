@@ -12,13 +12,13 @@
 	// Connexion à la base de données GESPAC
 	$con_gespac = new Sql ( $host, $user, $pass, $gespac );
 	
-	$base = "gespac";
+	$uai = $con_gespac->QueryOne("SELECT clg_uai FROM college;");
 
 	// nom du fichier dump
-	$dumpfile = $base. "-sqldump-".date("Ymd-His").".sql"; 
+	$dumpfile = "dump-$gespac-$uai-".date("YmdHis").".sql"; 
 	
 	// création du fichier dump dans le dossier dump
-	file_put_contents( "dump/" . $dumpfile, dump_base($host, $user, $pass, $base) );
+	file_put_contents( "dump/" . $dumpfile, dump_base($host, $user, $pass, $gespac) );
 	
 	// On écrit des choses interessantes ici ...
 	echo "<center><h2>Création du fichier dump de la base GESPAC dans le dossier dump du site ...";

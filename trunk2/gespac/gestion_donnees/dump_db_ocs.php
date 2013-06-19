@@ -14,13 +14,12 @@
 
 
 	if ($con_ocs->Exists()) {
-		$base = "ocsweb";
 
 		// nom du fichier dump
-		$dumpfile = $base. "-sqldump-".date("Ymd-His").".sql"; 
+		$dumpfile = "dump-$ocsweb-".date("Ymd-His").".sql"; 
 		
 		// création du fichier dump dans le dossier dump
-		file_put_contents( "dump/" . $dumpfile, dump_base($host, $user, $pass, $base) );
+		file_put_contents( "dump/" . $dumpfile, dump_base($host, $user, $pass, $ocsweb) );
 		
 		// On écrit des choses interessantes ici ...
 		echo "<center><h2>Création du fichier dump de la base OCS dans le dossier dump du site ...";
