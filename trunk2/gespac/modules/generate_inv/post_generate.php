@@ -6,7 +6,7 @@
 	include_once ('../../../class/Log.class.php');
 	include_once ('../../../class/Sql.class.php');
 
-	$lot 		= $_POST ['pc_a_poster'];
+	$lot 		= $_POST ['id_a_poster'];
 	$lot_array 	= explode(";", $lot);
 
 	// cnx à la db gespac

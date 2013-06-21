@@ -33,16 +33,16 @@
 		
 		<span class="option">
 			<!-- Partie post de la sélection -->
-			<form name="post_form" id="post_form" action="modules/generate_inv/post_generate.php" method="post">
-				<input type=hidden name='pc_a_poster' id='pc_a_poster' value=''>
-				<input type=submit name='post_selection' id='post_selection' value='générer' style='display:none;'>	<span id='nb_selectionnes'> [0] </span>			
+			<form name="post_form" id="formulaire" action="modules/generate_inv/post_generate.php" method="post">
+				<input type=hidden name='id_a_poster' id='id_a_poster' value=''>
+				<input type=submit name='post_selection' id='post_form' value='générer' style='display:none;'>	<span id='nb_selectionnes'> [0] </span>			
 			</form>
 		</span>
 		
 		<span class="option"><?PHP if ( $E_chk ) echo "<a href='gestion_inventaire/form_salles.php?height=250&width=640&id=-1' rel='slb_salles' title='Ajouter une salle'> <img src='" . ICONSPATH . "add.png'></a>";?></span>
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'generate_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
+			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'generate_table');" type="text" value=<?PHP echo $_GET['filter'];?>><span id="filtercount" title="Nombre de lignes filtrées"></span></form>
 		</span>
 	</span>
 
@@ -77,12 +77,10 @@
 	*
 	**************************************/
 
-	echo "<table class='tablehover' id='generate_table'>";
-	
-	$compteur = 0;
+	echo "<table class='bigtable hover' id='generate_table'>";
 	
 	echo "
-		<th> <input type=checkbox id=checkall onclick=\"checkall('generate_table');\" > </th>
+		<th> <input type=checkbox id='checkall' > </th>
 		<th>id</th>
 		<th>Nom</th>
 		<th>Serial</th>
@@ -150,13 +148,9 @@
 		
 		$numinventaire = $inventaire . $id_type . $num_unique;
 
-				
-		// alternance des couleurs
-		$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
+		echo "<tr id='tr_id$mat_id' class='tr_modif'>";
 		
-		echo "<tr id=tr_id$mat_id class=$tr_class $tr_color>";
-		
-			echo "<td><input class=chkbx type=checkbox name=chk indexed=true value='$mat_id' onclick=\"select_cette_ligne('$mat_id', $compteur); \"></td>";
+			echo "<td><input type=checkbox name=chk indexed=true id='$mat_id' value='$mat_id' class='chk_line'></td>";
 			echo "<td>$mat_id</td>";
 			echo "<td>$nom</td>";
 			echo "<td>$serial</td>";
@@ -166,12 +160,8 @@
 			echo "<td>$modele</td>";
 			echo "<td>$origine</td>";
 			echo "<td>$numinventaire</td>";
-
 		
-		echo "</tr>";
-	
-		$compteur++;
-		
+		echo "</tr>";		
 	}
 	
 	echo "</table>";	
@@ -183,162 +173,98 @@
 
 <script type="text/javascript">
 	
+	$(function(){
 	
-	window.addEvent('domready', function() {
-
-		// AJAX		
-		$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-			new Event(e).stop();
-			new Request({
-
-				method: this.method,
-				url: this.action,
-
-				onSuccess: function(responseText, responseXML) {
-					$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-					$('target').set('html', responseText);
-					window.setTimeout("document.location.href='index.php?page=geninventaire'", 1500);			
-				}
-			
-			}).send(this.toQueryString());
-		}); 
+	
+		//---------------------------------------  POST AJAX FORMULAIRES
 		
-	
-    });
-	
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
+		$("#post_form").click(function(event) {
 
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+			
+			if ( validForm() == true) {
+			
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
 				
-		for (var r = 1; r < table.rows.length; r++){
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=geninventaire&filter=" + $('#filt').val() + "'", 2500);
+				 });
+			}			 
+		});	
+	
+	
+
+		//--------------------------------------- Selection d'une ligne
+		
+		$('.chk_line').click(function(){
 			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
+			var id = $(this).attr('id');
 			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
+			if ( $(this).is(':checked') ){		
+				$('#id_a_poster').val( $('#id_a_poster').val() + ";" + id );
+				$("#tr_id" + id).addClass("selected");
+			}
+			else {
+				$('#id_a_poster').val( $('#id_a_poster').val().replace(";" + id + ";", ";") );	// Supprime la valeur au milieu de la chaine
+				var re = new RegExp(";" + id + "$", "g"); $('#id_a_poster').val( $('#id_a_poster').val().replace(re, "") );			// Supprime la valeur en fin de la chaine
+				$("#tr_id" + id).removeClass("selected");
+				$('#checkall').prop("checked", false);
 			}
 			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-		}
-	}	
-	
-	
-	
-
-	// *********************************************************************************
-	//
-	//				Selection/déselection de toutes les rows
-	//
-	// *********************************************************************************	
-	
-	
-	function checkall(_table) {
-		var table = $(_table);	// le tableau du matériel
-		var checkall_box = $('checkall');	// la checkbox "checkall"
-		
-		for ( var i = 1 ; i < table.rows.length ; i++ ) {
-
-			var lg = table.rows[i].id					// le tr_id (genre tr115)
-			
-			if (checkall_box.checked == true) {
-				document.getElementsByName("chk")[i - 1].checked = true;	// on coche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 1 )					//on selectionne la ligne et on ajoute l'index
-			} else {
-				document.getElementsByName("chk")[i - 1].checked = false;	// on décoche toutes les checkbox
-				select_cette_ligne( lg.substring(5), i, 0 )					//on déselectionne la ligne et on la retire de l'index
-			}
-			
-		}
-	}
-	
-	
-	// *********************************************************************************
-	//
-	//				Ajout des index pour postage sur clic de la checkbox
-	//
-	// *********************************************************************************	
-	 
-	function select_cette_ligne( tr_id, num_ligne, check ) {
-
-		var chaine_id = $('pc_a_poster').value;
-		var table_id = chaine_id.split(";");
-
-		var nb_selectionnes = $('nb_selectionnes');
-		
-		var ligne = "tr_id" + tr_id;	//on récupère l'tr_id de la row
-		var li = document.getElementById(ligne);
-		
-		if ( li.style.display == "" ) {	// si une ligne est masquée on ne la selectionne pas (pratique pour le filtre)
-		
-			switch (check) {
-				case 1: // On force la selection si la ligne n'est pas déjà cochée
-					if ( !table_id.contains(tr_id) ) { // la valeur n'existe pas dans la liste
-						table_id.push(tr_id);
-						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
-					}
-				break;
-				
-				case 0: // On force la déselection
-					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
-						table_id.erase(tr_id);
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-						// alternance des couleurs calculée avec la parité
-						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-					}
-				break;
-				
-				
-				default:	// le check n'est pas précisé, la fonction détermine si la ligne est selectionnée ou pas
-					if ( table_id.contains(tr_id) ) { // la valeur existe dans la liste on le supprime donc le tr_id de la liste
-						table_id.erase(tr_id);
-						
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	 // On entre le nombre de machines sélectionnées			
-
-						// alternance des couleurs calculée avec la parité
-						if ( num_ligne % 2 == 0 ) li.className="tr1"; else li.className="tr2";
-					
-					} else {	// le tr_id n'est pas trouvé dans la liste, on créé un nouvel tr_id à la fin du tableau
-						table_id.push(tr_id);
-						li.className = "selected";
-						nb_selectionnes.innerHTML = "<small>[" + (table_id.length-1) + "]</small>";	// On entre le nombre de machines sélectionnées	
-					}
-				break;			
-			}
-	
-			// on concatène tout le tableau dans une chaine de valeurs séparées par des ;
-			$('pc_a_poster').value = table_id.join(";");
-			
-			if ( $('pc_a_poster').value != "" ) {
-				$('post_selection').style.display = "";
-
+			// On affiche les boutons
+			if ( $('#id_a_poster').val() != "" ) {
+				$('#post_form').show();				
 			} else { 
-				$('post_selection').style.display = "none";
+				$('#post_form').hide();
 			}
+			
+		});
+		
+		
+		
+		//--------------------------------------- Selection de toutes les lignes
+		
+		$('#checkall').click(function(){
+			
+			if ( $('#checkall').is(':checked') ){		
+				
+				$('.chk_line:visible').prop("checked", true);	// On coche toutes les cases visibles
 
-		}
-	}
+				$('#id_a_poster').val("");	// On vide les matos à poster
+				$('.chk_line:visible').each (function(){$('#id_a_poster').val( $('#id_a_poster').val() + ";" + $(this).attr('id') );	});	// On alimente le input à poster
+				
+				$('#post_form').show();
+				$('.tr_modif:visible').addClass("selected");	// On colorie toutes les lignes	visibles
+			}
+			else {
+				$('#id_a_poster').val("");	// On vide les matos à poster
+				$('.chk_line').prop("checked", false);	// On décoche toutes les cases
+				$('.tr_modif').removeClass("selected");	// On vire le coloriage de toutes les lignes	
+				$('#post_form').hide();
+			}			
+		});	
+		
+		
+	});
 	
 	
-	
+
+	// Filtre rémanent
+	filter ( $('#filt').val(), 'generate_table' );
 	
 </script>
 
