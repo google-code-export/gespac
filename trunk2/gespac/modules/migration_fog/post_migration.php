@@ -7,7 +7,7 @@
 	include_once ('../../../class/Sql.class.php');
 
 	$maj_desc 	= $_POST ['import_nom'];
-	$lot 		= $_POST ['pc_a_poster'];
+	$lot 		= $_POST ['id_a_poster'];
 	$lot_array 	= explode(";", $lot);
 
 	// cnx à la db gespac

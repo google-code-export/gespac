@@ -22,9 +22,9 @@
 		
 		<span class="option">
 			<!-- Partie post de la sélection -->
-			<form name="post_form" id="post_form" action="modules/migration_fog/post_migration.php" method="post">
+			<form name="post_form" id="formulaire" action="modules/migration_fog/post_migration.php" method="post">
 				<input type=hidden name='id_a_poster' id='id_a_poster' value=''>
-				<input type=submit name='post_selection' id='post_selection' value='Effectuer la migration' style='display:none;'>
+				<input type=submit name='post_selection' id='post_form' value='Effectuer la migration' style='display:none;'>
 				<input type=checkbox name='import_nom' id='import_nom'><label for='import_nom' title="Met à jour le champ description dans fog avec le nom du matériel. Ca simplifie la recherche dans fog...">Nom dans la description</label>
 			</form>
 		</span>
@@ -110,9 +110,41 @@
 
 <script type="text/javascript">
 	
-		$(function(){
+	$(function(){
 	
 	
+		//---------------------------------------  POST AJAX FORMULAIRES
+		
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+			
+			if ( validForm() == true) {
+			
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=migfog&filter=" + $('#filt').val() + "'", 2500);
+				 });
+			}			 
+		});	
+	
+	
+
 		//--------------------------------------- Selection d'une ligne
 		
 		$('.chk_line').click(function(){
@@ -132,11 +164,11 @@
 			
 			// On affiche les boutons
 			if ( $('#id_a_poster').val() != "" ) {
-				$('#post_selection').show();
-				$('#post_selection').val("Migration " + ($('.chk_line:checked').length) + " PC");
+				$('#post_form').show();
+				$('#post_form').val("Migration " + ($('.chk_line:checked').length) + " PC");
 				
 			} else { 
-				$('#post_selection').hide();
+				$('#post_form').hide();
 			}
 			
 		});
@@ -154,15 +186,15 @@
 				$('#id_a_poster').val("");	// On vide les matos à poster
 				$('.chk_line:visible').each (function(){$('#id_a_poster').val( $('#id_a_poster').val() + ";" + $(this).attr('id') );	});	// On alimente le input à poster
 				
-				$('#modif_selection').show(); $('#affect_selection').show();		// On fait apparaitre les boutons
-				$('#nb_selectionnes').show(); $('#nb_selectionnes').html( $('.chk_line:checked').length + ' sélectionné(s)');
+				$('#post_form').show();
+				$('#post_form').val("Migration " + ($('.chk_line:checked').length) + " PC");
 				$('.tr_modif:visible').addClass("selected");	// On colorie toutes les lignes	visibles
 			}
 			else {
 				$('#id_a_poster').val("");	// On vide les matos à poster
 				$('.chk_line').prop("checked", false);	// On décoche toutes les cases
 				$('.tr_modif').removeClass("selected");	// On vire le coloriage de toutes les lignes	
-				$('#modif_selection').hide();	$('#rename_selection').hide(); $('#affect_selection').hide(); $('#nb_selectionnes').hide();
+				$('#post_form').hide();
 			}			
 		});	
 		
