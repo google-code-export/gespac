@@ -20,16 +20,7 @@
 		<br><SPAN style="background-color:green;">VERT</SPAN> : Correspondances sur nom et prénom.
 		<br><SPAN style="background-color:yellow;">JAUNE</SPAN> : Correspondances	sur le nom.
 		<br><SPAN style="background-color:red;">ROUGE</SPAN> : Aucune correspondance.
-	</div>
-	
-	<span class="entetes-options">
-		
-		<span class="option">
-			<!-- 	bouton pour le filtrage du tableau	-->
-			<form id="filterform"> <input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'migration_users_table');" type="text" value=<?PHP echo $_GET['filter'];?>> </form>
-		</span>
-	</span>
-	
+	</div>	
 </div>
 
 <div class="spacer"></div>
@@ -75,35 +66,31 @@
 		$liste_des_utilisateurs = $con_gespac->QueryAll ( "SELECT user_id, user_nom, user_logon FROM users WHERE user_logon<>'ati' ORDER BY user_nom" );
 
 	?>
-		<form method="POST" action="modules/migration_users/post_migration_users.php" name="post_form" id="post_form">
+		<form method="POST" action="modules/migration_users/post_migration_users.php" name="post_form" id="formulaire">
 		
 			<center>
 				
-			<input type=submit value="migrer les comptes"><br><br>
+			<input type=submit value="migrer les comptes" id="post_form"><br><br>
 			
-			<table class="tablehover" id="migration_users_table">
+			<table class="bigtable hover" id="migration_users_table">
 				<th>Nom</th>
 				<th>Logon</th>
 				<th>Correspondance</th>
 				<th>&nbsp;</th>
 						
 				<?PHP	
-					
-					$compteur = 0;
+
 					// On parcourt le tableau
 					foreach ( $liste_des_utilisateurs as $record ) {
 						
 						$indice = "red";
-						
-						// alternance des couleurs
-						$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-								
+									
 							$nom 			= $record['user_nom'];
 							$logon 			= $record['user_logon'];
 							$id				= $record['user_id'];
 									
 
-							echo "<tr id=tr_id$id class=$tr_class>";
+							echo "<tr id='tr_id$id'>";
 							
 								echo "<td> $nom </td>";
 								echo "<td> $logon </td>";
@@ -152,8 +139,6 @@
 								}
 							
 						echo "</tr>";
-						
-						$compteur++;
 					}
 				?>		
 
@@ -179,67 +164,38 @@
 
 	
 	<script>
-		
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-		}
-	}	
 	
-	/******************************************
-	*
-	*		AJAX
-	*
-	*******************************************/
-	
-	window.addEvent('domready', function(){
-		
-		if ($('post_form')) {
-			$('post_form').addEvent('submit', function(e) {	//	Pour poster un formulaire
-				new Event(e).stop();
-				new Request({
-
-					method: this.method,
-					url: this.action,
-
-					onSuccess: function(responseText, responseXML, filt) {
-						$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-						$('target').set('html', responseText);
-						window.setTimeout("document.location.href='index.php?page=migusers'", 1500);
-					}
+	$(function() {	
 				
-				}).send(this.toQueryString());
-			});		
-		}
-		
+		// **************************************************************** POST AJAX FORMULAIRES
+		$("#post_form").click(function(event) {
+
+			/* stop form from submitting normally */
+			event.preventDefault(); 
+			
+			if ( validForm() == true) {
+			
+				// Permet d'avoir les données à envoyer
+				var dataString = $("#formulaire").serialize();
+				
+				// action du formulaire
+				var url = $("#formulaire").attr( 'action' );
+				
+				var request = $.ajax({
+					type: "POST",
+					url: url,
+					data: dataString,
+					dataType: "html"
+				 });
+				 
+				 request.done(function(msg) {
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(msg);
+					window.setTimeout("document.location.href='index.php?page=utilisateurs'", 2500);
+				 });
+			}			 
+		});	
 	});
-		
+	
 </script>
 	

@@ -26,7 +26,7 @@
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform">
 				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'grades_table');" type="text" value=<?PHP echo $_GET['filter'];?>>  <span id="filtercount" title="Nombre de lignes filtrées"></span>
-				<span id="nb_filtre" title="nombre d'utilisateurs affichés"></span>
+				<span id="nb_filtre" title="nombre d'éléments affichés"></span>
 			</form>
 		</span>
 	</span>
