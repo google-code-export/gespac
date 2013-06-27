@@ -13,7 +13,7 @@
 	
 	$action = $_GET['action'];
 	
-	
+	//-------------------------------------- @@ SUPPRESSION
 	if ($action == 'suppr') {
 	
 		$id = $_GET['id'];
@@ -29,7 +29,7 @@
 	
 	
 	
-	
+	//-------------------------------------- @@ CREATION
 	if ($action == 'add') {
 
 		$nom_uo = escapeSql($_POST['nom_uo']);
@@ -65,9 +65,5 @@
 	
 	
 	}
-	
-
-
-
 
 ?>

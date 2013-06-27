@@ -16,49 +16,11 @@
 		
 		// si la réponse est TRUE ==> on lance la page post_marques.php
 		if (valida) {
-			$('targetback').setStyle("display","block"); $('target').setStyle("display","block");
-			$('target').load("modules/snapin_aic/post_snapin_aic.php?action=suppr&id=" + id);
-			window.setTimeout("document.location.href='index.php?page=aic'", 1500);		
+			$('#targetback').show(); $('#target').show();
+			$('#target').load("modules/snapin_aic/post_snapin_aic.php?action=suppr&id=" + id);
+			window.setTimeout("document.location.href='index.php?page=aic'", 2500);		
 		}
 	}
-	
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
-
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var compteur = 0;
-				
-		for (var r = 1; r < table.rows.length; r++){
-			
-			ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-			var displayStyle = 'none';
-			
-			for (var i = 0; i < words.length; i++) {
-				if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-					displayStyle = '';
-					compteur++;
-				}	
-				else {	// on masque les rows qui ne correspondent pas
-					displayStyle = 'none';
-					break;
-				}
-			}
-			
-			// Affichage on / off en fonction de displayStyle
-			table.rows[r].style.display = displayStyle;	
-			
-			$('nb_filtre').innerHTML = "<small>" + compteur + "</small>";
-		}
-	}	
-
-
 </script>
 
 
@@ -80,8 +42,8 @@
 		<span class="option">
 			<!-- 	bouton pour le filtrage du tableau	-->
 			<form id="filterform">
-				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'association_uo');" type="text"> 
-				<span id="nb_filtre" title="nombre de machines affichés"></span>
+				<input placeholder=" filtrer" name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this.value, 'association_uo');" type="text"> 
+				<span id="nb_filtre" title="nombre de lignes filtrées"></span>
 			</form>
 		</span>
 	</span>
@@ -123,10 +85,8 @@
 	*
 	**************************************/
 
-	echo "<table id='association_uo'>";
-	
-	$compteur = 0;
-	
+	echo "<table id='association_uo' class='hover bigtable'>";
+
 	echo "
 		<th>Snapin</th>
 		<th>Arguments</th>
@@ -141,21 +101,13 @@
 		$sFilePath 	= $record['sFilePath'];
 		$sArgs		= $record['sArgs'];
 		
-					
-		// alternance des couleurs
-		$tr_class = ($compteur % 2) == 0 ? "tr1" : "tr2";
-		
 
-		echo "<tr id=tr_id$hostid  class=$tr_class>";
+		echo "<tr id=tr_id$hostid >";
 			
 			echo "<td>$sName</td>
 			<td>$sArgs</td>
 			<td> <a href='#' onclick=\"javascript:validation_suppr($sID, '$sName');\">	<img src='img/delete.png'>	</a> </td>
 		</tr>";
-
-		$compteur++;
-
-
 		
 	}
 	
