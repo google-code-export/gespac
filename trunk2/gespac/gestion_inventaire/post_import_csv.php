@@ -55,9 +55,10 @@
 				$line[$row][0] = $data[0];	
 				$line[$row][1] = $data[1];			
 				$line[$row][2] = $data[2];			
+				$line[$row][3] = $data[3];			
 
 				if ( $line[$row][0] <> "" && $line[$row][1] <> "") {	// On ne prend le champ que si le nom et le ssn sont non nuls
-					$req_import_csv = "INSERT INTO materiels (mat_nom, mat_serial, mat_dsit, mat_etat, mat_origine, salle_id, user_id, marque_id, mat_suppr) VALUES ('" . trim($line[$row][0]) . "', '" . trim($line[$row][1]) ."', '" . trim($line[$row][2]) . "', '$etat', '$origine', 1, 1, $marque_id, 0 );";
+					$req_import_csv = "INSERT INTO materiels (mat_nom, mat_serial, mat_dsit, mat_etat, mat_origine, salle_id, user_id, marque_id, mat_suppr, mat_mac) VALUES ('" . trim($line[$row][0]) . "', '" . trim($line[$row][1]) ."', '" . trim($line[$row][2]) . "', '$etat', '$origine', 1, 1, $marque_id, 0, '" . trim($line[$row][3]) . "' );";
 					$con_gespac->Execute ( $req_import_csv );
 					
 					// On log la requête SQL

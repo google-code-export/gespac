@@ -23,101 +23,75 @@
 	
 <script type="text/javascript"> 
 	
-		
-	// *********************************************************************************
-	//
-	//				Fonction de filtrage des tables
-	//
-	// *********************************************************************************
 
-	function filter (phrase, _id){
-
-		var words = phrase.value.toLowerCase().split(" ");
-		var table = document.getElementById(_id);
-		var ele;
-		var elements_liste = "";
-		var nb_resultats = 0;
-			
-		if (phrase.value == "") {	// Si la phrase est nulle, on masque toutes les lignes
-			for (var r = 1; r < table.rows.length; r++)	table.rows[r].style.display = "none";	
-		}
-		else {			
-			for (var r = 1; r < table.rows.length; r++){
-				
-				ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-				var displayStyle = 'none';
-				
-				for (var i = 0; i < words.length; i++) {
-					if (ele.toLowerCase().indexOf(words[i])>=0) {	// la phrase de recherche est reconnue
-						displayStyle = '';
-						nb_resultats++;
-					}	
-					else {	// on masque les rows qui ne correspondent pas
-						displayStyle = 'none';
-						break;
-					}
-				}
-				
-				// Affichage on / off en fonction de displayStyle
-				table.rows[r].style.display = displayStyle;	
-			}
-			
-			// Affiche le div "pasderesultat", si jamais il n'y a ... pas de résultat !
-			if ( nb_resultats == 0 )
-				$('pasderesultat').style.display = "";
-			else
-				$('pasderesultat').style.display = "none";
-			
-		}
-	}	
-	
-	
-		
-	// *********************************************************************************
-	//
-	//			AJOUT d'un MARQUE par sa CORRESPONDANCE
-	//
-	// *********************************************************************************
-	
+	// **************************************************************** AJOUT d'un MARQUE par sa CORRESPONDANCE
 	function validation_choisir_marque (corr_id, marque) {
 			
 		var valida = confirm('Voulez-vous vraiment choisir la marque ' + marque + ' ?');
 		
 		// si la réponse est TRUE ==> on colle dans un input la valeur corr_id
 		if (valida) {
-			$('marque_id').value = corr_id;
+			$('#marque_id').val(corr_id);
 			
-			$('choix_modele').style.display = 'none';
-			$('table_modele_selectionne').style.display = '';
+			$('#choix_modele').hide();
+			$('#table_modele_selectionne').show();
 			
-			$('modele_selectionne').value = marque;
+			$('#modele_selectionne').val(marque);
 		}
 	}
 	
-	
-	// *********************************************************************************
-	//
-	//			FAIT REAPPARAITRE LE CHOIX DE SELECTION DE LA MARQUE
-	//
-	// *********************************************************************************
-	
+
+	// **************************************************************** FAIT REAPPARAITRE LE CHOIX DE SELECTION DE LA MARQUE
 	function choisir_modele () {
 		
-		$('choix_modele').style.display = '';
-		$('table_modele_selectionne').style.display = 'none';
+		$('#choix_modele').show();
+		$('#table_modele_selectionne').hide();
 		
-		$('marque_id').value = "";
-		$('modele_selectionne').value = "";
+		$('#marque_id').val("");
+		$('#modele_selectionne').val("");
+	}
+
+	
+		
+	// **************************************************************** Fonction de filtrage des marques pour correspondance
+	function filter_marque (phrase, tableid){
+		
+		var data = phrase.split(" ");
+		var cells=$("#" + tableid + " td");
+					
+		if(data != "") {
+			// On cache toutes les lignes
+			cells.parent("tr").hide();
+			// puis on filtre pour n'afficher que celles qui répondent au critère du filtre
+			cells.filter(function() {
+				return $(this).text().toLowerCase().indexOf(data) > -1;
+			}).parent("tr").show();		
+		} else {
+			// On montre toutes les lignes
+			cells.parent("tr").hide();
+		}
+		
+
+		if ($("pasderesultat")) {
+			if ($("#" + tableid + " tr:visible").length < 1 && data != "") {$("#pasderesultat").show();}
+			else {$("#pasderesultat").hide();}
+		}
 	}
 	
+		
 	// ferme la smoothbox et rafraichis la page
 	function refresh_quit () {
 		// lance la fonction avec un délais de 1500ms
 		window.setTimeout("document.location.href='index.php?page=materiels'", 1500);
 	}
 	
+	$(function(){
+		$('#showhelp').click(function() {
+			$('#help').toggle();
+		});
+	});
 	
-</SCRIPT>
+</script>
 		
 		
 <form method="POST" action="gestion_inventaire/post_import_csv.php" target=_blank enctype="multipart/form-data">
@@ -160,7 +134,7 @@
 		<table align=center cellpadding=10px >
 			<tr>
 				<td>Choisir un modèle :</td>
-				<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter(this, 'marque_table_csv');" type="text"> </td>
+				<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'marque_table_csv');" type="text"> </td>
 			</tr>
 		</table>
 
@@ -174,7 +148,7 @@
 		<!-- s'affiche si il n'y a pas de résultat -->
 		<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez créer le modèle manuellement.</div>
 		
-		<table id="marque_table_csv" class='tablehover'>
+		<table id="marque_table_csv" class='alternate smalltable'>
 			
 			<?PHP
 				foreach ( $liste_marques as $marque ) {
@@ -229,14 +203,18 @@
 
 <br>
 <br>
-
-<div>
+<center>
+<br><b><a href='#' id='showhelp'>formalisme du fichier CSV</a></b><br><br>
+<div id='help' style="text-align:left; width:400px;display:none;">
 	<small>
-		<br><b>formalisme du fichier CSV :</b><br>
-			"Nom_materiel1";"no_serie1";"no_dsit1"<br>
-			"Nom_materiel2";"no_serie2";"no_dsit2"<br>
-			"Nom_materiel3";"no_serie3";"no_dsit3"<br>
-			"Nom_materiel4";"no_serie4";"no_dsit4"<br>
+			"Nom_materiel1";"no_serie1";"no_inventaire1";"adresse_mac1"<br>
+			"Nom_materiel2";"no_serie2";"no_inventaire2";"adresse_mac2"<br>
+			"Nom_materiel3";"no_serie3";"no_inventaire3";""<br>
+			"Nom_materiel4";"no_serie4";"";""<br>
+			...<br>
 			...
+			<br><br>
+			- Le numéro d'inventaire et l'adresse MAC sont facultatifs mais doivent apparaitre<br>
+			- Chaque octet de l'adresse MAC est séparée par des :
 	</small>
 </div>	
