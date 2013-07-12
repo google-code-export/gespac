@@ -37,6 +37,7 @@
 			$('#table_modele_selectionne').show();
 			
 			$('#modele_selectionne').val(marque);
+			$('#choix_fichier').show();
 		}
 	}
 	
@@ -46,6 +47,7 @@
 		
 		$('#choix_modele').show();
 		$('#table_modele_selectionne').hide();
+		$('#choix_fichier').hide();
 		
 		$('#marque_id').val("");
 		$('#modele_selectionne').val("");
@@ -78,143 +80,181 @@
 		}
 	}
 	
-		
-	// ferme la smoothbox et rafraichis la page
-	function refresh_quit () {
-		// lance la fonction avec un délais de 1500ms
-		window.setTimeout("document.location.href='index.php?page=materiels'", 1500);
-	}
 	
 	$(function(){
+
+		//---------------------------------------- Montre et cache l'aide
 		$('#showhelp').click(function() {
 			$('#help').toggle();
 		});
+	
+		
+		
+		//---------------------------------------- Post file par Ajax (fonction par olanod : http://stackoverflow.com/users/931340/olanod)
+		$('#post_add').click(function(){
+			var formData = new FormData($('form#formulaire')[0]);
+			
+			$.ajax({			
+				url: "gestion_inventaire/post_import_csv.php",  //server script to process data
+				type: 'POST',
+				xhr: function() {  // custom xhr
+					var myXhr = $.ajaxSettings.xhr();
+					return myXhr;
+				},
+				// Data du formulaire
+				data: formData,
+				//Options to tell JQuery not to process data or worry about content-type
+				cache: false,
+				contentType: false,
+				processData: false,
+				complete : function(res) {
+					$('#targetback').show(); $('#target').show();
+					$('#target').html(res.responseText);
+					window.setTimeout("document.location.href='index.php?page=materiels'", 2500);
+				}
+			});
+		});
+		
+		
+		$('#filt').focus();
+		
 	});
 	
 </script>
 		
-		
-<form method="POST" action="gestion_inventaire/post_import_csv.php" target=_blank enctype="multipart/form-data">
-	<center>
-			
-	<table width=400 align=center cellpadding=10px>
 
-		<tr>
-			<TD>Origine</TD> 
-			<TD>
-				<select name="origine">
-					<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
-				</select>
-			</TD>
-		</tr>
-		
-		<tr>
-			<TD>Etat du matériel</TD>
-			<TD>
-				<select name="etat">
-					<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
-				</select>
-			</TD>
-		</tr>
-		
-	</table>
+<center>
 	
-	<br>
-	
-	<!--
+	<form enctype="multipart/form-data" id="formulaire">
+		
+		<input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+		
+		
+		<!--
 
-	GESTION PAR CORRESPONDANCE DE L'INSERTION D'UNE MARQUE
+		GESTION PAR CORRESPONDANCE DE L'INSERTION D'UNE MARQUE
 
-	-->
+		-->
 		
-	<div id='choix_modele' style='border:1px dotted grey;'>
-	
-		<center>
-	
-		<table align=center cellpadding=10px >
-			<tr>
-				<td>Choisir un modèle :</td>
-				<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'marque_table_csv');" type="text"> </td>
-			</tr>
-		</table>
+		<div id='choix_modele' style='border:1px dotted grey;'>
+		
+			<center>
+		
+			<table class='formtable' >
+				<tr>
+					<td>Choisir un modèle :</td>
+					<td><input name="filt" id="filt" onKeyPress="return disableEnterKey(event)" onkeyup="filter_marque(this.value, 'marque_table_csv');" type="text"> </td>
+				</tr>
+			</table>
 
-		
-		<?PHP
-		// ici il faut récupérer les lignes DISTINCTES histoire de ne pas surcharger le tableau
-		//$liste_correspondances = $db_gespac->queryAll ( "SELECT corr_id, corr_marque_ocs, corr_type, corr_stype, corr_marque, corr_modele FROM correspondances GROUP BY corr_modele ORDER BY corr_modele" );
-		$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_marque, marque_model, marque_type, marque_stype FROM marques ORDER BY marque_model" );
-		?>
-		 	 	 	 	
-		<!-- s'affiche si il n'y a pas de résultat -->
-		<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez créer le modèle manuellement.</div>
-		
-		<table id="marque_table_csv" class='alternate smalltable'>
 			
 			<?PHP
-				foreach ( $liste_marques as $marque ) {
-				
-					$marque_id 		= $marque['marque_id'];
-					$marque_marque 	= $marque['marque_marque'];
-					$marque_model 	= $marque['marque_model'];
-					$marque_type 	= $marque['marque_type'];
-					$marque_stype 	= $marque['marque_stype'];
-				
-					echo "<tr style='display:none' class='tr_filter'>";
-						echo "<td width=200>$marque_type</td>";
-						echo "<td width=200>$marque_stype</td>";
-						echo "<td width=200>$marque_marque</td>";
-						echo "<td width=200>$marque_model</td>";
-						echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_model');\"><img src='img/arrow-right.png' width=16 height=16 title='Choisir ce modèle'> </a></td>";
-					echo "</tr>";
-				
-				}
-			
+			$liste_marques = $con_gespac->QueryAll ( "SELECT marque_id, marque_marque, marque_model, marque_type, marque_stype FROM marques ORDER BY marque_model" );
 			?>
+							
+			<!-- s'affiche si il n'y a pas de résultat -->
+			<div id="pasderesultat" style='display:none'>Pas de résultat, vous devez créer le modèle manuellement.</div>
 			
-		</table>
+
+			<table id="marque_table_csv" class='alternate smalltable'>
+				
+				<?PHP
+					foreach ( $liste_marques as $marque ) {
+					
+						$marque_id 		= $marque['marque_id'];
+						$marque_marque 	= $marque['marque_marque'];
+						$marque_model 	= $marque['marque_model'];
+						$marque_type 	= $marque['marque_type'];
+						$marque_stype 	= $marque['marque_stype'];
+					
+						echo "<tr style='display:none' class='tr_filter'>";
+							echo "<td width=200>$marque_type</td>";
+							echo "<td width=200>$marque_stype</td>";
+							echo "<td width=200>$marque_marque</td>";
+							echo "<td width=200>$marque_model</td>";
+							echo "<td><a href='#' onclick=\"validation_choisir_marque($marque_id, '$marque_marque $marque_model');\"><img src='img/arrow-right.png' width=16 height=16 title='Choisir ce modèle'> </a></td>";
+						echo "</tr>";
+					
+					}
+				
+				?>
+				
+			</table>
+		</div>	
+		
+
+		<table class="formtable" style='display:none' id="table_modele_selectionne">
+			<tr>
+				<td>Modèle sélectionné :</td>
+				<td><input type=hidden name="marque_id" id="marque_id"> <input type="text" id="modele_selectionne"> </td>
+				<td><a href='#' onclick="choisir_modele();">changer</a></td>
+			</tr>
+		 </table>
+
+
+				 
+		<br>	
+		
+		<div id='choix_fichier' style="display:none;">
+		
+			<!-- choix de l'origine et de l'état -->	
+			
+			<table class="formtable">
+				<tr>
+					<TD>Origine</TD> 
+					<TD>
+						<select name="origine">
+							<?PHP	foreach ($liste_origines as $origine) {	echo "<option value='" . $origine['origine'] ."'>" . $origine['origine'] ."</option>";	}	?>
+						</select>
+					</TD>
+				</tr>
+				
+				<tr>
+					<TD>Etat du matériel</TD>
+					<TD>
+						<select name="etat">
+							<?PHP	foreach ($liste_etats as $etat) {	$selected = $etat['etat'] == "Fonctionnel" ? "selected" : ""; echo "<option $selected value='" . $etat['etat'] ."'>" . $etat['etat'] ."</option>";	}	?>
+						</select>
+					</TD>
+				</tr>
+				
+			</table>
+		
+			
+			<br>
+			
+			 
+			<!-- Fichier à poster -->	
+				 
+			<table class="formtable">	 
+				<tr><td>Fichier CSV</td><td><input type="file" name="myfile"></td></tr>
+				<tr><td colspan=2><br><center><input type="button" name="envoyer" id="post_add" value="Envoyer le fichier"></center></td></tr>
+			</table>
+		</div> 
+	 	  
+	</form>
+
+
+	<br>
+	<br>
+
+
+	<!-- AIDE -->
+
+	<br><b><a href='#' id='showhelp'>formalisme du fichier CSV</a></b><br><br>
+
+	<div id='help' style="text-align:left; width:400px;display:none;">
+		<small>
+				"Nom_materiel1";"no_serie1";"no_inventaire1";"adresse_mac1"<br>
+				"Nom_materiel2";"no_serie2";"no_inventaire2";"adresse_mac2"<br>
+				"Nom_materiel3";"no_serie3";"no_inventaire3";""<br>
+				"Nom_materiel4";"no_serie4";"";""<br>
+				...<br>
+				...
+				<br><br>
+				- Le numéro d'inventaire et l'adresse MAC sont facultatifs mais doivent apparaitre<br>
+				- Chaque octet de l'adresse MAC est séparée par des :
+		</small>
 	</div>	
-	
-	<table align=center cellpadding=10px style='display:none' id="table_modele_selectionne">
-	 	<tr>
-			<td>Modèle sélectionné :</td>
-			<td><input type=hidden name="marque_id" id="marque_id"> <input type="text" id="modele_selectionne"> </td>
-			<td><a href='#' onclick="choisir_modele();">changer</a></td>
-		</tr>
-	 </table>
 
-	 <br>
-	
-	<input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-	 
-	 <table align=center cellpadding=10px>
-		<tr>
-			<td>Fichier CSV</td>
-			<td><input type="file" name="myfile"></td>
-		</tr>
-	 </table>
-	 
-	<br>
-	<br>
-
-	<input type="submit" name="envoyer" value="Envoyer le fichier" onclick="refresh_quit();">
-
-
-</FORM>
-
-<br>
-<br>
-<center>
-<br><b><a href='#' id='showhelp'>formalisme du fichier CSV</a></b><br><br>
-<div id='help' style="text-align:left; width:400px;display:none;">
-	<small>
-			"Nom_materiel1";"no_serie1";"no_inventaire1";"adresse_mac1"<br>
-			"Nom_materiel2";"no_serie2";"no_inventaire2";"adresse_mac2"<br>
-			"Nom_materiel3";"no_serie3";"no_inventaire3";""<br>
-			"Nom_materiel4";"no_serie4";"";""<br>
-			...<br>
-			...
-			<br><br>
-			- Le numéro d'inventaire et l'adresse MAC sont facultatifs mais doivent apparaitre<br>
-			- Chaque octet de l'adresse MAC est séparée par des :
-	</small>
-</div>	
+</center>

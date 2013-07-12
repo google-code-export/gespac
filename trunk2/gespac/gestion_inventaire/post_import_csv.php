@@ -27,6 +27,9 @@
 	$etat 		= $_POST ['etat']; 
 	$marque_id 	= $_POST ['marque_id']; 
 	
+	$marque = $con_gespac->QueryOne("SELECT marque_marque FROM marques WHERE marque_id=$marque_id;");
+	$modele = $con_gespac->QueryOne("SELECT marque_model FROM marques WHERE marque_id=$marque_id;");
+	
 	//Si l'extension n'est pas dans le tableau
 	if ( !in_array($extension, $extensions) )
 		 $erreur = 'Vous devez uploader un fichier de txt ou csv...';
@@ -39,9 +42,7 @@
 		 
 		//On upload et on teste si la fonction renvoie TRUE
 		if ( move_uploaded_file($_FILES['myfile']['tmp_name'], $dossier . $fichier) ) {
-			echo $fichier . " envoyé avec succès !";
-			
-			
+						
 			// ************ Traitement du fichier uploadé *****************
 		
 			$chemin_import = $dossier . $fichier;
@@ -68,7 +69,7 @@
 			}
 
 			//Insertion d'un log
-			$log_texte = "Import fichier CSV pour la marque <b>$marque $modele</b>";
+			echo $log_texte = "Import fichier CSV pour la marque <b>$marque $modele</b>";
 
 			$req_log_import_csv = "INSERT INTO logs ( log_type, log_texte ) VALUES ( 'Import CSV', '$log_texte' )";
 			$con_gespac->Execute ( $req_log_import_csv );
