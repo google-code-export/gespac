@@ -1,6 +1,6 @@
 <?php
 
-	class Sql {
+	class Sql extends PDO  {
 		
 		# Propriétés
 		
@@ -8,8 +8,13 @@
 		private $user;
 		private $pass;
 		private $db;
-		private $link;
+		private $link;	// Le handle pour le SQL
+		private $log;	// Le handle pour les logs
+		private $path;	// Le chemin d'accès pour le logs
 		
+		public $exists;	// La connexion existe
+		
+	
 		
 		
 		# Magiques
@@ -17,19 +22,35 @@
 		
 		/*
 		* @name: Constructeur
-		* @param : paramètres de connexion : hote, utilisateur, mot de passe et base de données sur laquelle se connecter
+		* @param : paramètres de connexion : hote, utilisateur, mot de passe et base de données sur laquelle se connecter + logfile qui spécifie le chemin du fichier où stocker la trace des requête d'execution
 		* @return : rien
 		* @description : se connecte à l'hote puis à la base
 		*/
-		public function __construct ($host = 'localhost', $user = 'root', $pass = '', $db) {
+		public function __construct ($host = 'localhost', $user = 'root', $pass = '', $db, $logfile = '') {
 			
 			$this->host = $host;
 			$this->user = $user;
 			$this->pass = $pass;
 			$this->db 	= $db;
+			$this->path	= $logfile;
+									
+			try {
+				$this->link = parent::__construct('mysql:host=' . $this->host . ';dbname=' . $this->db, $this->user, $this->pass);
+				$this->exists = true;
+				
+				// Si logfile est spécifié, alors on log
+				if ( $logfile <> "" ) {
+					$this->log = fopen($this->path, 'a+');
+				}
+				
+			}
+			catch (PDOException $e) {
+				//echo "Connexion à MySQL impossible : ", $e->getMessage();
+				//die();
+				$this->exists = false;
+			}
 			
-			$this->link	= mysql_pconnect($this->host, $this->user, $this->pass);
-			$Base = mysql_select_db($this->db, $this->link);
+
 			
 		}
 		
@@ -39,9 +60,10 @@
 		* @param : rien
 		* @return : rien
 		* @description : ferme la connexion
+		* @amelioration : ben ca marche pas : Warning: mysql_close(): 7 is not a valid MySQL-Link resource in D:\DATA\DEV\php\gespac4\class\Sql.class.php on line 50
 		*/		
 		public function __destruct () {	
-			//mysql_close($this->link);
+			$this->link = null;
 		}
 				
 		
@@ -58,11 +80,35 @@
 		
 		
 		# Méthodes
-		public function Exists () {
-			if($basetest = mysql_select_db($this->db, $this->link)) return true;
-			else return false;
+		
+				
+		
+		/*
+		* @name: Close
+		* @param : rien
+		* @return : rien
+		* @description : ferme manuellement le fichier
+		*/
+		public function CloseLog () {
+			fclose($this->log);
 		}
 		
+		/*
+		* @name: InsertLog
+		* @param : le texte à insérer
+		* @return : TRUE si on a pu écrire, FALSE sinon
+		* @description : insert un texte dans un fichier avec date et mise en forme utf8
+		*/
+		public function InsertLog ($text) {
+			
+			if ( !fwrite($this->log, date("Ymd His") . " " . utf8_decode($text) ."\n") ) {
+				return false; // On arrive pas à écrire
+			}
+			else {
+				return true; // On arrive à écrire
+			}
+		}
+
 		
 		/*
 		* @name: close
@@ -71,7 +117,7 @@
 		* @description : ferme la connexion manuellement
 		*/	
 		public function Close () {
-			mysql_close($this->link);
+			//mysql_close($this->link);
 		}
 		
 		
@@ -82,17 +128,20 @@
 		* @description : Execute une requête SQL SELECT
 		*/
 		public function QueryAll ($query) {
+				
+			try {
+				$req = parent::query($query);
+				$result = $req->fetchAll();
+				
+				if ($this->log)	$this->InsertLog($query);
+			  			  
+			  return $result;
+			}
+			catch (PDOException $e) {
+			  print $e->getMessage();
+			  return false;
+			}
 			
-			// lit les enregistrements
-			$req = mysql_query($query, $this->link) or die(mysql_error());
-		   
-			// tout dans un tableau
-			for($i = 0; $tab[$i] = mysql_fetch_assoc($req); $i++) ;
-		   
-			// Je vire le dernier enreg, vu qu'il est tjs vide
-			array_pop($tab);
-			
-			return $tab;
 		}
 		
 		
@@ -103,15 +152,20 @@
 		* @description : Execute une requête SQL SELECT
 		*/
 		public function QueryRow ($query) {
+
+			try {
+				$req = parent::query($query);
+				$result = $req->fetch();
+				
+				if ($this->log)	$this->InsertLog($query);
+			  			  
+				return $result;
+			}
+			catch (PDOException $e) {
+				print $e->getMessage() . "<br> Request : " . $query;
+				return false;
+			}
 			
-			$tab = array();
-			
-			// lit les enregistrements
-			$req = mysql_query($query, $this->link) or die(mysql_error());
-		   
-			$tab = mysql_fetch_row($req);
-			
-			return $tab;
 		}
 		
 		
@@ -123,13 +177,18 @@
 		*/
 		public function QueryOne ($query) {
 	
-			$tab = array();
-	
-			$req = mysql_query($query, $this->link) or die(mysql_error());
-		   
-			$tab = mysql_fetch_row($req);
-			
-			return $tab[0];
+			try {
+				$req = parent::query($query);
+				$result = $req->fetchColumn();
+
+				if ($this->log)	$this->InsertLog($query);
+			  			  
+				return $result;
+			}
+			catch (PDOException $e) {
+				print $e->getMessage() . "<br> Request : " . $query;
+				return false;
+			}
 		}
 		
 		
@@ -140,15 +199,29 @@
 		* @description : Execute une requête SQL action (insert, update, delete ...) 
 		*/
 		public function Execute ($query) {
-			$result = mysql_query($query, $this->link);
 			
-			$NbResult = mysql_affected_rows();
-			return $NbResult; 
+			try {
+
+				$result = parent::exec($query);
+				
+				if ($this->log)	$this->InsertLog($query);
+			  			  
+				return $result;
+			}
+			catch (PDOException $e) {
+				print $e->getMessage() . "<br> Request : " . $query;
+				return false;
+			}	
 		}
 		
 				
-		// renvoie la liste des fonctions dispo
-		public function GetFunctions () {
+		/*
+		* @name: Help
+		* @param : nada
+		* @return : nada
+		* @description : Affiche la liste des méthodes disponibles pour la classe SQL 
+		*/
+		public function Help () {
 		}
 		
 		
@@ -159,58 +232,9 @@
 		* @description : renvoie l'id automatique de la dernière requête d'ajout
 		*/
 		public function GetLastID () {
-			return mysql_insert_id($this->link);
+			return $this->link->lastInsertId();
 		}
 		
-		
-		
-		# SETTERS
-		
-		
-		public function SetDatabase ($db) {
-			$this->db 	= $db;
-		}
-		
-		
-		public function SetHost ($host) {
-			$this->host 	= $host;
-		}
-		
-		
-		public function SetUser ($user) {
-			$this->user 	= $user;
-		}
-		
-		
-		public function SetPass ($pass) {
-			$this->pass 	= $pass;
-		}
-		
-		
-		
-		# GETTERS
-		public function GetLink () {
-			return $this->link;
-		}
-		
-		public function GetDatabase () {
-			return $this->db;
-		}
-		
-		
-		public function GetHost () {
-			return $this->host;
-		}
-		
-		
-		public function GetUser () {
-			return $this->user;
-		}
-		
-		
-		public function GetPass () {
-			return $this->pass;
-		}
 
 	}
 
